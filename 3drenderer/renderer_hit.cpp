@@ -3075,7 +3075,7 @@ int Renderer_gl1::hitPen(int x, int y)
 			selectMode == smCurveRefineInit || selectMode == smCurveRefineLast || selectMode == smCurveEditRefine ||
 			selectMode == smCurveEditRefine_fm || selectMode == smCurveDirectionInter || selectMode == smCurveMarkerLists_fm)
 	{
-		//qDebug("\t track-start ( %i, %i ) to define Curve", x,y);
+		qDebug("\t track-start ( %i, %i ) to define Curve", x,y);
 		_appendMarkerPos(x,y);
 		// endSlectMode() in movePen
 		return 1;

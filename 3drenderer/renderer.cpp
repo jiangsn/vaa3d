@@ -789,9 +789,11 @@ void Renderer::drawVaa3DInfo(int fontsize)
 
         char str[100];
         //sprintf(str, "%s", "BigNeuron.org");
-        sprintf(str, "%s", "vaa3d.org");
+        //sprintf(str, "%s", "vaa3d.org");
 
-        drawString(A0.x, A0.y, A0.z, str, 0, fontsize);
+		// Shuning: don't draw string, it might distract participants
+        //drawString(A0.x, A0.y, A0.z, str, 0, fontsize);
+
 //        drawString(A0.x + td, A0.y + td, A0.z, "bigneuron.org", 0, fontsize);
         //glColor3f(1, 0, 0);		drawString(A1.x + td, A0.y, A0.z, "X");
         //glColor3f(0, 1, 0);		drawString(A0.x, A1.y + td, A0.z, "Y");

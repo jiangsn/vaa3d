@@ -608,13 +608,14 @@ void V3dR_GLWidget::customEvent(QEvent* e)
 		}
 		if (!_idep->V3Dmainwindow->vrMode)
 		{
-			system(("echo. " + to_string(_idep->V3Dmainwindow->vrMode) + " > .\\utils\\" + to_string(_idep->V3Dmainwindow->currentImgIdx)).c_str());
+			// // Shuning: legacy tracking system
+			// system(("echo. " + to_string(_idep->V3Dmainwindow->vrMode) + " > .\\utils\\" + to_string(_idep->V3Dmainwindow->currentImgIdx)).c_str());
 
-			system(("start /B python .\\utils\\desktop_tracker.py " + \
-				QString::number(_idep->V3Dmainwindow->currentImgIdx) + \
-				" > " + \
-				_idep->V3Dmainwindow->currentEventPath.replace("/", "\\\\")
-				).toStdString().c_str());
+			// system(("start /B python .\\utils\\desktop_tracker.py " + \
+			// 	QString::number(_idep->V3Dmainwindow->currentImgIdx) + \
+			// 	" > " + \
+			// 	_idep->V3Dmainwindow->currentEventPath.replace("/", "\\\\")
+			// 	).toStdString().c_str());
 		}
 		
 		qDebug("-------------------------------------------------------------- Ready");
@@ -1914,6 +1915,7 @@ void V3dR_GLWidget::setCSTransparent(int t)
 
 void V3dR_GLWidget::setContrast(int t)
 {
+	qDebug() << "SetContrast: " << t;
     Renderer_gl2* curr_renderer = (Renderer_gl2*)(getRenderer());
 
     if (curr_renderer)
@@ -2329,6 +2331,7 @@ void V3dR_GLWidget::OnVRSocketDisConnected()
 
 void V3dR_GLWidget::setXRotation(int angle)
 {
+	qDebug() << "X_Rotation: " << angle;
 	NORMALIZE_angle( angle );
 	if (angle != _xRot) {
 		_absRot = false;
@@ -2343,6 +2346,7 @@ void V3dR_GLWidget::setXRotation(int angle)
 
 void V3dR_GLWidget::setXRotation(float angle)
 {
+	qDebug() << "X_Rotation: " << angle;
     NORMALIZE_angle( angle );
     if (angle != _xRot) {
         _absRot = false;
@@ -2357,6 +2361,7 @@ void V3dR_GLWidget::setXRotation(float angle)
 
 void V3dR_GLWidget::setYRotation(int angle)
 {
+	qDebug() << "Y_Rotation: " << angle;
 	NORMALIZE_angle( angle );
 	if (angle != _yRot) {
 		_absRot = false;
@@ -2371,6 +2376,7 @@ void V3dR_GLWidget::setYRotation(int angle)
 
 void V3dR_GLWidget::setYRotation(float angle)
 {
+	qDebug() << "Y_Rotation: " << angle;
     NORMALIZE_angle( angle );
     if (angle != _yRot) {
         _absRot = false;
@@ -2385,6 +2391,7 @@ void V3dR_GLWidget::setYRotation(float angle)
 
 void V3dR_GLWidget::setZRotation(int angle)
 {
+	qDebug() << "Z_Rotation: " << angle;
 	NORMALIZE_angle( angle );
     if (angle != _zRot) {
 		_absRot = false;
@@ -2399,6 +2406,7 @@ void V3dR_GLWidget::setZRotation(int angle)
 
 void V3dR_GLWidget::setZRotation(float angle)
 {
+	qDebug() << "Z_Rotation: " << angle;
     NORMALIZE_angle( angle );
     if (angle != _zRot) {
         _absRot = false;
