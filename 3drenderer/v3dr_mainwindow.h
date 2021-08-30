@@ -45,6 +45,9 @@ Last update: 080814: move iDrawExternalParameter to v3d_core.h
 
 #include "qtr_widget.h"
 
+#include<QWidget>
+#include<QTimer>
+
 
 class V3dR_GLWidget;
 
@@ -61,6 +64,8 @@ public:
 	QString getDataTitle() {return data_title;}
 	V3dR_GLWidget * getGLWidget() {return glWidget;}
 
+	void updateV3dR_GLWidget(iDrawExternalParameter* idep);
+
 protected:
     virtual void closeEvent(QCloseEvent* e);
     virtual void dragEnterEvent(QDragEnterEvent *e);
@@ -74,6 +79,8 @@ protected:
 	virtual void keyReleaseEvent(QKeyEvent * e);
 
 public slots:
+	void TimeSlot();
+
 	void postClose();
 
 	void setXCutLockIcon(bool);
@@ -84,6 +91,7 @@ public slots:
 	void initVolumeTimeRange();
 	void initVolumeCutRange();  // called by initControlValue
 	void initSurfaceCutRange(); // called by initControlValue
+	void toggleCenterCutRange();
 
 	void onlySurfaceObjTab() {if(tabOptions) tabOptions->setCurrentIndex(1); if(tabCutPlane) tabCutPlane->setCurrentIndex(1);}
 
@@ -121,6 +129,12 @@ public:
 	iDrawExternalParameter* _idep;
 	QString title_prefix;
 	QString data_title;
+
+	int countTemp;
+	QTimer *msTimer;
+	void Display(QString, QString, QString);
+	void SetStrLength(QString *str, int length);
+	
 
     void saveFrameFunc(int i);
 	QString outputDir;
@@ -201,6 +215,12 @@ public:
     QCheckBox *checkBox_channelR, *checkBox_channelG, *checkBox_channelB, *checkBox_channelA, *checkBox_volCompress;
     QPushButton *volumeColormapButton;
 
+	QPushButton *nextImgBtn;
+	QPushButton *prevImgBtn;
+	QPushButton *selectBtn;
+	QPushButton *showCenterBtn;
+	QLCDNumber *timerWindow;
+
     // surface display control
     QCheckBox *checkBox_displayMarkers, *checkBox_displaySurf, *checkBox_markerLabel, *checkBox_surfStretch, *checkBox_surfZLock;
     QSpinBox * spinBox_markerSize; // 090422 RZC
@@ -217,7 +237,10 @@ public:
     QGroupBox *controlGroup;
     QPushButton *hideDisplayControlsButton;
     bool displayControlsHidden;
-    QWidget *toolBtnGroup;
+	QWidget *toolBtnGroup;
+	QWidget *navBtnGroup;
+	QWidget *selectBtnGroup;
+	QWidget *timerGroup;
 
     QTabWidget *tabOptions;
 

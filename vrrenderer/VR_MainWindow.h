@@ -11,6 +11,7 @@
 //#endif
 #include "V3dR_Communicator.h"
 #include "../basic_c_fun/v3d_interface.h"
+#include "xformwidget.h"
 class V3dR_Communicator;
 struct VRoutInfo
 {
@@ -68,6 +69,6 @@ private:
 };
 
 // bool startStandaloneVRScene(QList<NeuronTree> *ntlist, My4DImage *img4d, MainWindow *pmain);
-int startStandaloneVRScene(QList<NeuronTree> *ntlist, My4DImage *img4d, MainWindow *pmain, XYZ* zoomPOS = 0);
+int startStandaloneVRScene(QList<NeuronTree> *ntlist, My4DImage *img4d, iDrawExternalParameter* idep, MainWindow *pmain, XYZ* zoomPOS = 0);
 
 #endif // VR_MainWindow_H

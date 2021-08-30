@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c)2006-2010  Hanchuan Peng (Janelia Farm, Howard Hughes Medical Institute).
  * All rights reserved.
  */
@@ -103,6 +103,44 @@ void Renderer::drawString(float x, float y, float z, const char* text, int shado
         ((QOpenGLWidget_proxy*)widget)->renderText(x,y,z, QString(text), f1);
     else
         ((QOpenGLWidget_proxy*)widget)->renderText(x,y,z, QString(text));
+#endif
+
+
+	if (shadow)
+	{
+		glPopAttrib();
+	}
+}
+
+void Renderer::drawString(float x, float y, float z, QString text, int shadow, int fontsize)
+{
+	if (!widget)  return;
+
+	if (shadow)
+	{
+		glPushAttrib(GL_DEPTH_BUFFER_BIT);
+		glPushAttrib(GL_CURRENT_BIT);
+		glColor3ub(50, 50, 50);
+		//glColor3ub(200,200,200);
+
+		// CMB MSVC debugger with Qt 4.7 triggers assert if font weight > 99
+		// QFont f;  f.setPointSize(f.pointSize()+1); f.setWeight(f.weight()+200);
+		QFont f;  f.setPointSize(f.pointSize() + 1); f.setWeight(99);
+#if defined(USE_Qt5)
+#else
+		((QOpenGLWidget_proxy*)widget)->renderText(x, y, z, QString(text), f);
+#endif
+		glPopAttrib();
+		glDepthFunc(GL_LEQUAL);
+	}
+
+	QFont f1;  f1.setPointSize((fontsize>0) ? fontsize : 30); f1.setWeight(99);
+	if (fontsize>0)
+#if defined(USE_Qt5)
+#else
+		((QOpenGLWidget_proxy*)widget)->renderText(x, y, z, QString(text), f1);
+	else
+		((QOpenGLWidget_proxy*)widget)->renderText(x, y, z, QString(text));
 #endif
 
 
@@ -368,8 +406,11 @@ void Renderer::paint()
 
 	if (!b_selecting) if (bShowBoundingBox || bShowAxes || bShowXYTranslateArrows)// a frame box [-1,+1]^3
 	{
+		
 		setBoundingBoxSpace(boundingBox);
 		drawBoundingBoxAndAxes(boundingBox);
+
+		//BoundingBox centerBox = 
 	}
 
 	return;
@@ -396,6 +437,29 @@ void Renderer::setBoundingBoxSpace(BoundingBox BB)
 	t[0] = -BB.x0 -DX /2;
 	t[1] = -BB.y0 -DY /2;
 	t[2] = -BB.z0 -DZ /2;
+
+	// from boundingBox space ==> fit in [-1, +1]^3
+	glScaled(s[0], s[1], s[2]);
+	glTranslated(t[0], t[1], t[2]);
+}
+
+
+
+void Renderer::setCenterBoundingBoxSpace(BoundingBox BB)
+{
+	float DX = BB.Dx();
+	float DY = BB.Dy();
+	float DZ = BB.Dz();
+	float maxD = BB.Dmax();
+
+	double s[3];
+	s[0] = 1 / maxD * 2;
+	s[1] = 1 / maxD * 2;
+	s[2] = 1 / maxD * 2;
+	double t[3];
+	t[0] = -BB.x0 - DX / 2;
+	t[1] = -BB.y0 - DY / 2;
+	t[2] = -BB.z0 - DZ / 2;
 
 	// from boundingBox space ==> fit in [-1, +1]^3
 	glScaled(s[0], s[1], s[2]);
@@ -447,6 +511,7 @@ inline void draw_tri(const XYZ P1, const XYZ P2, const XYZ P3, const XYZ offst)
 
 void Renderer::drawBoundingBoxAndAxes(BoundingBox BB, float BlineWidth, float AlineWidth)
 {
+	//qDebug() << BB.x0 << ";" << BB.x1 << ";" << BB.y0 << ";" << BB.y1 << ";" << BB.z0 << ";" << BB.z1 << ";" << endl;
 	glPushAttrib(GL_LINE_BIT | GL_POLYGON_BIT);
 			//| GL_DEPTH_BUFFER_BIT);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -564,6 +629,126 @@ void Renderer::drawBoundingBoxAndAxes(BoundingBox BB, float BlineWidth, float Al
 }
 
 
+void Renderer::drawCenterBoundingBoxAndAxes(BoundingBox BB, float BlineWidth, float AlineWidth)
+{
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glPushAttrib(GL_LINE_BIT | GL_POLYGON_BIT);
+	//| GL_DEPTH_BUFFER_BIT);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glEnable(GL_POLYGON_OFFSET_LINE);
+
+	//	glPolygonOffset(0, -1); // deal z-fighting, 081120
+	//	glDepthFunc(GL_LEQUAL);
+	if (posXTranslateBB != 0) delete posXTranslateBB;
+	if (negXTranslateBB != 0) delete negXTranslateBB;
+	if (posYTranslateBB != 0) delete posYTranslateBB;
+	if (negYTranslateBB != 0) delete negYTranslateBB;
+	posXTranslateBB = 0, negXTranslateBB = 0, posYTranslateBB = 0, negYTranslateBB = 0;
+	if (bShowXYTranslateArrows && (iNegXTranslateArrowEnabled || iPosXTranslateArrowEnabled || iNegYTranslateArrowEnabled || iPosYTranslateArrowEnabled))
+	{
+		float D = (BB.Dmax());
+		float td = D*0.015;
+		XYZ A0 = BB.Vabsmin();
+		XYZ A1 = BB.V1();// + D*0.05;
+		XYZ Y0 = XYZ(0.5*(A0.x + A1.x) - td, A0.y - td, A0.z);
+		XYZ Y1 = XYZ(0.5*(A0.x + A1.x) - td, A1.y + td, A0.z);
+		XYZ X0 = XYZ(A0.x - td, 0.5*(A0.y + A1.y) - td, A0.z);
+		XYZ X1 = XYZ(A1.x + td, 0.5*(A0.y + A1.y) - td, A0.z);
+
+		glPolygonOffset(-0.002, -2); //(-0.002, -2) for good z-fighting with bounding box, 081120,100823
+
+		glLineWidth(AlineWidth); // work only before glBegin(), by RZC 080827
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+		if (iNegXTranslateArrowEnabled)
+		{
+			if (iNegXTranslateArrowEnabled > 1)
+				glColor3f(1, 0.7f, 0.7f);
+			else
+				glColor3f(0.7f, 0, 0);
+			glBegin(GL_QUADS); box_quads(BoundingBox(X0, XYZ(X0.x - td, X0.y + 2.0f*td, X0.z + td))); glEnd();
+			draw_tri(XYZ(X0.x - td, X0.y - td, X0.z), XYZ(X0.x - td, X0.y + 3.0f*td, X0.z), XYZ(X0.x - 3.0f*td, X0.y + td, X0.z), XYZ(0.0f, 0.0f, td));
+			negXTranslateBB = new BoundingBox(XYZ(X0.x - 3.0f*td, X0.y - td, X0.z), XYZ(X0.x, X0.y + 2.0f*td, X0.z + td));
+		}
+		if (iPosXTranslateArrowEnabled)
+		{
+			if (iPosXTranslateArrowEnabled > 1)
+				glColor3f(1, 0.7f, 0.7f);
+			else
+				glColor3f(0.7f, 0, 0);
+			glBegin(GL_QUADS); box_quads(BoundingBox(X1, XYZ(X1.x + td, X1.y + 2.0f*td, X1.z + td))); glEnd();
+			draw_tri(XYZ(X1.x + td, X1.y - td, X1.z), XYZ(X1.x + td, X1.y + 3.0f*td, X1.z), XYZ(X1.x + 3.0f*td, X1.y + td, X1.z), XYZ(0.0f, 0.0f, td));
+			posXTranslateBB = new BoundingBox(XYZ(X1.x, X1.y - td, X1.z), XYZ(X1.x + 3.0f*td, X1.y + 3.0f*td, X1.z + td));
+		}
+		if (iNegYTranslateArrowEnabled)
+		{
+			if (iNegYTranslateArrowEnabled > 1)
+				glColor3f(0.7f, 1, 0.7f);
+			else
+				glColor3f(0, 0.7f, 0);
+			glBegin(GL_QUADS); box_quads(BoundingBox(Y0, XYZ(Y0.x + 2.0f*td, Y0.y - td, Y0.z + td))); glEnd();
+			draw_tri(XYZ(Y0.x - td, Y0.y - td, Y0.z), XYZ(Y0.x + 3.0f*td, Y0.y - td, Y0.z), XYZ(Y0.x + td, Y0.y - 3.0f*td, Y0.z), XYZ(0.0f, 0.0f, td));
+			negYTranslateBB = new BoundingBox(XYZ(Y0.x - td, Y0.y - 3.0f*td, Y0.z), XYZ(Y0.x + 3.0f*td, Y0.y - td, Y0.z + td));
+		}
+		if (iPosYTranslateArrowEnabled)
+		{
+			if (iPosYTranslateArrowEnabled > 1)
+				glColor3f(0.7f, 1, 0.7f);
+			else
+				glColor3f(0, 0.7f, 0);
+			glBegin(GL_QUADS); box_quads(BoundingBox(Y1, XYZ(Y1.x + 2.0f*td, Y1.y + td, Y1.z + td))); glEnd();
+			draw_tri(XYZ(Y1.x - td, Y1.y + td, Y1.z), XYZ(Y1.x + 3.0f*td, Y1.y + td, Y1.z), XYZ(Y1.x + td, Y1.y + 3.0f*td, Y1.z), XYZ(0.0f, 0.0f, td));
+			posYTranslateBB = new BoundingBox(XYZ(Y1.x - td, Y1.y + td, Y1.z), XYZ(Y1.x + 3.0f*td, Y1.y + 3.0f*td, Y1.z + td));
+		}
+	}
+
+	// an indicator of coordinate direction
+	if (bShowAxes && AlineWidth>0)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+		float D = (BB.Dmax());
+		float ld = D*0.0001; //1e-4 is best
+		float td = D*0.015;
+		XYZ A0 = BB.Vabsmin();
+		XYZ A1 = BB.V1() + D*0.05;
+
+		glPolygonOffset(-0.002, -2); //(-0.002, -2) for good z-fighting with bounding box, 081120,100823
+
+		glLineWidth(AlineWidth); // work only before glBegin(), by RZC 080827
+		glBegin(GL_QUADS);
+		//glBegin(GL_LINES); // glPolygonOffset do NOT  influence GL_LINES
+		{
+			glColor3f(1, 0, 0);		box_quads(BoundingBox(A0, XYZ(A1.x, A0.y + ld, A0.z + ld)));
+			glColor3f(0, 1, 0);		box_quads(BoundingBox(A0, XYZ(A0.x + ld, A1.y, A0.z + ld)));
+			glColor3f(0, 0, 1);		box_quads(BoundingBox(A0, XYZ(A0.x + ld, A0.y + ld, A1.z)));
+		}
+		glEnd();
+
+		glColor3f(1, 0, 0);		drawString(A1.x + td, A0.y, A0.z, "X", 1, 0);
+		glColor3f(0, 1, 0);		drawString(A0.x, A1.y + td, A0.z, "Y", 1, 0);
+		glColor3f(0, 0, 1);		drawString(A0.x, A0.y, A1.z + td, "Z", 1, 0);
+	}
+
+	if (bShowBoundingBox && BlineWidth>0)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+		glPolygonOffset(0, -1); // deal z-fighting with volume, 081120
+
+		glLineWidth(BlineWidth); // work only before glBegin(), by RZC 080827
+		glBegin(GL_QUADS);
+		//glBegin(GL_LINES);
+		{
+			glColor3fv(color_line.c);	box_quads(BB);
+		}
+		glEnd();
+	}
+
+	glPopAttrib();
+}
+
+
 void Renderer::drawVaa3DInfo(int fontsize)
 {
     // no scale here
@@ -606,7 +791,7 @@ void Renderer::drawVaa3DInfo(int fontsize)
         //sprintf(str, "%s", "BigNeuron.org");
         sprintf(str, "%s", "vaa3d.org");
 
-        drawString(A0.x + td, A0.y, A0.z, str, 0, fontsize);
+        drawString(A0.x, A0.y, A0.z, str, 0, fontsize);
 //        drawString(A0.x + td, A0.y + td, A0.z, "bigneuron.org", 0, fontsize);
         //glColor3f(1, 0, 0);		drawString(A1.x + td, A0.y, A0.z, "X");
         //glColor3f(0, 1, 0);		drawString(A0.x, A1.y + td, A0.z, "Y");
@@ -618,6 +803,89 @@ void Renderer::drawVaa3DInfo(int fontsize)
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
 }
+
+
+void Renderer::drawImageInfo(int fontsize)
+{
+	if (!_idep->V3Dmainwindow->devMode)
+		return;
+	if (_idep->V3Dmainwindow->expImages.size() <= 0)
+	{
+		return;
+	}
+	// no scale here
+	GLdouble mRot[16];
+	glGetDoublev(GL_MODELVIEW_MATRIX, mRot);
+	for (int i = 0; i<3; i++) mRot[i * 4 + 3] = mRot[3 * 4 + i] = 0; mRot[3 * 4 + 3] = 1; // only reserve rotation, remove translation in mRot
+
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	double aspect = double(screenW) / MAX(screenH, 1);
+	double halfw = 1.3*aspect;
+	double halfh = 1.3;
+	glOrtho(-halfw, halfw, -halfh, halfh, -1, 1000); // 1000 makes 0 at most front depth in z-buffer
+	glTranslated(-1.9, +1.2, 0); // put at right-bottom corner
+
+	double sbar = 0.1; // scale bar display size
+	glScaled(sbar * 2, sbar * 2, sbar * 2); //[0,1]-->[-1,+1]
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glMultMatrixd(mRot); // last rotation pose
+
+	glPushAttrib(GL_LINE_BIT | GL_POLYGON_BIT);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glEnable(GL_POLYGON_OFFSET_LINE);
+
+	glColor3fv(color_line.c);
+
+	if (fontsize > 0)
+	{
+		BoundingBox BB = UNIT_BoundingBox;
+		float D = (BB.Dmax());
+		float ld = D*0.0001; //1e-4 is best
+		float td = 0.02;
+		XYZ A0 = BB.Vabsmin();
+		XYZ A1 = BB.V1();
+
+		//char str[100];
+		QString str;
+		//sprintf(str, "%s", "BigNeuron.org");
+		//qDebug() << _idep->V3Dmainwindow->currentImgPath << endl;
+		if (_idep->V3Dmainwindow->selectedImages.contains(_idep->V3Dmainwindow->currentImgPath))
+		{
+			str += "SELECTED\t";
+			//sprintf(str, "%s", "SELECTED");
+		}
+		else
+		{
+			str += "NOT SELECTED\t";
+			//sprintf(str, "%s", _idep->V3Dmainwindow->currentImgAttributes);
+		}
+		
+		QStringList attributes = _idep->V3Dmainwindow->currentImgAttributes.split(',');
+		str = str + \
+			"index(" + QString::number(_idep->V3Dmainwindow->currentImgIdx) + \
+			"),\tlabel(" + attributes[1] + \
+			"),\tname(" + attributes[0] + \
+			"),\tlength(" + attributes[6] + \
+			"),\tmin_dist(" + attributes[7] + \
+			"),\tmin_curv(" + attributes[10] + \
+			"),\tvar_of_lap(" + attributes[13] + \
+			")";
+
+		drawString(A0.x, A0.y, A0.z, str, 0, fontsize);
+
+	}
+
+	glPopAttrib();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+}
+
+
 
 //added different edit modes display
 void Renderer::drawEditInfo()
@@ -969,21 +1237,21 @@ void Renderer::setZoom(float ratio)
 	if (ratio <-1) // [-inf,-1) zoom out..............
 	{
 		ratio = -ratio;
-		zoomRatio = //1+(ratio);
+		zoomRatio = 1.2+(ratio);
 					//1+sqrt(ratio);
-					2+(150/viewAngle-1)*(1-2/(1+ratio));
+					//2+(150/viewAngle-1)*(1.2-2/(1.2+ratio));
 	}
 	else if (ratio < 0) // [-1, 0) zoom out
 	{
 		ratio = -ratio;
-		zoomRatio = 1+(ratio);
+		zoomRatio = 1.2+(ratio);
 					//1+sqrt(ratio);
 					//1+pow(ratio, 1/3.0);
 	}
 	else	// [0+, +inf] zoom in.....................
 	{
 		zoomRatio = //1/(1+(ratio));
-					1/(1+(ratio)*(ratio));
+					1.2/(1+(ratio)*(ratio));
 	}
 	setupView(screenW, screenH);
 }

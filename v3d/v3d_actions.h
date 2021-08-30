@@ -11,37 +11,37 @@
 namespace v3d {
 
 /// Opens a web page in the user's web browser
-class BrowseToWebPageAction : public QAction
-{
-    Q_OBJECT
-public:
-    BrowseToWebPageAction(const QString& text, const QUrl& url, QObject* parent);
-signals:
-    void page_open_failed();
-private slots:
-    void openWebPage();
-private:
-    QUrl _url;
-};
+//class BrowseToWebPageAction : public QAction
+//{
+//    Q_OBJECT
+//public:
+//    BrowseToWebPageAction(const QString& text, const QUrl& url, QObject* parent);
+//signals:
+//    void page_open_failed();
+//private slots:
+//    void openWebPage();
+//private:
+//    QUrl _url;
+//};
 
 
 /// Opens the main V3D web page in the user's web browser
-class OpenV3dWebPageAction : public BrowseToWebPageAction
-{
-public:
-    OpenV3dWebPageAction(QObject* parent);
-};
+//class OpenV3dWebPageAction : public BrowseToWebPageAction
+//{
+//public:
+//    OpenV3dWebPageAction(QObject* parent);
+//};
 
 
 /// Show the "About V3D" dialog
-class ShowV3dAboutDialogAction : public QAction
-{
-    Q_OBJECT
-public:
-    ShowV3dAboutDialogAction(QWidget* parent);
-private slots:
-    void show_dialog();
-};
+//class ShowV3dAboutDialogAction : public QAction
+//{
+//    Q_OBJECT
+//public:
+//    ShowV3dAboutDialogAction(QWidget* parent);
+//private slots:
+//    void show_dialog();
+//};
 
 
 } // namespace v3d

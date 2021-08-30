@@ -66,7 +66,7 @@ struct iDrawExternalParameter
 	QStringList pointcloud_file_list;
 	QString surface_file;
 	QString labelfield_file;
-        QString marker_file;
+    QString marker_file;
 
 	//some external controls for the 3d viewer
 	//float zthickness; //the default z-thickness when start the 3d viewer. 100626
@@ -134,9 +134,14 @@ class XFormWidget : public QWidget, public TriviewControl //class XFormWidget : 
     Q_OBJECT;
 
 public:
-    XFormWidget(QWidget *parent);
+	int currentImageIdx;
+	QStringList expImages;
+	XFormWidget(QWidget *parent);
+	XFormWidget(QWidget *parent, QStringList fromExpImages);
     XFormWidget(QWidget *parent, Qt::WidgetAttribute f); //080814 add the second arugment. This is eventually not used. Just keep here for further use
     ~XFormWidget();
+
+	
 
     void initialize();
     void connectColorGUI(); //110721 RZC
@@ -153,7 +158,8 @@ public:
 	bool importLeicaData();
 	bool importGeneralImgSeries(const QStringList & mylist, TimePackType timepacktype);
 
-    bool loadFile(QString filename);
+	bool loadFile(QString filename);
+	bool loadFile(int imgIdx);
     bool importGeneralImageFile(QString filename);
     bool importLeicaFile(QString filename);
 	QString userFriendlyCurrentFile() {return (openFileNameLabel);}
@@ -224,6 +230,8 @@ public:
      Mapview_Paras mapview_paras; // for mapview control
      ImageMapView mapview; // mapview
 
+	 MainWindow * p_mainWindow;
+
 protected:
 	virtual void changeEvent(QEvent* e);    //110802 RZC
 	virtual void hideEvent(QHideEvent * e); //110808 RZC
@@ -239,7 +247,6 @@ protected:
 
 private:
 	// communication of different images windows
-	MainWindow * p_mainWindow;
 	bool bSendSignalToExternal, bAcceptSignalFromExternal, bUsingMultithreadedImageIO;
 
 	My4DImage *imgData;
@@ -317,6 +324,8 @@ private:
 	void createMenuOf3DViewer();
 
 public slots:
+
+	bool loadNextImg(); //0427 JSN
 //    void changeColorType(ImageDisplayColorType c);
 
 //110722 RZC, for directly updating pixmap of 3view.  //110803 RZC, add bGlass
@@ -365,7 +374,7 @@ public slots:
     void doImage3DView(bool tmp_b_use_512x512x256, int b_local=0, V3DLONG bbx0=-1, V3DLONG bbx1=-1, V3DLONG bby0=-1, V3DLONG bby1=-1, V3DLONG bbz0=-1, V3DLONG bbz1=-1,
                        bool show=true); // @ADDED by Alessandro on 2015-09-29. Postpone show() if required.
 	void doMenuOf3DViewer();
-	void aboutInfo();
+	//void aboutInfo();
 
     void setOpenFileName();
     void reset();

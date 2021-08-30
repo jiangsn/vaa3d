@@ -583,6 +583,7 @@ int VR_MainWindow::StartVRScene(QList<NeuronTree>* ntlist, My4DImage *i4d, MainW
 	}
 	if (!pMainApplication->BInit())
 	{
+		qDebug()<<"You clicked quit 2."<<endl;
 		pMainApplication->Shutdown();
 		return 0;
 	}
@@ -741,13 +742,14 @@ void VR_MainWindow::RunVRMainloop(XYZ* zoomPOS)
 //-----------------------------------------------------------------------------
 // Purpose: for standalone VR.
 //-----------------------------------------------------------------------------
-int startStandaloneVRScene(QList<NeuronTree>* ntlist, My4DImage *i4d, MainWindow *pmain, XYZ* zoomPOS)
+int startStandaloneVRScene(QList<NeuronTree>* ntlist, My4DImage *i4d, iDrawExternalParameter* idep, MainWindow *pmain, XYZ* zoomPOS) //shuning: we use this one
 // bool startStandaloneVRScene(QList<NeuronTree>* ntlist, My4DImage *i4d, MainWindow *pmain)
 {
 
 	CMainApplication *pMainApplication = new CMainApplication( 0, 0 );
 	//pMainApplication->setnetworkmodefalse();//->NetworkModeOn=false;
     pMainApplication->mainwindow = pmain;
+	pMainApplication->_idep = idep;
     pMainApplication->isOnline = false;
 
 	if(ntlist != NULL)
@@ -794,6 +796,7 @@ int startStandaloneVRScene(QList<NeuronTree>* ntlist, My4DImage *i4d, MainWindow
 	}
 	if (!pMainApplication->BInit())
 	{
+		qDebug()<<"You clicked quit 3."<<endl;
 		pMainApplication->Shutdown();
 		return 0;
 	}
@@ -805,6 +808,10 @@ int startStandaloneVRScene(QList<NeuronTree>* ntlist, My4DImage *i4d, MainWindow
 
 	// bool _call_that_plugin = pMainApplication->_call_assemble_plugin;
 	int _call_that_function = pMainApplication->postVRFunctionCallMode;
+	if (pMainApplication->loadNextQuit)
+	{
+		_call_that_function = 965;
+	}
 	zoomPOS->x = pMainApplication->teraflyPOS.x;
 	zoomPOS->y = pMainApplication->teraflyPOS.y;
 	zoomPOS->z = pMainApplication->teraflyPOS.z;

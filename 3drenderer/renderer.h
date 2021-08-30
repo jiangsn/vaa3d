@@ -65,6 +65,9 @@ Peng, H, Ruan, Z., Atasoy, D., and Sternson, S. (2010) Automatic reconstruction 
 
 class Renderer
 {
+	public slots:
+	//virtual void saveNeuronTree(int, const QString&);
+
 public:
 	enum RenderMode {rmCrossSection=0,
 					rmAlphaBlendingProjection,
@@ -111,6 +114,7 @@ public:
 	UI3dViewMode  ui3dviewMode;
 	void* widget;
 
+
 public:
 	Renderer(void* widget); //100827 add widget
 	virtual ~Renderer();
@@ -118,7 +122,8 @@ public:
 
 	bool hasError() {return b_error;}
 	void makeCurrent(); //ensure right-GL-context when resize-view, animate, mouse-drop, delete-object, select-object etc. across multiple views, 081105
-        void drawString(float x, float y, float z, const char* text, int shadow=0, int fontsize=0);
+	void drawString(float x, float y, float z, const char* text, int shadow = 0, int fontsize = 0);
+	void drawString(float x, float y, float z, QString text, int shadow = 0, int fontsize = 0);
 	bool beStill();
 
 public:
@@ -169,9 +174,12 @@ public:
 	virtual void setObjectSpace();
 	virtual void setSurfClipSpace();
 	virtual void setBoundingBoxSpace(BoundingBox BB);
-	virtual void drawBoundingBoxAndAxes(BoundingBox BB, float BlineWidth=1, float AlineWidth=3);
+	virtual void setCenterBoundingBoxSpace(BoundingBox BB);
+	virtual void drawBoundingBoxAndAxes(BoundingBox BB, float BlineWidth = 1, float AlineWidth = 3);
+	virtual void drawCenterBoundingBoxAndAxes(BoundingBox BB, float BlineWidth = 1, float AlineWidth = 3);
 
-    virtual void drawVaa3DInfo(int fontsize=30);
+	virtual void drawVaa3DInfo(int fontsize = 30);
+	virtual void drawImageInfo(int fontsize = 30);
     virtual void drawEditInfo();
 
 	virtual void drawSegInfo();
@@ -265,6 +273,7 @@ public:
 
 
 public:
+	iDrawExternalParameter* _idep;
 	int sShowTrack, curChannel;
      int sShowRubberBand; // ZJL 1109221
 
@@ -367,7 +376,7 @@ private:
 
 		tryTexNPT = 0;
 		tryTex3D = 0;
-		tryTexCompress = 1;
+		tryTexCompress = 0;
 		tryTexStream = 1;
 		tryVolShader = 1;
 
@@ -384,7 +393,7 @@ private:
 		//// perspective view frustum
 		screenW = screenH = 0;
 		viewAngle = 31;
-		zoomRatio = 1;
+		zoomRatio = 1.2;
 	    viewNear = 1;
 	    viewFar = 10;
         viewDistance = 5;

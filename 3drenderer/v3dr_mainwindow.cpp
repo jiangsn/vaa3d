@@ -54,7 +54,7 @@ last update: 060903
 void V3dR_MainWindow::closeEvent(QCloseEvent* e)
 {
 	qDebug("V3dR_MainWindow::closeEvent, glWidget = %0p", glWidget);
-
+	system(("del /f .\\utils\\" + to_string(_idep->V3Dmainwindow->currentImgIdx)).c_str());
 	if (sAnimate==1) // preview or save movie
 	{
 		e->ignore(); // wait animating stop, 080930
@@ -201,9 +201,13 @@ V3dR_MainWindow::V3dR_MainWindow(iDrawExternalParameter* idep)
 	//090723 move to the last position & size
     if (_idep && (_idep->local_win_size.isValid()))
 	{
-		 move(_idep->local_win_pos + QPoint(0, 25)); //100721 RZC, move pos down slightly to pull back title bar of win
+		 move(_idep->local_win_pos + QPoint(0, 0)); //100721 RZC, move pos down slightly to pull back title bar of win
 		 resize(_idep->local_win_size);
 	}
+	//move(_idep->local_win_pos + QPoint(480, 270)); //100721 RZC, move pos down slightly to pull back title bar of win
+	//resize(_idep->local_win_size);
+	//showFullScreen();
+	showMaximized();
 #endif
     qDebug() << title_prefix+" [" + data_title + "]";
     setWindowTitle(title_prefix+" [" + data_title + "]");
@@ -224,6 +228,7 @@ V3dR_MainWindow::V3dR_MainWindow(iDrawExternalParameter* idep)
 
     //if (glWidget)	POST_EVENT(glWidget, QEvent::Type(QEvent_OpenFiles)); // move to V3dR_GLWidget::initializeGL for dynamic renderer, 081122 by RZC
 
+	
 
 	//qDebug("V3dR_MainWindow::createControlWidgets");
     createControlWidgets(); // RZC 080930, 090420: included connectSignal() & initControlValue()
@@ -233,6 +238,99 @@ V3dR_MainWindow::V3dR_MainWindow(iDrawExternalParameter* idep)
 	setFocusPolicy(Qt::StrongFocus); // STRANGE: cannot accept foucusInEvent when mouse click, 081119
 
 	//qDebug("V3dR_MainWindow::V3dR_MainWindow ===== end");
+}
+
+void V3dR_MainWindow::updateV3dR_GLWidget(iDrawExternalParameter* idep)
+{
+	//null_idep = *_idep;
+	//_idep = &null_idep;
+	//_idep->image4d = new My4DImage();
+
+	//if (_idep->xwidget)	data_title = _idep->xwidget->windowTitle();
+	//if (_idep->V3Dmainwindow) setParent(_idep->V3Dmainwindow); //090710
+
+	//qDebug() << title_prefix + " [" + data_title + "]";
+	//setWindowTitle(title_prefix + " [" + data_title + "]");
+
+	//glWidget = 0;
+	//glWidget = new V3dR_GLWidget(_idep, this, data_title); // 'this' pointer for glWidget calling back
+
+	////////////////////////////////////////////////////////////////////
+	qDebug("V3dR_MainWindow::V3dR_MainWindow =====================================");
+	//setAttribute ( Qt::WA_DeleteOnClose, true ); // maybe cause Non-aligned pointer being freed error, when do'not use deleteLater, by RZC 080814, 090427
+	//setAttribute ( Qt::WA_AlwaysShowToolTips, true ); //090427 RZC: force show tooltip, may show some rubbish.
+	//090427 Always tooltip disappears after press any Modifier Key (Shift, Control, Option, Command). Because posting KeyPressEvent to glWidget make CPU 100% load.
+
+	///////////////////////////////////////////////////////////////
+	init_members();    // this is important to clear zero before new object, by RZC 080818
+	////////////////////////////////////////////////////////////////
+
+	title_prefix = "3D View";
+	data_title = "";
+	this->_idep = idep; ////
+#ifndef test_main_cpp
+	if (_idep)
+	{
+		if (_idep->image4d == 0)
+		{
+			//090918 RZC: dummy image4d for editing swc
+			null_idep = *_idep;
+			_idep = &null_idep;
+			_idep->image4d = new My4DImage();
+		}
+
+		if (_idep->b_local) 	title_prefix = "Local 3D View";
+
+		_idep->b_still_open = true;
+		if (_idep->xwidget)	data_title = _idep->xwidget->windowTitle();
+		//if (_idep->V3Dmainwindow) setParent(_idep->V3Dmainwindow); //090710
+	}
+
+	if (!_idep || !_idep->p_list_3Dview_win) //by PHC, 081003
+	{
+		qDebug() << "The iDrawExternalParameter is invalid or contains a NULL pointer to the list_3Dview_win. This should NEVER happen. Check your program.";
+	}
+	else //now add "this" pointer to the central record keeper
+	{
+		_idep->p_list_3Dview_win->append(this);
+	}
+
+	//090723 move to the last position & size
+	if (_idep && (_idep->local_win_size.isValid()))
+	{
+		move(_idep->local_win_pos + QPoint(0, 0)); //100721 RZC, move pos down slightly to pull back title bar of win
+		resize(_idep->local_win_size);
+	}
+#endif
+	qDebug() << title_prefix + " [" + data_title + "]";
+	setWindowTitle(title_prefix + " [" + data_title + "]");
+
+
+	//////////////////////////////////////////////////////////////////
+	glWidget = 0;
+	glWidget = new V3dR_GLWidget(_idep, this, data_title); // 'this' pointer for glWidget calling back
+#if defined(USE_Qt5)
+	if (!glWidget) //Under Qt5, the GL Widget is not valid until after it's shown
+#else
+	if (!glWidget || !(glWidget->isValid()))
+#endif
+	{
+		MESSAGE("ERROR: Failed to create OpenGL Widget or Context!!! \n");
+	}
+	//////////////////////////////////////////////////////////////////
+
+	//if (glWidget)	POST_EVENT(glWidget, QEvent::Type(QEvent_OpenFiles)); // move to V3dR_GLWidget::initializeGL for dynamic renderer, 081122 by RZC
+
+
+	//qDebug("V3dR_MainWindow::createControlWidgets");
+	createControlWidgets(); // RZC 080930, 090420: included connectSignal() & initControlValue()
+
+
+	setAcceptDrops(true); //081031
+	setFocusPolicy(Qt::StrongFocus); // STRANGE: cannot accept foucusInEvent when mouse click, 081119
+
+	//qDebug("V3dR_MainWindow::V3dR_MainWindow ===== end");
+
 }
 
 void V3dR_MainWindow::setDataTitle(QString newdt)

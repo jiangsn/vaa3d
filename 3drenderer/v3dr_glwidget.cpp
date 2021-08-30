@@ -203,11 +203,19 @@ V3dR_GLWidget::V3dR_GLWidget(iDrawExternalParameter* idep, QWidget* mainWindow, 
 
 	//qDebug("V3dR_GLWidget::V3dR_GLWidget ----- end");
 	currentPluginState = -1; // May 29, 2012 by Hang
+
+	exptime.start();
 }
 
 //////////////////////////////////////////////////////
 void V3dR_GLWidget::deleteRenderer() {makeCurrent(); DELETE_AND_ZERO(renderer);} //090710 RZC: to delete renderer before ~V3dR_GLWidget()
-void V3dR_GLWidget::createRenderer() {makeCurrent(); deleteRenderer(); initializeGL();} //090710 RZC: to create renderer at any time
+void V3dR_GLWidget::createRenderer() 
+{
+	qDebug() << "createRenderer()" << endl;
+	makeCurrent(); 
+	deleteRenderer(); 
+	initializeGL();
+} //090710 RZC: to create renderer at any time
 
 void V3dR_GLWidget::choiceRenderer()
 {
@@ -265,6 +273,7 @@ void V3dR_GLWidget::settingRenderer() // before renderer->setupData & init
 #ifndef test_main_cpp
 	if (_idep && _idep->V3Dmainwindow && renderer)
 	{
+		renderer->_idep = _idep;
 		renderer->bShowBoundingBox = (_idep->V3Dmainwindow->global_setting.b_autoDispBoundingBox);
 		renderer->bShowAxes        = (_idep->V3Dmainwindow->global_setting.b_autoDispXYZAxes);
 
@@ -333,11 +342,11 @@ void V3dR_GLWidget::preparingRenderer() // renderer->setupData & init, 100719 ex
 	{
 		emit changeDispType_cs3d(true);  // 081215, set check-box must after changeVolumeCutRange()
 	}
-	if (supported_TexCompression())
-	{
-		qDebug("	GL texture compression supported, enable texture compression function");
-		emit changeEnableVolCompress(true);
-	}
+	// if (supported_TexCompression())
+	// {
+	// 	qDebug("	GL texture compression supported, enable texture compression function+++++++++++++++++++++++++++");
+	// 	emit changeEnableVolCompress(true);
+	// }
 	if (supported_GLSL())
 	{
 		qDebug("	GL shading language supported, enable volume colormap function");
@@ -349,6 +358,36 @@ void V3dR_GLWidget::preparingRenderer() // renderer->setupData & init, 100719 ex
 
 	//updateTool(); //081222   //110722, no need, called by V3dR_MainWindow::changeEvent(ActivationChange)
 	// 081122, CAUTION: call updateGL from initializeGL will cause infinite loop call
+}
+
+void V3dR_GLWidget::autoSaveSwc()
+{
+	qDebug() << "V3dR_GLWidget::autoSaveSwc()";
+	((Renderer_gl2*)renderer)->saveNeuronTree(0, _idep->V3Dmainwindow->currentSwcPath);
+	//renderer->saveNeuronTree(0, _idep->V3Dmainwindow->currentImgPath);
+	float elapsed_time = exptime.elapsed() * 0.001;
+	qDebug() << "Time cost: " << elapsed_time << endl;
+	appendInfoToSwc("#Time cost: " + to_string(elapsed_time));
+}
+
+
+void V3dR_GLWidget::appendInfoToSwc(string info)
+{
+	string swcName = _idep->V3Dmainwindow->currentSwcPath.toUtf8().constData();
+	string outstring = info;
+	outstring += '\n';
+	ifstream fin;
+	fin.open(swcName);
+	stringstream org_content;;
+	org_content << fin.rdbuf();
+	fin.close();
+	outstring += org_content.str();
+
+	ofstream fout;
+	fout.open(swcName);
+	fout.flush();
+	fout << outstring;
+	fout.close();
 }
 
 void V3dR_GLWidget::initializeGL()
@@ -379,6 +418,58 @@ void V3dR_GLWidget::initializeGL()
 	settingRenderer(); //091007, 100719 moved to position before renderer->setupData
 
      preparingRenderer();
+
+	 // shuning
+	 // auto load swc file (same directory)
+	 QString swcName = _idep->V3Dmainwindow->currentImgPath;
+	 swcName = swcName.replace("tif", "swc");
+	 ifstream swcFile(swcName.toUtf8().constData());
+	 if (swcFile.good())
+	 {
+		 //qDebug() << "Loading swc: " << swcName << endl;
+		 //loadObjectFromFile(swcName);
+	 }
+	 
+	 renderer->callStrokeCurveDrawingBBoxes();
+
+	 //shuning
+	 //show center by default
+	 //toggleCenterCutRange();
+
+	 if (_idep->V3Dmainwindow->vrMode)
+	 {
+		 //doimage3DVRView();
+	 }
+}
+
+
+void V3dR_GLWidget::toggleCenterCutRange()
+{
+	int d1, d2, d3;
+	d1 = MAX(0, dataDim1() - 1);
+	d2 = MAX(0, dataDim2() - 1);
+	d3 = MAX(0, dataDim3() - 1);
+	qDebug() << d1 << "---" << d2 << "---" << d3 << endl;
+
+	//qDebug() << glWidget->xCut0() << endl;
+	if (xCut0())
+	{
+		setXCut0(0);
+		setXCut1(d1);
+		setYCut0(0);
+		setYCut1(d2);
+		setZCut0(0);
+		setZCut1(d3);
+	}
+	else
+	{
+		setXCut0(d1 / 3);
+		setXCut1(d1 * 2 / 3);
+		setYCut0(d2 / 3);
+		setYCut1(d2 * 2 / 3);
+		setZCut0(d3 / 3);
+		setZCut1(d3 * 2 / 3);
+	}
 }
 
 
@@ -515,7 +606,23 @@ void V3dR_GLWidget::customEvent(QEvent* e)
 		{
 			emit signalOnlySurfaceObj(); // V3dR_MainWindow->onlySurfaceObjTab
 		}
+		if (!_idep->V3Dmainwindow->vrMode)
+		{
+			system(("echo. " + to_string(_idep->V3Dmainwindow->vrMode) + " > .\\utils\\" + to_string(_idep->V3Dmainwindow->currentImgIdx)).c_str());
+
+			system(("start /B python .\\utils\\desktop_tracker.py " + \
+				QString::number(_idep->V3Dmainwindow->currentImgIdx) + \
+				" > " + \
+				_idep->V3Dmainwindow->currentEventPath.replace("/", "\\\\")
+				).toStdString().c_str());
+		}
+		
 		qDebug("-------------------------------------------------------------- Ready");
+		if (_idep->V3Dmainwindow->vrMode)
+		{
+			//emit signalStartVR();
+			doimage3DVRView();
+		}
 		break;
 
 	}
@@ -967,7 +1074,7 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent * e)  //090428 RZC: make publi
 		case Qt::Key_B:
 			if (IS_CTRL_MODIFIER)
 		    {
-		    	setBright();
+		    	//setBright();
             }else if (IS_ALT_MODIFIER)
             {
                 callStrokeCurveDrawingBBoxes();//For serial BBoxes curve drawing shortcut, by ZZ,02212018
@@ -976,17 +1083,17 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent * e)  //090428 RZC: make publi
 		case Qt::Key_R:
 			if (IS_CTRL_MODIFIER)
 		    {
-		    	reloadData();
+		    	//reloadData();
 			}
             else
             {
-                returncheckmode();
+                //returncheckmode();
             }
 	  		break;
 		case Qt::Key_U:
 			if (IS_CTRL_MODIFIER)
 		    {
-		    	updateWithTriView();
+		    	//updateWithTriView();
 			}
 	  		break;
 //		case Qt::Key_I:
@@ -1010,16 +1117,16 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent * e)  //090428 RZC: make publi
 		    		WITH_CTRL_MODIFIER
 		    	)
 		    {
-		    	showGLinfo();
+		    	//showGLinfo();
 			}
             else if (renderer)
             {
-                Renderer_gl1* thisRenderer = static_cast<Renderer_gl1*>(this->getRenderer());
-                if (thisRenderer->selectMode == Renderer::smDeleteMultiNeurons)
-                {
-                    thisRenderer->setDeleteKey(1);
-                    thisRenderer->deleteMultiNeuronsByStroke();
-                }
+                //Renderer_gl1* thisRenderer = static_cast<Renderer_gl1*>(this->getRenderer());
+                //if (thisRenderer->selectMode == Renderer::smDeleteMultiNeurons)
+                //{
+                //    thisRenderer->setDeleteKey(1);
+                //    thisRenderer->deleteMultiNeuronsByStroke();
+                //}
             }
 	  		break;
 		case Qt::Key_G:
@@ -1027,13 +1134,13 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent * e)  //090428 RZC: make publi
                  WITH_CTRL_MODIFIER
                  )
             {
-                toggleShader();
+                //toggleShader();
             }else if (IS_ALT_MODIFIER)
             {
-                callStrokeCurveDrawingGlobal();//For Global optimal curve drawing shortcut, by ZZ,02212018
+                //callStrokeCurveDrawingGlobal();//For Global optimal curve drawing shortcut, by ZZ,02212018
             }else
             {
-                callGDTracing();
+                //callGDTracing();
             }
             break;
 
@@ -1041,7 +1148,7 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent * e)  //090428 RZC: make publi
 		case Qt::Key_F:
 		    if (IS_CTRL_MODIFIER)
 		    {
-		    	toggleTexFilter();
+		    	//toggleTexFilter();
 			}
 			else if (IS_ALT_MODIFIER)
 			{
@@ -1210,7 +1317,7 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent * e)  //090428 RZC: make publi
          case Qt::Key_E:
             if (IS_ALT_MODIFIER)
             {
-                toggleEditMode();
+                //toggleEditMode();
             }
 			else if (IS_SHIFT_MODIFIER)
 			{
@@ -1262,10 +1369,10 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent * e)  //090428 RZC: make publi
 		    		WITH_CTRL_MODIFIER
 				)
 		    {
-		    	toggleTex2D3D();
+		    	//toggleTex2D3D();
             }else if (IS_ALT_MODIFIER)
             {
-                callStrokeRetypeMultiNeurons();//For multiple segments retyping shortcut, by ZZ,02212018
+                //callStrokeRetypeMultiNeurons();//For multiple segments retyping shortcut, by ZZ,02212018
             }
 			else if (WITH_ALT_MODIFIER && WITH_SHIFT_MODIFIER)
 			{
@@ -1273,15 +1380,15 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent * e)  //090428 RZC: make publi
             }
 			else if (renderer)
 			{
-				Renderer_gl1* thisRenderer = static_cast<Renderer_gl1*>(this->getRenderer());
-                if (thisRenderer->selectMode == Renderer::smDeleteMultiNeurons)
-                {
-                    thisRenderer->setDeleteKey(2);
-                    thisRenderer->deleteMultiNeuronsByStroke();
-                }
+				//Renderer_gl1* thisRenderer = static_cast<Renderer_gl1*>(this->getRenderer());
+                //if (thisRenderer->selectMode == Renderer::smDeleteMultiNeurons)
+                //{
+                //    thisRenderer->setDeleteKey(2);
+                //    thisRenderer->deleteMultiNeuronsByStroke();
+                //}
 			}
 			else
-                callAutoTracers();
+                //callAutoTracers();
 	  		break;
         case Qt::Key_D:
             if (IS_ALT_MODIFIER)
@@ -1898,6 +2005,7 @@ void V3dR_GLWidget::setChannelB(bool s)
 }
 void V3dR_GLWidget::setVolCompress(bool s)
 {
+	s = false;
 	if (renderer)
 	{
 		_volCompress = (renderer->tryTexCompress >0);
@@ -2110,81 +2218,26 @@ void V3dR_GLWidget::doimageVRView(bool bCanCoMode)//0518
 	My4DImage *img4d = this->getiDrawExternalParameter()->image4d;
     this->getMainWindow()->hide();
 	//process3Dwindow(false);
-    QMessageBox::StandardButton reply;
-	if(bCanCoMode&&(!resumeCollaborationVR))// get into collaboration  first time
-		reply = QMessageBox::question(this, "Vaa3D VR", "Collaborative mode?", QMessageBox::Yes|QMessageBox::No);
-	else if(resumeCollaborationVR)	//if resume collaborationVR ,reply = yes and no question message box
-		reply = QMessageBox::Yes;
-	else
-		reply = QMessageBox::No;
-	if (reply == QMessageBox::Yes)
+    
+	// bool _Call_ZZ_Plugin = startStandaloneVRScene(listNeuronTrees, img4d, (MainWindow *)(this->getMainWindow())); // both nt and img4d can be empty.
+	int _call_that_func = startStandaloneVRScene(listNeuronTrees, img4d, _idep, (MainWindow *)(this->getMainWindow()),&teraflyZoomInPOS); // both nt and img4d can be empty.
+	qDebug()<<"result is "<<_call_that_func;
+	qDebug()<<"xxxxxxxxxxxxx ==%1 y ==%2 z ==%3"<<teraflyZoomInPOS.x<<teraflyZoomInPOS.y<<teraflyZoomInPOS.z;
+	updateWithTriView();
+	if (_call_that_func == 965) //load next image
 	{
-		if(VRClientON==false)
-		{
-			VRClientON = true;
-			if(myvrwin)
-				delete myvrwin;
-			myvrwin = 0;
-			myvrwin = new VR_MainWindow(TeraflyCommunicator);
-			myvrwin->setWindowTitle("VR MainWindow");
-			//bool linkerror = myvrwin->SendLoginRequest(resumeCollaborationVR);
-			
-			if(!TeraflyCommunicator)  // there is error with linking ,linkerror = 0
-			{qDebug()<<"can't connect to server .unknown wrong ";this->getMainWindow()->show(); VRClientON = false;return;}
-			connect(myvrwin,SIGNAL(VRSocketDisconnect()),this,SLOT(OnVRSocketDisConnected()));
-			QString VRinfo = this->getDataTitle();
-			qDebug()<<"VR get data_title = "<<VRinfo;
-			resumeCollaborationVR = false;//reset resumeCollaborationVR
-			myvrwin->ResIndex = Resindex;
-			int _call_that_func = myvrwin->StartVRScene(listNeuronTrees,img4d,(MainWindow *)(this->getMainWindow()),1,VRinfo,CollaborationCreatorRes,TeraflyCommunicator,&teraflyZoomInPOS,&CollaborationCreatorPos,collaborationMaxResolution);
-
-			qDebug()<<"result is "<<_call_that_func;
-			qDebug()<<"xxxxxxxxxxxxx ==%1 y ==%2 z ==%3"<<teraflyZoomInPOS.x<<teraflyZoomInPOS.y<<teraflyZoomInPOS.z;
-#ifdef __ALLOW_VR_FUNCS_
-			UpdateVRcollaInfo();
-#endif
-			updateWithTriView();
-
-			if (_call_that_func > 0)
-			{
-				resumeCollaborationVR = true;
-				emit(signalCallTerafly(_call_that_func));
-			}
-			else if(_call_that_func == -1)
-			{
-				call_neuron_assembler_live_plugin((MainWindow *)(this->getMainWindow()));
-			}
-		}
-		else
-		{
-			v3d_msg("The ** client is running.Failed to start VR client.");
-			this->getMainWindow()->show();
-		}
+		autoSaveSwc();
+		_idep->V3Dmainwindow->loadNextImage();
 	}
-	else
+	else if (_call_that_func > 0)
 	{
-		// bool _Call_ZZ_Plugin = startStandaloneVRScene(listNeuronTrees, img4d, (MainWindow *)(this->getMainWindow())); // both nt and img4d can be empty.
-		int _call_that_func = startStandaloneVRScene(listNeuronTrees, img4d, (MainWindow *)(this->getMainWindow()),&teraflyZoomInPOS); // both nt and img4d can be empty.
-		qDebug()<<"result is "<<_call_that_func;
-		qDebug()<<"xxxxxxxxxxxxx ==%1 y ==%2 z ==%3"<<teraflyZoomInPOS.x<<teraflyZoomInPOS.y<<teraflyZoomInPOS.z;
-		updateWithTriView();
-		if (_call_that_func > 0)
-		{
-			emit(signalCallTerafly(_call_that_func));
-		}
-		else if(_call_that_func == -1)
-		{
-			call_neuron_assembler_live_plugin((MainWindow *)(this->getMainWindow()));
-		}
-
-		//this->getMainWindow()->show();
-		// if(_Call_ZZ_Plugin)
-		// {
-		// 	// call_neuron_assembler_live_plugin((MainWindow *)(this->getMainWindow()));
-		// 	emit(signalCallTerafly());
-		// }
+		emit(signalCallTerafly(_call_that_func));
 	}
-		//process3Dwindow(true);
+	else if(_call_that_func == -1)
+	{
+		call_neuron_assembler_live_plugin((MainWindow *)(this->getMainWindow()));
+	}
+	
 
 }
 void V3dR_GLWidget::doclientView(bool check_flag)

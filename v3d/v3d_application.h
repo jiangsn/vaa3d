@@ -25,11 +25,11 @@ private:
     static V3dApplication* theApp;
     static MainWindow* mainWindow;
     static bool mainWindowIsActive;
-
-#ifdef _ALLOW_WORKMODE_MENU_
-    static NaMainWindow* naMainWindow;
-    static bool naMainWindowIsActive;
-#endif
+//shuning
+//#ifdef _ALLOW_WORKMODE_MENU_
+//    static NaMainWindow* naMainWindow;
+//    static bool naMainWindowIsActive;
+//#endif
 
     explicit V3dApplication(int & argc, char ** argv);
 
@@ -75,11 +75,12 @@ public:
     static void handleCloseEvent(QCloseEvent* event) {
         mainWindow->handleCoordinatedCloseEvent(event);
 
-#ifdef _ALLOW_WORKMODE_MENU_
-        if (naMainWindow!=0) {
-            naMainWindow->handleCoordinatedCloseEvent(event);
-        }
-#endif
+//shuning
+//#ifdef _ALLOW_WORKMODE_MENU_
+//        if (naMainWindow!=0) {
+//            naMainWindow->handleCoordinatedCloseEvent(event);
+//        }
+//#endif
 
         QCoreApplication::postEvent(theApp, new QEvent(QEvent::Quit)); // this more OK
     }
@@ -88,11 +89,12 @@ public:
         return mainWindow;
     }
 
-#ifdef _ALLOW_WORKMODE_MENU_
-    static NaMainWindow* getNaMainWindow() {
-        return naMainWindow;
-    }
-#endif
+//shuning
+//#ifdef _ALLOW_WORKMODE_MENU_
+//    static NaMainWindow* getNaMainWindow() {
+//        return naMainWindow;
+//    }
+//#endif
 
     static void activateMainWindow() {
         if (mainWindowIsActive==false) {
@@ -100,12 +102,13 @@ public:
             mainWindowIsActive=true;
         }
 
-#ifdef _ALLOW_WORKMODE_MENU_
-        if (naMainWindow!=0) {
-            naMainWindow->setV3DDefaultModeCheck(true);
-        }
-        mainWindow->setV3DDefaultModeCheck(true);
-#endif
+//shuning
+//#ifdef _ALLOW_WORKMODE_MENU_
+//        if (naMainWindow!=0) {
+//            naMainWindow->setV3DDefaultModeCheck(true);
+//        }
+//        mainWindow->setV3DDefaultModeCheck(true);
+//#endif
     }
 
     static void deactivateMainWindow() {
@@ -113,43 +116,45 @@ public:
             deactivateMainWindowHelper(mainWindow);
             mainWindowIsActive=false;
         }
-#ifdef _ALLOW_WORKMODE_MENU_
-        mainWindow->setV3DDefaultModeCheck(false);
-        if (naMainWindow!=0) {
-            naMainWindow->setV3DDefaultModeCheck(false);
-        }
-#endif
+//shuning
+//#ifdef _ALLOW_WORKMODE_MENU_
+//        mainWindow->setV3DDefaultModeCheck(false);
+//        if (naMainWindow!=0) {
+//            naMainWindow->setV3DDefaultModeCheck(false);
+//        }
+//#endif
     }
 
-#ifdef _ALLOW_WORKMODE_MENU_
-    static void activateNaMainWindow() {
-        if (naMainWindowIsActive==false) {
-            if (naMainWindow==0) {
-                naMainWindow = new NaMainWindow();
-                // Allow NeuronAnnotator to activate file load in default window
-                connect(naMainWindow, SIGNAL(defaultVaa3dFileLoadRequested(QString)),
-                        mainWindow, SLOT(loadV3DFile(QString)));
-                connect(naMainWindow, SIGNAL(defaultVaa3dUrlLoadRequested(QUrl)),
-                        mainWindow, SLOT(loadV3DUrl(QUrl)));
-            }
-            activateMainWindowHelper(naMainWindow);
-            naMainWindowIsActive=true;
-        }
-        naMainWindow->setNeuronAnnotatorModeCheck(true);
-        mainWindow->setNeuronAnnotatorModeCheck(true);
-    }
-
-    static void deactivateNaMainWindow() {
-        if (naMainWindowIsActive==true) {
-            deactivateMainWindowHelper(naMainWindow);
-            naMainWindowIsActive=false;
-        }
-        if (naMainWindow!=0) {
-            naMainWindow->setNeuronAnnotatorModeCheck(false);
-        }
-        mainWindow->setNeuronAnnotatorModeCheck(false);
-    }
-#endif
+//shuning
+//#ifdef _ALLOW_WORKMODE_MENU_
+//    static void activateNaMainWindow() {
+//        if (naMainWindowIsActive==false) {
+//            if (naMainWindow==0) {
+//                naMainWindow = new NaMainWindow();
+//                // Allow NeuronAnnotator to activate file load in default window
+//                connect(naMainWindow, SIGNAL(defaultVaa3dFileLoadRequested(QString)),
+//                        mainWindow, SLOT(loadV3DFile(QString)));
+//                connect(naMainWindow, SIGNAL(defaultVaa3dUrlLoadRequested(QUrl)),
+//                        mainWindow, SLOT(loadV3DUrl(QUrl)));
+//            }
+//            activateMainWindowHelper(naMainWindow);
+//            naMainWindowIsActive=true;
+//        }
+//        naMainWindow->setNeuronAnnotatorModeCheck(true);
+//        mainWindow->setNeuronAnnotatorModeCheck(true);
+//    }
+//
+//    static void deactivateNaMainWindow() {
+//        if (naMainWindowIsActive==true) {
+//            deactivateMainWindowHelper(naMainWindow);
+//            naMainWindowIsActive=false;
+//        }
+//        if (naMainWindow!=0) {
+//            naMainWindow->setNeuronAnnotatorModeCheck(false);
+//        }
+//        mainWindow->setNeuronAnnotatorModeCheck(false);
+//    }
+//#endif
 
     static V3dApplication* getInstance(int & argc, char ** argv) {
         if (theApp==0) {

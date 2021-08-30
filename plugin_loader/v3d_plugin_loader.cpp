@@ -209,24 +209,11 @@ QList<QDir> V3d_PluginLoader::getPluginsDirList()
 
     pluginsDirList.clear();
 	QDir testPluginsDir = QDir(qApp->applicationDirPath());
-#if defined(Q_OS_WIN)
+
     if (testPluginsDir.dirName().toLower() == "debug" || testPluginsDir.dirName().toLower() == "release")
         testPluginsDir.cdUp();
 
 	qDebug() << testPluginsDir.absolutePath();
-#elif defined(Q_OS_MAC)
-    // In a Mac app bundle, plugins directory could be either
-    //  a - below the actual executable i.e. v3d.app/Contents/MacOS/plugins/
-    //  b - parallel to v3d.app i.e. foo/v3d.app and foo/plugins/
-    if (testPluginsDir.dirName() == "MacOS") {
-        QDir testUpperPluginsDir = testPluginsDir;
-        testUpperPluginsDir.cdUp();
-        testUpperPluginsDir.cdUp();
-        testUpperPluginsDir.cdUp(); // like foo/plugins next to foo/v3d.app
-        if (testUpperPluginsDir.cd("plugins"))
-            pluginsDirList.append(testUpperPluginsDir);
-    }
-#endif
     if (testPluginsDir.cd("plugins"))
         pluginsDirList.append(testPluginsDir);
 
@@ -235,38 +222,38 @@ QList<QDir> V3d_PluginLoader::getPluginsDirList()
 
 void V3d_PluginLoader::loadPlugins()
 {
-	QAction *plugin_manager = new QAction(tr("Plug-in manager"), this);
-	connect(plugin_manager, SIGNAL(triggered()), this, SLOT(aboutPlugins()));
-    QAction *plugin_rescan = new QAction(tr("Re-scan all plugins"), this);
-	connect(plugin_rescan, SIGNAL(triggered()), this, SLOT(rescanPlugins()));
-    QAction * plugin_clear = new QAction(tr("Clear used plugins history"),this);
-    connect(plugin_clear, SIGNAL(triggered()), this, SLOT(clear_recentPlugins()));
-	{
-		plugin_menu.addAction(plugin_manager);
-		plugin_menu.addAction(plugin_rescan);
+	//QAction *plugin_manager = new QAction(tr("Plug-in manager"), this);
+	//connect(plugin_manager, SIGNAL(triggered()), this, SLOT(aboutPlugins()));
+ //   QAction *plugin_rescan = new QAction(tr("Re-scan all plugins"), this);
+	//connect(plugin_rescan, SIGNAL(triggered()), this, SLOT(rescanPlugins()));
+ //   QAction * plugin_clear = new QAction(tr("Clear used plugins history"),this);
+ //   connect(plugin_clear, SIGNAL(triggered()), this, SLOT(clear_recentPlugins()));
+	//{
+	//	plugin_menu.addAction(plugin_manager);
+	//	plugin_menu.addAction(plugin_rescan);
 
-        addrecentPlugins(&plugin_menu); //added by Zhi Z 20140721
-        updated_recentPlugins();
+ //       addrecentPlugins(&plugin_menu); //added by Zhi Z 20140721
+ //       updated_recentPlugins();
 
-        plugin_menu.addAction(plugin_clear);
-		plugin_menu.addSeparator();
-	}
+ //       plugin_menu.addAction(plugin_clear);
+	//	plugin_menu.addSeparator();
+	//}
 
-    QList<QDir> pluginsDirList = getPluginsDirList();
+ //   QList<QDir> pluginsDirList = getPluginsDirList();
 
-    if (pluginsDirList.size() == 0)
-    {
-    	qDebug("Cannot find ./plugins directory!");
-        return;
-    }
+ //   if (pluginsDirList.size() == 0)
+ //   {
+ //   	qDebug("Cannot find ./plugins directory!");
+ //       return;
+ //   }
 
-    qDebug("Searching in ./plugins ...... ");
-    foreach (const QDir& pluginsDir, pluginsDirList)
-    {
-    	searchPluginDirs(&plugin_menu, pluginsDir);
-        searchPluginFiles(&plugin_menu, pluginsDir);
-        qDebug("Searching ./plugins done.");
-    }
+ //   qDebug("Searching in ./plugins ...... ");
+ //   foreach (const QDir& pluginsDir, pluginsDirList)
+ //   {
+ //   	searchPluginDirs(&plugin_menu, pluginsDir);
+ //       searchPluginFiles(&plugin_menu, pluginsDir);
+ //       qDebug("Searching ./plugins done.");
+ //   }
 }
 
 //added by Zhi Z 20140721

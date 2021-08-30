@@ -38,6 +38,7 @@ Peng, H, Ruan, Z., Atasoy, D., and Sternson, S. (2010) Automatic reconstruction 
 #ifndef V3DR_GLWIDGET_H
 #define V3DR_GLWIDGET_H
 
+#include <fstream>
 #include "v3dr_common.h"
 #include "renderer.h"
 #include "../basic_c_fun/basic_view3d.h"
@@ -132,6 +133,8 @@ public:
 	int CollaborationCreatorRes;
 	int Resindex;
 
+	QTime exptime;
+
 	static bool resumeCollaborationVR;
 #endif
 //protected:
@@ -183,6 +186,9 @@ public:
 
 public slots:
    	virtual void stillPaint(); //for deferred full-resolution volume painting, connected to still_timer
+	void autoSaveSwc();
+
+	void appendInfoToSwc(string info);
 
 #define __view3dcontrol_interface__
 public:
@@ -462,6 +468,7 @@ signals:
 	void signalInitControlValue();
 	void signalVolumeCutRange();
 	void signalOnlySurfaceObj();
+	void signalStartVR();
 
 	void changeVolumeTimePoint(int);
 
@@ -522,6 +529,7 @@ signals:
 
 public slots:
 	void subtreeHighlightModeMonitor();
+	void toggleCenterCutRange();
 
 public:
 	bool _still, _stillpaint_need, _stillpaint_pending;

@@ -181,8 +181,8 @@ PMain::PMain(V3DPluginCallback2 *callback, QWidget *parent) : QWidget(parent)
     menuBar = new QMenuBar(0);
     /* --------------------------- "File" menu --------------------------- */
     fileMenu = menuBar->addMenu("File");
-    openTeraFlyVolumeAction = new QAction(QIcon(":/icons/open_image_terafly.png"), "Open TeraFly Image (3-5D)", this);
-    openHDF5VolumeAction = new QAction(QIcon(":/icons/open_image_hdf5.png"),    "Open HDF5 Image (3-4D)", this);
+    //openTeraFlyVolumeAction = new QAction(QIcon(":/icons/open_image_terafly.png"), "Open TeraFly Image (3-5D)", this);
+    //openHDF5VolumeAction = new QAction(QIcon(":/icons/open_image_hdf5.png"),    "Open HDF5 Image (3-4D)", this);
     openUnstitchedImageAction = new QAction(QIcon(":/icons/open_image_unconverted.png"),    "Open Unstitched image (3-4D)", this);
     openUnconvertedVolumeFileAction = new QAction(QIcon(":/icons/open_image_file.png"), "Browse For File", this);
     openUnconvertedVolumeFolderAction = new QAction(QIcon(":/icons/open_image_folder.png"), "Browse For Folder", this);
@@ -195,8 +195,8 @@ PMain::PMain(V3DPluginCallback2 *callback, QWidget *parent) : QWidget(parent)
     saveAnnotationsAsAction = new QAction(QIcon(":/icons/saveas.png"), "Save annotations as", this);
     clearAnnotationsAction = new QAction(QIcon(":/icons/clear.png"), "Clear annotations", this);
     exitAction = new QAction("Quit", this);
-    openTeraFlyVolumeAction->setShortcut(QKeySequence("Ctrl+O"));
-    openHDF5VolumeAction->setShortcut(QKeySequence("Ctrl+H"));
+    //openTeraFlyVolumeAction->setShortcut(QKeySequence("Ctrl+O"));
+    //openHDF5VolumeAction->setShortcut(QKeySequence("Ctrl+H"));
     closeVolumeAction->setShortcut(QKeySequence("Ctrl+C"));
     loadAnnotationsAction->setShortcut(QKeySequence("Ctrl+L"));
     //saveandchangetype->setShortcut(QKeySequence("Ctrl+W"));
@@ -206,8 +206,9 @@ PMain::PMain(V3DPluginCallback2 *callback, QWidget *parent) : QWidget(parent)
     saveAnnotationsAsAction->setShortcut(QKeySequence("Ctrl+Shift+S"));
     clearAnnotationsAction->setShortcut(QKeySequence("Ctrl+Shift+C"));
     exitAction->setShortcut(QKeySequence("Ctrl+Q"));
-    connect(openTeraFlyVolumeAction, SIGNAL(triggered()), this, SLOT(openImage()));
-    connect(openHDF5VolumeAction, SIGNAL(triggered()), this, SLOT(openImage()));
+    //connect(openTeraFlyVolumeAction, SIGNAL(triggered()), this, SLOT(openImage()));
+    //connect(openHDF5VolumeAction, SIGNAL(triggered()), this, SLOT(openImage()));
+	//
     connect(openUnstitchedImageAction, SIGNAL(triggered()), this, SLOT(openImage()));
     connect(openUnconvertedVolumeFolderAction, SIGNAL(triggered()), this, SLOT(openImage()));
     connect(openUnconvertedVolumeFileAction, SIGNAL(triggered()), this, SLOT(openImage()));
@@ -220,8 +221,8 @@ PMain::PMain(V3DPluginCallback2 *callback, QWidget *parent) : QWidget(parent)
     connect(saveAnnotationsAsAction, SIGNAL(triggered()), this, SLOT(saveAnnotationsAs()));
     connect(clearAnnotationsAction, SIGNAL(triggered()), this, SLOT(clearAnnotations()));
     connect(saveAnnotationsAfterRemoveDupNodesAction,SIGNAL(triggered()),this,SLOT(saveAnnotationsAfterRemoveDupNodes()));
-    fileMenu->addAction(openTeraFlyVolumeAction);
-    fileMenu->addAction(openHDF5VolumeAction);
+    //fileMenu->addAction(openTeraFlyVolumeAction);
+    //fileMenu->addAction(openHDF5VolumeAction);
     fileMenu->addAction(openUnstitchedImageAction);
     openUnconvertedVolumeMenu = fileMenu->addMenu(QIcon(":/icons/open_image_unconverted.png"), "Open Unconverted Image (3-4D)");
     openUnconvertedVolumeMenu->addAction(openUnconvertedVolumeFolderAction);
@@ -561,8 +562,8 @@ PMain::PMain(V3DPluginCallback2 *callback, QWidget *parent) : QWidget(parent)
     recentVolumesMenu->addSeparator();
     recentVolumesMenu->addAction(clearRecentVolumesAction);
 
-    openMenu->addAction(openTeraFlyVolumeAction);
-    openMenu->addAction(openHDF5VolumeAction);
+    //openMenu->addAction(openTeraFlyVolumeAction);
+    //openMenu->addAction(openHDF5VolumeAction);
     openMenu->addAction(openUnstitchedImageAction);
     openMenu->addMenu(openUnconvertedVolumeMenu);
     openMenu->addMenu(recentVolumesMenu);
@@ -1201,8 +1202,8 @@ void PMain::reset()
     /**/tf::debug(tf::LEV1, 0, __itm__current__function__);
 
     //resetting menu options and widgets
-    openTeraFlyVolumeAction->setEnabled(true);
-    openHDF5VolumeAction->setEnabled(true);
+    //openTeraFlyVolumeAction->setEnabled(true);
+    //openHDF5VolumeAction->setEnabled(true);
     openUnstitchedImageAction->setEnabled(true);
     openVolumeToolButton->setEnabled(true);
     recentVolumesMenu->setEnabled(true);
@@ -1375,14 +1376,12 @@ void PMain::openImage(std::string path /*= ""*/)
             throw RuntimeException("An image has been already imported! Please close the current image first.");
 
         // these senders require a folder selection dialog
-        if(sender() == openTeraFlyVolumeAction || sender() == openUnconvertedVolumeFolderAction)
+        if(sender() == openUnconvertedVolumeFolderAction)
         {
             /**/tf::debug(tf::LEV2, "launch folder dialog", __itm__current__function__);
 
-            std::string title = sender() == openTeraFlyVolumeAction ?
-                        "Select any folder with prefix \"RES\"" :
-                        "Select the folder containing all image files";
-            #ifdef _USE_QT_DIALOGS
+            std::string title = "Select the folder containing all image files";
+            /*#ifdef _USE_QT_DIALOGS
             QFileDialog dialog(0);
             dialog.setFileMode(QFileDialog::Directory);
             dialog.setViewMode(QFileDialog::Detail);
@@ -1391,11 +1390,11 @@ void PMain::openImage(std::string path /*= ""*/)
             dialog.setDirectory(CSettings::instance()->getVolumePathLRU().c_str());
             if(dialog.exec())
                 path = dialog.directory().absolutePath().toStdString().c_str();
-            #else
+            #else*/
             path = QFileDialog::getExistingDirectory(this, title.c_str(),
                                                      CSettings::instance()->getVolumePathLRU().c_str(),
                                                      QFileDialog::ShowDirsOnly).toStdString();
-            #endif
+            //#endif
 
             /**/tf::debug(tf::LEV3, strprintf("selected path = %s", path.c_str()).c_str(), __itm__current__function__);
 
@@ -1403,29 +1402,27 @@ void PMain::openImage(std::string path /*= ""*/)
                 return;
 
             // for TeraFly format, check folder name matches with the used convention
+/*
             if(sender() == openTeraFlyVolumeAction)
             {
                 QDir dir(path.c_str());
                 if( dir.dirName().toStdString().substr(0,3).compare(tf::RESOLUTION_PREFIX) != 0)
                     throw RuntimeException(strprintf("\"%s\" is not a valid resolution: the name of the folder does not start with \"%s\"",
                                            path.c_str(), tf::RESOLUTION_PREFIX.c_str() ).c_str());
-            }
+            }*/
         }
         // these senders require a file selection dialog
-        else if(sender() == openHDF5VolumeAction || sender() == openUnconvertedVolumeFileAction || sender() == openUnstitchedImageAction)
+        else if(sender() == openUnconvertedVolumeFileAction || sender() == openUnstitchedImageAction)
         {
             /**/tf::debug(tf::LEV2, "launch file dialog", __itm__current__function__);
 
 
-            std::string filter;
-            if(sender() == openHDF5VolumeAction)
-                filter = "HDF5 files (*.h5)";
-            else if(sender() == openUnconvertedVolumeFileAction)
+            std::string filter;if(sender() == openUnconvertedVolumeFileAction)
                 filter = "Vaa3D files (*.raw *.v3draw * *.RAW *.V3DRAW);; TIFF files (*.tif *.TIFF)" ;
             else if(sender() == openUnstitchedImageAction)
                 filter = "Image descriptor files (*.xml)" ;
 
-            #ifdef _USE_QT_DIALOGS
+            /*#ifdef _USE_QT_DIALOGS
             QFileDialog dialog(0);
             dialog.setFileMode(QFileDialog::ExistingFile);
             dialog.setNameFilter(tr(filter.c_str()));
@@ -1436,9 +1433,9 @@ void PMain::openImage(std::string path /*= ""*/)
             if(dialog.exec())
                 path = dialog.directory().absolutePath().toStdString();
 
-            #else
+            #else*/
             path = QFileDialog::getOpenFileName(this, "Select file", QString(), tr(filter.c_str())).toStdString();
-            #endif
+            //#endif
             /**/tf::debug(tf::LEV3, strprintf("selected path = %s", path.c_str()).c_str(), __itm__current__function__);
 
             if (path.empty())
@@ -1454,11 +1451,11 @@ void PMain::openImage(std::string path /*= ""*/)
 
         // infer image format
         tf::volume_format image_format(tf::volume_format::UNKNOWN);
-        if(sender() == openTeraFlyVolumeAction)
+        /*if(sender() == openTeraFlyVolumeAction)
             image_format.id = tf::volume_format::TERAFLY;
-        else if(sender() == openHDF5VolumeAction)
+        else *//*if(sender() == openHDF5VolumeAction)
             image_format.id = tf::volume_format::BDVHDF5;
-        else if(sender() == openUnconvertedVolumeFileAction || sender() == openUnconvertedVolumeFolderAction)
+        else */if(sender() == openUnconvertedVolumeFileAction || sender() == openUnconvertedVolumeFolderAction)
             image_format.id = tf::volume_format::UNCONVERTED;
         else if(sender() == openUnstitchedImageAction)
             image_format.id = tf::volume_format::UNSTITCHED;
@@ -2296,8 +2293,8 @@ void PMain::importDone(RuntimeException *ex, qint64 elapsed_time)
         Overview_panel->setEnabled(true);
         //updating menu items
         /**/tf::debug(tf::LEV3, "updating menu items", __itm__current__function__);
-        openTeraFlyVolumeAction->setEnabled(false);
-        openHDF5VolumeAction->setEnabled(false);
+        //openTeraFlyVolumeAction->setEnabled(false);
+        //openHDF5VolumeAction->setEnabled(false);
         recentVolumesMenu->setEnabled(false);
         openVolumeToolButton->setEnabled(false);
         importOptionsMenu->setEnabled(false);

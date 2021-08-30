@@ -132,7 +132,7 @@ template <class T> void delete3dpointer_v3d(T *** & p, V3DLONG sz0, V3DLONG sz1,
 template <class T> int new4dpointer_v3d(T **** & p, V3DLONG sz0, V3DLONG sz1, V3DLONG sz2, V3DLONG sz3, unsigned char * p1d);
 template <class T> void delete4dpointer_v3d(T **** & p, V3DLONG sz0, V3DLONG sz1, V3DLONG sz2, V3DLONG sz3);
 
-void v3d_aboutinfo();
+//void v3d_aboutinfo();
 
 template <class T> QPixmap copyRaw2QPixmap(const T ** p2d, V3DLONG sz0, V3DLONG sz1);
 template <class T> QPixmap copyRaw2QPixmap(const T ** p2dRed, const unsigned char ** p2dGreen, const unsigned char ** p2dBlue, V3DLONG sz0, V3DLONG sz1);

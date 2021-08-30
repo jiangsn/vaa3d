@@ -1529,8 +1529,11 @@ void Renderer_gl1::drawDynamicNeuronTube(float rb, float rt, float length)
 	gluCylinder( Q, .5*rb, .5*rt, length,  mNeuron, 1);
 	gluDeleteQuadric(Q);
 }
+
+
 void Renderer_gl1::saveNeuronTree(int kk, const QString& filename) //kk is the cur number of the tree to save
 {
+	qDebug() << "kk = " << kk << endl;
 	if (kk<0 || kk>=listNeuronTree.size())
 	{
 		qDebug()<< "Invalid tree index number in saveNeuronTree()";

@@ -231,6 +231,8 @@ public:
 	Matrix4 GetCurrentViewProjectionMatrix( vr::Hmd_Eye nEye );
 	void UpdateHMDMatrixPose();
 
+	void AppendMovetoFile();
+
 	Matrix4 ConvertSteamVRMatrixToMatrix4( const vr::HmdMatrix34_t &matPose );
 
 	GLuint CompileGLShader( const char *pchShaderName, const char *pchVertexShader, const char *pchFragmentShader );
@@ -241,7 +243,8 @@ public:
 
 	float GetGlobalScale();
 public:
-
+	bool loadNextQuit;
+	iDrawExternalParameter* _idep;
 	MainWindow *mainwindow;
 	My4DImage *img4d;
 	static My4DImage *img4d_replace;

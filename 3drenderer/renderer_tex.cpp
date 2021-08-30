@@ -528,7 +528,8 @@ void Renderer_gl1::paint()
 				// bounding box space ==>fit in [-1,+1]^3
 				setObjectSpace();
 				drawBoundingBoxAndAxes(boundingBox, 1, 3);
-
+				//drawCenterBoundingBoxAndAxes(boundingBox.center(33), 1, 0);
+				
 				glPopMatrix(); //========================================================= }
 			}
 
@@ -636,6 +637,7 @@ void Renderer_gl1::paint()
         glPushMatrix(); //============================================== {
 
         drawVaa3DInfo(16);
+		drawImageInfo(12);
         drawEditInfo(); 
 
 #ifdef _NEURON_ASSEMBLER_

@@ -2975,6 +2975,16 @@ XFormWidget::XFormWidget(QWidget *parent) : QWidget(parent)
 	updateDataRelatedGUI();
 }
 
+XFormWidget::XFormWidget(QWidget *parent, QStringList fromExpImages) : QWidget(parent)
+{
+	currentImageIdx = 0;
+	expImages = fromExpImages;
+	initialize();
+	createGUI();
+	connectEventSignals();
+	updateDataRelatedGUI();
+}
+
 #if defined(USE_Qt5)
 XFormWidget::XFormWidget(QWidget *parent, Qt::WidgetAttribute f) : QMdiSubWindow(parent) //added on 080814: this function is for future use. Not really get called now
 #else
@@ -4181,7 +4191,7 @@ void XFormWidget::createGUI()
 
 	//the landmark ctrl box
 
-	QGroupBox *landmarkGroup  = new QGroupBox(mainGroup);
+	/*QGroupBox *landmarkGroup  = new QGroupBox(mainGroup);
 	landmarkGroup->setTitle("Landmark controls");
 
 	landmarkCopyButton = new QPushButton(landmarkGroup);
@@ -4197,15 +4207,15 @@ void XFormWidget::createGUI()
 	landmarkLoadButton->setText("Load");
 
 	landmarkManagerButton = new QPushButton(landmarkGroup);
-	landmarkManagerButton->setText("Landmark/Atlas/Color Manager");
+	landmarkManagerButton->setText("Landmark/Atlas/Color Manager");*/
 
     imgV3DButton = new QPushButton(mainGroup);
     imgV3DButton->setText("See in 3D");
 
 	createMenuOf3DViewer();
 
-    whatsThisButton = new QPushButton(mainGroup);
-    whatsThisButton->setText("Help ... ");
+    //whatsThisButton = new QPushButton(mainGroup);
+    //whatsThisButton->setText("Help -... ");
     //whatsThisButton->setCheckable(true);
 
     // All layouts
@@ -4285,11 +4295,11 @@ void XFormWidget::createGUI()
 
 	//landmark group
 
-	LandmarkGroupLayout = new QGridLayout(landmarkGroup);
+	/*LandmarkGroupLayout = new QGridLayout(landmarkGroup);
 	LandmarkGroupLayout->addWidget(landmarkCopyButton, 0, 0, 1, 4);
 	LandmarkGroupLayout->addWidget(landmarkPasteButton, 0, 5, 1, 4);
 	LandmarkGroupLayout->addWidget(landmarkLoadButton, 0, 10, 1, 4);
-	LandmarkGroupLayout->addWidget(landmarkSaveButton, 0, 15, 1, 4);
+	LandmarkGroupLayout->addWidget(landmarkSaveButton, 0, 15, 1, 4);*/
 
 	//LandmarkGroupLayout->addWidget(landmarkLabelDispCheckBox, 1, 0, 1, 11);
 
@@ -4298,10 +4308,10 @@ void XFormWidget::createGUI()
 	QWidget* btnArea = new QWidget(self);
 	QVBoxLayout* btnLayout = new QVBoxLayout(btnArea);
 	//btnLayout->setContentsMargins(0,0,0,0); //remove margins
-    btnLayout->addWidget(landmarkManagerButton);
+    //btnLayout->addWidget(landmarkManagerButton);
     btnLayout->addWidget(imgV3DButton);
     btnLayout->addStretch(0);
-    btnLayout->addWidget(whatsThisButton);
+    //btnLayout->addWidget(whatsThisButton);
 
 	// main control panel layout ====================================
 
@@ -4310,7 +4320,7 @@ void XFormWidget::createGUI()
     mainGroupLayout->addWidget(coordGroup);
     mainGroupLayout->addWidget(scaleGroup);
     mainGroupLayout->addWidget(createColorGUI()); //typeGroup); //110719 RZC
-    mainGroupLayout->addWidget(landmarkGroup); //080107
+    //mainGroupLayout->addWidget(landmarkGroup); //080107
 	mainGroupLayout->addWidget(btnArea); //110719 RZC
 
 	// force layout set
@@ -4512,7 +4522,8 @@ void XFormWidget::updateDataRelatedGUI()
 		setWindowTitle(openFileNameLabel); //061011
 
 		//added 081124
-		imgData->updateViews();
+		//shuning 0422 hide image window
+		//imgData->updateViews();
 	}
 	else
 	{
@@ -4638,6 +4649,71 @@ bool XFormWidget::loadFile(QString filename)
 	{
 		return false;
 	}
+}
+
+bool XFormWidget::loadFile(int imgIdx)
+{
+	if (expImages.size() > 0)
+	{
+		qDebug() << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX-------------------------XXXXXXXXXXXXXXXXXXXXXXXXXXX\n";
+		openFileNameLabel = expImages.at(imgIdx);
+		qDebug() << openFileNameLabel << endl;
+		return loadData();
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool XFormWidget::loadNextImg() //alt doImage3DView
+{
+	currentImageIdx++;
+	if (currentImageIdx < expImages.size())
+	{
+		openFileNameLabel = expImages.at(currentImageIdx);
+		qDebug() << openFileNameLabel << endl;
+		//return loadData();
+		loadData();
+
+		// doImage3DView__
+		bool tmp_b_use_512x512x256 = true;
+		int b_local = 0;
+
+
+		if (imgData)
+		{
+			if (!b_local) //0 for entire image
+			{
+				//iDrawExternalParameter mypara;
+				mypara_3Dview.image4d = imgData;
+				mypara_3Dview.b_use_512x512x256 = tmp_b_use_512x512x256;
+				mypara_3Dview.xwidget = this; //imgData->listLandmarks;
+				mypara_3Dview.V3Dmainwindow = p_mainWindow; //added on 090503
+				mypara_3Dview.p_list_3Dview_win = &(p_mainWindow->list_3Dview_win); //081003: always keep an record in the central controller
+
+				mypara_3Dlocalview.b_local = b_local;
+			}
+			
+
+			//V3dR_MainWindow *my3dwin = 0;
+
+			//my3dwin = new V3dR_MainWindow(&mypara_3Dview); //iDrawMainWindow-->V3dR_MainWindow, by RZC 20080921
+			//mypara_3Dview.window3D = my3dwin;
+			//my3dwin->setParent(0);
+
+			mypara_3Dview.window3D->updateV3dR_GLWidget(&mypara_3Dview);
+
+			// @ADDED by Alessandro on 2015-09-29. Postpone show() if required.
+			//mypara_3Dview.window3D->show();
+
+
+		}
+	}
+	else
+		return false;
+
+	glFlush();
 }
 
 bool XFormWidget::loadData()
@@ -4948,10 +5024,10 @@ void XFormWidget::doImage3DLocalBBoxView()  //do not have arguments so that can 
 }
 
 void XFormWidget::doImage3DView(bool tmp_b_use_512x512x256, int b_local, V3DLONG bbx0, V3DLONG bbx1, V3DLONG bby0, V3DLONG bby1, V3DLONG bbz0, V3DLONG bbz1, bool show)
-	//b_local==0, use entire image
-	//b_local==1, use marker;
-	//b_local==2, use roi;
-	//b_local==3, use lower and upper bounding box in bbx0, bby0, ....
+//b_local==0, use entire image
+//b_local==1, use marker;
+//b_local==2, use roi;
+//b_local==3, use lower and upper bounding box in bbx0, bby0, ....
 {
 	if (!b_local && mypara_3Dview.b_still_open)
 	{
@@ -4964,11 +5040,11 @@ void XFormWidget::doImage3DView(bool tmp_b_use_512x512x256, int b_local, V3DLONG
 
 		//090723: continue create a new view, wait 1 second for the last local 3D view closed
 		mypara_3Dlocalview.window3D->postClose();
-		if (b_local==1)
+		if (b_local == 1)
 			QTimer::singleShot(1000, this, SLOT(doImage3DLocalMarkerView()));
-		else if (b_local==2)
+		else if (b_local == 2)
 			QTimer::singleShot(1000, this, SLOT(doImage3DLocalRoiView()));
-		else if (b_local==3)
+		else if (b_local == 3)
 			QTimer::singleShot(1000, this, SLOT(doImage3DLocalBBoxView())); //do not have arguments so that can be used as the slot of a timer signal
 		else
 			v3d_msg("Invalid b_local parameter in doImage3DView();");
@@ -4979,13 +5055,13 @@ void XFormWidget::doImage3DView(bool tmp_b_use_512x512x256, int b_local, V3DLONG
 	if (imgData)
 	{
 		V3DLONG nbytes = estimateRoughAmountUsedMemory();
-        if (nbytes>(V3DLONG)((double(1024)*1024*1024*TH_USE_MEMORY)))
+		if (nbytes>(V3DLONG)((double(1024) * 1024 * 1024 * TH_USE_MEMORY)))
 		{
-            v3d_msg(QString("You already used more than %1G bytes for your images. Please close some stacks to assure you have enough memory.").arg(TH_USE_MEMORY));
+			v3d_msg(QString("You already used more than %1G bytes for your images. Please close some stacks to assure you have enough memory.").arg(TH_USE_MEMORY));
 			return;
 		}
 
-		if (! b_local) //0 for entire image
+		if (!b_local) //0 for entire image
 		{
 			//iDrawExternalParameter mypara;
 			mypara_3Dview.image4d = imgData;
@@ -4996,72 +5072,72 @@ void XFormWidget::doImage3DView(bool tmp_b_use_512x512x256, int b_local, V3DLONG
 
 			mypara_3Dlocalview.b_local = b_local;
 		}
-		if (b_local==1 || b_local==2 || b_local==3)
+		if (b_local == 1 || b_local == 2 || b_local == 3)
 		{
 			V3DLONG x0, y0, z0, x1, y1, z1;
 
 			switch (b_local)
 			{
-				case 1: //1 for marker
-					if (imgData->listLandmarks.size()>0)
-					{
-						//get the current marker
-						LocationSimple *pt = 0;
-						LocationSimple mypt;
-						mypt = imgData->listLandmarks.at(imgData->cur_hit_landmark);
-						mypt.x-=1; mypt.y-=1; mypt.z-=1;
-						pt = &mypt;
+			case 1: //1 for marker
+				if (imgData->listLandmarks.size()>0)
+				{
+					//get the current marker
+					LocationSimple *pt = 0;
+					LocationSimple mypt;
+					mypt = imgData->listLandmarks.at(imgData->cur_hit_landmark);
+					mypt.x -= 1; mypt.y -= 1; mypt.z -= 1;
+					pt = &mypt;
 
-						x0 = qBound((V3DLONG)0L, (V3DLONG)((*pt).x-64) , (imgData->getXDim()-1));
-						y0 = qBound((V3DLONG)0L, (V3DLONG)((*pt).y-64) , (imgData->getYDim()-1));
-						z0 = qBound((V3DLONG)0L, (V3DLONG)((*pt).z-64) , imgData->getZDim()-1);
-						x1 = qBound((V3DLONG)0L, (V3DLONG)((*pt).x+63) , imgData->getXDim()-1);
-						y1 = qBound((V3DLONG)0L, (V3DLONG)((*pt).y+63) , imgData->getYDim()-1);
-						z1 = qBound((V3DLONG)0L, (V3DLONG)((*pt).z+63) , imgData->getZDim()-1);
-						//					c0 = 0;
-						//					c1 = sz3-1;
-					}
-					break;
+					x0 = qBound((V3DLONG)0L, (V3DLONG)((*pt).x - 64), (imgData->getXDim() - 1));
+					y0 = qBound((V3DLONG)0L, (V3DLONG)((*pt).y - 64), (imgData->getYDim() - 1));
+					z0 = qBound((V3DLONG)0L, (V3DLONG)((*pt).z - 64), imgData->getZDim() - 1);
+					x1 = qBound((V3DLONG)0L, (V3DLONG)((*pt).x + 63), imgData->getXDim() - 1);
+					y1 = qBound((V3DLONG)0L, (V3DLONG)((*pt).y + 63), imgData->getYDim() - 1);
+					z1 = qBound((V3DLONG)0L, (V3DLONG)((*pt).z + 63), imgData->getZDim() - 1);
+					//					c0 = 0;
+					//					c1 = sz3-1;
+				}
+				break;
 
-				case 3:
-					x0 = qBound((V3DLONG)(bbx0), V3DLONG(0), imgData->getXDim()-1);
-					y0 = qBound((V3DLONG)(bby0), V3DLONG(0), imgData->getYDim()-1);
-					z0 = qBound((V3DLONG)(bbz0), V3DLONG(0), imgData->getZDim()-1);
-					x1 = qBound((V3DLONG)(bbx1), V3DLONG(0), imgData->getXDim()-1);
-					y1 = qBound((V3DLONG)(bby1), V3DLONG(0), imgData->getYDim()-1);
-					z1 = qBound((V3DLONG)(bbz1), V3DLONG(0), imgData->getZDim()-1);
+			case 3:
+				x0 = qBound((V3DLONG)(bbx0), V3DLONG(0), imgData->getXDim() - 1);
+				y0 = qBound((V3DLONG)(bby0), V3DLONG(0), imgData->getYDim() - 1);
+				z0 = qBound((V3DLONG)(bbz0), V3DLONG(0), imgData->getZDim() - 1);
+				x1 = qBound((V3DLONG)(bbx1), V3DLONG(0), imgData->getXDim() - 1);
+				y1 = qBound((V3DLONG)(bby1), V3DLONG(0), imgData->getYDim() - 1);
+				z1 = qBound((V3DLONG)(bbz1), V3DLONG(0), imgData->getZDim() - 1);
 
-					break;
+				break;
 
-				case 2: //2 for roi
-				default:
-					QRect b_xy = imgData->p_xy_view->getRoiBoundingRect();
-					QRect b_yz = imgData->p_yz_view->getRoiBoundingRect();
-					QRect b_zx = imgData->p_zx_view->getRoiBoundingRect();
+			case 2: //2 for roi
+			default:
+				QRect b_xy = imgData->p_xy_view->getRoiBoundingRect();
+				QRect b_yz = imgData->p_yz_view->getRoiBoundingRect();
+				QRect b_zx = imgData->p_zx_view->getRoiBoundingRect();
 
-					V3DLONG bpos_x = qBound((V3DLONG)(0), V3DLONG(qMax(b_xy.left(), b_zx.left())), imgData->getXDim()-1),
-					bpos_y = qBound((V3DLONG)(0), V3DLONG(qMax(b_xy.top(),  b_yz.top())), imgData->getYDim()-1),
-					bpos_z = qBound((V3DLONG)(0), V3DLONG(qMax(b_yz.left(), b_zx.top())), imgData->getZDim()-1),
+				V3DLONG bpos_x = qBound((V3DLONG)(0), V3DLONG(qMax(b_xy.left(), b_zx.left())), imgData->getXDim() - 1),
+					bpos_y = qBound((V3DLONG)(0), V3DLONG(qMax(b_xy.top(), b_yz.top())), imgData->getYDim() - 1),
+					bpos_z = qBound((V3DLONG)(0), V3DLONG(qMax(b_yz.left(), b_zx.top())), imgData->getZDim() - 1),
 					bpos_c = 0;
-					V3DLONG epos_x = qBound((V3DLONG)(0), V3DLONG(qMin(b_xy.right(), b_zx.right())), imgData->getXDim()-1),
-					epos_y = qBound((V3DLONG)(0), V3DLONG(qMin(b_xy.bottom(), b_yz.bottom())), imgData->getYDim()-1),
-					epos_z = qBound((V3DLONG)(0), V3DLONG(qMin(b_yz.right(), b_zx.bottom())), imgData->getZDim()-1),
-					epos_c = imgData->getCDim()-1;
+				V3DLONG epos_x = qBound((V3DLONG)(0), V3DLONG(qMin(b_xy.right(), b_zx.right())), imgData->getXDim() - 1),
+					epos_y = qBound((V3DLONG)(0), V3DLONG(qMin(b_xy.bottom(), b_yz.bottom())), imgData->getYDim() - 1),
+					epos_z = qBound((V3DLONG)(0), V3DLONG(qMin(b_yz.right(), b_zx.bottom())), imgData->getZDim() - 1),
+					epos_c = imgData->getCDim() - 1;
 
-					if (bpos_x>epos_x || bpos_y>epos_y || bpos_z>epos_z)
-					{
-						v3d_msg("The roi polygons in three views are not intersecting! No crop is done!\n");
-						return;
-					}
+				if (bpos_x>epos_x || bpos_y>epos_y || bpos_z>epos_z)
+				{
+					v3d_msg("The roi polygons in three views are not intersecting! No crop is done!\n");
+					return;
+				}
 
-					x0 = bpos_x;
-					y0 = bpos_y;
-					z0 = bpos_z;
-					x1 = epos_x;
-					y1 = epos_y;
-					z1 = epos_z;
+				x0 = bpos_x;
+				y0 = bpos_y;
+				z0 = bpos_z;
+				x1 = epos_x;
+				y1 = epos_y;
+				z1 = epos_z;
 
-					break;
+				break;
 			}
 
 			mypara_3Dlocalview.image4d = imgData;
@@ -5071,7 +5147,7 @@ void XFormWidget::doImage3DView(bool tmp_b_use_512x512x256, int b_local, V3DLONG
 			mypara_3Dlocalview.p_list_3Dview_win = &(p_mainWindow->list_3Dview_win); //081003: always keep an record in the central controller
 
 			mypara_3Dlocalview.b_local = b_local;
-			mypara_3Dlocalview.local_size = LocationSimple(x1-x0+1, y1-y0+1, z1-z0+1);
+			mypara_3Dlocalview.local_size = LocationSimple(x1 - x0 + 1, y1 - y0 + 1, z1 - z0 + 1);
 			mypara_3Dlocalview.local_start = LocationSimple(x0, y0, z0);
 
 			//			if (mypara_3Dlocalview.localimage4d)
@@ -5101,14 +5177,16 @@ void XFormWidget::doImage3DView(bool tmp_b_use_512x512x256, int b_local, V3DLONG
 			}
 			my3dwin->setParent(0);
 
-            // @ADDED by Alessandro on 2015-09-29. Postpone show() if required.
-            if(show)
-                my3dwin->show();
+			// @ADDED by Alessandro on 2015-09-29. Postpone show() if required.
+			if (show)
+				my3dwin->show();
+
+			
 		}
 		catch (...)
 		{
 			v3d_msg("You fail to open a 3D view window. You may have opened too many stacks (if so please close some first) or "
-                    "try to render a too-big 3D view (if so please contact Hanchuan Peng for a 64-bit version of Vaa3D).");
+				"try to render a too-big 3D view (if so please contact Hanchuan Peng for a 64-bit version of Vaa3D).");
 			return;
 		}
 	}
@@ -5136,10 +5214,10 @@ void XFormWidget::popupImageProcessingDialog(QString item)
 	}
 }
 
-void XFormWidget::aboutInfo()
-{
-	v3d_aboutinfo();
-}
+//void XFormWidget::aboutInfo()
+//{
+//	v3d_aboutinfo();
+//}
 
 void XFormWidget::connectEventSignals()
 {
@@ -5212,11 +5290,11 @@ void XFormWidget::connectEventSignals()
 	connectColorGUI(); //110721 RZC
 
 
-    connect(landmarkCopyButton, SIGNAL(clicked()), this, SLOT(copyLandmarkToPublicBuffer()));
-    connect(landmarkPasteButton, SIGNAL(clicked()), this, SLOT(pasteLandmarkFromPublicBuffer()));
-    connect(landmarkLoadButton, SIGNAL(clicked()), this, SLOT(loadLandmarkFromFile()));
-    connect(landmarkSaveButton, SIGNAL(clicked()), this, SLOT(saveLandmarkToFile()));
-    connect(landmarkManagerButton, SIGNAL(clicked()), this, SLOT(openLandmarkManager()));
+    //connect(landmarkCopyButton, SIGNAL(clicked()), this, SLOT(copyLandmarkToPublicBuffer()));
+    //connect(landmarkPasteButton, SIGNAL(clicked()), this, SLOT(pasteLandmarkFromPublicBuffer()));
+    //connect(landmarkLoadButton, SIGNAL(clicked()), this, SLOT(loadLandmarkFromFile()));
+    //connect(landmarkSaveButton, SIGNAL(clicked()), this, SLOT(saveLandmarkToFile()));
+    //connect(landmarkManagerButton, SIGNAL(clicked()), this, SLOT(openLandmarkManager()));
 
     connect(resetButton, SIGNAL(clicked()), this, SLOT(reset()));
 	//connect(openFileNameButton, SIGNAL(clicked()), this, SLOT(setOpenFileName())); //	remove this button on 080402
@@ -5228,7 +5306,7 @@ void XFormWidget::connectEventSignals()
     //connect(imgV3DButton, SIGNAL(clicked()), this, SLOT(doImage3DView()));
     connect(imgV3DButton, SIGNAL(clicked()), this, SLOT(doMenuOf3DViewer()));
     //connect(imgV3DROIButton, SIGNAL(clicked()), this, SLOT(doImage3DLocalRoiView()));
-    connect(whatsThisButton, SIGNAL(clicked()), this, SLOT(aboutInfo()));
+    //connect(whatsThisButton, SIGNAL(clicked()), this, SLOT(aboutInfo()));
 	//    connect(xy_view, SIGNAL(descriptionEnabledChanged(bool)), xy_view->hoverPoints(), SLOT(setDisabled(bool)));
 	//    connect(xy_view, SIGNAL(descriptionEnabledChanged(bool)), whatsThisButton, SLOT(setChecked(bool)));
 
@@ -5284,7 +5362,7 @@ void XFormWidget::disconnectEventSignals()
     //disconnect(imgProcessButton, 0, this, 0);
     disconnect(imgV3DButton, 0, this, 0);
 	// disconnect(imgV3DROIButton, 0, this, 0);
-    disconnect(whatsThisButton, 0, this, 0);
+    //disconnect(whatsThisButton, 0, this, 0);
 	//    disconnect(whatsThisButton, 0, xy_view, 0);
 	//    disconnect(xy_view, 0, xy_view->hoverPoints(), 0);
 	//    disconnect(xy_view, 0, whatsThisButton, 0);

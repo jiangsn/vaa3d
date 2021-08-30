@@ -1507,13 +1507,15 @@ void NaMainWindow::on_actionQuit_triggered() {
 }
 
 void NaMainWindow::on_actionV3DDefault_triggered() {
-    V3dApplication::deactivateNaMainWindow();
-    V3dApplication::activateMainWindow();
+//shuning
+//    V3dApplication::deactivateNaMainWindow();
+//    V3dApplication::activateMainWindow();
 }
 
 void NaMainWindow::on_actionNeuronAnnotator_triggered() {
-    V3dApplication::activateNaMainWindow();
-    V3dApplication::deactivateMainWindow();
+//shuning
+//    V3dApplication::activateNaMainWindow();
+//    V3dApplication::deactivateMainWindow();
 }
 
 void NaMainWindow::setV3DDefaultModeCheck(bool checkState) {

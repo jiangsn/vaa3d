@@ -215,9 +215,9 @@ struct BoundingBox {
 
 	BoundingBox() 					{ *this = NULL_BoundingBox; }
 	BoundingBox(float a) 			{x0=y0=z0=x1=y1=z1 = a;}
-        BoundingBox(float px0, float py0, float pz0, float px1, float py1, float pz1)
+	BoundingBox(float px0, float py0, float pz0, float px1, float py1, float pz1)
                              {x0=px0; y0=py0; z0=pz0;  x1=px1; y1=py1; z1=pz1;}
-        BoundingBox(XYZ pV0, XYZ pV1)		{x0=pV0.x; y0=pV0.y; z0=pV0.z;  x1=pV1.x; y1=pV1.y; z1=pV1.z;}
+    BoundingBox(XYZ pV0, XYZ pV1)		{x0=pV0.x; y0=pV0.y; z0=pV0.z;  x1=pV1.x; y1=pV1.y; z1=pV1.z;}
         float Dx() const		{return (x1-x0); }
         float Dy() const		{return (y1-y0); }
         float Dz() const		{return (z1-z0); }
@@ -229,8 +229,8 @@ struct BoundingBox {
         XYZ Vabsmax() const	{return XYZ(ABSMAX(x0,x1), ABSMAX(y0,y1), ABSMAX(z0,z1));}
         bool isNegtive()	const 	{return (Dx()<0 || Dy()<0 || Dz()<0);}
         bool isInner(XYZ V, float d=0) const	{
-		return BETWEENEQ(x0-d,x1+d, V.x) && BETWEENEQ(y0-d,y1+d, V.y) && BETWEENEQ(z0-d,z1+d, V.z);
-	}
+			return BETWEENEQ(x0-d,x1+d, V.x) && BETWEENEQ(y0-d,y1+d, V.y) && BETWEENEQ(z0-d,z1+d, V.z);
+		}
 	void clamp(XYZ & V) {
 		V.x = CLAMP(x0, x1, V.x); V.y = CLAMP(y0, y1, V.y); V.z = CLAMP(z0, z1, V.z);
 	}
@@ -245,6 +245,17 @@ struct BoundingBox {
 	}
 	void shift(float x, float y, float z) 	{x0+=x; y0+=y; z0+=z;	x1+=x; y1+=y; z1+=z;}
 	void shift(XYZ S) 						{shift(S.x, S.y, S.z);}
+	
+	BoundingBox center(float d)
+	{
+		float cx0 = (Dx() - d) / 2;
+		float cx1 = cx0 + d;
+		float cy0 = (Dy() - d) / 2;
+		float cy1 = cy0 + d;
+		float cz0 = (Dz() - d) / 2;
+		float cz1 = cz0 + d;
+		return BoundingBox(cx0, cy0, cz0, cx1, cy1, cz1);
+	}
 };
 
 

@@ -7,6 +7,7 @@
 #include "../v3d/vr_vaa3d_call.h"
 #include "../neuron_tracing/fastmarching_linker.h"
 
+#include <fstream>
 
 
 #if defined( OSX )
@@ -68,7 +69,7 @@ int checkForOpenGLError(const char* file, int line)
 
 float CMainApplication::fContrast = 1;
 bool CMainApplication::m_bFrozen = false;
-bool CMainApplication::m_bVirtualFingerON = false;
+bool CMainApplication::m_bVirtualFingerON = true;
 float CMainApplication::iLineWid = 1;
 float CMainApplication::iscaleZ =1;
 float CMainApplication::fBrightness = 0.0;
@@ -782,7 +783,7 @@ CMainApplication::CMainApplication( int argc, char *argv[] )
 CMainApplication::~CMainApplication()
 {
 	// work is done in Shutdown
-	dprintf( "Shutdown" );
+	dprintf( "Shutdown\n" );
 	this->mainwindow->show();
 }
 
@@ -1838,26 +1839,38 @@ bool CMainApplication::HandleInput()
 				}
 				else if(m_modeTouchPad_R == tr_clipplane)
 				{
+					qDebug() << "plane cut 1" << endl;
 					glm::mat4 model;
 					model = glm::scale(glm::mat4(), glm::vec3(img4d->getXDim(), img4d->getYDim(), img4d->getZDim()));
 					model = m_globalMatrix * model;
 					const Matrix4 &mat_M = m_rmat4DevicePose[m_iControllerIDRight]; // mat means current controller pos
 					glm::mat4 mat = glm::mat4();
+
+					// printf("MAT begin:\n");
 					for (size_t i = 0; i < 4; i++)
 					{
 						for (size_t j = 0; j < 4; j++)
 						{
 							mat[i][j] = *(mat_M.get() + i * 4 + j);
+							// printf("%f,\t", mat[i][j]);
 						}
+						// printf("\n");
 					}
+					// printf("MAT end:\n\n");
 
 					mat = glm::inverse(model) * mat;
 					glm::vec4 m_v4DevicePose = mat * glm::vec4(0, 0, 0, 1);
 					mat = glm::inverse(mat);
 					mat = glm::transpose(mat);
 					glm::vec4 clipnormal = mat * glm::vec4(0.0, 0.0, 0.05, 1);
+
+					qDebug()<<"u_clipnormal: "<<clipnormal.x << clipnormal.y << clipnormal.z<<endl;
 					u_clipnormal = glm::vec3(clipnormal.x, clipnormal.y, clipnormal.z);
+					//u_clipnormal = glm::vec3(0, 0, 1);
+
+					qDebug()<<"u_clippoint: "<<m_v4DevicePose.x << m_v4DevicePose.y << m_v4DevicePose.z<<'\n'<<endl;
 					u_clippoint = glm::vec3(m_v4DevicePose.x, m_v4DevicePose.y, m_v4DevicePose.z);
+					//u_clippoint = glm::vec3(0.5, 0.5, 0.5);
 				}
 				// else if(0&&m_rotateMode==true)//into ratate mode
 				// {
@@ -2067,8 +2080,10 @@ bool CMainApplication::HandleInput()
 void CMainApplication::RunMainLoop()
 {
 	bool bQuit = false;
+	loadNextQuit = false;
 
-	while ( !bQuit )
+	while ( !bQuit && !loadNextQuit)
+	//while (!loadNextQuit)
 	{
 		bQuit = HandleInput();
 		if (bQuit) break;
@@ -2082,7 +2097,11 @@ bool CMainApplication::HandleOneIteration()
 	bool bQuit = false;
 	bQuit = HandleInput();
 	RenderFrame();
-	if(bQuit==true) Shutdown();
+	if(bQuit==true)
+	{
+		qDebug()<<"You clicked quit 1."<<endl;
+		Shutdown();
+	}
 	
 	return bQuit;
 
@@ -2408,6 +2427,7 @@ void CMainApplication::ProcessVREvent( const vr::VREvent_t & event )
 			}
 		case _Contrast://contrast func is moved to right controller touch pad , grip button+/-
 			{
+				qDebug()<<"Run contrast adjustment";
 				 if(temp_x>0)
 				 {
 					fBrightness+= 0.02f;
@@ -2461,6 +2481,30 @@ void CMainApplication::ProcessVREvent( const vr::VREvent_t & event )
 			}
 		case _AutoRotate: //actually for auto-rotation
 			{
+				// qDebug()<<"stop input";
+				// SDL_StopTextInput();
+				// qDebug()<<"now shut down";
+				// Shutdown();
+				// qDebug()<<"load next image";
+				// qDebug() << _idep->V3Dmainwindow->currentImgPath;
+				// _idep->V3Dmainwindow->loadNextImage();
+				
+				qDebug()<<"loadNextQuit changed to true"<<endl;
+				loadNextQuit = true;
+				if (m_autoRotateON)
+				{
+					m_autoRotateON = false;
+				}
+				else 
+				{
+					m_autoRotateON = true;
+
+				}
+								
+				break;
+			}
+		case 100: //org autorotate
+			{
 				qDebug()<<"Auto rotation";
 				if (m_autoRotateON)
 				{
@@ -2491,6 +2535,7 @@ void CMainApplication::ProcessVREvent( const vr::VREvent_t & event )
 			}
 		case _TeraShift:
 			{
+				qDebug() << "You clicked TeraVR Shift (4)." << endl;
 				const Matrix4 & mat_M = m_rmat4DevicePose[m_iControllerIDLeft];// mat means current controller pos
 					glm::mat4 mat = glm::mat4();
 					for (size_t i = 0; i < 4; i++)
@@ -2519,7 +2564,7 @@ void CMainApplication::ProcessVREvent( const vr::VREvent_t & event )
 						teraflyPOS.z=swcBB.z0;
 					else if (teraflyPOS.y>swcBB.y1)
 						teraflyPOS.z=swcBB.z1;
-					if (_maxDelta == _deltaX)
+					/*if (_maxDelta == _deltaX)
 					{
 						postVRFunctionCallMode = (ctrlLeftPos.x - loadedNTCenter.x) > 0 ? 1 : 2;
 						teraflyPOS.x = loadedNTCenter.x;
@@ -2536,7 +2581,9 @@ void CMainApplication::ProcessVREvent( const vr::VREvent_t & event )
 					}
 					else
 						qDebug() << "oh no! Something wrong!Please check!";
-					cout<<"postVRFunctionCallMode"<<postVRFunctionCallMode<<endl;
+					cout<<"postVRFunctionCallMode"<<postVRFunctionCallMode<<endl;*/
+
+
 					break;
 			}
 		case _TeraZoom:
@@ -4204,8 +4251,17 @@ void CMainApplication::RenderFrame()
 		dprintf( "PoseCount:%d(%s) Controllers:%d\n", m_iValidPoseCount, m_strPoseClasses.c_str(), m_iTrackedControllerCount );
 	}
 	UpdateHMDMatrixPose();
+
+	//AppendMovetoFile();
 }
 
+
+void CMainApplication::AppendMovetoFile()
+{
+	std::ofstream outfile;
+	outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
+	outfile << m_rmat4DevicePose;
+}
 
 //-----------------------------------------------------------------------------
 // Purpose: Compiles a GL shader program and returns the handle. Returns 0 if
@@ -4605,6 +4661,7 @@ void CMainApplication::SetupControllerTexture()
 		case _MovetoCreator:
 		case _TeraShift:
 			{//_TeraShift
+				//qDebug() << "You clicked TeraVR Shift (1)." << endl;
 				AddVertex(point_E.x,point_E.y,point_E.z,0.17f,0.5f,vcVerts);
 				AddVertex(point_F.x,point_F.y,point_F.z,0.25f,0.5f,vcVerts);
 				AddVertex(point_G.x,point_G.y,point_G.z,0.17f,0.625f,vcVerts);
@@ -4658,6 +4715,7 @@ void CMainApplication::SetupControllerTexture()
 			{
 				if(m_autoRotateON)
 				{
+					//qDebug()<<"You clicked autorotate 2"<<endl;
 					AddVertex(point_E.x,point_E.y,point_E.z,0,0.375f,vcVerts);
 					AddVertex(point_F.x,point_F.y,point_F.z,0.085f,0.375f,vcVerts);
 					AddVertex(point_G.x,point_G.y,point_G.z,0,0.5f,vcVerts);
@@ -4667,6 +4725,7 @@ void CMainApplication::SetupControllerTexture()
 				}
 				else
 				{
+					//qDebug()<<"You clicked autorotate 3"<<endl;
 					AddVertex(point_E.x,point_E.y,point_E.z,0.085f,0.375f,vcVerts);
 					AddVertex(point_F.x,point_F.y,point_F.z,0.165f,0.375f,vcVerts);
 					AddVertex(point_G.x,point_G.y,point_G.z,0.085f,0.5f,vcVerts);
@@ -4736,6 +4795,7 @@ void CMainApplication::SetupControllerTexture()
 			}
 		case _TeraShift:
 			{//_TeraShift
+				//qDebug() << "You clicked TeraVR Shift (2)." << endl;
 				AddVertex(point_M.x,point_M.y,point_M.z,0.42f,0.125f,vcVerts);
 				AddVertex(point_N.x,point_N.y,point_N.z,0.5f,0.125f,vcVerts);
 				AddVertex(point_O.x,point_O.y,point_O.z,0.42f,0.25f,vcVerts);
@@ -4790,6 +4850,7 @@ void CMainApplication::SetupControllerTexture()
 		}
 		case _AutoRotate:
 			{
+				//qDebug()<<"You clicked autorotate 1"<<endl;
 				AddVertex(point_M.x,point_M.y,point_M.z,0.42f,0,vcVerts);
 				AddVertex(point_N.x,point_N.y,point_N.z,0.5f,0,vcVerts);
 				AddVertex(point_O.x,point_O.y,point_O.z,0.42f,0.125f,vcVerts);
@@ -7672,9 +7733,11 @@ void CMainApplication::SetUinformsForRayCasting()
 		
 	if(m_modeTouchPad_R == tr_clipplane)
 	{
+
 		raycastingShader->setVec3("clippoint", u_clippoint);
 		raycastingShader->setVec3("clipnormal", u_clipnormal);
 		raycastingShader->setInt("clipmode", 1);
+
 	}
 	// else if(m_modeGrip_R == m_slabplaneMode)
 	// {
@@ -8022,6 +8085,7 @@ void CMainApplication::MenuFunctionChoose(glm::vec2 UV)
 		if((panelpos_x <= 0.26) && (panelpos_y<= 0.25)&&(panelpos_y >= 0.075)&&(panelpos_x >= 0.1))
 		{
 			m_modeGrip_L = _TeraShift;
+			qDebug() << "You clicked TeraVR Shift (3)." << endl;
 		}
 		 if((panelpos_x <= 0.436) && (panelpos_y<= 0.25)&&(panelpos_y >= 0.075)&&(panelpos_x >= 0.26))
 		{

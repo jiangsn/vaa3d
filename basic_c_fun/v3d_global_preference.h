@@ -97,7 +97,7 @@ struct V3D_GlobalSetting
 		b_autoDispBoundingBox = true;
 		marker_disp_amplifying_factor = 15;
 		b_autoSWCLineMode = false;
-		b_autoVideoCardCompress = true;
+		b_autoVideoCardCompress = false;
 		b_autoVideoCard3DTex = false;
 		b_autoVideoCardNPTTex = false;
 		autoVideoCardStreamMode = 0;//1 for adaptive stream mode, 0 for 512x512x256 downsample. for others see dialog info

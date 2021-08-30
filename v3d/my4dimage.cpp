@@ -496,7 +496,7 @@ void My4DImage::loadImage(const char* filename)
         bool lsmFlag = false;
         bool tiffFlag = false;
         QString qFilename = QString(filename);
-
+		qDebug() << qFilename << endl;
         if (qFilename.endsWith("lsm") || qFilename.endsWith("LSM")) {
             lsmFlag = true;
         } else if (qFilename.endsWith("tif") || qFilename.endsWith("TIF") || qFilename.endsWith("tiff") || qFilename.endsWith("TIFF")) {
