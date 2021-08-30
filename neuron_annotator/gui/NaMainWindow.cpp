@@ -1513,7 +1513,7 @@ void NaMainWindow::on_actionV3DDefault_triggered() {
 }
 
 void NaMainWindow::on_actionNeuronAnnotator_triggered() {
-//shuning
+//shuning 0830
 //    V3dApplication::activateNaMainWindow();
 //    V3dApplication::deactivateMainWindow();
 }
