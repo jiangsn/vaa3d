@@ -2380,17 +2380,14 @@ void Renderer_gl1::_appendMarkerPos(int x, int y)
 int Renderer_gl1::movePen(int x, int y, bool b_move)
 {
 	//qDebug("  Renderer_gl1::movePen");
-	//	//100731 RZC
-	//	if (renderMode==rmCrossSection)
-	//		selectObj(x,y, false, 0); //no menu, no tip, just for lastSliceType
-	// define a curve //091023
-//    if (selectMode == smCurveCreate1 || selectMode == smCurveCreate2 || selectMode == smCurveCreate3 || selectMode == smSelectMultiMarkers ||
-//    	selectMode == smDeleteMultiNeurons || selectMode == smRetypeMultiNeurons || selectMode == smBreakMultiNeurons || selectMode == smBreakTwoNeurons)
+	
 
     if (selectMode == smCurveCreate1 || selectMode == smCurveCreate2 || selectMode == smCurveCreate3 || selectMode == smSelectMultiMarkers ||
 		selectMode == smDeleteMultiNeurons ||  selectMode == smRetypeMultiNeurons || selectMode == smBreakMultiNeurons || selectMode == smBreakTwoNeurons ||
 		selectMode == smConnectNeurons || selectMode == smConnectPointCloud || selectMode == smConnectMarker || selectMode == smCutNeurons || selectMode == smSimpleConnect || selectMode == smSimpleConnectLoopSafe ||
-		selectMode == smShowSubtree)
+		selectMode == smShowSubtree 
+		//|| selectMode == smCurveTiltedBB_fm_sbbox
+		)
 	{
 		_appendMarkerPos(x,y);
 		if (b_move)
@@ -2481,7 +2478,7 @@ int Renderer_gl1::movePen(int x, int y, bool b_move)
 		_appendMarkerPos(x,y);
 		if (b_move)
 		{
-			//qDebug("\t track ( %i, %i ) to refine Curve", x,y);
+			qDebug("\t track ( %i, %i ) to refine Curve", x,y);
 			this->sShowTrack = 1;
 			return 1; //display 2d track
 		}
@@ -3066,6 +3063,9 @@ int Renderer_gl1::hitWheel(int x, int y)
 int Renderer_gl1::hitPen(int x, int y)
 {
 	qDebug("  Renderer_gl1::hitPen");
+	// smCurveTiltedBB_fm_sbbox: drawing bbox
+	// smDeleteMultiNeurons: deleting
+	qDebug() << "selectMode: " << selectMode;
 	//	//100731 RZC
 	//	if (renderMode==rmCrossSection)
 	//		selectObj(x,y, false, 0); //no menu, no tip, just for lastSliceType

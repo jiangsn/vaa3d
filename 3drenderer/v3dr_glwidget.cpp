@@ -575,6 +575,9 @@ void V3dR_GLWidget::paintGL()
 	//qDebug("paint frame cost time = %g sec", qtime.elapsed()*0.001);
 
 	//CHECK_GLError_print(); //090715,090723
+
+	
+		
 }
 
 /////////////////////////////////////////////////////////////
@@ -782,6 +785,15 @@ void V3dR_GLWidget::mousePressEvent(QMouseEvent *event)
 {
 	//091025: use QMouseEvent::button()== not buttonS()&
     //qDebug("V3dR_GLWidget::mousePressEvent  button = %d", event->button());
+	
+	if (event->button() == Qt::RightButton && renderer && (renderer->selectMode == 28 || renderer->selectMode == 31))
+	{
+		std::ofstream eventlog;
+		eventlog.open(_idep->V3Dmainwindow->currentEventPath.toUtf8().constData(), std::ios_base::app);
+		eventlog << (renderer->selectMode == 28 ? "Drawing" : "Deleting") << " start" << endl;
+		eventlog << "(" << event->x() << ", " << event->y() << ")" << endl;
+		eventlog.close();
+	}
 
 	mouse_held = 1;
 
@@ -811,6 +823,14 @@ void V3dR_GLWidget::mouseReleaseEvent(QMouseEvent *event)
 {
 	//091025: use 'QMouseEvent::button()==' instead of 'buttons()&'
     //qDebug("V3dR_GLWidget::mouseReleaseEvent  button = %d", event->button());
+	if (event->button() == Qt::RightButton && renderer && (renderer->selectMode == 28 || renderer->selectMode == 31))
+	{
+		std::ofstream eventlog;
+		eventlog.open(_idep->V3Dmainwindow->currentEventPath.toUtf8().constData(), std::ios_base::app);
+		eventlog << (renderer->selectMode == 28 ? "Drawing" : "Deleting") << " end" << endl;
+		//qDebug() << "(" << event->x() << ", " << event->y() << ")";
+		eventlog.close();
+	}
 
 	mouse_held = 0;
 
@@ -830,6 +850,15 @@ void V3dR_GLWidget::mouseMoveEvent(QMouseEvent *event)
     //qDebug()<<"V3dR_GLWidget::mouseMoveEvent  buttons = "<< event->buttons();
 
     //setFocus(); // accept KeyPressEvent, by RZC 080831
+	if ((event->buttons() & Qt::RightButton) && renderer && (renderer->selectMode == 28 || renderer->selectMode == 31))
+	{
+		//qDebug() << (renderer->selectMode == 28 ? "Drawing" : "Deleting") << " start";
+		std::ofstream eventlog;
+		eventlog.open(_idep->V3Dmainwindow->currentEventPath.toUtf8().constData(), std::ios_base::app);
+		eventlog << "(" << event->x() << ", " << event->y() << ")" << endl;
+		eventlog.close();
+	}
+
 
 	int dx = event->x() - lastPos.x();
 	int dy = event->y() - lastPos.y();
@@ -869,6 +898,18 @@ void V3dR_GLWidget::mouseMoveEvent(QMouseEvent *event)
 		{
 			viewRotation(xRotStep, yRotStep, 0);
 		}
+		string current_mRot = "[\n";
+		for (int i = 0; i < 4; i++){
+			current_mRot += "    [";
+			for (int j = 0; j < 4; j++)
+			{
+				current_mRot += mRot[i * 4 + j];
+				current_mRot += ", ";
+			}
+			current_mRot += "],\n";
+		}
+		current_mRot += "]\n";
+		qDebug() << QString::fromStdString(current_mRot);
 	}
 }
 

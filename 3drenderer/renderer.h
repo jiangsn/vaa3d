@@ -142,7 +142,7 @@ public:
 	virtual void paint();								//link to QGLWidget::paintGL
 	virtual int hitPoint(int x, int y)					//called by mouse press event
 		{
-			if (selectMode==smObject)	return selectObj(x,y, true); //pop-up menu
+			if (selectMode==smObject)	return 0;		//selectObj(x,y, true); //pop-up menu
 			else						return hitPen(x,y);			 //marker definition
 		}
 	virtual int selectObj(int x, int y, bool b_menu, char* pTip=0);			//MUST makeCurrent for concurrent contexts, 090715
