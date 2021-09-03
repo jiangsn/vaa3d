@@ -2386,7 +2386,6 @@ int Renderer_gl1::movePen(int x, int y, bool b_move)
 		selectMode == smDeleteMultiNeurons ||  selectMode == smRetypeMultiNeurons || selectMode == smBreakMultiNeurons || selectMode == smBreakTwoNeurons ||
 		selectMode == smConnectNeurons || selectMode == smConnectPointCloud || selectMode == smConnectMarker || selectMode == smCutNeurons || selectMode == smSimpleConnect || selectMode == smSimpleConnectLoopSafe ||
 		selectMode == smShowSubtree 
-		//|| selectMode == smCurveTiltedBB_fm_sbbox
 		)
 	{
 		_appendMarkerPos(x,y);
