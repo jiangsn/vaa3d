@@ -113,7 +113,7 @@ V3dApplication* V3dApplication::theApp = 0;
 
 int main(int argc, char **argv)
 {
-	printf("Hello World!\nVaa3D\n");
+	printf("Hello World!\n");
 	Q_INIT_RESOURCE(v3d);
 	V3dApplication* app = V3dApplication::getInstance(argc, argv);
 	app->activateMainWindow();
