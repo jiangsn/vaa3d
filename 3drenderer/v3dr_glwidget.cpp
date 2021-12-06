@@ -899,18 +899,18 @@ void V3dR_GLWidget::mouseMoveEvent(QMouseEvent *event)
 			viewRotation(xRotStep, yRotStep, 0);
 		}
 		
-		/*string current_modelview = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_modelview += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_modelview += to_string(modelviewMatrix[i * 4 + j]);
-				current_modelview += ", ";
-			}
-			current_modelview += "],\n";
-		}
-		current_modelview += "]\n";
-		qDebug() << QString::fromStdString(current_modelview);*/
+		// string current_modelview = "[\n";
+		// for (int i = 0; i < 4; i++){
+		// 	current_modelview += "    [";
+		// 	for (int j = 0; j < 4; j++)
+		// 	{
+		// 		current_modelview += to_string(modelviewMatrix[i * 4 + j]);
+		// 		current_modelview += ", ";
+		// 	}
+		// 	current_modelview += "],\n";
+		// }
+		// current_modelview += "]\n";
+		// qDebug() << QString::fromStdString(current_modelview);
 	}
 }
 
@@ -2383,39 +2383,7 @@ void V3dR_GLWidget::setXRotation(int angle)
 		emit xRotationChanged(angle);
         POST_updateGL(); // post update to prevent shaking, by RZC 080910
 
-		double modelviewMatrix[16];
-		glGetDoublev(GL_MODELVIEW_MATRIX, modelviewMatrix);
-		qDebug() << "-------GL_MODELVIEW_MATRIX-------";
-		string current_modelview = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_modelview += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_modelview += to_string(modelviewMatrix[i * 4 + j]);
-				current_modelview += ", ";
-			}
-			current_modelview += "],\n";
-		}
-		current_modelview += "]\n";
-		qDebug() << QString::fromStdString(current_modelview);
-		qDebug() << "---------------------------------";
-
-		double projectionMatrix[16];
-		glGetDoublev(GL_PROJECTION_MATRIX, projectionMatrix);
-		qDebug() << "------GL_PROJECTION_MATRIX------";
-		string current_projection = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_projection += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_projection += to_string(projectionMatrix[i * 4 + j]);
-				current_projection += ", ";
-			}
-			current_projection += "],\n";
-		}
-		current_projection += "]\n";
-		qDebug() << QString::fromStdString(current_projection);
-		qDebug() << "--------------------------------";
+		dump_desktop_state_matrix();
     }
 }
 
@@ -2432,39 +2400,7 @@ void V3dR_GLWidget::setXRotation(float angle)
         emit xRotationChanged(angle);
         POST_updateGL(); // post update to prevent shaking, by RZC 080910
 
-		double modelviewMatrix[16];
-		glGetDoublev(GL_MODELVIEW_MATRIX, modelviewMatrix);
-		qDebug() << "-------GL_MODELVIEW_MATRIX-------";
-		string current_modelview = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_modelview += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_modelview += to_string(modelviewMatrix[i * 4 + j]);
-				current_modelview += ", ";
-			}
-			current_modelview += "],\n";
-		}
-		current_modelview += "]\n";
-		qDebug() << QString::fromStdString(current_modelview);
-		qDebug() << "---------------------------------";
-
-		double projectionMatrix[16];
-		glGetDoublev(GL_PROJECTION_MATRIX, projectionMatrix);
-		qDebug() << "------GL_PROJECTION_MATRIX------";
-		string current_projection = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_projection += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_projection += to_string(projectionMatrix[i * 4 + j]);
-				current_projection += ", ";
-			}
-			current_projection += "],\n";
-		}
-		current_projection += "]\n";
-		qDebug() << QString::fromStdString(current_projection);
-		qDebug() << "--------------------------------";
+		dump_desktop_state_matrix();
     }
 }
 
@@ -2480,39 +2416,7 @@ void V3dR_GLWidget::setYRotation(int angle)
 		emit yRotationChanged(angle);
         POST_updateGL(); // post update to prevent shaking, by RZC 080910
 
-		double modelviewMatrix[16];
-		glGetDoublev(GL_MODELVIEW_MATRIX, modelviewMatrix);
-		qDebug() << "-------GL_MODELVIEW_MATRIX-------";
-		string current_modelview = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_modelview += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_modelview += to_string(modelviewMatrix[i * 4 + j]);
-				current_modelview += ", ";
-			}
-			current_modelview += "],\n";
-		}
-		current_modelview += "]\n";
-		qDebug() << QString::fromStdString(current_modelview);
-		qDebug() << "---------------------------------";
-
-		double projectionMatrix[16];
-		glGetDoublev(GL_PROJECTION_MATRIX, projectionMatrix);
-		qDebug() << "------GL_PROJECTION_MATRIX------";
-		string current_projection = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_projection += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_projection += to_string(projectionMatrix[i * 4 + j]);
-				current_projection += ", ";
-			}
-			current_projection += "],\n";
-		}
-		current_projection += "]\n";
-		qDebug() << QString::fromStdString(current_projection);
-		qDebug() << "--------------------------------";
+		dump_desktop_state_matrix();
     }
 }
 
@@ -2528,39 +2432,7 @@ void V3dR_GLWidget::setYRotation(float angle)
         emit yRotationChanged(angle);
         POST_updateGL(); // post update to prevent shaking, by RZC 080910
 
-		double modelviewMatrix[16];
-		glGetDoublev(GL_MODELVIEW_MATRIX, modelviewMatrix);
-		qDebug() << "-------GL_MODELVIEW_MATRIX-------";
-		string current_modelview = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_modelview += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_modelview += to_string(modelviewMatrix[i * 4 + j]);
-				current_modelview += ", ";
-			}
-			current_modelview += "],\n";
-		}
-		current_modelview += "]\n";
-		qDebug() << QString::fromStdString(current_modelview);
-		qDebug() << "---------------------------------";
-
-		double projectionMatrix[16];
-		glGetDoublev(GL_PROJECTION_MATRIX, projectionMatrix);
-		qDebug() << "------GL_PROJECTION_MATRIX------";
-		string current_projection = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_projection += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_projection += to_string(projectionMatrix[i * 4 + j]);
-				current_projection += ", ";
-			}
-			current_projection += "],\n";
-		}
-		current_projection += "]\n";
-		qDebug() << QString::fromStdString(current_projection);
-		qDebug() << "--------------------------------";
+		dump_desktop_state_matrix();
     }
 }
 
@@ -2576,39 +2448,7 @@ void V3dR_GLWidget::setZRotation(int angle)
 		emit zRotationChanged(angle);
         POST_updateGL(); // post update to prevent shaking, by RZC 080910
 
-		double modelviewMatrix[16];
-		glGetDoublev(GL_MODELVIEW_MATRIX, modelviewMatrix);
-		qDebug() << "-------GL_MODELVIEW_MATRIX-------";
-		string current_modelview = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_modelview += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_modelview += to_string(modelviewMatrix[i * 4 + j]);
-				current_modelview += ", ";
-			}
-			current_modelview += "],\n";
-		}
-		current_modelview += "]\n";
-		qDebug() << QString::fromStdString(current_modelview);
-		qDebug() << "---------------------------------";
-
-		double projectionMatrix[16];
-		glGetDoublev(GL_PROJECTION_MATRIX, projectionMatrix);
-		qDebug() << "------GL_PROJECTION_MATRIX------";
-		string current_projection = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_projection += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_projection += to_string(projectionMatrix[i * 4 + j]);
-				current_projection += ", ";
-			}
-			current_projection += "],\n";
-		}
-		current_projection += "]\n";
-		qDebug() << QString::fromStdString(current_projection);
-		qDebug() << "--------------------------------";
+		dump_desktop_state_matrix();
     }
 }
 
@@ -2624,39 +2464,7 @@ void V3dR_GLWidget::setZRotation(float angle)
 		emit zRotationChanged(angle);
 		POST_updateGL(); // post update to prevent shaking, by RZC 080910
 
-		double modelviewMatrix[16];
-		glGetDoublev(GL_MODELVIEW_MATRIX, modelviewMatrix);
-		qDebug() << "-------GL_MODELVIEW_MATRIX-------";
-		string current_modelview = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_modelview += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_modelview += to_string(modelviewMatrix[i * 4 + j]);
-				current_modelview += ", ";
-			}
-			current_modelview += "],\n";
-		}
-		current_modelview += "]\n";
-		qDebug() << QString::fromStdString(current_modelview);
-		qDebug() << "---------------------------------";
-
-		double projectionMatrix[16];
-		glGetDoublev(GL_PROJECTION_MATRIX, projectionMatrix);
-		qDebug() << "------GL_PROJECTION_MATRIX------";
-		string current_projection = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_projection += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_projection += to_string(projectionMatrix[i * 4 + j]);
-				current_projection += ", ";
-			}
-			current_projection += "],\n";
-		}
-		current_projection += "]\n";
-		qDebug() << QString::fromStdString(current_projection);
-		qDebug() << "--------------------------------";
+		dump_desktop_state_matrix();
 	}
 }
 
@@ -3021,39 +2829,7 @@ void V3dR_GLWidget::setZoom(int zr)
         emit zoomChanged(zr);
 		POST_updateGL();
 
-		double modelviewMatrix[16];
-		glGetDoublev(GL_MODELVIEW_MATRIX, modelviewMatrix);
-		qDebug() << "-------GL_MODELVIEW_MATRIX-------";
-		string current_modelview = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_modelview += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_modelview += to_string(modelviewMatrix[i * 4 + j]);
-				current_modelview += ", ";
-			}
-			current_modelview += "],\n";
-		}
-		current_modelview += "]\n";
-		qDebug() << QString::fromStdString(current_modelview);
-		qDebug() << "---------------------------------";
-
-		double projectionMatrix[16];
-		glGetDoublev(GL_PROJECTION_MATRIX, projectionMatrix);
-		qDebug() << "------GL_PROJECTION_MATRIX------";
-		string current_projection = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_projection += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_projection += to_string(projectionMatrix[i * 4 + j]);
-				current_projection += ", ";
-			}
-			current_projection += "],\n";
-		}
-		current_projection += "]\n";
-		qDebug() << QString::fromStdString(current_projection);
-		qDebug() << "--------------------------------";
+		dump_desktop_state_matrix();
 	}
 }
 
@@ -3095,39 +2871,7 @@ void V3dR_GLWidget::setZoom(float zr)
         emit zoomChanged(int(zr));
 		POST_updateGL();
 
-		double modelviewMatrix[16];
-		glGetDoublev(GL_MODELVIEW_MATRIX, modelviewMatrix);
-		qDebug() << "-------GL_MODELVIEW_MATRIX-------";
-		string current_modelview = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_modelview += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_modelview += to_string(modelviewMatrix[i * 4 + j]);
-				current_modelview += ", ";
-			}
-			current_modelview += "],\n";
-		}
-		current_modelview += "]\n";
-		qDebug() << QString::fromStdString(current_modelview);
-		qDebug() << "---------------------------------";
-
-		double projectionMatrix[16];
-		glGetDoublev(GL_PROJECTION_MATRIX, projectionMatrix);
-		qDebug() << "------GL_PROJECTION_MATRIX------";
-		string current_projection = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_projection += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_projection += to_string(projectionMatrix[i * 4 + j]);
-				current_projection += ", ";
-			}
-			current_projection += "],\n";
-		}
-		current_projection += "]\n";
-		qDebug() << QString::fromStdString(current_projection);
-		qDebug() << "--------------------------------";
+		dump_desktop_state_matrix();
     }
 }
 
@@ -3141,39 +2885,7 @@ void V3dR_GLWidget::setXShift(int s)
         emit xShiftChanged(s);
         POST_updateGL();
 
-		double modelviewMatrix[16];
-		glGetDoublev(GL_MODELVIEW_MATRIX, modelviewMatrix);
-		qDebug() << "-------GL_MODELVIEW_MATRIX-------";
-		string current_modelview = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_modelview += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_modelview += to_string(modelviewMatrix[i * 4 + j]);
-				current_modelview += ", ";
-			}
-			current_modelview += "],\n";
-		}
-		current_modelview += "]\n";
-		qDebug() << QString::fromStdString(current_modelview);
-		qDebug() << "---------------------------------";
-
-		double projectionMatrix[16];
-		glGetDoublev(GL_PROJECTION_MATRIX, projectionMatrix);
-		qDebug() << "------GL_PROJECTION_MATRIX------";
-		string current_projection = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_projection += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_projection += to_string(projectionMatrix[i * 4 + j]);
-				current_projection += ", ";
-			}
-			current_projection += "],\n";
-		}
-		current_projection += "]\n";
-		qDebug() << QString::fromStdString(current_projection);
-		qDebug() << "--------------------------------";
+		dump_desktop_state_matrix();
     }
 }
 
@@ -3187,39 +2899,7 @@ void V3dR_GLWidget::setXShift(float s)
         emit xShiftChanged(int(s));
 		POST_updateGL();
 
-		double modelviewMatrix[16];
-		glGetDoublev(GL_MODELVIEW_MATRIX, modelviewMatrix);
-		qDebug() << "-------GL_MODELVIEW_MATRIX-------";
-		string current_modelview = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_modelview += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_modelview += to_string(modelviewMatrix[i * 4 + j]);
-				current_modelview += ", ";
-			}
-			current_modelview += "],\n";
-		}
-		current_modelview += "]\n";
-		qDebug() << QString::fromStdString(current_modelview);
-		qDebug() << "---------------------------------";
-
-		double projectionMatrix[16];
-		glGetDoublev(GL_PROJECTION_MATRIX, projectionMatrix);
-		qDebug() << "------GL_PROJECTION_MATRIX------";
-		string current_projection = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_projection += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_projection += to_string(projectionMatrix[i * 4 + j]);
-				current_projection += ", ";
-			}
-			current_projection += "],\n";
-		}
-		current_projection += "]\n";
-		qDebug() << QString::fromStdString(current_projection);
-		qDebug() << "--------------------------------";
+		dump_desktop_state_matrix();
     }
 }
 
@@ -3233,39 +2913,7 @@ void V3dR_GLWidget::setYShift(int s)
         emit yShiftChanged(s);
         POST_updateGL();
 
-		double modelviewMatrix[16];
-		glGetDoublev(GL_MODELVIEW_MATRIX, modelviewMatrix);
-		qDebug() << "-------GL_MODELVIEW_MATRIX-------";
-		string current_modelview = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_modelview += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_modelview += to_string(modelviewMatrix[i * 4 + j]);
-				current_modelview += ", ";
-			}
-			current_modelview += "],\n";
-		}
-		current_modelview += "]\n";
-		qDebug() << QString::fromStdString(current_modelview);
-		qDebug() << "---------------------------------";
-
-		double projectionMatrix[16];
-		glGetDoublev(GL_PROJECTION_MATRIX, projectionMatrix);
-		qDebug() << "------GL_PROJECTION_MATRIX------";
-		string current_projection = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_projection += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_projection += to_string(projectionMatrix[i * 4 + j]);
-				current_projection += ", ";
-			}
-			current_projection += "],\n";
-		}
-		current_projection += "]\n";
-		qDebug() << QString::fromStdString(current_projection);
-		qDebug() << "--------------------------------";
+		dump_desktop_state_matrix();
     }
 }
 
@@ -3279,39 +2927,7 @@ void V3dR_GLWidget::setYShift(float s)
         emit yShiftChanged(int(s));
 		POST_updateGL();
 
-		double modelviewMatrix[16];
-		glGetDoublev(GL_MODELVIEW_MATRIX, modelviewMatrix);
-		qDebug() << "-------GL_MODELVIEW_MATRIX-------";
-		string current_modelview = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_modelview += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_modelview += to_string(modelviewMatrix[i * 4 + j]);
-				current_modelview += ", ";
-			}
-			current_modelview += "],\n";
-		}
-		current_modelview += "]\n";
-		qDebug() << QString::fromStdString(current_modelview);
-		qDebug() << "---------------------------------";
-
-		double projectionMatrix[16];
-		glGetDoublev(GL_PROJECTION_MATRIX, projectionMatrix);
-		qDebug() << "------GL_PROJECTION_MATRIX------";
-		string current_projection = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_projection += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_projection += to_string(projectionMatrix[i * 4 + j]);
-				current_projection += ", ";
-			}
-			current_projection += "],\n";
-		}
-		current_projection += "]\n";
-		qDebug() << QString::fromStdString(current_projection);
-		qDebug() << "--------------------------------";
+		dump_desktop_state_matrix();
     }
 }
 
@@ -3324,39 +2940,7 @@ void V3dR_GLWidget::setZShift(int s)
         emit zShiftChanged(s);
         POST_updateGL();
 
-		double modelviewMatrix[16];
-		glGetDoublev(GL_MODELVIEW_MATRIX, modelviewMatrix);
-		qDebug() << "-------GL_MODELVIEW_MATRIX-------";
-		string current_modelview = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_modelview += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_modelview += to_string(modelviewMatrix[i * 4 + j]);
-				current_modelview += ", ";
-			}
-			current_modelview += "],\n";
-		}
-		current_modelview += "]\n";
-		qDebug() << QString::fromStdString(current_modelview);
-		qDebug() << "---------------------------------";
-
-		double projectionMatrix[16];
-		glGetDoublev(GL_PROJECTION_MATRIX, projectionMatrix);
-		qDebug() << "------GL_PROJECTION_MATRIX------";
-		string current_projection = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_projection += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_projection += to_string(projectionMatrix[i * 4 + j]);
-				current_projection += ", ";
-			}
-			current_projection += "],\n";
-		}
-		current_projection += "]\n";
-		qDebug() << QString::fromStdString(current_projection);
-		qDebug() << "--------------------------------";
+		dump_desktop_state_matrix();
     }
 }
 
@@ -3369,39 +2953,7 @@ void V3dR_GLWidget::setZShift(float s)
         emit zShiftChanged(int(s));
 		POST_updateGL();
 
-		double modelviewMatrix[16];
-		glGetDoublev(GL_MODELVIEW_MATRIX, modelviewMatrix);
-		qDebug() << "-------GL_MODELVIEW_MATRIX-------";
-		string current_modelview = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_modelview += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_modelview += to_string(modelviewMatrix[i * 4 + j]);
-				current_modelview += ", ";
-			}
-			current_modelview += "],\n";
-		}
-		current_modelview += "]\n";
-		qDebug() << QString::fromStdString(current_modelview);
-		qDebug() << "---------------------------------";
-
-		double projectionMatrix[16];
-		glGetDoublev(GL_PROJECTION_MATRIX, projectionMatrix);
-		qDebug() << "------GL_PROJECTION_MATRIX------";
-		string current_projection = "[\n";
-		for (int i = 0; i < 4; i++){
-			current_projection += "    [";
-			for (int j = 0; j < 4; j++)
-			{
-				current_projection += to_string(projectionMatrix[i * 4 + j]);
-				current_projection += ", ";
-			}
-			current_projection += "],\n";
-		}
-		current_projection += "]\n";
-		qDebug() << QString::fromStdString(current_projection);
-		qDebug() << "--------------------------------";
+		dump_desktop_state_matrix();
     }
 }
 
@@ -4962,6 +4514,51 @@ void V3dR_GLWidget::reloadData()
 
 	updateTool(); //081222
 	POST_updateGL();
+}
+
+void V3dR_GLWidget::dump_desktop_state_matrix()
+{
+	std::ofstream eventlog;
+	eventlog.open(_idep->V3Dmainwindow->currentEventPath.toUtf8().constData(), std::ios_base::app);
+
+	double modelviewMatrix[16];
+	glGetDoublev(GL_MODELVIEW_MATRIX, modelviewMatrix);
+
+	double projectionMatrix[16];
+	glGetDoublev(GL_PROJECTION_MATRIX, projectionMatrix);
+
+	// mv matrix is for rotation and translation
+	eventlog << "---------------------------------\n";
+	eventlog << "-------GL_MODELVIEW_MATRIX-------\n";
+	string current_modelview = "[\n";
+	for (int i = 0; i < 4; i++){
+		current_modelview += "    [";
+		for (int j = 0; j < 4; j++)
+		{
+			current_modelview += to_string(modelviewMatrix[i * 4 + j]);
+			current_modelview += ", ";
+		}
+		current_modelview += "],\n";
+	}
+	current_modelview += "]\n";
+	eventlog << current_modelview;
+	//projection matrix is for zoom
+	eventlog << "------GL_PROJECTION_MATRIX------\n";
+	string current_projection = "[\n";
+	for (int i = 0; i < 4; i++){
+		current_projection += "    [";
+		for (int j = 0; j < 4; j++)
+		{
+			current_projection += to_string(projectionMatrix[i * 4 + j]);
+			current_projection += ", ";
+		}
+		current_projection += "],\n";
+	}
+	current_projection += "]\n";
+	eventlog << current_projection;
+	eventlog << "--------------------------------\n";
+
+	eventlog.close();
 }
 
 void V3dR_GLWidget::cancelSelect()

@@ -1514,6 +1514,22 @@ bool CMainApplication::HandleInput()
 							}
 						}
 						mat=glm::inverse(m_globalMatrix) * mat;
+						
+						glm::vec4 ctrlRightPos = mat * glm::vec4( 0, 0, 0, 1 );
+						qDebug(" DrawctrlRightPos = %.2f,%.2f,%.2f\n",ctrlRightPos.x,ctrlRightPos.y,ctrlRightPos.z);
+						qDebug()<<"-----------------right controller drawing mat---------------------"<<endl;
+						string mat_out = "";
+						for (size_t i = 0; i < 4; i++)
+						{
+							for (size_t j = 0; j < 4; j++)
+							{
+								mat_out += to_string(mat[i][j]) + " ";
+							}
+							mat_out += "\n";
+						}
+						qDebug() << QString::fromStdString(mat_out);
+						qDebug()<<"---------------mat end-------------------"<<endl;
+
 						glm::vec4 m_v4DevicePose = mat * glm::vec4( 0, 0, 0, 1 );//change the world space(with the globalMatrix) to the initial world space
 
 						swccount++;//for every 10(#drawing_step_size) frames we store a point as a neuronswc point,control with swccount
@@ -1599,7 +1615,21 @@ bool CMainApplication::HandleInput()
 					}
 					mat=glm::inverse(m_globalMatrix) * mat;
 					glm::vec4 ctrlRightPos = mat * glm::vec4( 0, 0, 0, 1 );
-					//qDebug("ctrlRightPos = %.2f,%.2f,%.2f\n",ctrlRightPos.x,ctrlRightPos.y,ctrlRightPos.z);
+					qDebug(" DragctrlRightPos = %.2f,%.2f,%.2f\n",ctrlRightPos.x,ctrlRightPos.y,ctrlRightPos.z);
+
+					qDebug()<<"-----------------right controller drag mat---------------------"<<endl;
+						string mat_out = "";
+						for (size_t i = 0; i < 4; i++)
+						{
+							for (size_t j = 0; j < 4; j++)
+							{
+								mat_out += to_string(mat[i][j]) + " ";
+							}
+							mat_out += "\n";
+						}
+						qDebug() << QString::fromStdString(mat_out);
+						qDebug()<<"---------------mat end-------------------"<<endl;
+
 					if(!_startdragnode)
 					{
 						if (isOnline == false)

@@ -108,6 +108,8 @@ public:
 	void setDataTitle(QString newdt) {data_title = newdt;}
 	int getNumKeyHolding()    {for(int i=1;i<=9; i++) if(_holding_num[i]) return i; return -1;}
 
+	void dump_desktop_state_matrix();
+
 	bool getStill() 		{return _still;} //used by Renderer::beStill()
 	void setStill(bool b) 	{_still = b;}    //used by V3dR_MainWindow::doSaveMovie()
     bool needStillPaint();
@@ -567,6 +569,7 @@ public:
 	int _Bright, _Contrast, sUpdate_bright, sUpdate_track;
     bool _showAxes, _showBoundingBox, _absRot, _orthoView, _clipBoxEnable;
 	bool _volCompress, _volFilter;
+
 
     RGBA8 backgroundColor; // record current non-black backgroundColor
 
