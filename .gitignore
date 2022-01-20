@@ -7,3 +7,4 @@
 !.gitignore
 moc_*
 /v3d/release/*
+test
