@@ -370,8 +370,6 @@ void V3dR_GLWidget::preparingRenderer() // renderer->setupData & init, 100719 ex
 	// 081122, CAUTION: call updateGL from initializeGL will cause infinite loop call
 }
 
-
-
 void V3dR_GLWidget::autoSaveSwc()
 {
 	qDebug() << "V3dR_GLWidget::autoSaveSwc()";
@@ -2436,6 +2434,7 @@ void V3dR_GLWidget::doimageVRView(bool bCanCoMode) //0518
 	//process3Dwindow(false);
 
 	// bool _Call_ZZ_Plugin = startStandaloneVRScene(listNeuronTrees, img4d, (MainWindow *)(this->getMainWindow())); // both nt and img4d can be empty.
+	_idep->glWidget = this;
 	int _call_that_func = startStandaloneVRScene(listNeuronTrees, img4d, _idep, (MainWindow *)(this->getMainWindow()), &teraflyZoomInPOS); // both nt and img4d can be empty.
 	qDebug() << "result is " << _call_that_func;
 	qDebug() << "xxxxxxxxxxxxx ==%1 y ==%2 z ==%3" << teraflyZoomInPOS.x << teraflyZoomInPOS.y << teraflyZoomInPOS.z;
