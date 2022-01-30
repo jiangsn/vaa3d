@@ -804,10 +804,14 @@ void V3dR_GLWidget::mousePressEvent(QMouseEvent *event)
 	//091025: use QMouseEvent::button()== not buttonS()&
 	//qDebug("V3dR_GLWidget::mousePressEvent  button = %d", event->button());
 
-	if (event->button() == Qt::RightButton && renderer && (renderer->selectMode == 28 || renderer->selectMode == 31))
+	if (event->button() == Qt::RightButton && renderer && (renderer->selectMode == 28 || renderer->selectMode == 31) && notFinishedFlag)
 	{
 		std::ofstream eventlog;
 		eventlog.open(_idep->V3Dmainwindow->currentEventPath.toUtf8().constData(), std::ios_base::app);
+		eventlog << "--------------------------------\n";
+		float elapsed_time = exptime.elapsed() * 0.001;
+		eventlog << "Time: " << elapsed_time << endl;
+
 		eventlog << (renderer->selectMode == 28 ? "Drawing" : "Deleting") << " start" << endl;
 		eventlog << "(" << event->x() << ", " << event->y() << ")" << endl;
 		eventlog.close();
@@ -841,11 +845,14 @@ void V3dR_GLWidget::mouseReleaseEvent(QMouseEvent *event)
 {
 	//091025: use 'QMouseEvent::button()==' instead of 'buttons()&'
 	//qDebug("V3dR_GLWidget::mouseReleaseEvent  button = %d", event->button());
-	if (event->button() == Qt::RightButton && renderer && (renderer->selectMode == 28 || renderer->selectMode == 31))
+	if (event->button() == Qt::RightButton && renderer && (renderer->selectMode == 28 || renderer->selectMode == 31) && notFinishedFlag)
 	{
 		std::ofstream eventlog;
 		eventlog.open(_idep->V3Dmainwindow->currentEventPath.toUtf8().constData(), std::ios_base::app);
 		eventlog << (renderer->selectMode == 28 ? "Drawing" : "Deleting") << " end" << endl;
+		float elapsed_time = exptime.elapsed() * 0.001;
+		eventlog << "Time: " << elapsed_time << endl;
+		eventlog << "--------------------------------\n";
 		//qDebug() << "(" << event->x() << ", " << event->y() << ")";
 		eventlog.close();
 	}
@@ -868,7 +875,7 @@ void V3dR_GLWidget::mouseMoveEvent(QMouseEvent *event)
 	//qDebug()<<"V3dR_GLWidget::mouseMoveEvent  buttons = "<< event->buttons();
 
 	//setFocus(); // accept KeyPressEvent, by RZC 080831
-	if ((event->buttons() & Qt::RightButton) && renderer && (renderer->selectMode == 28 || renderer->selectMode == 31))
+	if ((event->buttons() & Qt::RightButton) && renderer && (renderer->selectMode == 28 || renderer->selectMode == 31) && notFinishedFlag)
 	{
 		//qDebug() << (renderer->selectMode == 28 ? "Drawing" : "Deleting") << " start";
 		std::ofstream eventlog;
@@ -1828,6 +1835,13 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 		{
 			if (!V3dR_GLWidget::disableUndoRedo && v3dr_getImage4d(_idep) && renderer)
 			{
+				std::ofstream eventlog;
+				eventlog.open(_idep->V3Dmainwindow->currentEventPath.toUtf8().constData(), std::ios_base::app);
+				eventlog << "--------------------------------\n";
+				float elapsed_time = exptime.elapsed() * 0.001;
+				eventlog << "Time: " << elapsed_time << endl;
+				eventlog << "Redo\n";
+				eventlog << "--------------------------------\n";
 				v3dr_getImage4d(_idep)->proj_trace_history_redo();
 				v3dr_getImage4d(_idep)->update_3drenderer_neuron_view(this, (Renderer_gl1 *)renderer); //090924
 			}
@@ -1837,6 +1851,13 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 		{
 			if (!V3dR_GLWidget::disableUndoRedo && v3dr_getImage4d(_idep) && renderer)
 			{
+				std::ofstream eventlog;
+				eventlog.open(_idep->V3Dmainwindow->currentEventPath.toUtf8().constData(), std::ios_base::app);
+				eventlog << "--------------------------------\n";
+				float elapsed_time = exptime.elapsed() * 0.001;
+				eventlog << "Time: " << elapsed_time << endl;
+				eventlog << "Undo\n";
+				eventlog << "--------------------------------\n";
 				v3dr_getImage4d(_idep)->proj_trace_history_undo();
 				v3dr_getImage4d(_idep)->update_3drenderer_neuron_view(this, (Renderer_gl1 *)renderer); //090924
 			}
@@ -1848,8 +1869,8 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 		{
 			if (!V3dR_GLWidget::disableUndoRedo && v3dr_getImage4d(_idep) && renderer)
 			{
-				v3dr_getImage4d(_idep)->proj_trace_history_redo();
-				v3dr_getImage4d(_idep)->update_3drenderer_neuron_view(this, (Renderer_gl1 *)renderer); //090924
+				//v3dr_getImage4d(_idep)->proj_trace_history_redo();
+				//v3dr_getImage4d(_idep)->update_3drenderer_neuron_view(this, (Renderer_gl1 *)renderer); //090924
 			}
 		}
 		break;
