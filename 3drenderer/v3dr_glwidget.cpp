@@ -200,6 +200,8 @@ V3dR_GLWidget::V3dR_GLWidget(iDrawExternalParameter *idep, QWidget *mainWindow, 
 	currentPluginState = -1; // May 29, 2012 by Hang
 
 	exptime.start();
+
+	notFinishedFlag = true;
 }
 
 //////////////////////////////////////////////////////
@@ -368,6 +370,8 @@ void V3dR_GLWidget::preparingRenderer() // renderer->setupData & init, 100719 ex
 	// 081122, CAUTION: call updateGL from initializeGL will cause infinite loop call
 }
 
+
+
 void V3dR_GLWidget::autoSaveSwc()
 {
 	qDebug() << "V3dR_GLWidget::autoSaveSwc()";
@@ -376,6 +380,8 @@ void V3dR_GLWidget::autoSaveSwc()
 	float elapsed_time = exptime.elapsed() * 0.001;
 	qDebug() << "Time cost: " << elapsed_time << endl;
 	appendInfoToSwc("#Time cost: " + to_string(elapsed_time));
+
+	notFinishedFlag = false;
 }
 
 void V3dR_GLWidget::appendInfoToSwc(string info)
@@ -4815,10 +4821,12 @@ void V3dR_GLWidget::dump_desktop_state_matrix()
 	double projectionMatrix[16];
 	glGetDoublev(GL_PROJECTION_MATRIX, projectionMatrix);
 
-	if (!_idep->V3Dmainwindow->vrMode)
+	if (!_idep->V3Dmainwindow->vrMode && notFinishedFlag)
 	{
 		// mv matrix is for rotation and translation
 		eventlog << "---------------------------------\n";
+		float elapsed_time = exptime.elapsed() * 0.001;
+		eventlog << "Time: " << elapsed_time << endl;
 		eventlog << "-------GL_MODELVIEW_MATRIX-------\n";
 		string current_modelview = "[\n";
 		for (int i = 0; i < 4; i++)

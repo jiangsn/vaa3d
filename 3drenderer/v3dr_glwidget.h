@@ -188,6 +188,7 @@ public:
 
 public slots:
    	virtual void stillPaint(); //for deferred full-resolution volume painting, connected to still_timer
+
 	void autoSaveSwc();
 
 	void appendInfoToSwc(string info);
@@ -262,6 +263,8 @@ public:
     // @ADDED by Alessandro on 2015-09-30. See 'show_progress_bar'.
     bool         getShowProgressBar(){return show_progress_bar;}
     void         setShowProgressBar(bool val){show_progress_bar = val;}
+
+	bool notFinishedFlag;
 
 public slots:
 // most of format: set***(type) related to a change***(type)

@@ -79,6 +79,9 @@ protected:
 	virtual void keyReleaseEvent(QKeyEvent * e);
 
 public slots:
+
+	void enableNextImg();
+
 	void TimeSlot();
 
 	void postClose();
@@ -215,6 +218,7 @@ public:
     QCheckBox *checkBox_channelR, *checkBox_channelG, *checkBox_channelB, *checkBox_channelA, *checkBox_volCompress;
     QPushButton *volumeColormapButton;
 
+	QPushButton *finishBtn;
 	QPushButton *nextImgBtn;
 	QPushButton *prevImgBtn;
 	QPushButton *selectBtn;
