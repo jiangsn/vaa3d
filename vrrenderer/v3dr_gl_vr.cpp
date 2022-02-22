@@ -1448,6 +1448,8 @@ bool CMainApplication::HandleInput()
 						// shuning track right controller drawing
 						qDebug(" DrawCtrlRightPos = %.2f,%.2f,%.2f\n", ctrlRightPos.x, ctrlRightPos.y, ctrlRightPos.z);
 						string mat_out = "------right controller drawing------\n";
+						float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
+						mat_out += "Time: " + std::to_string(elapsed_time) + "\n";
 						for (size_t i = 0; i < 4; i++)
 						{
 							for (size_t j = 0; j < 4; j++)
@@ -1465,7 +1467,6 @@ bool CMainApplication::HandleInput()
 							outfile << mat_out;
 							outfile.close();
 						}
-						
 
 						glm::vec4 m_v4DevicePose = mat * glm::vec4(0, 0, 0, 1); // change the world space(with the globalMatrix) to the initial world space
 
@@ -1811,7 +1812,6 @@ bool CMainApplication::HandleInput()
 							outfile << mat_out;
 							outfile.close();
 						}
-						
 					}
 					else if (m_fTouchPosY < -0.1)
 					{
@@ -1919,6 +1919,8 @@ bool CMainApplication::HandleInput()
 				{
 					// shuning track rotation
 					string s = "--------m_globalMatrix--------\n";
+					float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
+					s += "Time: " + std::to_string(elapsed_time) + "\n";
 					for (int i = 0; i < 4; i++)
 					{
 						for (int j = 0; j < 4; j++)
@@ -1961,7 +1963,7 @@ bool CMainApplication::HandleInput()
 					// m_globalScale += 0.1;
 					// m_globalMatrix = glm::scale(m_globalMatrix, glm::vec3(m_globalScale, m_globalScale, m_globalScale));
 					m_globalMatrix = glm::scale(m_globalMatrix, glm::vec3(1.01, 1.01, 1.01));
-					
+
 					string s = "------------------------------------\n";
 					float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
 					s += "Time: " + std::to_string(elapsed_time) + "\n";
@@ -4138,8 +4140,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 
 		float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
 		mat_out += "Time: " + std::to_string(elapsed_time) + "\n";
-		mat_out += "Redo";
-		mat_out += to_string(fContrast) + "\n";
+		mat_out += "Redo\n";
 		mat_out += "------------------------------------\n";
 
 		if (_idep->glWidget->notFinishedFlag)
