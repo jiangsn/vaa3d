@@ -4,7 +4,7 @@
  */
 
 /************
-                                            ********* LICENSE NOTICE ************
+											********* LICENSE NOTICE ************
 
 This folder contains all source codes for the V3D project, which is subject to the following conditions if you want to use it.
 
@@ -65,7 +65,7 @@ bool V3dR_GLWidget::skipFormat = false; // 201602 TDP: allow skip format to avoi
 bool V3dR_GLWidget::resumeCollaborationVR = false;
 #endif
 
-//PROGRESS_DIALOG("", 0)
+// PROGRESS_DIALOG("", 0)
 V3dr_colormapDialog *V3dR_GLWidget::colormapDlg = 0;
 V3dr_surfaceDialog *V3dR_GLWidget::surfaceDlg = 0;
 
@@ -100,8 +100,8 @@ void V3dR_GLWidget::closeEvent(QCloseEvent *e)
 	deleteRenderer();
 
 	/////////////////////////////////////////////////////
-	deleteLater();			//Schedules this object for deletion
-	QWidget::closeEvent(e); //accept
+	deleteLater();			// Schedules this object for deletion
+	QWidget::closeEvent(e); // accept
 							/////////////////////////////////////////////////////
 }
 
@@ -112,12 +112,12 @@ V3dR_GLWidget::~V3dR_GLWidget()
 
 	if (colormapDlg && colormapDlg->DecRef(this) < 1)
 	{
-	} //colormapDlg = 0 safely called in destructor of colormapDlg;
+	} // colormapDlg = 0 safely called in destructor of colormapDlg;
 	if (surfaceDlg && surfaceDlg->DecRef(this) < 1)
 	{
-	} //surfaceDlg = 0  safely called in destructor of surfaceDlg;
+	} // surfaceDlg = 0  safely called in destructor of surfaceDlg;
 
-	deleteRenderer(); //090711 RZC: maybe too late, because some version Qt destroyed GL context before here.
+	deleteRenderer(); // 090711 RZC: maybe too late, because some version Qt destroyed GL context before here.
 
 	POST_CLOSE(mainwindow);
 	QCoreApplication::sendPostedEvents(0, 0); // process all blocked events
@@ -138,13 +138,13 @@ V3dR_GLWidget::V3dR_GLWidget(iDrawExternalParameter *idep, QWidget *mainWindow, 
 	init_members();
 	///////////////////////////////////////////////////////////////
 
-	//setFormat(QGLFormat(0));
-	makeCurrent(); //090729: this make sure created GL context
+	// setFormat(QGLFormat(0));
+	makeCurrent(); // 090729: this make sure created GL context
 	static int isGLinfoDetected = 0;
 	if (isGLinfoDetected == 0) // only once when multiple views
 	{
 #ifdef test_main_cpp
-		GLinfoDetect(0); //print to console
+		GLinfoDetect(0); // print to console
 #endif
 		isGLinfoDetected = 1;
 	}
@@ -164,39 +164,39 @@ V3dR_GLWidget::V3dR_GLWidget(iDrawExternalParameter *idep, QWidget *mainWindow, 
 		f.setDepth(true);
 		f.setStencil(true);
 
-		if (_isMultipleSampleSupported()) //090729
+		if (_isMultipleSampleSupported()) // 090729
 		{
 			f.setSampleBuffers(true); // ensure using multiple-sample-buffers for smooth line and edge, by RZC 080825
 			f.setSamples(4);		  // (1,2,4), For ATI must force samples, by RZC 081001
 		}
 		else
 		{
-			f.setSampleBuffers(false); //081003: this must be set as false for Maci, Tiger for Simposon WM2.
-			f.setSamples(0);		   //090730: For X11 must force 0
+			f.setSampleBuffers(false); // 081003: this must be set as false for Maci, Tiger for Simposon WM2.
+			f.setSamples(0);		   // 090730: For X11 must force 0
 		}
 
-		//f.setOverlay(true); // no use
-		//f.setAccum(true);   // use blend a rectangle instead of this
-		//f.setAccumBufferSize(16);
-		//f.setStereo(true);    // 081126, for glDrawBuffers, QGLFormat do NOT support AUX_BUFFER !!!, will cause system DEAD
+		// f.setOverlay(true); // no use
+		// f.setAccum(true);   // use blend a rectangle instead of this
+		// f.setAccumBufferSize(16);
+		// f.setStereo(true);    // 081126, for glDrawBuffers, QGLFormat do NOT support AUX_BUFFER !!!, will cause system DEAD
 	}
 #endif
 
-	//dynamic choice GLFormat
+	// dynamic choice GLFormat
 	if (!skipFormat)
 		setFormat(f);
 
 	///////////////////////////////////////////////////////////////
-	//makeCurrent(); //090729: this make sure created GL context
-	//  2008-11-22 RZC, 090628 RZC
-	//choice renderer according to OpenGl version, MUST put in initializeGL
+	// makeCurrent(); //090729: this make sure created GL context
+	//   2008-11-22 RZC, 090628 RZC
+	// choice renderer according to OpenGl version, MUST put in initializeGL
 	////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	//setFocusPolicy(Qt::WheelFocus); // accept KeyPressEvent when mouse wheel move, by RZC 080831
+	// setFocusPolicy(Qt::WheelFocus); // accept KeyPressEvent when mouse wheel move, by RZC 080831
 	setFocusPolicy(Qt::StrongFocus); // accept KeyPressEvent when mouse click, by RZC 081028
-	//setFocusProxy(mainWindow);
+	// setFocusProxy(mainWindow);
 
-	//qDebug("V3dR_GLWidget::V3dR_GLWidget ----- end");
+	// qDebug("V3dR_GLWidget::V3dR_GLWidget ----- end");
 	currentPluginState = -1; // May 29, 2012 by Hang
 
 	exptime.start();
@@ -209,14 +209,14 @@ void V3dR_GLWidget::deleteRenderer()
 {
 	makeCurrent();
 	DELETE_AND_ZERO(renderer);
-} //090710 RZC: to delete renderer before ~V3dR_GLWidget()
+} // 090710 RZC: to delete renderer before ~V3dR_GLWidget()
 void V3dR_GLWidget::createRenderer()
 {
 	qDebug() << "createRenderer()" << endl;
 	makeCurrent();
 	deleteRenderer();
 	initializeGL();
-} //090710 RZC: to create renderer at any time
+} // 090710 RZC: to create renderer at any time
 
 void V3dR_GLWidget::choiceRenderer()
 {
@@ -228,8 +228,8 @@ void V3dR_GLWidget::choiceRenderer()
 	// OpenGL hardware supporting detection
 	// standard method
 	const char *glversion = (const char *)glGetString(GL_VERSION);
-	//if (strlen(glversion)>3 && glversion[0]=='1' && glversion[1]=='.' && glversion[2]<'3')	_isSoftwareGL = true;
-	// GLee method
+	// if (strlen(glversion)>3 && glversion[0]=='1' && glversion[1]=='.' && glversion[2]<'3')	_isSoftwareGL = true;
+	//  GLee method
 	if (!GLEE_VERSION_1_3)
 		_isSoftwareGL = true;
 
@@ -250,23 +250,23 @@ void V3dR_GLWidget::choiceRenderer()
 	//============================================================================
 	// dynamic choice different Renderer version according to OpenGL version
 	renderer = 0;
-	//if (strlen(glversion)>3 && glversion[0]>='2' && glversion[1]=='.' && glversion[2]>='0')
+	// if (strlen(glversion)>3 && glversion[0]>='2' && glversion[1]=='.' && glversion[2]>='0')
 	if (1 && supported_GLSL())
 	{
 		renderer = new Renderer_gl2(this);
 	}
 	else	   // 081215: this comment for special version without GL 2.0 support
-		if (1) //strlen(glversion)>3 && glversion[0]>='1' && glversion[1]=='.' && glversion[2]>='0')
-	{
-		renderer = new Renderer_gl1(this);
-	}
-	else
-	{
-		renderer = new Renderer(this);
-	}
+		if (1) // strlen(glversion)>3 && glversion[0]>='1' && glversion[1]=='.' && glversion[2]>='0')
+		{
+			renderer = new Renderer_gl1(this);
+		}
+		else
+		{
+			renderer = new Renderer(this);
+		}
 	if (renderer)
 		renderer->selectMode = Renderer::defaultSelectMode;
-	//if (renderer) renderer->widget = (void*)this; //081025 //100827 move to constructor parameter
+	// if (renderer) renderer->widget = (void*)this; //081025 //100827 move to constructor parameter
 }
 
 // 091007 RZC: extract to function
@@ -274,7 +274,7 @@ void V3dR_GLWidget::settingRenderer() // before renderer->setupData & init
 {
 	qDebug("V3dR_GLWidget::settingRenderer");
 
-	//by PHC, 090618: set up some default rendering options
+	// by PHC, 090618: set up some default rendering options
 #ifndef test_main_cpp
 	if (_idep && _idep->V3Dmainwindow && renderer)
 	{
@@ -293,9 +293,9 @@ void V3dR_GLWidget::settingRenderer() // before renderer->setupData & init
 		}
 		if (_idep->b_use_512x512x256 == false)
 		{
-			renderer->tryTexStream = -1; //091016, 100719: use data of full resolution
+			renderer->tryTexStream = -1; // 091016, 100719: use data of full resolution
 			qDebug("	Don't use 512x512x256. tryTexStream = -1, use data of full resolution");
-			//renderer->tryTex3D = 0; // 3D texture may cause overflow on some machine
+			// renderer->tryTex3D = 0; // 3D texture may cause overflow on some machine
 		}
 
 		renderer->lineType = (_idep->V3Dmainwindow->global_setting.b_autoSWCLineMode) ? 1 : 0;
@@ -308,7 +308,7 @@ void V3dR_GLWidget::preparingRenderer() // renderer->setupData & init, 100719 ex
 	qDebug("V3dR_GLWidget::preparingRenderer");
 
 	if (_isSoftwareGL)
-		setRenderMode_Cs3d(true); //090724 set renderer mode before paint
+		setRenderMode_Cs3d(true); // 090724 set renderer mode before paint
 
 	//=============================================================================
 	PROGRESS_DIALOG("Preparing 3D View", NULL);
@@ -326,7 +326,7 @@ void V3dR_GLWidget::preparingRenderer() // renderer->setupData & init, 100719 ex
 			renderer->setupData(this->_idep);
 			if (renderer->hasError())
 				POST_CLOSE(this);
-			renderer->getLimitedDataSize(_data_size); //for update slider size
+			renderer->getLimitedDataSize(_data_size); // for update slider size
 		}
 
 		if (this->show_progress_bar)
@@ -335,7 +335,7 @@ void V3dR_GLWidget::preparingRenderer() // renderer->setupData & init, 100719 ex
 		}
 		if (renderer)
 		{
-			renderer->initialize(renderer->class_version()); //090705 RZC
+			renderer->initialize(renderer->class_version()); // 090705 RZC
 			if (renderer->hasError())
 				POST_CLOSE(this);
 		}
@@ -364,19 +364,17 @@ void V3dR_GLWidget::preparingRenderer() // renderer->setupData & init, 100719 ex
 	}
 
 	POST_EVENT(this, QEvent::Type(QEvent_OpenFiles));
-	POST_EVENT(this, QEvent::Type(QEvent_Ready)); //081124
+	POST_EVENT(this, QEvent::Type(QEvent_Ready)); // 081124
 
-	//updateTool(); //081222   //110722, no need, called by V3dR_MainWindow::changeEvent(ActivationChange)
-	// 081122, CAUTION: call updateGL from initializeGL will cause infinite loop call
+	// updateTool(); //081222   //110722, no need, called by V3dR_MainWindow::changeEvent(ActivationChange)
+	//  081122, CAUTION: call updateGL from initializeGL will cause infinite loop call
 }
-
-
 
 void V3dR_GLWidget::autoSaveSwc()
 {
 	qDebug() << "V3dR_GLWidget::autoSaveSwc()";
 	((Renderer_gl2 *)renderer)->saveNeuronTree(0, _idep->V3Dmainwindow->currentSwcPath);
-	//renderer->saveNeuronTree(0, _idep->V3Dmainwindow->currentImgPath);
+	// renderer->saveNeuronTree(0, _idep->V3Dmainwindow->currentImgPath);
 	float elapsed_time = exptime.elapsed() * 0.001;
 	qDebug() << "Time cost: " << elapsed_time << endl;
 	appendInfoToSwc("#Time cost: " + to_string(elapsed_time));
@@ -426,10 +424,10 @@ void V3dR_GLWidget::initializeGL()
 #endif
 #endif
 
-	//choice renderer according to OpenGl version
+	// choice renderer according to OpenGl version
 	choiceRenderer();
 
-	settingRenderer(); //091007, 100719 moved to position before renderer->setupData
+	settingRenderer(); // 091007, 100719 moved to position before renderer->setupData
 
 	preparingRenderer();
 
@@ -440,19 +438,19 @@ void V3dR_GLWidget::initializeGL()
 	ifstream swcFile(swcName.toUtf8().constData());
 	if (swcFile.good())
 	{
-		//qDebug() << "Loading swc: " << swcName << endl;
-		//loadObjectFromFile(swcName);
+		// qDebug() << "Loading swc: " << swcName << endl;
+		// loadObjectFromFile(swcName);
 	}
 
 	renderer->callStrokeCurveDrawingBBoxes();
 
-	//shuning
-	//show center by default
-	//toggleCenterCutRange();
+	// shuning
+	// show center by default
+	// toggleCenterCutRange();
 
 	if (_idep->V3Dmainwindow->vrMode)
 	{
-		//doimage3DVRView();
+		// doimage3DVRView();
 	}
 }
 
@@ -464,7 +462,7 @@ void V3dR_GLWidget::toggleCenterCutRange()
 	d3 = MAX(0, dataDim3() - 1);
 	qDebug() << d1 << "---" << d2 << "---" << d3 << endl;
 
-	//qDebug() << glWidget->xCut0() << endl;
+	// qDebug() << glWidget->xCut0() << endl;
 	if (xCut0())
 	{
 		setXCut0(0);
@@ -487,7 +485,7 @@ void V3dR_GLWidget::toggleCenterCutRange()
 
 void V3dR_GLWidget::resizeGL(int width, int height)
 {
-	//qDebug(" renderer->setupView( %d, %d )", width, height);
+	// qDebug(" renderer->setupView( %d, %d )", width, height);
 	viewW = width;
 	viewH = height;
 	if (renderer)
@@ -499,32 +497,32 @@ void V3dR_GLWidget::paintGL()
 	if (renderer && renderer->hasError())
 		POST_CLOSE(this);
 
-	//QTime qtime; qtime.start();
+	// QTime qtime; qtime.start();
 
-	//the following translation & rotation operations are carried out in view space
+	// the following translation & rotation operations are carried out in view space
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	//the order is important
+	// the order is important
 
-	//GET current rotation pose by GL matrix stack
+	// GET current rotation pose by GL matrix stack
 	glPushMatrix();
 	{
 		glLoadIdentity();
-		//last absolute rotation pose
+		// last absolute rotation pose
 		glMultMatrixd(mRot);
-		//current relative small rotation, always around center of model
+		// current relative small rotation, always around center of model
 		{
-			XYZ R(dxRot, dyRot, dzRot); //qDebug("R= %f %f %f", R.x, R.y, R.z);
+			XYZ R(dxRot, dyRot, dzRot); // qDebug("R= %f %f %f", R.x, R.y, R.z);
 			dxRot = dyRot = dzRot = 0;	// clear relative rotation step
 
-			double angle = norm(R) / (float)ANGLE_TICK; //qDebug("angle=%f", angle);
+			double angle = norm(R) / (float)ANGLE_TICK; // qDebug("angle=%f", angle);
 			if (angle)
 			{
-				normalize(R); //qDebug("R= %f %f %f", R.x, R.y, R.z);
+				normalize(R); // qDebug("R= %f %f %f", R.x, R.y, R.z);
 				glRotated(angle, R.x, R.y, R.z);
 			}
 		}
-		//save current absolute rotation pose
+		// save current absolute rotation pose
 		glGetDoublev(GL_MODELVIEW_MATRIX, mRot);
 		for (int i = 0; i < 3; i++)
 			mRot[i * 4 + 3] = mRot[3 * 4 + i] = 0;
@@ -532,11 +530,11 @@ void V3dR_GLWidget::paintGL()
 	}
 	glPopMatrix();
 
-	//SET translation
+	// SET translation
 	{
-		//absolute translation
-		XYZ T(_xShift, _yShift, _zShift); //qDebug("T= %f %f %f", T.x, T.y, T.z);
-		//XYZ T(_xShift, _yShift, 0); // force zShift=0
+		// absolute translation
+		XYZ T(_xShift, _yShift, _zShift); // qDebug("T= %f %f %f", T.x, T.y, T.z);
+		// XYZ T(_xShift, _yShift, 0); // force zShift=0
 		dxShift = dyShift = dzShift = 0; // clear relative shift step
 
 		double s = 1.4 / (float)SHIFT_RANGE; // 1.4 ~ sqrt(2);
@@ -567,7 +565,7 @@ void V3dR_GLWidget::paintGL()
 		glTranslated(T.x, T.y, T.z);
 	}
 
-	//SET current absolute rotation pose at alternate rotation center
+	// SET current absolute rotation pose at alternate rotation center
 	if (alt_rotation)
 		glTranslated(mAltC[0] * flip_X, mAltC[1] * flip_Y, mAltC[2] * flip_Z);
 	glMultMatrixd(mRot);
@@ -576,7 +574,7 @@ void V3dR_GLWidget::paintGL()
 
 	glScaled(flip_X, flip_Y, flip_Z); // make y-axis downward conformed with image coordinate
 
-	//glScaled(1,1, _thickness); // here may be out of view clip-space, not used
+	// glScaled(1,1, _thickness); // here may be out of view clip-space, not used
 
 	//=========================================================================
 	// normalized space of [-1,+1]^3;
@@ -585,14 +583,14 @@ void V3dR_GLWidget::paintGL()
 	//=========================================================================
 
 	// changed in setBright dialog, 081101
-	//if (sUpdate_bright)
+	// if (sUpdate_bright)
 	{
 		blendBrighten(_Bright / 100.f, (_Contrast + 100) / 100.f); // fast 8-bit precision
 	}
 
-	//qDebug("paint frame cost time = %g sec", qtime.elapsed()*0.001);
+	// qDebug("paint frame cost time = %g sec", qtime.elapsed()*0.001);
 
-	//CHECK_GLError_print(); //090715,090723
+	// CHECK_GLError_print(); //090715,090723
 }
 
 /////////////////////////////////////////////////////////////
@@ -640,7 +638,7 @@ void V3dR_GLWidget::customEvent(QEvent *e)
 		qDebug("-------------------------------------------------------------- Ready");
 		if (_idep->V3Dmainwindow->vrMode)
 		{
-			//emit signalStartVR();
+			// emit signalStartVR();
 			doimage3DVRView();
 		}
 		break;
@@ -648,7 +646,7 @@ void V3dR_GLWidget::customEvent(QEvent *e)
 	POST_updateGL();
 }
 
-bool V3dR_GLWidget::event(QEvent *e) //090427 RZC
+bool V3dR_GLWidget::event(QEvent *e) // 090427 RZC
 {
 	setAttribute(Qt::WA_Hover); // this control the QEvent::ToolTip and QEvent::HoverMove
 
@@ -660,7 +658,7 @@ bool V3dR_GLWidget::event(QEvent *e) //090427 RZC
 	{ // not work under Mac 64bit, because default not set WA_Hover
 		//		qDebug("QEvent::ToolTip in V3dR_GLWidget");
 		QHelpEvent *he = (QHelpEvent *)e;
-		pos = he->pos(); //globalPos();
+		pos = he->pos(); // globalPos();
 		event_tip = true;
 		break;
 	}
@@ -682,15 +680,15 @@ bool V3dR_GLWidget::event(QEvent *e) //090427 RZC
 
 	if (event_tip && renderer)
 	{
-		//qDebug()<<"cur_node.x="<<pos.x()<<" "<<"cur_node.y="<<pos.y();
+		// qDebug()<<"cur_node.x="<<pos.x()<<" "<<"cur_node.y="<<pos.y();
 
 		QPoint gpos = mapToGlobal(pos);
-		//qDebug()<<"gpos.x="<<gpos.x()<<" "<<"gpos.y="<<gpos.y();
+		// qDebug()<<"gpos.x="<<gpos.x()<<" "<<"gpos.y="<<gpos.y();
 
 		tipBuf[0] = '\0';
 		if (renderer->selectObj(pos.x(), pos.y(), false, tipBuf))
 		{
-		} //a switch to turn on/off hover tip, because processHit always return 0 for tipBuf!=0
+		} // a switch to turn on/off hover tip, because processHit always return 0 for tipBuf!=0
 		{
 			QToolTip::showText(gpos, QString(tipBuf), this);
 		}
@@ -707,33 +705,33 @@ bool V3dR_GLWidget::event(QEvent *e) //090427 RZC
 
 void V3dR_GLWidget::enterEvent(QEvent *)
 {
-	//qDebug("V3dR_GLWidget::enterEvent");
+	// qDebug("V3dR_GLWidget::enterEvent");
 	mouse_in_view = 1;
-	//setFocus();
+	// setFocus();
 }
 void V3dR_GLWidget::leaveEvent(QEvent *)
 {
-	//qDebug("V3dR_GLWidget::leaveEvent");
+	// qDebug("V3dR_GLWidget::leaveEvent");
 	mouse_in_view = 0;
 }
 void V3dR_GLWidget::focusInEvent(QFocusEvent *)
 {
-	//qDebug("V3dR_GLWidget::focusInEvent");
+	// qDebug("V3dR_GLWidget::focusInEvent");
 	//_stillpaint_disable = false;
 }
 void V3dR_GLWidget::focusOutEvent(QFocusEvent *)
 {
-	//qDebug("V3dR_GLWidget::focusOutEvent");
-	//if (_mouse_in_view)
+	// qDebug("V3dR_GLWidget::focusOutEvent");
+	// if (_mouse_in_view)
 	//	_stillpaint_disable = true;
 }
 
-//091015: use still_timer instead
+// 091015: use still_timer instead
 //#define DELAY_STILL_PAINT()  {QTimer::singleShot(1000, this, SLOT(stillPaint())); _still = false;}
 
 void V3dR_GLWidget::paintEvent(QPaintEvent *event)
 {
-	//QOpenGLWidget_proxy::paintEvent(event);
+	// QOpenGLWidget_proxy::paintEvent(event);
 	//	if (! mouse_in_view) //TODO:  use change of viewing matrix
 	//	{
 	//		_still = true;
@@ -745,7 +743,7 @@ void V3dR_GLWidget::paintEvent(QPaintEvent *event)
 		_still = false;
 		QOpenGLWidget_proxy::paintEvent(event);
 
-		if (needStillPaint()) //pending
+		if (needStillPaint()) // pending
 		{
 			_stillpaint_pending = true;
 		}
@@ -768,7 +766,7 @@ void V3dR_GLWidget::stillPaint()
 	{
 		_still = false;
 		_stillpaint_pending = true;
-		return; //continue pending if event loop is busy
+		return; // continue pending if event loop is busy
 	}
 	else // here system must be idle
 	{
@@ -777,7 +775,7 @@ void V3dR_GLWidget::stillPaint()
 		DO_updateGL(); // update at once, stream texture for full-resolution
 		_still = false;
 		_stillpaint_pending = false;
-		still_timer.start(still_timer_interval); //restart timer
+		still_timer.start(still_timer_interval); // restart timer
 	}
 }
 
@@ -801,8 +799,10 @@ void V3dR_GLWidget::stillPaint()
 
 void V3dR_GLWidget::mousePressEvent(QMouseEvent *event)
 {
-	//091025: use QMouseEvent::button()== not buttonS()&
-	//qDebug("V3dR_GLWidget::mousePressEvent  button = %d", event->button());
+	if (!notFinishedFlag)
+		return;
+	// 091025: use QMouseEvent::button()== not buttonS()&
+	// qDebug("V3dR_GLWidget::mousePressEvent  button = %d", event->button());
 
 	if (event->button() == Qt::RightButton && renderer && (renderer->selectMode == 28 || renderer->selectMode == 31) && notFinishedFlag)
 	{
@@ -831,20 +831,22 @@ void V3dR_GLWidget::mousePressEvent(QMouseEvent *event)
 		}
 	}
 
-	if (event->button() == Qt::RightButton && renderer) //right-click
+	if (event->button() == Qt::RightButton && renderer) // right-click
 	{
-		if (renderer->hitPoint(event->x(), event->y())) //pop-up menu (selectObj) or marker definition (hitPen)
+		if (renderer->hitPoint(event->x(), event->y())) // pop-up menu (selectObj) or marker definition (hitPen)
 		{
 			updateTool();
 		}
-		POST_updateGL(); //display result after menu
+		POST_updateGL(); // display result after menu
 	}
 }
 
 void V3dR_GLWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-	//091025: use 'QMouseEvent::button()==' instead of 'buttons()&'
-	//qDebug("V3dR_GLWidget::mouseReleaseEvent  button = %d", event->button());
+	if (!notFinishedFlag)
+		return;
+	// 091025: use 'QMouseEvent::button()==' instead of 'buttons()&'
+	// qDebug("V3dR_GLWidget::mouseReleaseEvent  button = %d", event->button());
 	if (event->button() == Qt::RightButton && renderer && (renderer->selectMode == 28 || renderer->selectMode == 31) && notFinishedFlag)
 	{
 		std::ofstream eventlog;
@@ -853,31 +855,33 @@ void V3dR_GLWidget::mouseReleaseEvent(QMouseEvent *event)
 		float elapsed_time = exptime.elapsed() * 0.001;
 		eventlog << "Time: " << elapsed_time << endl;
 		eventlog << "--------------------------------\n";
-		//qDebug() << "(" << event->x() << ", " << event->y() << ")";
+		// qDebug() << "(" << event->x() << ", " << event->y() << ")";
 		eventlog.close();
 	}
 
 	mouse_held = 0;
 
-	if (event->button() == Qt::RightButton && renderer) //right-drag end
+	if (event->button() == Qt::RightButton && renderer) // right-drag end
 	{
-		(renderer->movePen(event->x(), event->y(), false)); //create curve or nothing
-		//qDebug() << "done drawing\n";
+		(renderer->movePen(event->x(), event->y(), false)); // create curve or nothing
+		// qDebug() << "done drawing\n";
 		updateTool();
 
-		POST_updateGL(); //update display of curve
+		POST_updateGL(); // update display of curve
 	}
 }
 
 void V3dR_GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
-	//091025: use 'QMouseEvent::buttons()&' instead of 'button()=='
-	//qDebug()<<"V3dR_GLWidget::mouseMoveEvent  buttons = "<< event->buttons();
+	if (!notFinishedFlag)
+		return;
+	// 091025: use 'QMouseEvent::buttons()&' instead of 'button()=='
+	// qDebug()<<"V3dR_GLWidget::mouseMoveEvent  buttons = "<< event->buttons();
 
-	//setFocus(); // accept KeyPressEvent, by RZC 080831
+	// setFocus(); // accept KeyPressEvent, by RZC 080831
 	if ((event->buttons() & Qt::RightButton) && renderer && (renderer->selectMode == 28 || renderer->selectMode == 31) && notFinishedFlag)
 	{
-		//qDebug() << (renderer->selectMode == 28 ? "Drawing" : "Deleting") << " start";
+		// qDebug() << (renderer->selectMode == 28 ? "Drawing" : "Deleting") << " start";
 		std::ofstream eventlog;
 		eventlog.open(_idep->V3Dmainwindow->currentEventPath.toUtf8().constData(), std::ios_base::app);
 		eventlog << "(" << event->x() << ", " << event->y() << ")" << endl;
@@ -888,18 +892,18 @@ void V3dR_GLWidget::mouseMoveEvent(QMouseEvent *event)
 	int dy = event->y() - lastPos.y();
 	lastPos = event->pos();
 
-	if ((event->buttons() & Qt::RightButton) && renderer) //right-drag for 3d curve
+	if ((event->buttons() & Qt::RightButton) && renderer) // right-drag for 3d curve
 		if (ABS(dx) + ABS(dy) >= 2)
 		{
 			(renderer->movePen(event->x(), event->y(), true));
 
-			DO_updateGL(); //instantly display pen track
+			DO_updateGL(); // instantly display pen track
 			return;
 		}
 
 	if (event->buttons() & Qt::LeftButton)
 	{
-		//qDebug()<<"MoveEvent LeftButton";
+		// qDebug()<<"MoveEvent LeftButton";
 		int xRotStep = MOUSE_ROT(dy, MIN(viewW, viewH));
 		int yRotStep = MOUSE_ROT(dx, MIN(viewW, viewH));
 		int xShiftStep = MOUSE_SHIFT(dx, viewW);
@@ -915,7 +919,7 @@ void V3dR_GLWidget::mouseMoveEvent(QMouseEvent *event)
 		}
 		else if (IS_MODEL_MODIFIER) // ctrl+mouse control model space rotation, 081104
 		{
-			//modelRotation(yRotStep, xRotStep, 0); //swap y,x
+			// modelRotation(yRotStep, xRotStep, 0); //swap y,x
 			modelRotation(xRotStep, yRotStep, 0);
 		}
 		else // default mouse controls view space rotation
@@ -940,12 +944,14 @@ void V3dR_GLWidget::mouseMoveEvent(QMouseEvent *event)
 
 void V3dR_GLWidget::wheelEvent(QWheelEvent *event)
 {
-	//qDebug()<<"V3dR_GLWidget::wheelEvent ... ...";
+	if (!notFinishedFlag)
+		return;
+	// qDebug()<<"V3dR_GLWidget::wheelEvent ... ...";
 
-	//20170804 RZC: add zoomin_sign in global_setting.b_scrollupZoomin
+	// 20170804 RZC: add zoomin_sign in global_setting.b_scrollupZoomin
 	//-1 : scrolldown zoomin
 	//+1 : scrollup zoomin
-	int zoomin_sign = -1; //default
+	int zoomin_sign = -1; // default
 #ifndef test_main_cpp
 	if (_idep && _idep->V3Dmainwindow)
 	{
@@ -956,7 +962,7 @@ void V3dR_GLWidget::wheelEvent(QWheelEvent *event)
 	setFocus(); // accept KeyPressEvent, by RZC 081028
 
 	float d = (event->delta()) / 100; // ~480
-//qDebug("V3dR_GLWidget::wheelEvent->delta = %g",d);
+// qDebug("V3dR_GLWidget::wheelEvent->delta = %g",d);
 #define MOUSE_ZOOM(dz) (int(dz * 4 * MOUSE_SENSITIVE));
 #define MOUSE_ZROT(dz) (int(dz * 8 * MOUSE_SENSITIVE));
 
@@ -973,7 +979,7 @@ void V3dR_GLWidget::wheelEvent(QWheelEvent *event)
 	}
 	else // default
 	{
-		(renderer->hitWheel(event->x(), event->y())); //by PHC, 130424. record the wheel location when zoom-in or out
+		(renderer->hitWheel(event->x(), event->y())); // by PHC, 130424. record the wheel location when zoom-in or out
 
 #ifdef _NEURON_ASSEMBLER_
 		// As Alessandro points out in [CViewer::invokedFromVaa3D], Vaa3D somehow does not really disconnect setZoom slot
@@ -992,15 +998,17 @@ void V3dR_GLWidget::wheelEvent(QWheelEvent *event)
 				setZoom((zoomin_sign * zoomStep) + _zoom);
 		}
 #else
-		setZoom((zoomin_sign * zoomStep) + _zoom); //20170804 RZC: add zoomin_sign in global_setting.b_scrollupZoomin
+		setZoom((zoomin_sign * zoomStep) + _zoom); // 20170804 RZC: add zoomin_sign in global_setting.b_scrollupZoomin
 #endif
 	}
 
 	event->accept();
 }
 
-void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public function to finally overcome the crash problem of hook MainWindow
+void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) // 090428 RZC: make public function to finally overcome the crash problem of hook MainWindow
 {
+	if (!notFinishedFlag)
+		return;
 	switch (e->key())
 	{
 	case Qt::Key_1:
@@ -1032,81 +1040,91 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 		break;
 
 	case Qt::Key_BracketLeft:
-	{
-		if (IS_MODEL_MODIFIER) // alt-mouse to control model space rotation, 081104
-			modelRotation(0, 0, +5);
-		else
-			viewRotation(0, 0, +5);
-	}
-	break;
+		break;
+		{
+			if (IS_MODEL_MODIFIER) // alt-mouse to control model space rotation, 081104
+				modelRotation(0, 0, +5);
+			else
+				viewRotation(0, 0, +5);
+		}
+		break;
 	case Qt::Key_BracketRight:
-	{
-		if (IS_MODEL_MODIFIER) // alt-mouse to control model space rotation, 081104
-			modelRotation(0, 0, -5);
-		else
-			viewRotation(0, 0, -5);
-	}
-	break;
-	case Qt::Key_Left: //100802: arrows key must use WITH_?_MODIFIER
-	{
-		if (WITH_MODEL_MODIFIER)
-			modelRotation(0, -5, 0);
-		else if (WITH_TRANSLATE_MODIFIER)
-			setXShift(_xShift - 1); // move -model
-		else
-			setXShift(_xShift + 1); // move +view
-	}
-	break;
+		break;
+		{
+			if (IS_MODEL_MODIFIER) // alt-mouse to control model space rotation, 081104
+				modelRotation(0, 0, -5);
+			else
+				viewRotation(0, 0, -5);
+		}
+		break;
+	case Qt::Key_Left: // 100802: arrows key must use WITH_?_MODIFIER
+		break;
+		{
+			if (WITH_MODEL_MODIFIER)
+				modelRotation(0, -5, 0);
+			else if (WITH_TRANSLATE_MODIFIER)
+				setXShift(_xShift - 1); // move -model
+			else
+				setXShift(_xShift + 1); // move +view
+		}
+		break;
 	case Qt::Key_Right:
-	{
-		if (WITH_MODEL_MODIFIER)
-			modelRotation(0, +5, 0);
-		else if (WITH_TRANSLATE_MODIFIER)
-			setXShift(_xShift + 1); // move +model
-		else
-			setXShift(_xShift - 1); // move -view
-	}
-	break;
+		break;
+		{
+			if (WITH_MODEL_MODIFIER)
+				modelRotation(0, +5, 0);
+			else if (WITH_TRANSLATE_MODIFIER)
+				setXShift(_xShift + 1); // move +model
+			else
+				setXShift(_xShift - 1); // move -view
+		}
+		break;
 	case Qt::Key_Up:
-	{
-		if (WITH_MODEL_MODIFIER)
-			modelRotation(-5, 0, 0);
-		else if (WITH_TRANSLATE_MODIFIER)
-			setYShift(_yShift + 1); // move +model
-		else
-			setYShift(_yShift - 1); // move -view
-	}
-	break;
+		break;
+		{
+			if (WITH_MODEL_MODIFIER)
+				modelRotation(-5, 0, 0);
+			else if (WITH_TRANSLATE_MODIFIER)
+				setYShift(_yShift + 1); // move +model
+			else
+				setYShift(_yShift - 1); // move -view
+		}
+		break;
 	case Qt::Key_Down:
-	{
-		if (WITH_MODEL_MODIFIER)
-			modelRotation(+5, 0, 0);
-		else if (WITH_TRANSLATE_MODIFIER)
-			setYShift(_yShift - 1); // move -model
-		else
-			setYShift(_yShift + 1); // move +view
-	}
-	break;
+		break;
+		{
+			if (WITH_MODEL_MODIFIER)
+				modelRotation(+5, 0, 0);
+			else if (WITH_TRANSLATE_MODIFIER)
+				setYShift(_yShift - 1); // move -model
+			else
+				setYShift(_yShift + 1); // move +view
+		}
+		break;
 	case Qt::Key_Minus:
-	{
-		setZoom(_zoom - 10); // zoom out
-	}
-	break;
+		break;
+		{
+			setZoom(_zoom - 10); // zoom out
+		}
+		break;
 	case Qt::Key_Equal:
-	{
-		setZoom(_zoom + 10); // zoom in
-	}
-	break;
+		break;
+		{
+			setZoom(_zoom + 10); // zoom in
+		}
+		break;
 	case Qt::Key_Underscore:
-	{
-		emit changeMarkerSize(_markerSize - 1);
-	}
-	break;
+		break;
+		{
+			emit changeMarkerSize(_markerSize - 1);
+		}
+		break;
 	case Qt::Key_Plus:
-	{
-		emit changeMarkerSize(_markerSize + 1);
-	}
-	break;
+		break;
+		{
+			emit changeMarkerSize(_markerSize + 1);
+		}
+		break;
 	case Qt::Key_Backspace:
 	{
 		resetZoomShift();
@@ -1123,64 +1141,72 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 		}
 		break;
 	case Qt::Key_Comma:
-	{
-		emit changeFrontCut(_fCut - 1);
-	}
-	break;
+		break;
+		{
+			emit changeFrontCut(_fCut - 1);
+		}
+		break;
 	case Qt::Key_Period:
-	{
-		emit changeFrontCut(_fCut + 1);
-	}
-	break;
+		break;
+		{
+			emit changeFrontCut(_fCut + 1);
+		}
+		break;
 	case Qt::Key_Slash:
-	{
-		emit changeXCSSlider((dataDim1() - 1) / 2);
-		emit changeYCSSlider((dataDim2() - 1) / 2);
-		emit changeZCSSlider((dataDim3() - 1) / 2);
-		emit changeFrontCut(0);
-	}
-	break;
+		break;
+		{
+			emit changeXCSSlider((dataDim1() - 1) / 2);
+			emit changeYCSSlider((dataDim2() - 1) / 2);
+			emit changeZCSSlider((dataDim3() - 1) / 2);
+			emit changeFrontCut(0);
+		}
+		break;
 	case Qt::Key_Less:
-	{
-		emit changeVolumeTimePoint(_volumeTimePoint - 1);
-	}
-	break;
+		break;
+		{
+			emit changeVolumeTimePoint(_volumeTimePoint - 1);
+		}
+		break;
 	case Qt::Key_Greater:
-	{
-		emit changeVolumeTimePoint(_volumeTimePoint + 1);
-	}
-	break;
+		break;
+		{
+			emit changeVolumeTimePoint(_volumeTimePoint + 1);
+		}
+		break;
 	case Qt::Key_Question:
-	{
-		emit changeVolumeTimePoint(0);
-	}
-	break;
+		break;
+		{
+			emit changeVolumeTimePoint(0);
+		}
+		break;
 
 		//// button shortcut //////////////////////////////////////////////////////////////////
 	case Qt::Key_B:
 		if (IS_CTRL_MODIFIER)
 		{
-			//setBright();
+			// setBright();
 		}
 		else if (IS_ALT_MODIFIER)
 		{
-			callStrokeCurveDrawingBBoxes(); //For serial BBoxes curve drawing shortcut, by ZZ,02212018
+			callStrokeCurveDrawingBBoxes(); // For serial BBoxes curve drawing shortcut, by ZZ,02212018
 		}
 		break;
 	case Qt::Key_R:
+		break;
 		if (IS_CTRL_MODIFIER)
 		{
-			//reloadData();
+			// reloadData();
 		}
 		else
 		{
-			//returncheckmode();
+			// returncheckmode();
 		}
 		break;
 	case Qt::Key_U:
+		break;
 		if (IS_CTRL_MODIFIER)
 		{
-			//updateWithTriView();
+			// updateWithTriView();
 		}
 		break;
 		//		case Qt::Key_I:
@@ -1200,42 +1226,45 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 
 		///// advanced OpenGL shortcut // use & instead of == //////////////////////////////////////////////////////
 	case Qt::Key_I:
-		if (WITH_SHIFT_MODIFIER && //advanced
+		break;
+		if (WITH_SHIFT_MODIFIER && // advanced
 			WITH_CTRL_MODIFIER)
 		{
-			//showGLinfo();
+			// showGLinfo();
 		}
 		else if (renderer)
 		{
-			//Renderer_gl1* thisRenderer = static_cast<Renderer_gl1*>(this->getRenderer());
-			//if (thisRenderer->selectMode == Renderer::smDeleteMultiNeurons)
+			// Renderer_gl1* thisRenderer = static_cast<Renderer_gl1*>(this->getRenderer());
+			// if (thisRenderer->selectMode == Renderer::smDeleteMultiNeurons)
 			//{
-			//    thisRenderer->setDeleteKey(1);
-			//    thisRenderer->deleteMultiNeuronsByStroke();
-			//}
+			//     thisRenderer->setDeleteKey(1);
+			//     thisRenderer->deleteMultiNeuronsByStroke();
+			// }
 		}
 		break;
 	case Qt::Key_G:
-		if (WITH_SHIFT_MODIFIER && //advanced
+		break;
+		if (WITH_SHIFT_MODIFIER && // advanced
 			WITH_CTRL_MODIFIER)
 		{
-			//toggleShader();
+			// toggleShader();
 		}
 		else if (IS_ALT_MODIFIER)
 		{
-			//callStrokeCurveDrawingGlobal();//For Global optimal curve drawing shortcut, by ZZ,02212018
+			// callStrokeCurveDrawingGlobal();//For Global optimal curve drawing shortcut, by ZZ,02212018
 		}
 		else
 		{
-			//callGDTracing();
+			// callGDTracing();
 		}
 		break;
 
 		///// volume texture operation //////////////////////////////////////////////////////
 	case Qt::Key_F:
+		break;
 		if (IS_CTRL_MODIFIER)
 		{
-			//toggleTexFilter();
+			// toggleTexFilter();
 		}
 		else if (IS_ALT_MODIFIER)
 		{
@@ -1269,7 +1298,7 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 				}
 				else
 				{
-					//v3d_msg("Neuron Assembler plugin instance already exists.");
+					// v3d_msg("Neuron Assembler plugin instance already exists.");
 					V3DPluginArgList pluginInputList, pluginOutputList;
 					V3DPluginArgItem dummyInput, inputParam, dummyOutput;
 					vector<char *> pluginInputArgList;
@@ -1405,12 +1434,12 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 #endif
 
 	case Qt::Key_E:
-		//shuning: disable shortcut
+		// shuning: disable shortcut
 		break;
 		//-------------
 		if (IS_ALT_MODIFIER)
 		{
-			//toggleEditMode();
+			// toggleEditMode();
 		}
 		else if (IS_SHIFT_MODIFIER)
 		{
@@ -1460,42 +1489,42 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 		break;
 
 	case Qt::Key_T:
-		//shuning: disable shortcut
+		// shuning: disable shortcut
 		break;
 		//-------------
-		if (WITH_SHIFT_MODIFIER && //advanced
+		if (WITH_SHIFT_MODIFIER && // advanced
 			WITH_CTRL_MODIFIER)
 		{
-			//toggleTex2D3D();
+			// toggleTex2D3D();
 		}
 		else if (IS_ALT_MODIFIER)
 		{
-			//callStrokeRetypeMultiNeurons();//For multiple segments retyping shortcut, by ZZ,02212018
+			// callStrokeRetypeMultiNeurons();//For multiple segments retyping shortcut, by ZZ,02212018
 		}
 		else if (WITH_ALT_MODIFIER && WITH_SHIFT_MODIFIER)
 		{
-			//callShowSubtree(); // temporarily disabled, MK, July 2018
+			// callShowSubtree(); // temporarily disabled, MK, July 2018
 		}
 		else if (renderer)
 		{
-			//Renderer_gl1* thisRenderer = static_cast<Renderer_gl1*>(this->getRenderer());
-			//if (thisRenderer->selectMode == Renderer::smDeleteMultiNeurons)
+			// Renderer_gl1* thisRenderer = static_cast<Renderer_gl1*>(this->getRenderer());
+			// if (thisRenderer->selectMode == Renderer::smDeleteMultiNeurons)
 			//{
-			//    thisRenderer->setDeleteKey(2);
-			//    thisRenderer->deleteMultiNeuronsByStroke();
-			//}
+			//     thisRenderer->setDeleteKey(2);
+			//     thisRenderer->deleteMultiNeuronsByStroke();
+			// }
 		}
 		else
-			//callAutoTracers();
+			// callAutoTracers();
 			break;
 	case Qt::Key_D:
-		//shuning: disable shortcut
+		// shuning: disable shortcut
 		break;
 		//-------------
 
 		if (IS_ALT_MODIFIER)
 		{
-			callStrokeDeleteMultiNeurons(); //For multiple segments deleting shortcut, by ZZ,02212018
+			callStrokeDeleteMultiNeurons(); // For multiple segments deleting shortcut, by ZZ,02212018
 		}
 		else
 		{
@@ -1520,12 +1549,12 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 		}
 		break;
 	case Qt::Key_S:
-		//shuning: disable shortcut
+		// shuning: disable shortcut
 		break;
 		//-------------
 		if (IS_ALT_MODIFIER)
 		{
-			callStrokeSplitMultiNeurons(); //For multiple segments spliting shortcut, by ZZ,02212018
+			callStrokeSplitMultiNeurons(); // For multiple segments spliting shortcut, by ZZ,02212018
 		}
 #ifdef _NEURON_ASSEMBLER_
 		else if (IS_SHIFT_MODIFIER)
@@ -1592,7 +1621,8 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 		}
 		break;
 	case Qt::Key_C:
-		if (WITH_SHIFT_MODIFIER && //advanced
+		break;
+		if (WITH_SHIFT_MODIFIER && // advanced
 			WITH_CTRL_MODIFIER)
 		{
 			toggleTexCompression();
@@ -1600,7 +1630,7 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 		else if (IS_ALT_MODIFIER)
 		{
 
-			callStrokeConnectMultiNeurons(); //For multiple segments connection shortcut, by ZZ,02212018
+			callStrokeConnectMultiNeurons(); // For multiple segments connection shortcut, by ZZ,02212018
 		}
 		else if (IS_SHIFT_MODIFIER)
 		{
@@ -1644,12 +1674,13 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 		}
 		else
 		{
-			neuronColorMode = (neuronColorMode == 0) ? 5 : 0; //0 default display mode, 5 confidence level mode by ZZ 06192018
+			neuronColorMode = (neuronColorMode == 0) ? 5 : 0; // 0 default display mode, 5 confidence level mode by ZZ 06192018
 			updateColorMode(neuronColorMode);
 		}
 		break;
 	case Qt::Key_V:
-		if (WITH_SHIFT_MODIFIER && //advanced
+		break;
+		if (WITH_SHIFT_MODIFIER && // advanced
 			WITH_CTRL_MODIFIER)
 		{
 			toggleTexStream();
@@ -1664,12 +1695,13 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 		}
 		else
 		{
-			callLoadNewStack(); //by ZZ 02012018
+			callLoadNewStack(); // by ZZ 02012018
 		}
 		break;
 		/////  object operation //////////////////////////////////////////////////////
 	case Qt::Key_P:
-		if (WITH_SHIFT_MODIFIER && //advanced
+		break;
+		if (WITH_SHIFT_MODIFIER && // advanced
 			WITH_CTRL_MODIFIER)
 		{
 			toggleObjShader();
@@ -1685,18 +1717,20 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 		break;
 
 	case Qt::Key_Y:
+		break;
 		if (IS_ALT_MODIFIER)
 		{
-			callDefine3DPolyline(); //For 3D polyline shortcut, by ZZ,03262018
+			callDefine3DPolyline(); // For 3D polyline shortcut, by ZZ,03262018
 		}
 		break;
 
 	case Qt::Key_Q:
+		break;
 		if (IS_CTRL_MODIFIER)
 		{
 			qDebug() << "call special marker" << endl
 					 << "---------------------------------------------" << endl;
-			callCreateSpecialMarkerNearestNode(); //add special marker, by XZ, 20190720
+			callCreateSpecialMarkerNearestNode(); // add special marker, by XZ, 20190720
 		}
 		else
 		{
@@ -1707,7 +1741,7 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 		///// marker operation //////////////////////////////////////////////////////
 	case Qt::Key_Escape:
 	{
-		//shuning: disable shortcut
+		// shuning: disable shortcut
 		break;
 		//-------------
 		cancelSelect();
@@ -1745,6 +1779,7 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 
 		///// cell operation ///////////////////////////////////////////////////////
 	case Qt::Key_N:
+		break;
 		if (IS_CTRL_MODIFIER)
 		{
 			toggleCellName();
@@ -1766,6 +1801,7 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 
 		///// neuron operation //////////////////////////////////////////////////////
 	case Qt::Key_L:
+		break;
 		if (IS_CTRL_MODIFIER)
 		{
 			toggleLineType();
@@ -1780,8 +1816,8 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 		}
 		else
 		{
-			//callCurveLineDetector(0); //the 0 option is for a fixed 32 window
-			callCurveLineDetector(1); //by PHC 20170531. // the 1 option is for calling the curveline detector using its infinite loop mode
+			// callCurveLineDetector(0); //the 0 option is for a fixed 32 window
+			callCurveLineDetector(1); // by PHC 20170531. // the 1 option is for calling the curveline detector using its infinite loop mode
 
 			Renderer_gl1 *thisRenderer = static_cast<Renderer_gl1 *>(this->getRenderer());
 			if (thisRenderer->selectMode == Renderer::smShowSubtree)
@@ -1796,6 +1832,7 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 		break;
 
 	case Qt::Key_W:
+		break;
 		if (IS_ALT_MODIFIER)
 		{
 			setDragWinSize(+2);
@@ -1843,13 +1880,13 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 				eventlog << "Redo\n";
 				eventlog << "--------------------------------\n";
 				v3dr_getImage4d(_idep)->proj_trace_history_redo();
-				v3dr_getImage4d(_idep)->update_3drenderer_neuron_view(this, (Renderer_gl1 *)renderer); //090924
+				v3dr_getImage4d(_idep)->update_3drenderer_neuron_view(this, (Renderer_gl1 *)renderer); // 090924
 			}
 		}
-		//undo the last tracing step if possible. by PHC, 090120
+		// undo the last tracing step if possible. by PHC, 090120
 		else if (IS_CTRL_MODIFIER)
 		{
-			if (!V3dR_GLWidget::disableUndoRedo && v3dr_getImage4d(_idep) && renderer)
+			if (!V3dR_GLWidget::disableUndoRedo && v3dr_getImage4d(_idep) && renderer && notFinishedFlag)
 			{
 				std::ofstream eventlog;
 				eventlog.open(_idep->V3Dmainwindow->currentEventPath.toUtf8().constData(), std::ios_base::app);
@@ -1859,18 +1896,18 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 				eventlog << "Undo\n";
 				eventlog << "--------------------------------\n";
 				v3dr_getImage4d(_idep)->proj_trace_history_undo();
-				v3dr_getImage4d(_idep)->update_3drenderer_neuron_view(this, (Renderer_gl1 *)renderer); //090924
+				v3dr_getImage4d(_idep)->update_3drenderer_neuron_view(this, (Renderer_gl1 *)renderer); // 090924
 			}
 		}
 		break;
 
-	case Qt::Key_X: //090924 RZC: redo
+	case Qt::Key_X: // 090924 RZC: redo
 		if (IS_CTRL_MODIFIER)
 		{
 			if (!V3dR_GLWidget::disableUndoRedo && v3dr_getImage4d(_idep) && renderer)
 			{
-				//v3dr_getImage4d(_idep)->proj_trace_history_redo();
-				//v3dr_getImage4d(_idep)->update_3drenderer_neuron_view(this, (Renderer_gl1 *)renderer); //090924
+				// v3dr_getImage4d(_idep)->proj_trace_history_redo();
+				// v3dr_getImage4d(_idep)->update_3drenderer_neuron_view(this, (Renderer_gl1 *)renderer); //090924
 			}
 		}
 		break;
@@ -1881,10 +1918,10 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) //090428 RZC: make public 
 		QOpenGLWidget_proxy::keyPressEvent(e);
 		break;
 	}
-	update(); //091030: must be here for correct MarkerPos's view matrix
+	update(); // 091030: must be here for correct MarkerPos's view matrix
 }
 
-void V3dR_GLWidget::handleKeyReleaseEvent(QKeyEvent *e) //090428 RZC: make public function to finally overcome the crash problem of hook MainWindow
+void V3dR_GLWidget::handleKeyReleaseEvent(QKeyEvent *e) // 090428 RZC: make public function to finally overcome the crash problem of hook MainWindow
 {
 	switch (e->key())
 	{
@@ -1920,7 +1957,7 @@ void V3dR_GLWidget::handleKeyReleaseEvent(QKeyEvent *e) //090428 RZC: make publi
 		QOpenGLWidget_proxy::keyReleaseEvent(e);
 		break;
 	}
-	update(); //091030: must be here for correct MarkerPos's view matrix
+	update(); // 091030: must be here for correct MarkerPos's view matrix
 	return;
 }
 
@@ -1954,7 +1991,7 @@ QString V3dR_GLWidget::Cut_altTip(int dim_i, int v, int minv, int maxv, int offs
 
 	float w = minw + (v - minv) * (maxw - minw) / (maxv - minv);
 	QString tip = QString(" : %1(%2~%3)").arg(w + offset).arg(minw + offset).arg(maxw + offset);
-	//qDebug()<<"		Cut_altTip "<<tip;
+	// qDebug()<<"		Cut_altTip "<<tip;
 	return tip;
 }
 
@@ -1965,7 +2002,7 @@ QString V3dR_GLWidget::Cut_altTip(int dim_i, int v, int minv, int maxv, int offs
 
 int V3dR_GLWidget::setVolumeTimePoint(int t)
 {
-	//qDebug("V3dR_GLWidget::setVolumeTimePoint = %d", t);
+	// qDebug("V3dR_GLWidget::setVolumeTimePoint = %d", t);
 	if (t < 0)
 		t = 0;
 	if (t >= dataDim5())
@@ -1977,7 +2014,7 @@ int V3dR_GLWidget::setVolumeTimePoint(int t)
 		if (renderer)
 			_volumeTimePoint = renderer->setVolumeTimePoint(t);
 
-		POST_updateGL(); //090805: make slider dragging more smooth for Win32
+		POST_updateGL(); // 090805: make slider dragging more smooth for Win32
 	}
 	emit changeVolumeTimePoint(t);
 	return _volumeTimePoint;
@@ -1997,18 +2034,18 @@ void V3dR_GLWidget::incVolumeTimePoint(float step)
 
 void V3dR_GLWidget::setRenderMode_Mip(bool b, bool useMin)
 {
-	//qDebug("V3dR_GLWidget::setRenderMode_Mip = %i",b);
+	// qDebug("V3dR_GLWidget::setRenderMode_Mip = %i",b);
 	if (b)
 	{
 		if (!useMin)
-		{ //max IP
+		{ // max IP
 			_renderMode = int(Renderer::rmMaxIntensityProjection);
 			if (renderer)
 				renderer->setRenderMode(Renderer::rmMaxIntensityProjection);
 		}
 		else
 		{
-			//mIP
+			// mIP
 			_renderMode = int(Renderer::rmMinIntensityProjection);
 			if (renderer)
 				renderer->setRenderMode(Renderer::rmMinIntensityProjection);
@@ -2039,7 +2076,7 @@ void V3dR_GLWidget::setRenderMode_Mip(bool b, bool useMin)
 
 void V3dR_GLWidget::setRenderMode_Alpha(bool b)
 {
-	//qDebug("V3dR_GLWidget::setRenderMode_Alpha = %i",b);
+	// qDebug("V3dR_GLWidget::setRenderMode_Alpha = %i",b);
 	if (b)
 	{
 		_renderMode = int(Renderer::rmAlphaBlendingProjection);
@@ -2067,7 +2104,7 @@ void V3dR_GLWidget::setRenderMode_Alpha(bool b)
 
 void V3dR_GLWidget::setRenderMode_Cs3d(bool b)
 {
-	//qDebug("V3dR_GLWidget::setRenderMode_Cs3d = %i",b);
+	// qDebug("V3dR_GLWidget::setRenderMode_Cs3d = %i",b);
 	if (b)
 	{
 		_renderMode = int(Renderer::rmCrossSection);
@@ -2109,12 +2146,24 @@ void V3dR_GLWidget::setCSTransparent(int t)
 
 void V3dR_GLWidget::setContrast(int t)
 {
-	qDebug() << "-----------------contrast change---------------------" << endl;
+	if (!notFinishedFlag)
+		return;
+
+	t = -t;
+
+	std::ofstream eventlog;
+	eventlog.open(_idep->V3Dmainwindow->currentEventPath.toUtf8().constData(), std::ios_base::app);
+	eventlog << "--------------------------------\n";
+	float elapsed_time = exptime.elapsed() * 0.001;
+	eventlog << "Time: " << elapsed_time << endl;
+
+	eventlog << "-----------------contrast change---------------------" << endl;
 	string mat_out = "contrast change: ";
-	mat_out += to_string(t) + " ";
-	mat_out += "\n";
-	qDebug() << QString::fromStdString(mat_out);
-	qDebug() << "---------------contrast change-------------------" << endl;
+	mat_out += to_string(t) + " \n";
+	eventlog << mat_out;
+	eventlog << "-----------------contrast change---------------------" << endl;
+
+	eventlog.close();
 
 	Renderer_gl2 *curr_renderer = (Renderer_gl2 *)(getRenderer());
 
@@ -2162,7 +2211,7 @@ void V3dR_GLWidget::setContrast(int t)
 	}
 }
 
-void V3dR_GLWidget::setThickness(double t) //added by PHC, 090215
+void V3dR_GLWidget::setThickness(double t) // added by PHC, 090215
 {
 	if (_thickness != t)
 	{
@@ -2176,13 +2225,13 @@ void V3dR_GLWidget::setThickness(double t) //added by PHC, 090215
 	rendererGL1Ptr->zThick = t;
 }
 
-void V3dR_GLWidget::setCurChannel(int t) //100802
+void V3dR_GLWidget::setCurChannel(int t) // 100802
 {
 	if (_curChannel != t)
 	{
 		_curChannel = t;
 		if (renderer)
-			renderer->curChannel = (_curChannel - 1); //0-based
+			renderer->curChannel = (_curChannel - 1); // 0-based
 		POST_updateGL();
 	}
 }
@@ -2259,7 +2308,7 @@ void V3dR_GLWidget::enableZSlice(bool s)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-#define __shared_tool_dialogs__ //dummy, just for locating
+#define __shared_tool_dialogs__ // dummy, just for locating
 
 void V3dR_GLWidget::showTool()
 {
@@ -2277,15 +2326,15 @@ void V3dR_GLWidget::hideTool()
 }
 void V3dR_GLWidget::updateTool()
 {
-	//qDebug("V3dR_GLWidget::updateTool (surfaceDlg=%p) (colormapDlg=%p)", surfaceDlg, colormapDlg);
+	// qDebug("V3dR_GLWidget::updateTool (surfaceDlg=%p) (colormapDlg=%p)", surfaceDlg, colormapDlg);
 
-	if (surfaceDlg && !(surfaceDlg->isHidden())) //081215
+	if (surfaceDlg && !(surfaceDlg->isHidden())) // 081215
 	{
-		//int i = surfaceDlg->getCurTab();
+		// int i = surfaceDlg->getCurTab();
 		surfaceDlg->linkTo(this);
 		surfaceDlg->setCurTab(-1); //-1 = last tab
 	}
-	if (colormapDlg && !(colormapDlg->isHidden())) //081219
+	if (colormapDlg && !(colormapDlg->isHidden())) // 081219
 	{
 		colormapDlg->linkTo(this);
 	}
@@ -2298,16 +2347,16 @@ void V3dR_GLWidget::volumeColormapDialog()
 		return;
 
 	if (!colormapDlg)
-		colormapDlg = new V3dr_colormapDialog(this); //mainwindow);
+		colormapDlg = new V3dr_colormapDialog(this); // mainwindow);
 	else
-		colormapDlg->linkTo(this); //except isHidden, linkTo in updateTool triggered by ActivationChange event
+		colormapDlg->linkTo(this); // except isHidden, linkTo in updateTool triggered by ActivationChange event
 
 	if (colormapDlg)
 	{
 
 		colormapDlg->show();
-		this->raise();		  //110713
-		colormapDlg->raise(); //090710
+		this->raise();		  // 110713
+		colormapDlg->raise(); // 090710
 	}
 }
 
@@ -2323,13 +2372,13 @@ void V3dR_GLWidget::surfaceSelectDialog(int curTab)
 	if (!surfaceDlg)
 		surfaceDlg = new V3dr_surfaceDialog(this); //, mainwindow);
 	else
-		surfaceDlg->linkTo(this); //except isHidden, linkTo in updateTool triggered by ActivationChange event
+		surfaceDlg->linkTo(this); // except isHidden, linkTo in updateTool triggered by ActivationChange event
 
 	if (surfaceDlg)
 	{
 		surfaceDlg->show();
-		this->raise();		 //110713
-		surfaceDlg->raise(); //090710
+		this->raise();		 // 110713
+		surfaceDlg->raise(); // 090710
 
 		surfaceSelectTab(-1); //-1 = last tab
 	}
@@ -2367,7 +2416,7 @@ void V3dR_GLWidget::doimage3DVRView(bool bCanCoMode)
 	try
 	{
 		this->setWindowState(Qt::WindowMinimized);
-		//this->hide();
+		// this->hide();
 
 		int maxresindex = 1;
 		My4DImage *img4d = this->getiDrawExternalParameter()->image4d;
@@ -2376,8 +2425,8 @@ void V3dR_GLWidget::doimage3DVRView(bool bCanCoMode)
 		this->Resindex = -1;
 		cout << "CViewer::getCurrent()->volResIndex;   " << this->Resindex << endl;
 		this->doimageVRView(true);
-		//cur_win->storeAnnotations();
-		//this->show();
+		// cur_win->storeAnnotations();
+		// this->show();
 	}
 	catch (...)
 	{
@@ -2426,21 +2475,21 @@ void V3dR_GLWidget::process3Dwindow(bool show)
 		}
 	}
 }
-void V3dR_GLWidget::doimageVRView(bool bCanCoMode) //0518
+void V3dR_GLWidget::doimageVRView(bool bCanCoMode) // 0518
 {
 	Renderer_gl1 *tempptr = (Renderer_gl1 *)renderer;
 	QList<NeuronTree> *listNeuronTrees = tempptr->getHandleNeuronTrees();
 	cout << "vr listNeuronTrees.size()" << listNeuronTrees->size();
 	My4DImage *img4d = this->getiDrawExternalParameter()->image4d;
 	this->getMainWindow()->hide();
-	//process3Dwindow(false);
+	// process3Dwindow(false);
 
 	// bool _Call_ZZ_Plugin = startStandaloneVRScene(listNeuronTrees, img4d, (MainWindow *)(this->getMainWindow())); // both nt and img4d can be empty.
 	int _call_that_func = startStandaloneVRScene(listNeuronTrees, img4d, _idep, (MainWindow *)(this->getMainWindow()), &teraflyZoomInPOS); // both nt and img4d can be empty.
 	qDebug() << "result is " << _call_that_func;
 	qDebug() << "xxxxxxxxxxxxx ==%1 y ==%2 z ==%3" << teraflyZoomInPOS.x << teraflyZoomInPOS.y << teraflyZoomInPOS.z;
 	updateWithTriView();
-	if (_call_that_func == 965) //load next image
+	if (_call_that_func == 965) // load next image
 	{
 		autoSaveSwc();
 		_idep->V3Dmainwindow->loadNextImage();
@@ -2550,8 +2599,8 @@ void V3dR_GLWidget::setXRotation(int angle)
 	if (angle != _xRot)
 	{
 		_absRot = false;
-		dxRot = angle - _xRot;		//qDebug("dxRot=%d",dxRot);
-		NORMALIZE_angleStep(dxRot); //qDebug("dxRot=%d",dxRot);
+		dxRot = angle - _xRot;		// qDebug("dxRot=%d",dxRot);
+		NORMALIZE_angleStep(dxRot); // qDebug("dxRot=%d",dxRot);
 		_xRot = angle;
 
 		emit xRotationChanged(angle);
@@ -2563,13 +2612,13 @@ void V3dR_GLWidget::setXRotation(int angle)
 
 void V3dR_GLWidget::setXRotation(float angle)
 {
-	//qDebug() << "X_Rotation: " << angle;
+	// qDebug() << "X_Rotation: " << angle;
 	NORMALIZE_angle(angle);
 	if (angle != _xRot)
 	{
 		_absRot = false;
-		dxRot = angle - _xRot;		//qDebug("dxRot=%d",dxRot);
-		NORMALIZE_angleStep(dxRot); //qDebug("dxRot=%d",dxRot);
+		dxRot = angle - _xRot;		// qDebug("dxRot=%d",dxRot);
+		NORMALIZE_angleStep(dxRot); // qDebug("dxRot=%d",dxRot);
 		_xRot = angle;
 
 		emit xRotationChanged(angle);
@@ -2585,8 +2634,8 @@ void V3dR_GLWidget::setYRotation(int angle)
 	if (angle != _yRot)
 	{
 		_absRot = false;
-		dyRot = angle - _yRot;		//qDebug("dyRot=%d",dyRot);
-		NORMALIZE_angleStep(dyRot); //qDebug("dyRot=%d",dyRot);
+		dyRot = angle - _yRot;		// qDebug("dyRot=%d",dyRot);
+		NORMALIZE_angleStep(dyRot); // qDebug("dyRot=%d",dyRot);
 		_yRot = angle;
 
 		emit yRotationChanged(angle);
@@ -2602,8 +2651,8 @@ void V3dR_GLWidget::setYRotation(float angle)
 	if (angle != _yRot)
 	{
 		_absRot = false;
-		dyRot = angle - _yRot;		//qDebug("dyRot=%d",dyRot);
-		NORMALIZE_angleStep(dyRot); //qDebug("dyRot=%d",dyRot);
+		dyRot = angle - _yRot;		// qDebug("dyRot=%d",dyRot);
+		NORMALIZE_angleStep(dyRot); // qDebug("dyRot=%d",dyRot);
 		_yRot = angle;
 
 		emit yRotationChanged(angle);
@@ -2619,8 +2668,8 @@ void V3dR_GLWidget::setZRotation(int angle)
 	if (angle != _zRot)
 	{
 		_absRot = false;
-		dzRot = angle - _zRot;		//qDebug("dzRot=%d",dzRot);
-		NORMALIZE_angleStep(dzRot); //qDebug("dzRot=%d",dzRot);
+		dzRot = angle - _zRot;		// qDebug("dzRot=%d",dzRot);
+		NORMALIZE_angleStep(dzRot); // qDebug("dzRot=%d",dzRot);
 		_zRot = angle;
 
 		emit zRotationChanged(angle);
@@ -2636,8 +2685,8 @@ void V3dR_GLWidget::setZRotation(float angle)
 	if (angle != _zRot)
 	{
 		_absRot = false;
-		dzRot = angle - _zRot;		//qDebug("dzRot=%d",dzRot);
-		NORMALIZE_angleStep(dzRot); //qDebug("dzRot=%d",dzRot);
+		dzRot = angle - _zRot;		// qDebug("dzRot=%d",dzRot);
+		NORMALIZE_angleStep(dzRot); // qDebug("dzRot=%d",dzRot);
 		_zRot = angle;
 
 		emit zRotationChanged(angle);
@@ -2656,7 +2705,7 @@ void V3dR_GLWidget::resetRotation(bool b_emit)
 	dxRot = dyRot = dzRot = 0;
 	_xRot = _yRot = _zRot = 0;
 
-	if (b_emit) //100720: for abs?Rotation's correct cursor position in spinBox
+	if (b_emit) // 100720: for abs?Rotation's correct cursor position in spinBox
 	{
 		emit xRotationChanged(0);
 		emit yRotationChanged(0);
@@ -2702,8 +2751,8 @@ void V3dR_GLWidget::doimageVRView(bool bCanCoMode)//0518
 
 	My4DImage *img4d = this->getiDrawExternalParameter()->image4d;
 
-    this->getMainWindow()->hide();
-    QMessageBox::StandardButton reply;
+	this->getMainWindow()->hide();
+	QMessageBox::StandardButton reply;
 	if(bCanCoMode&&(!resumeCollaborationVR))// get into collaboration  first time
 		reply = QMessageBox::question(this, "Vaa3D VR", "Collaborative mode?", QMessageBox::Yes|QMessageBox::No);
 	else if(resumeCollaborationVR)	//if resume collaborationVR ,reply = yes and no question message box
@@ -2715,7 +2764,7 @@ void V3dR_GLWidget::doimageVRView(bool bCanCoMode)//0518
 		if(VRClientON==false)
 		{
 			VRClientON = true;
-			if(myvrwin) 
+			if(myvrwin)
 				delete myvrwin;
 			myvrwin = 0;
 			myvrwin = new VR_MainWindow();
@@ -2733,7 +2782,7 @@ void V3dR_GLWidget::doimageVRView(bool bCanCoMode)//0518
 			qDebug()<<"result is "<<_call_that_func;
 			qDebug()<<"xxxxxxxxxxxxx ==%1 y ==%2 z ==%3"<<teraflyZoomInPOS.x<<teraflyZoomInPOS.y<<teraflyZoomInPOS.z;
 			qDebug()<<"xxxxxxxxxxxxx ==%1 y ==%2 z ==%3"<<CollaborationCreatorPos.x<<CollaborationCreatorPos.y<<CollaborationCreatorPos.z;
-			if (_call_that_func > 0) 
+			if (_call_that_func > 0)
 			{
 				resumeCollaborationVR = true;
 				emit(signalCallTerafly(_call_that_func));
@@ -2756,7 +2805,7 @@ void V3dR_GLWidget::doimageVRView(bool bCanCoMode)//0518
 		qDebug()<<"result is "<<_call_that_func;
 		qDebug()<<"xxxxxxxxxxxxx ==%1 y ==%2 z ==%3"<<teraflyZoomInPOS.x<<teraflyZoomInPOS.y<<teraflyZoomInPOS.z;
 		updateWithTriView();
-		if (_call_that_func > 0) 
+		if (_call_that_func > 0)
 		{
 			emit(signalCallTerafly(_call_that_func));
 		}
@@ -2775,7 +2824,7 @@ void V3dR_GLWidget::doimageVRView(bool bCanCoMode)//0518
 }
 void V3dR_GLWidget::doclientView(bool check_flag)
 {
-	
+
 	if(check_flag)
 	{
 		qDebug()<<"run true.";
@@ -2785,7 +2834,7 @@ void V3dR_GLWidget::doclientView(bool check_flag)
 			VRClientON = true;
 			Renderer_gl1* tempptr = (Renderer_gl1*)renderer;
 			QList <NeuronTree> * listNeuronTrees = tempptr->getHandleNeuronTrees();
-			if(myclient) 
+			if(myclient)
 				delete myclient;
 			myclient = 0;
 			myclient =new V3dR_Communicator(&this->VRClientON, listNeuronTrees);
@@ -2829,9 +2878,9 @@ void V3dR_GLWidget::OnVRSocketDisConnected()
 //>>>>>>> e4f5898908f8eaf6199ffedab4924649e0925911
 */
 
-void V3dR_GLWidget::absoluteRotPose() //100723 RZC
+void V3dR_GLWidget::absoluteRotPose() // 100723 RZC
 {
-	//mRot --> (xRot,yRot,zRot)
+	// mRot --> (xRot,yRot,zRot)
 	double M[4][4];
 	MAT16_TO_MAT4x4(mRot, M);
 	// NOTE:  M is column-first-index & 0-based
@@ -2844,14 +2893,14 @@ void V3dR_GLWidget::absoluteRotPose() //100723 RZC
 	{
 		ry = PI * 0.5;
 		rz = 0;
-		//rx = atan2( A(2,1), A(3,1) ) + rz; // this is wrong
+		// rx = atan2( A(2,1), A(3,1) ) + rz; // this is wrong
 		rx = asin(A(2, 1));
 	}
 	if (A(1, 3) == 1)
 	{
 		ry = PI * 1.5;
 		rz = 0;
-		//rx = atan2( A(2,1), A(3,1) ) - rz; // this is wrong
+		// rx = atan2( A(2,1), A(3,1) ) - rz; // this is wrong
 		rx = asin(-A(2, 1));
 	}
 	else
@@ -2861,7 +2910,7 @@ void V3dR_GLWidget::absoluteRotPose() //100723 RZC
 		rx = atan2(A(2, 3), A(3, 3));
 	}
 
-	int xRot = round(-rx / PI * 180); //must need be negative?
+	int xRot = round(-rx / PI * 180); // must need be negative?
 	int yRot = round(-ry / PI * 180);
 	int zRot = round(-rz / PI * 180);
 	NORMALIZE_angle(xRot);
@@ -2871,7 +2920,7 @@ void V3dR_GLWidget::absoluteRotPose() //100723 RZC
 	doAbsoluteRot(xRot, yRot, zRot);
 }
 
-void V3dR_GLWidget::doAbsoluteRot(int xRot, int yRot, int zRot) //100723 RZC
+void V3dR_GLWidget::doAbsoluteRot(int xRot, int yRot, int zRot) // 100723 RZC
 {
 	NORMALIZE_angle(xRot);
 	NORMALIZE_angle(yRot);
@@ -2931,19 +2980,19 @@ void V3dR_GLWidget::doAbsoluteRot(float xRot, float yRot, float zRot) // 2011 Fe
 	POST_updateGL();
 }
 
-void V3dR_GLWidget::lookAlong(float xLook, float yLook, float zLook) //100812 RZC
+void V3dR_GLWidget::lookAlong(float xLook, float yLook, float zLook) // 100812 RZC
 {
 	if (!renderer)
 		return;
 
-	//XYZ view(-xLook, -yLook, -zLook);
+	// XYZ view(-xLook, -yLook, -zLook);
 	XYZ view(-xLook * flip_X, -yLook * flip_Y, -zLook * flip_Z);
 	normalize(view);
 	XYZ eye = view * (renderer->getViewDistance());
 	XYZ at(0, 0, 0);
 	XYZ up(0, 1, 0);
 	if (cross(up, view) == 0)
-		up = up + 0.01; //make sure that cross(up,view)!=0
+		up = up + 0.01; // make sure that cross(up,view)!=0
 
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
@@ -2988,17 +3037,17 @@ void V3dR_GLWidget::resetZoomShift()
 
 void V3dR_GLWidget::setZoom(int zr)
 {
-	//qDebug("V3dR_GLWidget::setZoom = %i",zr);
+	// qDebug("V3dR_GLWidget::setZoom = %i",zr);
 	zr = CLAMP(-ZOOM_RANGE, ZOOM_RANGE, zr);
 	if (int(_zoom) != zr)
 	{
 		_zoom = zr;
 		if (renderer)
 		{
-			if (zr >= 100) //40
+			if (zr >= 100) // 40
 			{
-				//v3d_msg("Now prepare to enter the zr>40 wheel event!");
-				//check if terafly exists
+				// v3d_msg("Now prepare to enter the zr>40 wheel event!");
+				// check if terafly exists
 				QDir pluginsDir = QDir(qApp->applicationDirPath());
 #if defined(Q_OS_WIN)
 				if (pluginsDir.dirName().toLower() == "debug" || pluginsDir.dirName().toLower() == "release")
@@ -3018,10 +3067,10 @@ void V3dR_GLWidget::setZoom(int zr)
 					renderer->zoomview_wheel_event();
 				}
 				else
-					renderer->setZoom(+float(zr) / 100.f * ZOOM_RANGE_RATE); //sign can switch zoom orientation
+					renderer->setZoom(+float(zr) / 100.f * ZOOM_RANGE_RATE); // sign can switch zoom orientation
 			}
 			else
-				renderer->setZoom(+float(zr) / 100.f * ZOOM_RANGE_RATE); //sign can switch zoom orientation
+				renderer->setZoom(+float(zr) / 100.f * ZOOM_RANGE_RATE); // sign can switch zoom orientation
 		}
 		emit zoomChanged(zr);
 		POST_updateGL();
@@ -3032,17 +3081,17 @@ void V3dR_GLWidget::setZoom(int zr)
 
 void V3dR_GLWidget::setZoom(float zr)
 {
-	//qDebug("V3dR_GLWidget::setZoom = %i",zr);
+	// qDebug("V3dR_GLWidget::setZoom = %i",zr);
 	zr = CLAMP(-ZOOM_RANGE, ZOOM_RANGE, zr);
 	if (_zoom != zr)
 	{
 		_zoom = zr;
 		if (renderer)
 		{
-			if (zr >= 100) //40
+			if (zr >= 100) // 40
 			{
-				//v3d_msg("Now prepare to enter the zr>40 wheel event!");
-				//check if terafly exists
+				// v3d_msg("Now prepare to enter the zr>40 wheel event!");
+				// check if terafly exists
 				QDir pluginsDir = QDir(qApp->applicationDirPath());
 #if defined(Q_OS_WIN)
 				if (pluginsDir.dirName().toLower() == "debug" || pluginsDir.dirName().toLower() == "release")
@@ -3062,10 +3111,10 @@ void V3dR_GLWidget::setZoom(float zr)
 					renderer->zoomview_wheel_event();
 				}
 				else
-					renderer->setZoom(+float(zr) / 100.f * ZOOM_RANGE_RATE); //sign can switch zoom orientation
+					renderer->setZoom(+float(zr) / 100.f * ZOOM_RANGE_RATE); // sign can switch zoom orientation
 			}
 			else
-				renderer->setZoom(+float(zr) / 100.f * ZOOM_RANGE_RATE); //sign can switch zoom orientation
+				renderer->setZoom(+float(zr) / 100.f * ZOOM_RANGE_RATE); // sign can switch zoom orientation
 		}
 		emit zoomChanged(int(zr));
 		POST_updateGL();
@@ -3188,9 +3237,9 @@ void V3dR_GLWidget::setXCut0(int s)
 			renderer->setXCut0(s);
 
 		if (_xCut0 + dxCut > _xCut1)
-			setXCut1(_xCut0 + dxCut); //081029,100913
+			setXCut1(_xCut0 + dxCut); // 081029,100913
 		if (lockX && _xCut0 + dxCut < _xCut1)
-			setXCut1(_xCut0 + dxCut); //100913, 110713
+			setXCut1(_xCut0 + dxCut); // 100913, 110713
 		setXYZSurfure(renderer->b_surfZLock);
 
 		emit changeXCut0(s);
@@ -3212,7 +3261,7 @@ void V3dR_GLWidget::setXCut1(int s)
 		if (_xCut0 > _xCut1 - dxCut)
 			setXCut0(_xCut1 - dxCut);
 		if (lockX && _xCut0 < _xCut1 - dxCut)
-			setXCut0(_xCut1 - dxCut); //100913,110713
+			setXCut0(_xCut1 - dxCut); // 100913,110713
 		setXYZSurfure(renderer->b_surfZLock);
 
 		emit changeXCut1(s);
@@ -3325,7 +3374,7 @@ void V3dR_GLWidget::setXCutLock(bool b)
 		dxCut = _xCut1 - _xCut0;
 	else
 		dxCut = 0;
-	lockX = b ? 1 : 0; //110714
+	lockX = b ? 1 : 0; // 110714
 }
 void V3dR_GLWidget::setYCutLock(bool b)
 {
@@ -3333,7 +3382,7 @@ void V3dR_GLWidget::setYCutLock(bool b)
 		dyCut = _yCut1 - _yCut0;
 	else
 		dyCut = 0;
-	lockY = b ? 1 : 0; //110714
+	lockY = b ? 1 : 0; // 110714
 }
 void V3dR_GLWidget::setZCutLock(bool b)
 {
@@ -3341,7 +3390,7 @@ void V3dR_GLWidget::setZCutLock(bool b)
 		dzCut = _zCut1 - _zCut0;
 	else
 		dzCut = 0;
-	lockZ = b ? 1 : 0; //110714
+	lockZ = b ? 1 : 0; // 110714
 }
 
 void V3dR_GLWidget::setXCS(int s)
@@ -3384,7 +3433,7 @@ void V3dR_GLWidget::setXClip0(int s)
 			renderer->setXClip0(s / (float)CLIP_RANGE);
 
 		if (_xClip0 > _xClip1)
-			setXClip1(_xClip0); //081031
+			setXClip1(_xClip0); // 081031
 		emit changeXClip0(s);
 		POST_updateGL();
 	}
@@ -3398,7 +3447,7 @@ void V3dR_GLWidget::setXClip1(int s)
 			renderer->setXClip1(s / (float)CLIP_RANGE);
 
 		if (_xClip0 > _xClip1)
-			setXClip0(_xClip1); //081031
+			setXClip0(_xClip1); // 081031
 		emit changeXClip1(s);
 		POST_updateGL();
 	}
@@ -3413,7 +3462,7 @@ void V3dR_GLWidget::setYClip0(int s)
 			renderer->setYClip0(s / (float)CLIP_RANGE);
 
 		if (_yClip0 > _yClip1)
-			setYClip1(_yClip0); //081031
+			setYClip1(_yClip0); // 081031
 		emit changeYClip0(s);
 		POST_updateGL();
 	}
@@ -3427,7 +3476,7 @@ void V3dR_GLWidget::setYClip1(int s)
 			renderer->setYClip1(s / (float)CLIP_RANGE);
 
 		if (_yClip0 > _yClip1)
-			setYClip0(_yClip1); //081031
+			setYClip0(_yClip1); // 081031
 		emit changeYClip1(s);
 		POST_updateGL();
 	}
@@ -3442,7 +3491,7 @@ void V3dR_GLWidget::setZClip0(int s)
 			renderer->setZClip0(s / (float)CLIP_RANGE);
 
 		if (_zClip0 > _zClip1)
-			setZClip1(_zClip0); //081031
+			setZClip1(_zClip0); // 081031
 		emit changeZClip0(s);
 		POST_updateGL();
 	}
@@ -3456,7 +3505,7 @@ void V3dR_GLWidget::setZClip1(int s)
 			renderer->setZClip1(s / (float)CLIP_RANGE);
 
 		if (_zClip0 > _zClip1)
-			setZClip0(_zClip1); //081031
+			setZClip0(_zClip1); // 081031
 		emit changeZClip1(s);
 		POST_updateGL();
 	}
@@ -3533,7 +3582,7 @@ void V3dR_GLWidget::setBright()
 	d.connect(ok, SIGNAL(clicked()), &d, SLOT(accept()));
 	d.connect(cancel, SIGNAL(clicked()), &d, SLOT(reject()));
 
-	//d.connect(reset,  SIGNAL(clicked()), &d, SIGNAL(done(10))); //  connect signal to slot with constant parameter
+	// d.connect(reset,  SIGNAL(clicked()), &d, SIGNAL(done(10))); //  connect signal to slot with constant parameter
 	QSignalMapper mapper(this);
 	mapper.setMapping(reset, 10);
 	connect(reset, SIGNAL(clicked()), &mapper, SLOT(map()));
@@ -3553,7 +3602,7 @@ void V3dR_GLWidget::setBright()
 
 		_Bright = spinBright->value();
 		_Contrast = spinSlope->value() - 100;
-		if (ret == 10) //reset
+		if (ret == 10) // reset
 		{
 			_Bright = _Contrast = 0;
 		}
@@ -3733,7 +3782,7 @@ void V3dR_GLWidget::callUpBrainAtlas()
 
 void V3dR_GLWidget::enableShowAxes(bool s)
 {
-	//qDebug("V3dR_GLWidget::setShowAxes = %i",s);
+	// qDebug("V3dR_GLWidget::setShowAxes = %i",s);
 	if (renderer)
 	{
 		renderer->bShowAxes = _showAxes = (s > 0);
@@ -3741,7 +3790,7 @@ void V3dR_GLWidget::enableShowAxes(bool s)
 	}
 }
 
-void V3dR_GLWidget::enableClipBoundingBox(bool b) //141013 Hanbo Chen
+void V3dR_GLWidget::enableClipBoundingBox(bool b) // 141013 Hanbo Chen
 {
 	if (renderer)
 	{
@@ -3751,7 +3800,7 @@ void V3dR_GLWidget::enableClipBoundingBox(bool b) //141013 Hanbo Chen
 
 void V3dR_GLWidget::enableShowBoundingBox(bool s)
 {
-	//qDebug("V3dR_GLWidget::setShowBoundingBox = %i",s);
+	// qDebug("V3dR_GLWidget::setShowBoundingBox = %i",s);
 	if (renderer)
 	{
 		renderer->bShowBoundingBox = _showBoundingBox = (s > 0);
@@ -3761,7 +3810,7 @@ void V3dR_GLWidget::enableShowBoundingBox(bool s)
 
 void V3dR_GLWidget::enableOrthoView(bool s)
 {
-	//qDebug("V3dR_GLWidget::enableOrthoView = %i",s);
+	// qDebug("V3dR_GLWidget::enableOrthoView = %i",s);
 	if (s != _orthoView)
 		if (renderer)
 		{
@@ -3774,7 +3823,7 @@ void V3dR_GLWidget::enableOrthoView(bool s)
 
 void V3dR_GLWidget::setShowMarkers(int s)
 {
-	//qDebug("V3dR_GLWidget::setShowMarkers = %i",s);
+	// qDebug("V3dR_GLWidget::setShowMarkers = %i",s);
 	if (renderer)
 	{
 		switch (s)
@@ -3796,7 +3845,7 @@ void V3dR_GLWidget::setShowMarkers(int s)
 
 void V3dR_GLWidget::setShowSurfObjects(int s)
 {
-	//qDebug("V3dR_GLWidget::setShowSurfObjects = %i",s);
+	// qDebug("V3dR_GLWidget::setShowSurfObjects = %i",s);
 	if (renderer)
 	{
 		switch (s)
@@ -3818,18 +3867,18 @@ void V3dR_GLWidget::setShowSurfObjects(int s)
 
 void V3dR_GLWidget::enableMarkerLabel(bool s)
 {
-	//qDebug("V3dR_GLWidget::enableMarkerLabel = %i",s);
+	// qDebug("V3dR_GLWidget::enableMarkerLabel = %i",s);
 	if (renderer)
 	{
 		renderer->b_showMarkerLabel = s;
-		//renderer->b_showMarkerName = s; //added by PHC, 110426
+		// renderer->b_showMarkerName = s; //added by PHC, 110426
 		POST_updateGL();
 	}
 }
 
 void V3dR_GLWidget::setMarkerSize(int s)
 {
-	//qDebug("V3dR_GLWidget::setMarkerSize = %i",s);
+	// qDebug("V3dR_GLWidget::setMarkerSize = %i",s);
 	if (_markerSize != s)
 	{
 		_markerSize = s;
@@ -3886,14 +3935,14 @@ void V3dR_GLWidget::toggleMarkerName() // toggle marker name display. by Lei Qu,
 	if (renderer)
 	{
 		renderer->b_showMarkerName = !(renderer->b_showMarkerName);
-		//renderer->b_showMarkerLabel = !(renderer->b_showMarkerName);
+		// renderer->b_showMarkerLabel = !(renderer->b_showMarkerName);
 		POST_updateGL();
 	}
 }
 
 void V3dR_GLWidget::createSurfCurrentR()
 {
-	//qDebug("V3dR_GLWidget::createSurfCurrentR");
+	// qDebug("V3dR_GLWidget::createSurfCurrentR");
 	if (renderer)
 	{
 		renderer->createSurfCurrent(0);
@@ -3902,7 +3951,7 @@ void V3dR_GLWidget::createSurfCurrentR()
 }
 void V3dR_GLWidget::createSurfCurrentG()
 {
-	//qDebug("V3dR_GLWidget::createSurfCurrentG");
+	// qDebug("V3dR_GLWidget::createSurfCurrentG");
 	if (renderer)
 	{
 		renderer->createSurfCurrent(1);
@@ -3911,7 +3960,7 @@ void V3dR_GLWidget::createSurfCurrentG()
 }
 void V3dR_GLWidget::createSurfCurrentB()
 {
-	//qDebug("V3dR_GLWidget::createSurfCurrentB");
+	// qDebug("V3dR_GLWidget::createSurfCurrentB");
 	if (renderer)
 	{
 		renderer->createSurfCurrent(2);
@@ -3927,7 +3976,7 @@ void V3dR_GLWidget::updateColorMode(int colorMode)
 	POST_updateGL();
 }
 
-//defined for Katie's need to export the local 3D viewer starting and local locations //140811
+// defined for Katie's need to export the local 3D viewer starting and local locations //140811
 int V3dR_GLWidget::getLocalStartPosX()
 {
 	if (_idep)
@@ -3980,7 +4029,7 @@ int V3dR_GLWidget::getLocalEndPosZ()
 		return -1;
 }
 
-//void V3dR_GLWidget::loadObjectFromFile()
+// void V3dR_GLWidget::loadObjectFromFile()
 //{
 //	if (renderer)
 //	{
@@ -3988,7 +4037,7 @@ int V3dR_GLWidget::getLocalEndPosZ()
 //		updateTool();
 //		POST_updateGL();
 //	}
-//}
+// }
 void V3dR_GLWidget::loadObjectFromFile(QString url)
 {
 	if (renderer)
@@ -4013,7 +4062,7 @@ void V3dR_GLWidget::loadObjectListFromFile()
 
 void V3dR_GLWidget::saveSurfFile()
 {
-	//qDebug("V3dR_GLWidget::saveSurfFile");
+	// qDebug("V3dR_GLWidget::saveSurfFile");
 	if (renderer)
 		renderer->saveSurfFile();
 }
@@ -4140,7 +4189,7 @@ void V3dR_GLWidget::changeVolShadingOption()
 
 		if (tex_comp != renderer->tryTexCompress || tex_3d != renderer->tryTex3D
 			//#if BUFFER_NPT
-			|| tex_npt != renderer->tryTexNPT //no need when always use power_of_two buffer
+			|| tex_npt != renderer->tryTexNPT // no need when always use power_of_two buffer
 											  //#endif
 			|| ((tex_stream != renderer->tryTexStream) && !(tex_stream == 1 && renderer->tryTexStream == 2) && !(tex_stream == 2 && renderer->tryTexStream == 1))
 			//|| shader != renderer->tryVolShader   //no need of reloading texture
@@ -4160,12 +4209,12 @@ void V3dR_GLWidget::changeVolShadingOption()
 					renderer->setupData(this->_idep);
 					if (renderer->hasError())
 						POST_CLOSE(this);
-					renderer->getLimitedDataSize(_data_size); //for updating slider size
+					renderer->getLimitedDataSize(_data_size); // for updating slider size
 				}
 
 				PROGRESS_PERCENT(70);
 				{
-					renderer->reinitializeVol(renderer->class_version()); //100720
+					renderer->reinitializeVol(renderer->class_version()); // 100720
 					if (renderer->hasError())
 						POST_CLOSE(this);
 				}
@@ -4174,8 +4223,8 @@ void V3dR_GLWidget::changeVolShadingOption()
 			//=============================================================================
 
 			// when initialize done, update status of control widgets
-			//SEND_EVENT(this, QEvent::Type(QEvent_InitControlValue)); // use event instead of signal
-			emit signalVolumeCutRange(); //100809
+			// SEND_EVENT(this, QEvent::Type(QEvent_InitControlValue)); // use event instead of signal
+			emit signalVolumeCutRange(); // 100809
 		}
 
 		qDebug("V3dR_GLWidget::changeVolShadingOption end %s", renderer->try_vol_state());
@@ -4233,7 +4282,7 @@ void V3dR_GLWidget::changeObjShadingOption()
 
 void V3dR_GLWidget::updateControl()
 {
-	//qDebug("V3dR_GLWidget::updateControl");
+	// qDebug("V3dR_GLWidget::updateControl");
 	if (renderer)
 	{
 		emit changeVolCompress(renderer->tryTexCompress > 0);
@@ -4242,7 +4291,7 @@ void V3dR_GLWidget::updateControl()
 
 void V3dR_GLWidget::togglePolygonMode()
 {
-	//qDebug("V3dR_GLWidget::togglePolygonMode");
+	// qDebug("V3dR_GLWidget::togglePolygonMode");
 	if (renderer)
 	{
 		renderer->togglePolygonMode();
@@ -4363,7 +4412,7 @@ void V3dR_GLWidget::subtreeHighlightModeMonitor()
 	else
 	{
 		int pressedNumber = this->getNumKeyHolding();
-		//cout << pressedNumber << " ";
+		// cout << pressedNumber << " ";
 
 		if (thisRenderer->connectEdit == Renderer::loopEdit)
 		{
@@ -4420,7 +4469,7 @@ void V3dR_GLWidget::subtreeHighlightModeMonitor()
 
 				for (set<size_t>::iterator segIDit = thisRenderer->subtreeSegs.begin(); segIDit != thisRenderer->subtreeSegs.end(); ++segIDit)
 				{
-					//for (map<size_t, vector<V_NeuronSWC_unit> >::iterator it = thisRenderer->originalSegMap.begin(); it != thisRenderer->originalSegMap.end(); ++it)
+					// for (map<size_t, vector<V_NeuronSWC_unit> >::iterator it = thisRenderer->originalSegMap.begin(); it != thisRenderer->originalSegMap.end(); ++it)
 					//{
 					for (vector<V_NeuronSWC_unit>::iterator nodeIt = thisRenderer->originalSegMap[*segIDit].begin(); nodeIt != thisRenderer->originalSegMap[*segIDit].end(); ++nodeIt)
 						nodeIt->type = pressedNumber;
@@ -4471,7 +4520,7 @@ void V3dR_GLWidget::callCreateMarkerNearestNode()
 		POST_updateGL();
 	}
 }
-//end five shortcuts
+// end five shortcuts
 
 void V3dR_GLWidget::callCreateSpecialMarkerNearestNode()
 {
@@ -4481,7 +4530,7 @@ void V3dR_GLWidget::callCreateSpecialMarkerNearestNode()
 		renderer->callCreateSpecialMarkerNearestNode(gpos.x(), gpos.y());
 	}
 }
-//add special marker, by XZ, 20190720
+// add special marker, by XZ, 20190720
 
 // For curveline detection , by PHC 20170531
 void V3dR_GLWidget::callCurveLineDetector(int option)
@@ -4499,7 +4548,7 @@ void V3dR_GLWidget::callCurveLineDetector(int option)
 	}
 }
 
-//For new stack loading, by ZZ 01212018
+// For new stack loading, by ZZ 01212018
 void V3dR_GLWidget::callLoadNewStack()
 {
 	if (renderer && _idep && v3dr_getImage4d(_idep))
@@ -4512,7 +4561,7 @@ void V3dR_GLWidget::callLoadNewStack()
 	}
 }
 
-//for calling different auto tracers in terafly, by ZZ, 05142018
+// for calling different auto tracers in terafly, by ZZ, 05142018
 void V3dR_GLWidget::callAutoTracers()
 {
 	if (renderer && _idep && v3dr_getImage4d(_idep))
@@ -4558,7 +4607,7 @@ void V3dR_GLWidget::setDragWinSize(int csize)
 
 void V3dR_GLWidget::toggleLineType()
 {
-	//qDebug("V3dR_GLWidget::toggleLineType");
+	// qDebug("V3dR_GLWidget::toggleLineType");
 	if (renderer)
 	{
 		renderer->toggleLineType();
@@ -4568,7 +4617,7 @@ void V3dR_GLWidget::toggleLineType()
 
 void V3dR_GLWidget::toggleEditMode()
 {
-	//qDebug("V3dR_GLWidget::toggleEditMode");
+	// qDebug("V3dR_GLWidget::toggleEditMode");
 	if (renderer)
 	{
 		renderer->toggleEditMode();
@@ -4587,7 +4636,7 @@ void V3dR_GLWidget::setEditMode()
 
 void V3dR_GLWidget::toggleTexFilter()
 {
-	//qDebug("V3dR_GLWidget::toggleTexFilter");
+	// qDebug("V3dR_GLWidget::toggleTexFilter");
 	if (renderer)
 	{
 		renderer->toggleTexFilter();
@@ -4598,7 +4647,7 @@ void V3dR_GLWidget::toggleTexFilter()
 
 void V3dR_GLWidget::toggleTex2D3D()
 {
-	//qDebug("V3dR_GLWidget::toggleTex2D3D");
+	// qDebug("V3dR_GLWidget::toggleTex2D3D");
 	if (renderer)
 	{
 		renderer->toggleTex2D3D();
@@ -4609,7 +4658,7 @@ void V3dR_GLWidget::toggleTex2D3D()
 
 void V3dR_GLWidget::toggleTexCompression()
 {
-	//qDebug("V3dR_GLWidget::toggleTexCompression");
+	// qDebug("V3dR_GLWidget::toggleTexCompression");
 	if (renderer)
 	{
 		renderer->toggleTexCompression();
@@ -4621,7 +4670,7 @@ void V3dR_GLWidget::toggleTexCompression()
 
 void V3dR_GLWidget::toggleTexStream()
 {
-	//qDebug("V3dR_GLWidget::toggleTexStream");
+	// qDebug("V3dR_GLWidget::toggleTexStream");
 	if (renderer)
 	{
 		renderer->toggleTexStream();
@@ -4632,7 +4681,7 @@ void V3dR_GLWidget::toggleTexStream()
 
 void V3dR_GLWidget::toggleShader()
 {
-	//qDebug("V3dR_GLWidget::toggleShader");
+	// qDebug("V3dR_GLWidget::toggleShader");
 	if (renderer)
 	{
 		renderer->toggleShader();
@@ -4642,7 +4691,7 @@ void V3dR_GLWidget::toggleShader()
 }
 void V3dR_GLWidget::toggleObjShader()
 {
-	//qDebug("V3dR_GLWidget::toggleObjShader");
+	// qDebug("V3dR_GLWidget::toggleObjShader");
 	if (renderer)
 	{
 		renderer->toggleObjShader();
@@ -4653,12 +4702,12 @@ void V3dR_GLWidget::toggleObjShader()
 
 void V3dR_GLWidget::showGLinfo()
 {
-	//qDebug("V3dR_GLWidget::showGLinfo");
+	// qDebug("V3dR_GLWidget::showGLinfo");
 	string info;
 	GLinfoDetect(&info);
 	QString qinfo = QString::fromStdString(info);
-	//cerr<< (info);
-	//qDebug()<< qinfo; //090730: seems qDebug()<< cannot handle very large string
+	// cerr<< (info);
+	// qDebug()<< qinfo; //090730: seems qDebug()<< cannot handle very large string
 
 	// Qt OpenGL context format detection
 #if defined(USE_Qt5)
@@ -4677,8 +4726,8 @@ void V3dR_GLWidget::showGLinfo()
 #endif
 #endif
 
-	//QLabel *p = new QLabel(qinfo);
-	QTextEdit *p = new QTextEdit(); //no parent, otherwise will be ghost
+	// QLabel *p = new QLabel(qinfo);
+	QTextEdit *p = new QTextEdit(); // no parent, otherwise will be ghost
 	p->setPlainText(qinfo);
 	p->setReadOnly(true);
 	p->setTabStopWidth(8);
@@ -4691,11 +4740,11 @@ void V3dR_GLWidget::showGLinfo()
 void V3dR_GLWidget::updateWithTriView()
 {
 	if (renderer)
-		try //080927
+		try // 080927
 		{
 			renderer->updateLandmark();
 			renderer->updateTracedNeuron();
-			//updateTool(); //assume has called in above functions
+			// updateTool(); //assume has called in above functions
 			POST_updateGL();
 		}
 		catch (...)
@@ -4704,7 +4753,7 @@ void V3dR_GLWidget::updateWithTriView()
 		}
 }
 
-void V3dR_GLWidget::updateLandmark() //141018 Hanbo Chen
+void V3dR_GLWidget::updateLandmark() // 141018 Hanbo Chen
 {
 	if (renderer)
 		try
@@ -4737,7 +4786,7 @@ void V3dR_GLWidget::updateImageData()
 			renderer->setupData(this->_idep);
 			if (renderer->hasError())
 				POST_CLOSE(this);
-			renderer->getLimitedDataSize(_data_size); //for update slider size
+			renderer->getLimitedDataSize(_data_size); // for update slider size
 		}
 
 		if (this->show_progress_bar)
@@ -4745,7 +4794,7 @@ void V3dR_GLWidget::updateImageData()
 			PROGRESS_PERCENT(70);
 		}
 		{
-			renderer->reinitializeVol(renderer->class_version()); //100720
+			renderer->reinitializeVol(renderer->class_version()); // 100720
 			if (renderer->hasError())
 				POST_CLOSE(this);
 		}
@@ -4757,8 +4806,8 @@ void V3dR_GLWidget::updateImageData()
 	//=============================================================================
 
 	// when initialize done, update status of control widgets
-	//SEND_EVENT(this, QEvent::Type(QEvent_InitControlValue)); // use event instead of signal
-	emit signalVolumeCutRange(); //100809
+	// SEND_EVENT(this, QEvent::Type(QEvent_InitControlValue)); // use event instead of signal
+	emit signalVolumeCutRange(); // 100809
 
 	POST_updateGL();
 }
@@ -4776,13 +4825,13 @@ void V3dR_GLWidget::reloadData()
 
 	v3d_msg("V3dR_GLWidget::reloadData -----------------------------------------");
 
-	//reset by Hanchuan Peng 20140710
+	// reset by Hanchuan Peng 20140710
 	this->_idep->labelfield_file.clear();
 	this->_idep->swc_file_list.clear();
 	this->_idep->surface_file.clear();
 	this->_idep->pointcloud_file_list.clear();
 
-	//makeCurrent(); //ensure right context when concurrent animation, 081025 //090705 delete
+	// makeCurrent(); //ensure right context when concurrent animation, 081025 //090705 delete
 
 	PROGRESS_DIALOG("Reloading", this);
 	if (this->show_progress_bar)
@@ -4790,7 +4839,7 @@ void V3dR_GLWidget::reloadData()
 		PROGRESS_PERCENT(10);
 	}
 	{
-		//if (renderer)	renderer->cleanData(); //090705 delete this line
+		// if (renderer)	renderer->cleanData(); //090705 delete this line
 
 		if (this->show_progress_bar)
 		{
@@ -4802,7 +4851,7 @@ void V3dR_GLWidget::reloadData()
 			renderer->setupData(this->_idep);
 			if (renderer->hasError())
 				POST_CLOSE(this);
-			renderer->getLimitedDataSize(_data_size); //for update slider size
+			renderer->getLimitedDataSize(_data_size); // for update slider size
 		}
 
 		if (this->show_progress_bar)
@@ -4811,7 +4860,7 @@ void V3dR_GLWidget::reloadData()
 		}
 		if (renderer)
 		{
-			renderer->initialize(1); //090705 RZC: only treat as class Renderer_gl1
+			renderer->initialize(1); // 090705 RZC: only treat as class Renderer_gl1
 			if (renderer->hasError())
 				POST_CLOSE(this);
 		}
@@ -4822,12 +4871,12 @@ void V3dR_GLWidget::reloadData()
 		PROGRESS_PERCENT(100);
 	}
 
-	emit signalVolumeCutRange(); //100809
+	emit signalVolumeCutRange(); // 100809
 
 	POST_EVENT(this, QEvent::Type(QEvent_OpenFiles)); // open objects after loading volume, 081025
-	POST_EVENT(this, QEvent::Type(QEvent_Ready));	  //081124
+	POST_EVENT(this, QEvent::Type(QEvent_Ready));	  // 081124
 
-	updateTool(); //081222
+	updateTool(); // 081222
 	POST_updateGL();
 }
 
@@ -4862,7 +4911,7 @@ void V3dR_GLWidget::dump_desktop_state_matrix()
 		}
 		current_modelview += "]\n";
 		eventlog << current_modelview;
-		//projection matrix is for zoom
+		// projection matrix is for zoom
 		eventlog << "------GL_PROJECTION_MATRIX------\n";
 		string current_projection = "[\n";
 		for (int i = 0; i < 4; i++)
@@ -4908,8 +4957,8 @@ void V3dR_GLWidget::UpdateVRcollaInfo()
 				float dist = glm::sqrt((dPOS.x - SS0.x) * (dPOS.x - SS0.x) + (dPOS.y - SS0.y) * (dPOS.y - SS0.y) + (dPOS.z - SS0.z) * (dPOS.z - SS0.z));
 				qDebug() << "SSO POS" << SS0.x << " " << SS0.y << " " << SS0.z << " ";
 				qDebug() << "SSO n" << SS0.n << "   pn   " << SS0.pn;
-				//call the dist between pos & current node'position, then compare with the threshold
-				if (dist < 8.0) //this function is copy from v3dr_gl_vr.h   2 is an experienced value
+				// call the dist between pos & current node'position, then compare with the threshold
+				if (dist < 8.0) // this function is copy from v3dr_gl_vr.h   2 is an experienced value
 				{
 					int findrootindex = j;
 					qDebug() << "findrootindex" << findrootindex;
@@ -4929,7 +4978,7 @@ void V3dR_GLWidget::UpdateVRcollaInfo()
 			}
 			qDebug() << "find  delete point done " << i + 1;
 		}
-		std::sort(deletedcurvesindex.begin(), deletedcurvesindex.end()); //sort use default <
+		std::sort(deletedcurvesindex.begin(), deletedcurvesindex.end()); // sort use default <
 		deletedcurvesindex.erase(unique(deletedcurvesindex.begin(), deletedcurvesindex.end()), deletedcurvesindex.end());
 		NeuronTree NewNT;
 		qDebug() << "begin create new nt";
@@ -4962,7 +5011,7 @@ void V3dR_GLWidget::UpdateVRcollaInfo()
 				++indexinNewNT;
 			}
 			qDebug() << "pos 2";
-			if (deleteindex >= deletedcurvesindex.size() && indexinNewNT < nt.listNeuron.size()) //process last delete point then copy rest SWC into NewNT
+			if (deleteindex >= deletedcurvesindex.size() && indexinNewNT < nt.listNeuron.size()) // process last delete point then copy rest SWC into NewNT
 			{
 				qDebug() << "pos 3";
 				while (indexinNewNT < nt.listNeuron.size())

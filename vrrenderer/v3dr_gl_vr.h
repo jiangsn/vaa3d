@@ -243,6 +243,7 @@ public:
 
 	float GetGlobalScale();
 public:
+	bool finish_ano;
 	bool loadNextQuit;
 	iDrawExternalParameter* _idep;
 	MainWindow *mainwindow;

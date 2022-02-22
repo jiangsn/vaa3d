@@ -60,7 +60,7 @@ int checkForOpenGLError(const char *file, int line)
 			 << "@line " << line << gluErrorString(glErr) << endl;
 		retCode = 1;
 		break;
-		//exit(EXIT_FAILURE);
+		// exit(EXIT_FAILURE);
 	}
 	return retCode;
 }
@@ -85,14 +85,14 @@ bool CMainApplication::showshootingPad = false;
 #define dist_thres 0.01
 #define connection_rigourous 0.5
 #define default_radius 0.618
-#define drawing_step_size 2 //the larger, the fewer SWC nodes
-//LMG for Windows UTC Timestamp 15/10/2018
+#define drawing_step_size 2 // the larger, the fewer SWC nodes
+// LMG for Windows UTC Timestamp 15/10/2018
 #define timegm _mkgmtime
-//the following table is copied from renderer_obj.cpp and should be eventually separated out as a single neuron drawing routine. Boted by PHC 20170616
+// the following table is copied from renderer_obj.cpp and should be eventually separated out as a single neuron drawing routine. Boted by PHC 20170616
 
 const GLubyte neuron_type_color_heat[][3] = {
-	//whilte---> yellow ---> red ----> black  (hotness increases)
-	{255.0, 255.0, 255.0}, //white
+	// whilte---> yellow ---> red ----> black  (hotness increases)
+	{255.0, 255.0, 255.0}, // white
 	{255.0, 255.0, 251.062496062},
 	{255.0, 255.0, 247.124992125},
 	{255.0, 255.0, 243.187488187},
@@ -356,7 +356,7 @@ const GLubyte neuron_type_color[][3] = {
 	{200, 20, 0},	 // red,     2-axon
 	{0, 20, 200},	 // blue,    3-dendrite
 	{200, 0, 200},	 // purple,  4-apical dendrite
-	//the following is Hanchuan's extended color. 090331
+	// the following is Hanchuan's extended color. 090331
 	{0, 200, 200},	 // cyan,    5
 	{220, 200, 0},	 // yellow,  6
 	{0, 200, 20},	 // green,   7
@@ -365,16 +365,16 @@ const GLubyte neuron_type_color[][3] = {
 	{250, 100, 120}, // salmon,	10
 	{120, 200, 200}, // ice,		11
 	{100, 120, 200}, // orchid,	12
-	//the following is Hanchuan's further extended color. 111003
+	// the following is Hanchuan's further extended color. 111003
 	{255, 128, 168}, //	13
 	{128, 255, 168}, //	14
 	{128, 168, 255}, //	15
 	{168, 255, 128}, //	16
 	{255, 168, 128}, //	17
 	{168, 128, 255}, //	18
-	{0, 0, 0},		 //19 //totally black. PHC, 2012-02-15
-	//the following (20-275) is used for matlab heat map. 120209 by WYN
-	{0, 0, 131}, //20
+	{0, 0, 0},		 // 19 //totally black. PHC, 2012-02-15
+	// the following (20-275) is used for matlab heat map. 120209 by WYN
+	{0, 0, 131}, // 20
 	{0, 0, 135},
 	{0, 0, 139},
 	{0, 0, 143},
@@ -629,7 +629,7 @@ const GLubyte neuron_type_color[][3] = {
 	{139, 0, 0},
 	{135, 0, 0},
 	{131, 0, 0},
-	{127, 0, 0} //275
+	{127, 0, 0} // 275
 };				//////////////////////////////////////////////////////////////////////////////////
 const int neuron_type_color_num = sizeof(neuron_type_color) / (sizeof(GLubyte) * 3);
 //
@@ -672,7 +672,7 @@ CMainApplication::CMainApplication(int argc, char *argv[])
 	  ,
 	  m_nCompanionWindowHeight(1600) //(800)//( 320 )//
 	  ,
-	  morphologyShader(NULL), raycastingShader(NULL), clipPatchShader(NULL), backfaceShader(NULL), m_unCompanionWindowProgramID(0), m_unControllerTransformProgramID(0), m_unRenderModelProgramID(0), m_unControllerRayProgramID(0), m_pHMD(NULL), m_pRenderModels(NULL), m_pChaperone(NULL), m_bDebugOpenGL(false), m_bVerbose(false), m_bPerf(false), m_bVblank(false), m_bGlFinishHack(true), m_glControllerVertBuffer(0), m_unControllerVAO(0), m_unMorphologyLineModeVAO(0), m_uiMorphologyLineModeVertcount(0), m_unSketchMorphologyLineModeVAO(0), m_uiSketchMorphologyLineModeVertcount(0), m_VolumeImageVAO(0), m_clipPatchVAO(0), m_nControllerMatrixLocation(-1), m_nControllerRayMatrixLocation(-1), m_nRenderModelMatrixLocation(-1), m_iTrackedControllerCount(0), m_iTrackedControllerCount_Last(-1), m_iValidPoseCount(0), m_iValidPoseCount_Last(-1), m_strPoseClasses(""), m_bShowMorphologyLine(true), m_bShowMorphologySurface(false), m_bShowMorphologyMarker(true), m_bControllerModelON(true), m_modeControlTouchPad_R(0), m_modeControlGrip_R(0), m_contrastMode(true) //right touch_pad only control contrast
+	  morphologyShader(NULL), raycastingShader(NULL), clipPatchShader(NULL), backfaceShader(NULL), m_unCompanionWindowProgramID(0), m_unControllerTransformProgramID(0), m_unRenderModelProgramID(0), m_unControllerRayProgramID(0), m_pHMD(NULL), m_pRenderModels(NULL), m_pChaperone(NULL), m_bDebugOpenGL(false), m_bVerbose(false), m_bPerf(false), m_bVblank(false), m_bGlFinishHack(true), m_glControllerVertBuffer(0), m_unControllerVAO(0), m_unMorphologyLineModeVAO(0), m_uiMorphologyLineModeVertcount(0), m_unSketchMorphologyLineModeVAO(0), m_uiSketchMorphologyLineModeVertcount(0), m_VolumeImageVAO(0), m_clipPatchVAO(0), m_nControllerMatrixLocation(-1), m_nControllerRayMatrixLocation(-1), m_nRenderModelMatrixLocation(-1), m_iTrackedControllerCount(0), m_iTrackedControllerCount_Last(-1), m_iValidPoseCount(0), m_iValidPoseCount_Last(-1), m_strPoseClasses(""), m_bShowMorphologyLine(true), m_bShowMorphologySurface(false), m_bShowMorphologyMarker(true), m_bControllerModelON(true), m_modeControlTouchPad_R(0), m_modeControlGrip_R(0), m_contrastMode(true) // right touch_pad only control contrast
 	  ,
 	  m_rotateMode(false), m_zoomMode(false), m_autoRotateON(false), m_TouchFirst(true), m_fTouchOldX(0), m_fTouchOldY(0), m_pickUpState(false), pick_point_index_A(-1), pick_point_index_B(-1), m_ControllerTexVAO(0), m_iControllerRayVAO(0), m_nCtrTexMatrixLocation(-1), m_unCtrTexProgramID(0), m_bHasImage4D(false), mainwindow(NULL), img4d(NULL), READY_TO_SEND(false), sketchNum(0), bIsUndoEnable(false), bIsRedoEnable(false), _call_assemble_plugin(false), _startdragnode(false), postVRFunctionCallMode(0), curveDrawingTestStatus(-1), showshootingray(false), replacetexture(false)
 //, font_VR (NULL)
@@ -760,8 +760,8 @@ bool CMainApplication::BInit()
 	}
 
 	m_pRenderModels = (vr::IVRRenderModels *)vr::VR_GetGenericInterface(vr::IVRRenderModels_Version, &eError);
-	//question: difference between IVRRenderModels and the CGLRenderModel?
-	//is IVRRenderModels necessary for VR? comment it and observe the change
+	// question: difference between IVRRenderModels and the CGLRenderModel?
+	// is IVRRenderModels necessary for VR? comment it and observe the change
 	if (!m_pRenderModels)
 	{
 		m_pHMD = NULL;
@@ -773,8 +773,8 @@ bool CMainApplication::BInit()
 		return false;
 	}
 	m_pChaperone = (vr::IVRChaperone *)vr::VR_GetGenericInterface(vr::IVRChaperone_Version, &eError);
-	//question: difference between IVRRenderModels and the CGLRenderModel?
-	//is IVRRenderModels necessary for VR? comment it and observe the change
+	// question: difference between IVRRenderModels and the CGLRenderModel?
+	// is IVRRenderModels necessary for VR? comment it and observe the change
 	if (!m_pChaperone)
 	{
 		m_pHMD = NULL;
@@ -788,7 +788,7 @@ bool CMainApplication::BInit()
 
 	int nWindowPosX = 100;
 	int nWindowPosY = 100;
-	//fps test liqi
+	// fps test liqi
 	countsPerSecond = 0.0;
 	CounterStart = 0;
 
@@ -804,7 +804,7 @@ bool CMainApplication::BInit()
 	m_FlashCount = 0;*/
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-	//SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY );
+	// SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY );
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
@@ -847,7 +847,7 @@ bool CMainApplication::BInit()
 	m_strDriver = GetTrackedDeviceString(m_pHMD, vr::k_unTrackedDeviceIndex_Hmd, vr::Prop_TrackingSystemName_String);
 	m_strDisplay = GetTrackedDeviceString(m_pHMD, vr::k_unTrackedDeviceIndex_Hmd, vr::Prop_SerialNumber_String);
 
-	//std::string strWindowTitle = "Vaa3D VR - " + m_strDriver + " " + m_strDisplay;
+	// std::string strWindowTitle = "Vaa3D VR - " + m_strDriver + " " + m_strDisplay;
 	std::string strWindowTitle = "TeraVR - Initializing";
 	SDL_SetWindowTitle(m_pCompanionWindow, strWindowTitle.c_str());
 
@@ -857,7 +857,7 @@ bool CMainApplication::BInit()
 	m_iTexture = 0;
 	m_uiControllerTexIndexSize = 0;
 	m_oldGlobalMatrix = m_ctrlChangeMatrix = m_oldCtrlMatrix = glm::mat4();
-	//m_oldGlobalMatrix = m_ctrlChangeMatrix = m_oldCtrlMatrix= glm::mat4();
+	// m_oldGlobalMatrix = m_ctrlChangeMatrix = m_oldCtrlMatrix= glm::mat4();
 
 	// m_modeGrip_R = global_padm_modeGrip_R;
 	// m_modeGrip_L = global_padm_modeGrip_L;
@@ -881,15 +881,15 @@ bool CMainApplication::BInit()
 		return false;
 	}
 
-	//if(font_VR)
+	// if(font_VR)
 	//	delete font_VR;
-	//font_VR = 0;
+	// font_VR = 0;
 	//// init font
-	//font_VR= new gltext::Font("data/DroidSans.ttf", 32, 512, 512);
+	// font_VR= new gltext::Font("data/DroidSans.ttf", 32, 512, 512);
 	//// specify the screen size for perfect pixel rendering
-	//font_VR->setDisplaySize(m_nCompanionWindowWidth, m_nCompanionWindowHeight);
+	// font_VR->setDisplaySize(m_nCompanionWindowWidth, m_nCompanionWindowHeight);
 	//// NOTE: cache is hard to use properly; you need to calculate the right cache size in the above gltext::Font() constructor
-	//font_VR->cacheCharacters("1234567890!@#$%^&*()abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,./;'[]\\<>?:\"{}|-=_+");
+	// font_VR->cacheCharacters("1234567890!@#$%^&*()abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,./;'[]\\<>?:\"{}|-=_+");
 
 	ctrSphere = new Sphere(0.01f);
 	ctrSphereColor = glm::vec3();
@@ -942,10 +942,10 @@ bool CMainApplication::BInitGL()
 	loadedNT_merged.listNeuron.clear();
 	loadedNT_merged.hashNeuron.clear();
 
-	//merge all loaded Neuron (as non-editable Neuron) into one single NeuronTree ,then display
+	// merge all loaded Neuron (as non-editable Neuron) into one single NeuronTree ,then display
 	qDebug() << "loadedNTList->size()" << loadedNTList->size() << "  editableNTL size is" << this->editableLoadedNTL.size() << " non editable NTL size is " << this->nonEditableLoadedNTL.size();
 	if (nonEditableLoadedNTL.size() > 0)
-		loadedNT_merged = nonEditableLoadedNTL.at(0); //because the first loaded NeuronTree may be not in order, so just push it into loadedNT_merged
+		loadedNT_merged = nonEditableLoadedNTL.at(0); // because the first loaded NeuronTree may be not in order, so just push it into loadedNT_merged
 	if (nonEditableLoadedNTL.size() > 1)
 	{
 		for (int i = 1; i < nonEditableLoadedNTL.size(); i++)
@@ -959,7 +959,7 @@ bool CMainApplication::BInitGL()
 		}
 	}
 
-	//convert vaa3d_traced_neuron (as editable neuron) to V_NeuronSWC_list with all segments
+	// convert vaa3d_traced_neuron (as editable neuron) to V_NeuronSWC_list with all segments
 	for (int j = 0; j < editableLoadedNTL.size(); j++)
 	{
 		NeuronTree SingleTree = editableLoadedNTL.at(j);
@@ -967,11 +967,11 @@ bool CMainApplication::BInitGL()
 		for (int i = 0; i < testVNL.seg.size(); i++)
 		{
 			NeuronTree SS;
-			//convert each segment to NeuronTree with one single path
+			// convert each segment to NeuronTree with one single path
 			V_NeuronSWC seg_temp = testVNL.seg.at(i);
 			seg_temp.reverse();
 			SS = V_NeuronSWC__2__NeuronTree(seg_temp);
-			//append to editable sketchedNTList
+			// append to editable sketchedNTList
 			SS.name = "loaded_" + QString("%1").arg(i);
 			if (SS.listNeuron.size() > 0)
 				sketchedNTList.push_back(SS);
@@ -983,9 +983,9 @@ bool CMainApplication::BInitGL()
 	SetupGlobalMatrix();
 
 	SetupMorphologyLine(0);
-	//SetupMorphologyLine(2);
-	//SetupMorphologyLine(loadedNT_merged,m_unMorphologyLineModeVAO,m_glMorphologyLineModeVertBuffer,m_glMorphologyLineModeIndexBuffer,m_uiMorphologyLineModeVertcount,0);
-	//SetupMorphologySurface(loadedNT_merged,loaded_spheres,loaded_cylinders,loaded_spheresPos);
+	// SetupMorphologyLine(2);
+	// SetupMorphologyLine(loadedNT_merged,m_unMorphologyLineModeVAO,m_glMorphologyLineModeVertBuffer,m_glMorphologyLineModeIndexBuffer,m_uiMorphologyLineModeVertcount,0);
+	// SetupMorphologySurface(loadedNT_merged,loaded_spheres,loaded_cylinders,loaded_spheresPos);
 
 	SetupTexturemaps();
 	SetupCameras();
@@ -1018,7 +1018,7 @@ bool CMainApplication::BInitGL()
 // Purpose: Initialize Compositor. Returns true if the compositor was
 //          successfully initialized, false otherwise.
 //-----------------------------------------------------------------------------
-bool CMainApplication::BInitCompositor() //note: VRCompositor is responsible for getting pose and submitting framebuffers
+bool CMainApplication::BInitCompositor() // note: VRCompositor is responsible for getting pose and submitting framebuffers
 {
 	vr::EVRInitError peError = vr::VRInitError_None;
 
@@ -1040,15 +1040,15 @@ void CMainApplication::Shutdown()
 	// float trans_y = 1.5 ;
 	// float trans_z = 0.4 ;
 
-	//remeber last Grip choice
-	// global_padm_modeGrip_L = m_modeGrip_L;
-	// global_padm_modeGrip_R = m_modeGrip_R;
-	//reverse the normalization (so that the next VR session can normalize correctly)
+	// remeber last Grip choice
+	//  global_padm_modeGrip_L = m_modeGrip_L;
+	//  global_padm_modeGrip_R = m_modeGrip_R;
+	// reverse the normalization (so that the next VR session can normalize correctly)
 	m_globalMatrix = glm::translate(m_globalMatrix, glm::vec3(loadedNTCenter.x, loadedNTCenter.y, loadedNTCenter.z));
 	m_globalMatrix = glm::scale(m_globalMatrix, glm::vec3(1.0f / m_globalScale, 1.0f / m_globalScale, 1.0f / m_globalScale));
-	//m_globalMatrix = glm::translate(m_globalMatrix,glm::vec3(-trans_x,-trans_y,-trans_z) ); //fine tune
+	// m_globalMatrix = glm::translate(m_globalMatrix,glm::vec3(-trans_x,-trans_y,-trans_z) ); //fine tune
 	m_globalMatrix = glm::translate(m_globalMatrix, glm::vec3(-HmdQuadImageOffset.v[0], -HmdQuadImageOffset.v[1], -HmdQuadImageOffset.v[2]));
-	//replace "vaa3d_traced_neuron" with VR_drawn_curves
+	// replace "vaa3d_traced_neuron" with VR_drawn_curves
 	////////update glwidget->listneurontree
 	if (m_bHasImage4D && (sketchedNTList.size() > 0))
 	{
@@ -1066,7 +1066,7 @@ void CMainApplication::Shutdown()
 			{
 				contained = true;
 				SS.n = 1 + i;
-				//SS = loadedNTList->at(i);
+				// SS = loadedNTList->at(i);
 				MergeNeuronTrees(SS, &sketchedNTList);
 				loadedNTList->replace(i, SS);
 				break;
@@ -1087,7 +1087,7 @@ void CMainApplication::Shutdown()
 		img4d->proj_trace_history_append();
 		// img4d->update_3drenderer_neuron_view();
 	}
-	//if(drawnMarkerList.size()>0)//In all cases ,we should copy markerlist into img4d,liqi 2018_12_9
+	// if(drawnMarkerList.size()>0)//In all cases ,we should copy markerlist into img4d,liqi 2018_12_9
 	if (m_bHasImage4D)
 	{
 		img4d->listLandmarks.clear();
@@ -1204,10 +1204,10 @@ void CMainApplication::Shutdown()
 			iSketchNTLMorphologyVertcount.clear();
 		}
 
-		//for( std::vector< CGLRenderModel * >::iterator i = m_vecRenderModels.begin(); i != m_vecRenderModels.end(); i++ )
+		// for( std::vector< CGLRenderModel * >::iterator i = m_vecRenderModels.begin(); i != m_vecRenderModels.end(); i++ )
 		//{
 		//	delete (*i);
-		//}
+		// }
 		qDebug() << "Start to delete sphere....";
 		int j;
 		j = 0;
@@ -1262,14 +1262,14 @@ void CMainApplication::Shutdown()
 		if (ctrSphere)
 			delete ctrSphere;
 
-		//for (int i=0;i<loaded_spheres.size();i++) delete loaded_spheres[i];
-		//for (int i=0;i<loaded_cylinders.size();i++) delete loaded_cylinders[i];
-		//for (int i=0;i<sketch_spheres.size();i++) delete sketch_spheres[i];
-		//for (int i=0;i<sketch_cylinders.size();i++) delete sketch_cylinders[i];
+		// for (int i=0;i<loaded_spheres.size();i++) delete loaded_spheres[i];
+		// for (int i=0;i<loaded_cylinders.size();i++) delete loaded_cylinders[i];
+		// for (int i=0;i<sketch_spheres.size();i++) delete sketch_spheres[i];
+		// for (int i=0;i<sketch_cylinders.size();i++) delete sketch_cylinders[i];
 
-		//for (int i=0;i<Agents_spheres.size();i++) delete Agents_spheres[i];
+		// for (int i=0;i<Agents_spheres.size();i++) delete Agents_spheres[i];
 
-		//for (int i=0;i<Markers_spheres.size();i++) delete Markers_spheres[i];
+		// for (int i=0;i<Markers_spheres.size();i++) delete Markers_spheres[i];
 
 		loaded_spheres.clear();
 		loaded_spheresPos.clear();
@@ -1310,13 +1310,13 @@ void CMainApplication::Shutdown()
 		if (m_VolumeImageVAO != 0)
 		{
 			glDeleteVertexArrays(1, &m_VolumeImageVAO);
-			//glDeleteBuffers(1, &m_imageVBO);
+			// glDeleteBuffers(1, &m_imageVBO);
 		}
 
 		if (m_clipPatchVAO != 0)
 		{
 			glDeleteVertexArrays(1, &m_clipPatchVAO);
-			//glDeleteBuffers(1, &m_imageVBO);
+			// glDeleteBuffers(1, &m_imageVBO);
 		}
 
 		if (m_unCompanionWindowVAO != 0)
@@ -1383,8 +1383,8 @@ bool CMainApplication::HandleInput()
 	m_iControllerIDLeft = m_pHMD->GetTrackedDeviceIndexForControllerRole(vr::TrackedControllerRole_LeftHand);
 	m_iControllerIDRight = m_pHMD->GetTrackedDeviceIndexForControllerRole(vr::TrackedControllerRole_RightHand);
 
-	//qDebug("Left=%d, Right= %d\n",m_iControllerIDLeft,m_iControllerIDRight);
-	// Process SteamVR events
+	// qDebug("Left=%d, Right= %d\n",m_iControllerIDLeft,m_iControllerIDRight);
+	//  Process SteamVR events
 	vr::VREvent_t event;
 	while (m_pHMD->PollNextEvent(&event, sizeof(event)))
 	{
@@ -1401,29 +1401,36 @@ bool CMainApplication::HandleInput()
 		}
 		if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonPress) && (event.data.controller.button == vr::k_EButton_ApplicationMenu))
 		{
-			//shuning replace quit with quit & loadnext
-			loadNextQuit = true;
+			if (finish_ano)
+			{
+				// shuning replace quit with quit & loadnext
+				loadNextQuit = true;
 
-			// bRet = true;
-			return bRet;
+				// bRet = true;
+				return bRet;
+			}
+			else
+			{
+				finish_ano = true;
+			}
 		}
 	}
 
 	{
 		// Process SteamVR RIGHT controller state
-		//including draw lines
+		// including draw lines
 		vr::VRControllerState_t state;
-		//if( (unDevice==m_iControllerIDRight)&&(m_pHMD->GetControllerState( unDevice, &state, sizeof(state) ) ))
+		// if( (unDevice==m_iControllerIDRight)&&(m_pHMD->GetControllerState( unDevice, &state, sizeof(state) ) ))
 		if (m_pHMD->GetControllerState(m_iControllerIDRight, &state, sizeof(state)))
 		{
-			if (state.ulButtonPressed & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Trigger) && (!showshootingray))
+			if (state.ulButtonPressed & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Trigger) && (!showshootingray) && (!finish_ano))
 			{
 				if (m_modeGrip_R == m_drawMode)
 				{
 
-					//this part is for building a neuron tree to further save as SWC file
-					if (vertexcount % drawing_step_size == 0) //use vertexcount to control point counts in a single line
-					//each #drawing_step_size frames render a SWC node
+					// this part is for building a neuron tree to further save as SWC file
+					if (vertexcount % drawing_step_size == 0) // use vertexcount to control point counts in a single line
+					// each #drawing_step_size frames render a SWC node
 					{
 						const Matrix4 &mat_M = m_rmat4DevicePose[m_iControllerIDRight]; // mat means current controller pos
 						glm::mat4 mat = glm::mat4();
@@ -1439,7 +1446,7 @@ bool CMainApplication::HandleInput()
 						glm::vec4 ctrlRightPos = mat * glm::vec4(0, 0, 0, 1);
 
 						// shuning track right controller drawing
-						qDebug(" DrawctrlRightPos = %.2f,%.2f,%.2f\n", ctrlRightPos.x, ctrlRightPos.y, ctrlRightPos.z);
+						qDebug(" DrawCtrlRightPos = %.2f,%.2f,%.2f\n", ctrlRightPos.x, ctrlRightPos.y, ctrlRightPos.z);
 						string mat_out = "------right controller drawing------\n";
 						for (size_t i = 0; i < 4; i++)
 						{
@@ -1456,28 +1463,28 @@ bool CMainApplication::HandleInput()
 						outfile << mat_out;
 						outfile.close();
 
-						glm::vec4 m_v4DevicePose = mat * glm::vec4(0, 0, 0, 1); //change the world space(with the globalMatrix) to the initial world space
+						glm::vec4 m_v4DevicePose = mat * glm::vec4(0, 0, 0, 1); // change the world space(with the globalMatrix) to the initial world space
 
-						swccount++; //for every 10(#drawing_step_size) frames we store a point as a neuronswc point,control with swccount
+						swccount++; // for every 10(#drawing_step_size) frames we store a point as a neuronswc point,control with swccount
 						NeuronSWC SL0;
 						SL0.x = m_v4DevicePose.x;
 						SL0.y = m_v4DevicePose.y;
 						SL0.z = m_v4DevicePose.z;
-						SL0.r = default_radius;			 //set default radius 1
-						SL0.type = m_curMarkerColorType; //set default type 11:ice
+						SL0.r = default_radius;			 // set default radius 1
+						SL0.type = m_curMarkerColorType; // set default type 11:ice
 						SL0.n = currentNT.listNeuron.size() + 1;
 						SL0.creatmode = 618;
 						if ((swccount == 1) || (vertexcount == 0))
 						{
-							SL0.pn = -1; //for the first point of each lines , it's parent must be -1
+							SL0.pn = -1; // for the first point of each lines , it's parent must be -1
 						}
 						else
 						{
-							SL0.pn = currentNT.listNeuron.at(SL0.n - 1 - 1).n; //for the others, their parent should be the last one
+							SL0.pn = currentNT.listNeuron.at(SL0.n - 1 - 1).n; // for the others, their parent should be the last one
 						}
 						currentNT.listNeuron.append(SL0);
-						currentNT.hashNeuron.insert(SL0.n, currentNT.listNeuron.size() - 1); //store NeuronSWC SL0 into currentNT
-						if (img4d && m_bVirtualFingerON)									 //if an image exist, call virtual finger functions for curve drawing
+						currentNT.hashNeuron.insert(SL0.n, currentNT.listNeuron.size() - 1); // store NeuronSWC SL0 into currentNT
+						if (img4d && m_bVirtualFingerON)									 // if an image exist, call virtual finger functions for curve drawing
 						{
 							// for each 10 nodes/points, call virtual finger once aiming to see the line's mid-result
 							if ((currentNT.listNeuron.size() > 0) && (currentNT.listNeuron.size() % 10 == 0))
@@ -1487,7 +1494,7 @@ bool CMainApplication::HandleInput()
 								tempNT.hashNeuron.clear();
 								for (int i = 0; i < currentNT.listNeuron.size(); i++)
 								{
-									NeuronSWC S_node = currentNT.listNeuron.at(i); //swcBB
+									NeuronSWC S_node = currentNT.listNeuron.at(i); // swcBB
 									if (!isAnyNodeOutBBox(S_node))
 									{
 										S_node.n = tempNT.listNeuron.size();
@@ -1507,7 +1514,7 @@ bool CMainApplication::HandleInput()
 								NeuronTree InputNT;
 								InputNT = tempNT;
 								int iter_number = 1;
-								//for(int i=0;i<iter_number;i++)  // liqi  Find matching line segments more than once, resulting in inaccurate results
+								// for(int i=0;i<iter_number;i++)  // liqi  Find matching line segments more than once, resulting in inaccurate results
 								//{
 								//	NeuronTree OutputNT;
 								//	RefineSketchCurve(i%3,InputNT, OutputNT); //ver. 2b
@@ -1515,7 +1522,7 @@ bool CMainApplication::HandleInput()
 								//	InputNT.listNeuron.clear();
 								//	InputNT.hashNeuron.clear();
 								//	InputNT = OutputNT;
-								//}
+								// }
 								currentNT.listNeuron.clear();
 								currentNT.hashNeuron.clear();
 								currentNT = InputNT;
@@ -1584,7 +1591,7 @@ bool CMainApplication::HandleInput()
 								NeuronSWC SS0;
 								SS0 = nt.listNeuron.at(j);
 								dist = glm::sqrt((ctrlRightPos.x - SS0.x) * (ctrlRightPos.x - SS0.x) + (ctrlRightPos.y - SS0.y) * (ctrlRightPos.y - SS0.y) + (ctrlRightPos.z - SS0.z) * (ctrlRightPos.z - SS0.z));
-								//qDebug("SS0 = %.2f,%.2f,%.2f\n",SS0.x,SS0.y,SS0.z);
+								// qDebug("SS0 = %.2f,%.2f,%.2f\n",SS0.x,SS0.y,SS0.z);
 								if (dist > (dist_thres / m_globalScale * 5))
 									continue;
 								minvalue = glm::min(minvalue, dist);
@@ -1602,7 +1609,7 @@ bool CMainApplication::HandleInput()
 							qDebug("pick up %d, %d point.", pick_point_index_A, pick_point_index_B);
 						}
 					}
-					else if (pick_point_index_B != -1) //when pick up a node
+					else if (pick_point_index_B != -1) // when pick up a node
 					{
 						dragnodePOS = "";
 						dragnodePOS = QString("%1 %2").arg(pick_point_index_A).arg(pick_point_index_B);
@@ -1622,9 +1629,9 @@ bool CMainApplication::HandleInput()
 				}
 				else if (m_modeGrip_R == m_ConnectMode)
 				{
-					//this part is for building a neuron tree to further save as SWC file
-					if (vertexcount % drawing_step_size == 0) //use vertexcount to control point counts in a single line
-					//each #drawing_step_size frames render a SWC node
+					// this part is for building a neuron tree to further save as SWC file
+					if (vertexcount % drawing_step_size == 0) // use vertexcount to control point counts in a single line
+					// each #drawing_step_size frames render a SWC node
 					{
 						const Matrix4 &mat_M = m_rmat4DevicePose[m_iControllerIDRight]; // mat means current controller pos
 						glm::mat4 mat = glm::mat4();
@@ -1636,51 +1643,51 @@ bool CMainApplication::HandleInput()
 							}
 						}
 						mat = glm::inverse(m_globalMatrix) * mat;
-						glm::vec4 m_v4DevicePose = mat * glm::vec4(0, 0, 0, 1); //change the world space(with the globalMatrix) to the initial world space
+						glm::vec4 m_v4DevicePose = mat * glm::vec4(0, 0, 0, 1); // change the world space(with the globalMatrix) to the initial world space
 
-						swccount++; //for every 10(#drawing_step_size) frames we store a point as a neuronswc point,control with swccount
+						swccount++; // for every 10(#drawing_step_size) frames we store a point as a neuronswc point,control with swccount
 						NeuronSWC SL0;
 						SL0.x = m_v4DevicePose.x;
 						SL0.y = m_v4DevicePose.y;
 						SL0.z = m_v4DevicePose.z;
-						SL0.r = default_radius;			 //set default radius 1
-						SL0.type = m_curMarkerColorType; //set default type 11:ice
+						SL0.r = default_radius;			 // set default radius 1
+						SL0.type = m_curMarkerColorType; // set default type 11:ice
 						SL0.n = currentNT.listNeuron.size() + 1;
 						SL0.creatmode = 618;
 						if ((swccount == 1) || (vertexcount == 0))
 						{
-							SL0.pn = -1; //for the first point of each lines , it's parent must be -1
+							SL0.pn = -1; // for the first point of each lines , it's parent must be -1
 						}
 						else
 						{
-							SL0.pn = currentNT.listNeuron.at(SL0.n - 1 - 1).n; //for the others, their parent should be the last one
+							SL0.pn = currentNT.listNeuron.at(SL0.n - 1 - 1).n; // for the others, their parent should be the last one
 						}
 						currentNT.listNeuron.append(SL0);
-						currentNT.hashNeuron.insert(SL0.n, currentNT.listNeuron.size() - 1); //store NeuronSWC SL0 into currentNT
-																							 // if(img4d&&m_bVirtualFingerON) //if an image exist, call virtual finger functions for curve drawing
-																							 // {
-																							 // 	// for each 10 nodes/points, call virtual finger once aiming to see the line's mid-result
-																							 // 	if((currentNT.listNeuron.size()>0)&&(currentNT.listNeuron.size()%10==0))
-																							 // 	{
-																							 // 		qDebug()<<"size%10==0 goto charge isAnyNodeOutBBox";
-																							 // 		tempNT.listNeuron.clear();
-																							 // 		tempNT.hashNeuron.clear();
-																							 // 		for(int i=0;i<currentNT.listNeuron.size();i++)
-																							 // 		{
-																							 // 			NeuronSWC S_node = currentNT.listNeuron.at(i);//swcBB
-																							 // 			if(!isAnyNodeOutBBox(S_node))
-																							 // 			{
-																							 // 				S_node.n=tempNT.listNeuron.size();
-																							 // 				if(S_node.pn!=-1)
-																							 // 					S_node.pn = tempNT.listNeuron.last().n;
-																							 // 				tempNT.listNeuron.append(S_node);
-																							 // 				tempNT.hashNeuron.insert(S_node.n, tempNT.listNeuron.size()-1);
-																							 // 			}
-																							 // 			else if(i==0)
-																							 // 			{
-																							 // 				vertexcount=swccount=0;
-																							 // 				break;
-																							 // 			}
+						currentNT.hashNeuron.insert(SL0.n, currentNT.listNeuron.size() - 1); // store NeuronSWC SL0 into currentNT
+																							 //  if(img4d&&m_bVirtualFingerON) //if an image exist, call virtual finger functions for curve drawing
+																							 //  {
+																							 //  	// for each 10 nodes/points, call virtual finger once aiming to see the line's mid-result
+																							 //  	if((currentNT.listNeuron.size()>0)&&(currentNT.listNeuron.size()%10==0))
+																							 //  	{
+																							 //  		qDebug()<<"size%10==0 goto charge isAnyNodeOutBBox";
+																							 //  		tempNT.listNeuron.clear();
+																							 //  		tempNT.hashNeuron.clear();
+																							 //  		for(int i=0;i<currentNT.listNeuron.size();i++)
+																							 //  		{
+																							 //  			NeuronSWC S_node = currentNT.listNeuron.at(i);//swcBB
+																							 //  			if(!isAnyNodeOutBBox(S_node))
+																							 //  			{
+																							 //  				S_node.n=tempNT.listNeuron.size();
+																							 //  				if(S_node.pn!=-1)
+																							 //  					S_node.pn = tempNT.listNeuron.last().n;
+																							 //  				tempNT.listNeuron.append(S_node);
+																							 //  				tempNT.hashNeuron.insert(S_node.n, tempNT.listNeuron.size()-1);
+																							 //  			}
+																							 //  			else if(i==0)
+																							 //  			{
+																							 //  				vertexcount=swccount=0;
+																							 //  				break;
+																							 //  			}
 
 						// 		}
 						// 		qDebug()<<"charge isAnyNodeOutBBox done  goto virtual finger";
@@ -1708,7 +1715,7 @@ bool CMainApplication::HandleInput()
 					}
 					vertexcount++;
 				}
-				//else if(m_modeGrip_R==m_slabplaneMode)
+				// else if(m_modeGrip_R==m_slabplaneMode)
 				//{
 				//	glm::mat4 model;
 				//	model = glm::scale(glm::mat4(), glm::vec3(img4d->getXDim(), img4d->getYDim(), img4d->getZDim()));
@@ -1738,29 +1745,29 @@ bool CMainApplication::HandleInput()
 				m_pickUpState = false;
 				pick_point_index_A = -1;
 				pick_point_index_B = -1;
-			} //whenever the touchpad is unpressed, reset m_pickUpState and pick_point
+			} // whenever the touchpad is unpressed, reset m_pickUpState and pick_point
 
-			//whenever touchpad is unpressed, set bool flag  m_TouchFirst = true;
+			// whenever touchpad is unpressed, set bool flag  m_TouchFirst = true;
 			if (!(state.ulButtonTouched & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad)))
 			{
 				m_TouchFirst = true;
 			} //
-			//whenever touchpad is pressed, get detX&detY,return to one function according to the mode
+			// whenever touchpad is pressed, get detX&detY,return to one function according to the mode
 			if ((state.ulButtonTouched & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad)) &&
 				!(state.ulButtonPressed & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad))) //&&!(showshootingPad))
 			{
 				float m_fTouchPosY;
 				float m_fTouchPosX;
 				if (m_TouchFirst == true)
-				{ //for every first touch,store the axis(x&y) on touchpad as old(means the initial ) POS
+				{ // for every first touch,store the axis(x&y) on touchpad as old(means the initial ) POS
 					m_TouchFirst = false;
 					m_fTouchOldY = state.rAxis[0].y;
 					m_fTouchOldX = state.rAxis[0].x;
-					//qDebug("1m_TouchFirst= %d,m_fTouchOldX= %f,m_fTouchOldY= %f.\n",m_TouchFirst,m_fTouchOldX,m_fTouchOldY);
+					// qDebug("1m_TouchFirst= %d,m_fTouchOldX= %f,m_fTouchOldY= %f.\n",m_TouchFirst,m_fTouchOldX,m_fTouchOldY);
 				}
 				m_fTouchPosY = state.rAxis[0].y;
 				m_fTouchPosX = state.rAxis[0].x;
-				//qDebug("2m_TouchFirst= %d,m_fTouchPosXR= %f,m_fTouchPosYR= %f.\n",m_TouchFirst,m_fTouchPosXR,m_fTouchPosYR);
+				// qDebug("2m_TouchFirst= %d,m_fTouchPosXR= %f,m_fTouchPosYR= %f.\n",m_TouchFirst,m_fTouchPosXR,m_fTouchPosYR);
 				detX = m_fTouchPosX - m_fTouchOldX;
 				detY = m_fTouchPosY - m_fTouchOldY;
 				if ((detX < 0.3f) && (detX > -0.3f))
@@ -1772,16 +1779,16 @@ bool CMainApplication::HandleInput()
 				bRet = true;
 				return bRet;
 				}//*/
-				//if(m_contrastMode==true)//into translate mode
-				if (m_modeTouchPad_R == tr_contrast)
+				// if(m_contrastMode==true)//into translate mode
+				if (m_modeTouchPad_R == tr_contrast && (!finish_ano))
 				{
 					if (m_fTouchPosY > 0.1)
 					{
 						fContrast += 0.5;
 						if (fContrast > 50)
 							fContrast = 50;
-						//fBrightness+= 0.01f;
-						//if(fBrightness>0.8f)
+						// fBrightness+= 0.01f;
+						// if(fBrightness>0.8f)
 						//	fBrightness = 0.8f;
 
 						// qDebug() << "-----------------contrast change---------------------" << endl;
@@ -1801,8 +1808,8 @@ bool CMainApplication::HandleInput()
 						fContrast -= 0.5;
 						if (fContrast < 1)
 							fContrast = 1;
-						//fBrightness-= 0.01f;
-						//if(fBrightness<0)
+						// fBrightness-= 0.01f;
+						// if(fBrightness<0)
 						//	fBrightness = 0;
 
 						// qDebug() << "-----------------contrast change---------------------" << endl;
@@ -1847,12 +1854,12 @@ bool CMainApplication::HandleInput()
 
 					qDebug() << "u_clipnormal: " << clipnormal.x << clipnormal.y << clipnormal.z << endl;
 					u_clipnormal = glm::vec3(clipnormal.x, clipnormal.y, clipnormal.z);
-					//u_clipnormal = glm::vec3(0, 0, 1);
+					// u_clipnormal = glm::vec3(0, 0, 1);
 
 					qDebug() << "u_clippoint: " << m_v4DevicePose.x << m_v4DevicePose.y << m_v4DevicePose.z << '\n'
 							 << endl;
 					u_clippoint = glm::vec3(m_v4DevicePose.x, m_v4DevicePose.y, m_v4DevicePose.z);
-					//u_clippoint = glm::vec3(0.5, 0.5, 0.5);
+					// u_clippoint = glm::vec3(0.5, 0.5, 0.5);
 				}
 				// else if(0&&m_rotateMode==true)//into ratate mode
 				// {
@@ -1871,13 +1878,13 @@ bool CMainApplication::HandleInput()
 		}
 	}
 
-	//Process SteamVR LEFT controller state
-	//inlcuding
+	// Process SteamVR LEFT controller state
+	// inlcuding
 	{
 		vr::VRControllerState_t state;
 		if (m_pHMD->GetControllerState(m_iControllerIDLeft, &state, sizeof(state)))
 		{
-			if (state.ulButtonPressed & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Trigger))
+			if (state.ulButtonPressed & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Trigger) && (!finish_ano))
 			{
 				const Matrix4 &mat_M = m_rmat4DevicePose[m_iControllerIDLeft];
 				glm::mat4 mat = glm::mat4();
@@ -1893,33 +1900,36 @@ bool CMainApplication::HandleInput()
 				m_ctrlChangeMatrix = mat * glm::inverse(m_oldCtrlMatrix);
 				m_globalMatrix = m_ctrlChangeMatrix * m_oldGlobalMatrix;
 
-				// shuning track rotation
-				string s = "--------m_globalMatrix--------\n";
-				for (int i = 0; i < 4; i++)
+				if (!finish_ano)
 				{
-					for (int j = 0; j < 4; j++)
-						s += to_string(m_globalMatrix[i][j]) + ", ";
-					s += '\n';
+					// shuning track rotation
+					string s = "--------m_globalMatrix--------\n";
+					for (int i = 0; i < 4; i++)
+					{
+						for (int j = 0; j < 4; j++)
+							s += to_string(m_globalMatrix[i][j]) + ", ";
+						s += '\n';
+					}
+					s += "------------------------------------\n";
+					// qDebug() << QString::fromStdString(s);
+					std::ofstream outfile;
+					outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
+					outfile << s;
+					outfile.close();
 				}
-				s += "------------------------------------\n";
-				// qDebug() << QString::fromStdString(s);
-				std::ofstream outfile;
-				outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
-				outfile << s;
-				outfile.close();
 			}
 
 			if ((state.ulButtonTouched & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad)) &&
-				!(state.ulButtonPressed & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad))) //&&!(showshootingPad))
+				!(state.ulButtonPressed & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad)) && (!finish_ano)) //&&!(showshootingPad))
 			{
 				float m_fTouchPosY;
 				float m_fTouchPosX;
 				if (m_TouchFirst == true)
-				{ //for every first touch,store the axis(x&y) on touchpad as old(means the initial ) POS
+				{ // for every first touch,store the axis(x&y) on touchpad as old(means the initial ) POS
 					m_TouchFirst = false;
 					m_fTouchOldY = state.rAxis[0].y;
 					m_fTouchOldX = state.rAxis[0].x;
-					//qDebug("1m_TouchFirst= %d,m_fTouchOldX= %f,m_fTouchOldY= %f.\n",m_TouchFirst,m_fTouchOldX,m_fTouchOldY);
+					// qDebug("1m_TouchFirst= %d,m_fTouchOldX= %f,m_fTouchOldY= %f.\n",m_TouchFirst,m_fTouchOldX,m_fTouchOldY);
 				}
 				m_fTouchPosY = state.rAxis[0].y;
 				m_fTouchPosX = state.rAxis[0].x;
@@ -1973,9 +1983,9 @@ bool CMainApplication::HandleInput()
 		}
 	}
 
-	//qDebug()<<"run here 1.02";
-	// Process SteamVR LEFT controller state
-	//inlcuding translate,rotate and zoom with touchpad; pull a specific point to another POS with trigger
+	// qDebug()<<"run here 1.02";
+	//  Process SteamVR LEFT controller state
+	// inlcuding translate,rotate and zoom with touchpad; pull a specific point to another POS with trigger
 	//{
 	//	vr::VRControllerState_t state;
 
@@ -2139,9 +2149,10 @@ void CMainApplication::RunMainLoop()
 {
 	bool bQuit = false;
 	loadNextQuit = false;
+	finish_ano = false;
 
 	while (!bQuit && !loadNextQuit)
-	//while (!loadNextQuit)
+	// while (!loadNextQuit)
 	{
 		bQuit = HandleInput();
 		if (bQuit)
@@ -2217,26 +2228,26 @@ void CMainApplication::SetupAgentModels(vector<Agent> &curAgents)
 
 	for (int i = 0; i < Agents_spheres.size(); i++)
 		delete Agents_spheres[i];
-	Agents_spheres.clear();		 //clear old spheres
-	Agents_spheresPos.clear();	 //clear old spheres pos
-	Agents_spheresColor.clear(); //clear old spheres color
+	Agents_spheres.clear();		 // clear old spheres
+	Agents_spheresPos.clear();	 // clear old spheres pos
+	Agents_spheresColor.clear(); // clear old spheres color
 
 	if (curAgents.size() < 2)
-		return; //size<2 means there is no other users,no need to generate sphere
+		return; // size<2 means there is no other users,no need to generate sphere
 
-	for (int i = 0; i < curAgents.size(); i++) //generate new spheres as other users
+	for (int i = 0; i < curAgents.size(); i++) // generate new spheres as other users
 	{
 		if (curAgents.at(i).isItSelf == true)
-			continue; //come to itself, skip
+			continue; // come to itself, skip
 		Agents_spheres.push_back(new Sphere((0.05f / m_globalScale), 5, 5));
 
-		int type = curAgents.at(i).colorType; //the color of sphere's surface should be the same as Agent's colortype
+		int type = curAgents.at(i).colorType; // the color of sphere's surface should be the same as Agent's colortype
 		glm::vec3 agentclr = glm::vec3();
 		agentclr[0] = neuron_type_color[(type >= 0 && type < neuron_type_color_num) ? type : 0][0];
 		agentclr[1] = neuron_type_color[(type >= 0 && type < neuron_type_color_num) ? type : 0][1];
 		agentclr[2] = neuron_type_color[(type >= 0 && type < neuron_type_color_num) ? type : 0][2];
 		for (int i = 0; i < 3; i++)
-			agentclr[i] /= 255.0; //range should be in [0,1]
+			agentclr[i] /= 255.0; // range should be in [0,1]
 		Agents_spheresColor.push_back(agentclr);
 
 		glm::mat4 mat_HMD = glm::mat4();
@@ -2245,18 +2256,18 @@ void CMainApplication::SetupAgentModels(vector<Agent> &curAgents)
 			for (int j = 0; j < 4; j++)
 			{
 				mat_HMD[k][j] = curAgents.at(i).position[k * 4 + j];
-				//qDebug()<<"mat_HMD"<<k<<j<<mat_HMD[k][j]<<" ";
+				// qDebug()<<"mat_HMD"<<k<<j<<mat_HMD[k][j]<<" ";
 			}
 		}
 		glm::vec4 posss = mat_HMD * glm::vec4(0, 0, 0, 1);
 		XYZ convertPOS = ConvertGlobaltoLocalCoords(posss.x, posss.y, posss.z);
-		//qDebug()<<" get agent POS "<<convertPOS.x<<" "<<convertPOS.y<<" "<<convertPOS.z;
+		// qDebug()<<" get agent POS "<<convertPOS.x<<" "<<convertPOS.y<<" "<<convertPOS.z;
 		glm::vec3 agentsPos = glm::vec3(convertPOS.x, convertPOS.y, convertPOS.z);
-		//agentsPos  means user's position in world, posss[3] will always be 1.
-		//later may need orientation information
+		// agentsPos  means user's position in world, posss[3] will always be 1.
+		// later may need orientation information
 		if (curAgents[i].name == collaboration_creator_name)
 		{
-			//qDebug()<<collaboration_creator_name<<"converted pos";
+			// qDebug()<<collaboration_creator_name<<"converted pos";
 			CollaborationCreatorPos = convertPOS;
 		}
 		Agents_spheresPos.push_back(agentsPos);
@@ -2284,7 +2295,7 @@ void CMainApplication::SetupMarkerandSurface(double x, double y, double z, int t
 	Markers_spheresPos.push_back(glm::vec3(mk.x, mk.y, mk.z));
 
 	for (int i = 0; i < 3; i++)
-		agentclr[i] /= 255.0; //range should be in [0,1]
+		agentclr[i] /= 255.0; // range should be in [0,1]
 	Markers_spheresColor.push_back(agentclr);
 }
 
@@ -2304,14 +2315,14 @@ void CMainApplication::SetupMarkerandSurface(double x, double y, double z, int c
 	glm::vec3 agentclr = glm::vec3(colorR, colorG, colorB);
 
 	for (int i = 0; i < 3; i++)
-		agentclr[i] /= 255.0; //range should be in [0,1]
+		agentclr[i] /= 255.0; // range should be in [0,1]
 	Markers_spheresColor.push_back(agentclr);
 }
 
 bool CMainApplication::RemoveMarkerandSurface(double x, double y, double z, int type)
 {
 	// bool deletedmarker=false;
-	//remove the marker in list
+	// remove the marker in list
 	for (int i = 0; i < drawnMarkerList.size(); i++)
 	{
 		ImageMarker markertemp = drawnMarkerList.at(i);
@@ -2324,7 +2335,7 @@ bool CMainApplication::RemoveMarkerandSurface(double x, double y, double z, int 
 			XYZ TaegetMarkx = ConvertLocaltoGlobalCoords(markertemp.x, markertemp.y, markertemp.z, CollaborationTargetMarkerRes);
 			dist = glm::sqrt((TaegetMarkx.x - TargetResx.x) * (TaegetMarkx.x - TargetResx.x) + (TaegetMarkx.y - TargetResx.y) * (TaegetMarkx.y - TargetResx.y) + (TaegetMarkx.z - TargetResx.z) * (TaegetMarkx.z - TargetResx.z));
 		}
-		//cal the dist between pos & current node'position, then compare with the threshold
+		// cal the dist between pos & current node'position, then compare with the threshold
 		if (dist < (dist_thres / m_globalScale * 5))
 		{
 			drawnMarkerList.removeAt(i);
@@ -2341,7 +2352,7 @@ bool CMainApplication::RemoveMarkerandSurface(double x, double y, double z, int 
 	}
 
 	return false;
-	//if(deletedmarker == true)//if deleted a marker in drawnMarkerList, then
+	// if(deletedmarker == true)//if deleted a marker in drawnMarkerList, then
 	//{
 	//	//empty all Markers_spheres,Markers_spheresPos,Markers_spheresColor
 	//	for (int i=0;i<Markers_spheres.size();i++) delete Markers_spheres[i];
@@ -2364,7 +2375,7 @@ bool CMainApplication::RemoveMarkerandSurface(double x, double y, double z, int 
 	//		Markers_spheresColor.push_back(agentclr);
 	//	}
 	//}
-	//else
+	// else
 	//{
 	//	//cannot find marker, do nothing
 	//	qDebug()<<"Cannot find any marker nearby.Please retry.";
@@ -2379,7 +2390,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 	{
 		sdl_showsimplemessagebox( sdl_messagebox_error, "trigger pressed! ", "trigger pressed!", null );
 	}//*/
-	//if(event.data.controller.button==vr::k_ebutton_steamvr_trigger)
+	// if(event.data.controller.button==vr::k_ebutton_steamvr_trigger)
 
 	////////////////////////////////LEFT
 	if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonPress) && (event.data.controller.button == vr::k_EButton_Grip))
@@ -2473,8 +2484,8 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 		}
 		case _Freeze: // now temporarily used for brightness supression
 		{
-			//m_bControllerModelON = !m_bControllerModelON;
-			//m_bFrozen is used to control texture
+			// m_bControllerModelON = !m_bControllerModelON;
+			// m_bFrozen is used to control texture
 			m_bFrozen = !m_bFrozen;
 
 			if (fBrightness >= -0.9)
@@ -2484,7 +2495,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 
 			break;
 		}
-		case _Contrast: //contrast func is moved to right controller touch pad , grip button+/-
+		case _Contrast: // contrast func is moved to right controller touch pad , grip button+/-
 		{
 			qDebug() << "Run contrast adjustment";
 			if (temp_x > 0)
@@ -2528,7 +2539,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 
 			break;
 		}
-		case 200: //org _LineWidth: //line width
+		case 200: // org _LineWidth: //line width
 		{
 			qDebug() << "Clear all sketch Neuron";
 			if (temp_x > 0)
@@ -2546,7 +2557,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 
 			break;
 		}
-		case _AutoRotate: //actually for auto-rotation
+		case _AutoRotate: // actually for auto-rotation
 		{
 			// qDebug()<<"stop input";
 			// SDL_StopTextInput();
@@ -2569,7 +2580,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 
 			break;
 		}
-		case 100: //org autorotate
+		case 100: // org autorotate
 		{
 			qDebug() << "Auto rotation";
 			if (m_autoRotateON)
@@ -2709,12 +2720,12 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 				if (CollaborationCreatorPos.x != 0 && CollaborationCreatorPos.y != 0 && CollaborationCreatorPos.z != 0)
 				{
 					qDebug() << "get creator pos";
-					teraflyPOS = XYZ(CollaborationCreatorPos.x, CollaborationCreatorPos.y, CollaborationCreatorPos.z); //liqi
+					teraflyPOS = XYZ(CollaborationCreatorPos.x, CollaborationCreatorPos.y, CollaborationCreatorPos.z); // liqi
 					postVRFunctionCallMode = 9;
 				}
 			}
 		}
-		case _RGBImage: //line width
+		case _RGBImage: // line width
 		{
 			if (temp_x > 0)
 			{
@@ -2870,7 +2881,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 	//    }
 
 	//////////////////////////////////////////RIGHT
-	//if((event.trackedDeviceIndex==m_iControllerIDRight)&&(event.data.controller.button==vr::k_EButton_SteamVR_Touchpad)&&(event.eventType==vr::VREvent_ButtonUnpress))
+	// if((event.trackedDeviceIndex==m_iControllerIDRight)&&(event.data.controller.button==vr::k_EButton_SteamVR_Touchpad)&&(event.eventType==vr::VREvent_ButtonUnpress))
 	//{
 	//	vr::VRControllerState_t state;
 	//	m_pHMD->GetControllerState( m_iControllerIDRight, &state, sizeof(state));
@@ -2942,7 +2953,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 	//}
 
 	if ((event.trackedDeviceIndex == m_iControllerIDRight) && (event.eventType == vr::VREvent_ButtonPress) && (event.data.controller.button == vr::k_EButton_SteamVR_Touchpad) /*&&(!showshootingray)*/)
-	{ //use touchpad press to change the processing mode for touchpad, only contrast now
+	{ // use touchpad press to change the processing mode for touchpad, only contrast now
 		// m_modeControlTouchPad_R++;
 		// m_modeControlTouchPad_R%=4;
 
@@ -2966,7 +2977,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 		// default:
 		// 	break;
 		// }
-		//qDebug("m_modeControlTouchPad_R=%d,m_contrastMode=%d,m_rotateMode=%d,m_zoomMode=%d",m_modeControlTouchPad_R,m_contrastMode,m_rotateMode,m_zoomMode);
+		// qDebug("m_modeControlTouchPad_R=%d,m_contrastMode=%d,m_rotateMode=%d,m_zoomMode=%d",m_modeControlTouchPad_R,m_contrastMode,m_rotateMode,m_zoomMode);
 		vr::VRControllerState_t state;
 		m_pHMD->GetControllerState(m_iControllerIDRight, &state, sizeof(state));
 		float temp_x = state.rAxis[0].x;
@@ -2987,36 +2998,36 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 		// 	break;
 		// }
 	}
-	if ((event.trackedDeviceIndex == m_iControllerIDRight) && (event.data.controller.button == vr::k_EButton_SteamVR_Trigger) && (event.eventType == vr::VREvent_ButtonUnpress)) //detect trigger when menu show
+	if ((event.trackedDeviceIndex == m_iControllerIDRight) && (event.data.controller.button == vr::k_EButton_SteamVR_Trigger) && (event.eventType == vr::VREvent_ButtonUnpress)) // detect trigger when menu show
 	{
 		glm::vec2 ShootingPadUV = calculateshootingPadUV();
 		if (showshootingPad)
 			MenuFunctionChoose(ShootingPadUV);
 		else if (m_secondMenu != _nothing && (isOnline == false))
 		{
-			//todo liqi
+			// todo liqi
 			ColorMenuChoose(ShootingPadUV);
 		}
-		//qDebug()<<showshootingPad;
+		// qDebug()<<showshootingPad;
 	}
 
-	if ((event.trackedDeviceIndex == m_iControllerIDRight) && (event.data.controller.button == vr::k_EButton_SteamVR_Trigger) && (event.eventType == vr::VREvent_ButtonUnpress) && (!showshootingray)) //detect trigger when menu don't show
+	if ((event.trackedDeviceIndex == m_iControllerIDRight) && (event.data.controller.button == vr::k_EButton_SteamVR_Trigger) && (event.eventType == vr::VREvent_ButtonUnpress) && (!showshootingray)) // detect trigger when menu don't show
 	{
 
 		qDebug() << "current mode is " << m_modeGrip_R;
 		switch (m_modeGrip_R)
 		{
 		case m_drawMode:
-			//if(m_modeGrip_R==m_drawMode)
+			// if(m_modeGrip_R==m_drawMode)
 			{
-				if (img4d && m_bVirtualFingerON) //if an image exist, call virtual finger functions for curve drawing
+				if (img4d && m_bVirtualFingerON) // if an image exist, call virtual finger functions for curve drawing
 				{
-					//bool isAnyNodeOutBBox = false;
+					// bool isAnyNodeOutBBox = false;
 					tempNT.listNeuron.clear();
 					tempNT.hashNeuron.clear();
 					for (int i = 0; i < currentNT.listNeuron.size(); i++)
 					{
-						NeuronSWC S_node = currentNT.listNeuron.at(i); //swcBB
+						NeuronSWC S_node = currentNT.listNeuron.at(i); // swcBB
 						if (!isAnyNodeOutBBox(S_node))
 						{
 							S_node.n = tempNT.listNeuron.size();
@@ -3036,12 +3047,12 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 						NeuronTree InputNT;
 						InputNT = tempNT;
 						int iter_number = 1;
-						bool convergent = false; //todo:future may add this convergent func
+						bool convergent = false; // todo:future may add this convergent func
 						for (int i = 0; (convergent == false) && (i < iter_number); i++)
 						{
 							NeuronTree OutputNT;
-							RefineSketchCurve(i % 3, InputNT, OutputNT); //ver. 2b
-							//convergent = CompareDist(InputNT, OutputNT);
+							RefineSketchCurve(i % 3, InputNT, OutputNT); // ver. 2b
+							// convergent = CompareDist(InputNT, OutputNT);
 							InputNT.listNeuron.clear();
 							InputNT.hashNeuron.clear();
 							InputNT = OutputNT;
@@ -3052,7 +3063,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 						tempNT.listNeuron.clear();
 						tempNT.hashNeuron.clear();
 
-						//change radius to mark the curved traced in VR.
+						// change radius to mark the curved traced in VR.
 						for (int i = 0; i < currentNT.listNeuron.size(); i++)
 						{
 							currentNT.listNeuron[i].r = 0.666;
@@ -3074,7 +3085,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 				y2k.tm_mon = 0;
 				y2k.tm_mday = 1;						  // seconds since January 1, 2000 in UTC
 				time(&timer2);							  /* get current time; same as: timer = time(NULL)  */
-				seconds = difftime(timer2, timegm(&y2k)); //Timestamp LMG 27/9/2018
+				seconds = difftime(timer2, timegm(&y2k)); // Timestamp LMG 27/9/2018
 				qDebug("Timestamp at m_drawMode (VR) (seconds since January 1, 2000 in UTC): %.0f", seconds);
 				for (int i = 0; i < currentNT.listNeuron.size(); i++)
 				{
@@ -3098,8 +3109,8 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 						NeuronSWC SS0;
 						NeuronSWC min_node;
 
-						//find the nearest point on the current curve
-						//there could be more than one p on the curve, such that dist(p, begin)<thres. we always want to find the closest p to connect.
+						// find the nearest point on the current curve
+						// there could be more than one p on the curve, such that dist(p, begin)<thres. we always want to find the closest p to connect.
 						for (int j = 0; j < nt0.listNeuron.size(); j++)
 						{
 
@@ -3113,12 +3124,12 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 							}
 						}
 
-						//check if the candidate is qualified
+						// check if the candidate is qualified
 						if (min_dist < connection_rigourous * (dist_thres / m_globalScale * 5)
 							//|| ((min_dist < 2*(dist_thres/m_globalScale*5) ) && (i == sketchedNTList.size()-1)    )
-							) //todo: threshold to be refined
+							) // todo: threshold to be refined
 						{
-							bNodeChanged = true; //no need to try to match end node
+							bNodeChanged = true; // no need to try to match end node
 							beginNode->x = min_node.x;
 							beginNode->y = min_node.y;
 							beginNode->z = min_node.z;
@@ -3128,7 +3139,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 					}
 
 					// try to match end node
-					if (1 || bNodeChanged == false) //2018-08-27: try to connect both ends if possible
+					if (1 || bNodeChanged == false) // 2018-08-27: try to connect both ends if possible
 					{
 						// qDebug()<<"start to find begin nearest node";
 						for (int i = 0; i < sketchedNTList.size(); i++)
@@ -3152,7 +3163,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 
 							if (min_dist < connection_rigourous * (dist_thres / m_globalScale * 5)
 								//	|| ((min_dist < 3*(dist_thres/m_globalScale*5) ) && (i == sketchedNTList.size()-1)    )
-								) //todo: threshold to be refined
+								) // todo: threshold to be refined
 							{
 								endNode->x = min_node.x;
 								endNode->y = min_node.y;
@@ -3164,7 +3175,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 					}
 				}
 
-				if (autoConnected != -1 && m_curMarkerColorType == 0) //current color is white, allow auto color change after auto connection
+				if (autoConnected != -1 && m_curMarkerColorType == 0) // current color is white, allow auto color change after auto connection
 				{
 					for (int i = 0; i < currentNT.listNeuron.size(); i++)
 					{
@@ -3200,7 +3211,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 				break;
 			}
 		case m_deleteMode:
-			//else if(m_modeGrip_R==m_deleteMode)
+			// else if(m_modeGrip_R==m_deleteMode)
 			{
 				const Matrix4 &mat_M = m_rmat4DevicePose[m_iControllerIDRight]; // mat means current controller pos
 				glm::mat4 mat = glm::mat4();
@@ -3212,7 +3223,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 					}
 				}
 				mat = glm::inverse(m_globalMatrix) * mat;
-				glm::vec4 m_v4DevicePose = mat * glm::vec4(0, 0, 0, 1); //change the world space(with the globalMatrix) to the initial world space
+				glm::vec4 m_v4DevicePose = mat * glm::vec4(0, 0, 0, 1); // change the world space(with the globalMatrix) to the initial world space
 				delName = "";
 				delcurvePOS = "";
 				delcurvePOS = QString("%1 %2 %3").arg(m_v4DevicePose.x).arg(m_v4DevicePose.y).arg(m_v4DevicePose.z);
@@ -3242,7 +3253,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 			}
 		case m_ConnectMode:
 		{
-			//do timestamp when create new segments
+			// do timestamp when create new segments
 			time_t timer2; // set timestamp to all segments created,with or without virtual finger on
 			struct tm y2k = {0};
 			double seconds;
@@ -3253,7 +3264,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 			y2k.tm_mon = 0;
 			y2k.tm_mday = 1;						  // seconds since January 1, 2000 in UTC
 			time(&timer2);							  /* get current time; same as: timer = time(NULL)  */
-			seconds = difftime(timer2, timegm(&y2k)); //Timestamp LMG 27/9/2018
+			seconds = difftime(timer2, timegm(&y2k)); // Timestamp LMG 27/9/2018
 			qDebug("Timestamp at m_drawMode (VR) (seconds since January 1, 2000 in UTC): %.0f", seconds);
 			for (int i = 0; i < currentNT.listNeuron.size(); i++)
 			{
@@ -3261,10 +3272,10 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 					currentNT.listNeuron[i].timestamp = seconds;
 			}
 
-			//do simple connect
+			// do simple connect
 			float tolerance = 20;
-			std::vector<int> segInfo;		//prevent connect same segment
-			std::vector<int> nodeIndexInfo; //check connected node index ,prevent connect node both in middle of segment .only allow connect Branch to begin/end or begin/end to end/begin
+			std::vector<int> segInfo;		// prevent connect same segment
+			std::vector<int> nodeIndexInfo; // check connected node index ,prevent connect node both in middle of segment .only allow connect Branch to begin/end or begin/end to end/begin
 			NeuronTree connectTree;
 			for (V3DLONG i = 0; i < sketchedNTList.size(); i++)
 			{
@@ -3318,7 +3329,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 					if ((ix >= minX && ix <= maxX) && (iy >= minY && iy <= maxY) && (iz >= minZ && iz <= maxZ))
 					{
 						nodeOnStroke.push_back(p_listneuron->at(j)); //把当前考虑的已经画好的线 并且在stroke的矩形范围内的节点Push进入nodeonstroke
-																	 //cout << p.x() << " " << p.y() << endl;
+																	 // cout << p.x() << " " << p.y() << endl;
 					}
 				}
 
@@ -3347,14 +3358,14 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 						}
 					}
 				}
-				//push matchest node on the same segment (distance is smallest
+				// push matchest node on the same segment (distance is smallest
 				if (segInfo.size() == 0 && matchdistance <= tolerance)
 				{
-					segInfo.push_back(i); //push current segment ID
+					segInfo.push_back(i); // push current segment ID
 					nodeIndexInfo.push_back(matchestNode.n);
 					NeuronSWC SL0 = matchestNode;
-					//SL0.pn = -1;
-					//SL0.n = 1;
+					// SL0.pn = -1;
+					// SL0.n = 1;
 					connectTree.listNeuron.append(SL0);
 					connectTree.hashNeuron.insert(SL0.n, connectTree.listNeuron.size() - 1);
 					cout << "segInfo.size == 1 now" << endl;
@@ -3371,20 +3382,20 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 						segInfo.push_back(i);
 						nodeIndexInfo.push_back(matchestNode.n);
 						NeuronSWC SL0 = matchestNode;
-						//SL0.pn = 1;
-						//SL0.n = 2;
+						// SL0.pn = 1;
+						// SL0.n = 2;
 						connectTree.listNeuron.append(SL0);
 						connectTree.hashNeuron.insert(SL0.n, connectTree.listNeuron.size() - 1);
 						cout << "segInfo.size == 2 now" << endl;
 					}
-				} //for each sketchlist
+				} // for each sketchlist
 
 				cout << "come out of for" << endl;
 				if (segInfo.size() == 2)
 					break;
 			}
 			NeuronTree curNT;
-			//resort the number of connected segment
+			// resort the number of connected segment
 			if (segInfo.size() == 2)
 			{
 
@@ -3397,10 +3408,10 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 				NeuronTree *p_connectNT2 = &sketchedNTList[segInfo[1]];
 				cout << "p_connectNT1.list size is " << p_connectNT1->listNeuron.size();
 				cout << "p_connectNT2.list size is " << p_connectNT2->listNeuron.size();
-				if ((index1 == 1 && index2 == p_connectNT2->listNeuron.size())									 //head to tail
-					|| (index1 == p_connectNT1->listNeuron.size() && index2 == 1)								 //tail to head
-					|| (index1 == 1 && index2 == 1)																 //head to head
-					|| (index1 == p_connectNT1->listNeuron.size() && index2 == p_connectNT2->listNeuron.size())) //tail to tail
+				if ((index1 == 1 && index2 == p_connectNT2->listNeuron.size())									 // head to tail
+					|| (index1 == p_connectNT1->listNeuron.size() && index2 == 1)								 // tail to head
+					|| (index1 == 1 && index2 == 1)																 // head to head
+					|| (index1 == p_connectNT1->listNeuron.size() && index2 == p_connectNT2->listNeuron.size())) // tail to tail
 				{
 					cout << "connect head to tail !!! come into here" << endl;
 					for (int j = 0; j < 2; j++)
@@ -3411,7 +3422,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 						if ((index == 1 && j == 0) || (index == connectedNT->listNeuron.size() && j == 1))
 						{
 							cout << "pos 3 " << j << endl;
-							for (int i = connectedNT->listNeuron.size() - 1; i >= 0; i--) //add first segment to connectNT
+							for (int i = connectedNT->listNeuron.size() - 1; i >= 0; i--) // add first segment to connectNT
 							{
 								cout << "pos 4 " << i << endl;
 								NeuronSWC SL0 = connectedNT->listNeuron.at(i);
@@ -3429,7 +3440,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 						else if ((index == connectedNT->listNeuron.size() && j == 0) || (index == 1 && j == 1))
 						{
 							cout << "pos 2 " << j << endl;
-							for (int i = 0; i < connectedNT->listNeuron.size(); i++) //add first segment to connectNT
+							for (int i = 0; i < connectedNT->listNeuron.size(); i++) // add first segment to connectNT
 							{
 
 								NeuronSWC SL0 = connectedNT->listNeuron.at(i);
@@ -3460,9 +3471,9 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 							bIsRedoEnable = false;
 							vRedoList.clear();
 
-							//sketchedNTList.removeAt(segInfo[0]);
-							//sketchedNTList.removeAt(segInfo[1]);
-							//SetupSingleMorphologyLine(segInfo[1],2);
+							// sketchedNTList.removeAt(segInfo[0]);
+							// sketchedNTList.removeAt(segInfo[1]);
+							// SetupSingleMorphologyLine(segInfo[1],2);
 							DeleteSegment(sketchedNTList.at(segInfo[0]).name);
 							DeleteSegment(sketchedNTList.at(segInfo[1]).name);
 
@@ -3490,7 +3501,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 					|	NT1
 					NT2
 					*/
-					//begin/end connect to branch
+					// begin/end connect to branch
 
 					if (index2 == 1 || index2 == p_connectNT2->listNeuron.size())
 					{
@@ -3531,7 +3542,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 						result_NT2.listNeuron.append(SL0);
 						result_NT2.hashNeuron.insert(SL0.n, result_NT2.listNeuron.size() - 1);
 					}
-					//add third segment
+					// add third segment
 					NeuronSWC SL0 = p_connectNT2->listNeuron.at(index2 - 1);
 					SL0.n = result_NT3.listNeuron.size() + 1;
 					SL0.pn = -1;
@@ -3578,10 +3589,10 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 							bIsRedoEnable = false;
 							vRedoList.clear();
 
-							//sketchedNTList.removeAt(segInfo[0]);
-							//sketchedNTList.removeAt(segInfo[1]);
-							//SetupSingleMorphologyLine(segInfo[0],2);
-							//SetupSingleMorphologyLine(segInfo[1],2);
+							// sketchedNTList.removeAt(segInfo[0]);
+							// sketchedNTList.removeAt(segInfo[1]);
+							// SetupSingleMorphologyLine(segInfo[0],2);
+							// SetupSingleMorphologyLine(segInfo[1],2);
 							qDebug() << "sketchedNTList.at(segInfo[0]).name " << sketchedNTList.at(segInfo[0]).name << endl;
 							qDebug() << "sketchedNTList.at(segInfo[1]).name " << sketchedNTList.at(segInfo[1]).name << endl;
 							QString tempdelname = sketchedNTList.at(segInfo[0]).name;
@@ -3622,7 +3633,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 				}
 				else
 				{
-					//other situation clear currentNT listNeuron
+					// other situation clear currentNT listNeuron
 					currentNT.listNeuron.clear();
 					currentNT.hashNeuron.clear();
 					swccount = 0;
@@ -3659,11 +3670,11 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 		case m_dragMode:
 		{
 			_startdragnode = false;
-			//ClearUndoRedoVectors();
+			// ClearUndoRedoVectors();
 		}
 
 		break;
-		case m_markMode: //when there is a maker ,delete it ,otherwise add a marker
+		case m_markMode: // when there is a maker ,delete it ,otherwise add a marker
 		{
 			const Matrix4 &mat_M = m_rmat4DevicePose[m_iControllerIDRight]; // mat means current controller pos
 			glm::mat4 mat = glm::mat4();
@@ -3675,7 +3686,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 				}
 			}
 			mat = glm::inverse(m_globalMatrix) * mat;
-			glm::vec4 m_v4DevicePose = mat * glm::vec4(0, 0, 0, 1); //change the world space(with the globalMatrix) to the initial world space
+			glm::vec4 m_v4DevicePose = mat * glm::vec4(0, 0, 0, 1); // change the world space(with the globalMatrix) to the initial world space
 			/*delmarkerPOS="";
 				delmarkerPOS = QString("%1 %2 %3").arg(m_v4DevicePose.x).arg(m_v4DevicePose.y).arg(m_v4DevicePose.z);*/
 			markerPOS = "";
@@ -3711,15 +3722,15 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 					}
 				}
 				mat = glm::inverse(m_globalMatrix) * mat;
-				glm::vec4 m_v4DevicePose = mat * glm::vec4(0, 0, 0, 1); //change the world space(with the globalMatrix) to the initial world space
+				glm::vec4 m_v4DevicePose = mat * glm::vec4(0, 0, 0, 1); // change the world space(with the globalMatrix) to the initial world space
 				delName = "";
 				delName = FindNearestSegment(glm::vec3(m_v4DevicePose.x, m_v4DevicePose.y, m_v4DevicePose.z));
 				NeuronTree nearestNT;
 				NeuronSWC nearestNode;
 				if (delName == "")
-					break; //segment not found
+					break; // segment not found
 
-				for (int i = 0; i < sketchedNTList.size(); i++) //get split NT,nearest node
+				for (int i = 0; i < sketchedNTList.size(); i++) // get split NT,nearest node
 				{
 					QString NTname = "";
 					NTname = sketchedNTList.at(i).name;
@@ -3770,13 +3781,13 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 						qDebug() << "Cannot Find the Segment ";
 				}
 
-				//set newNTsize after insert node
-				//crete NewNT's topology
+				// set newNTsize after insert node
+				// crete NewNT's topology
 				for (int k = 0; k < NewNTsize; k++)
 				{
 
 					NeuronSWC tempSWC;
-					if (k == 0) //insert first node
+					if (k == 0) // insert first node
 					{
 						tempSWC.n = 1;
 						tempSWC.pn = -1;
@@ -3801,12 +3812,12 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 					NewNT.listNeuron.append(tempSWC);
 					NewNT.hashNeuron.insert(tempSWC.n, NewNT.listNeuron.size() - 1);
 				}
-				//add data to New NT
+				// add data to New NT
 				for (int k = 0, j = 0; k < NewNT.listNeuron.size(); j++, k++)
 				{
 					switch (switchinsertnode)
 					{
-					case 1: //insert node behind first
+					case 1: // insert node behind first
 					{
 						int temp = j;
 						if (j + 1 < nearestNT.listNeuron.size())
@@ -3830,7 +3841,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 						}
 					}
 					break;
-					case 2: //insert node before last
+					case 2: // insert node before last
 					{
 						int temp = j;
 						if (j - 1 > 0)
@@ -3855,7 +3866,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 						}
 					}
 					break;
-					case 3: //insert node in middle
+					case 3: // insert node in middle
 					{
 						int balancenode1 = j - 1;
 						int balancenode2 = j - 1;
@@ -3900,7 +3911,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 					}
 				}
 				qDebug() << "insert node finished!";
-				//add the  new NT to NTList
+				// add the  new NT to NTList
 				NewNT.name = "sketch_" + QString("%1").arg(sketchNum++);
 				qDebug() << NewNT.name;
 				sketchedNTList.push_back(NewNT);
@@ -3925,15 +3936,15 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 					}
 				}
 				mat = glm::inverse(m_globalMatrix) * mat;
-				glm::vec4 m_v4DevicePose = mat * glm::vec4(0, 0, 0, 1); //change the world space(with the globalMatrix) to the initial world space
+				glm::vec4 m_v4DevicePose = mat * glm::vec4(0, 0, 0, 1); // change the world space(with the globalMatrix) to the initial world space
 				delName = "";
 				delName = FindNearestSegment(glm::vec3(m_v4DevicePose.x, m_v4DevicePose.y, m_v4DevicePose.z));
 				NeuronTree nearestNT;
 				NeuronSWC nearestNode;
 				if (delName == "")
-					break; //segment not found
+					break; // segment not found
 
-				for (int i = 0; i < sketchedNTList.size(); i++) //get split NT,nearest node
+				for (int i = 0; i < sketchedNTList.size(); i++) // get split NT,nearest node
 				{
 					QString NTname = "";
 					NTname = sketchedNTList.at(i).name;
@@ -3944,13 +3955,13 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 						break;
 					}
 				}
-				//special situation for splitnode in head or end
+				// special situation for splitnode in head or end
 				if ((nearestNode == *nearestNT.listNeuron.begin()) || (nearestNode == nearestNT.listNeuron.back()) || nearestNT.listNeuron.size() <= 3 || nearestNode == *(nearestNT.listNeuron.begin() + 1) || nearestNode == *(nearestNT.listNeuron.end() - 2))
 				{
 					qDebug() << "split node in hear/end or neuron is too short";
 					break;
 				}
-				//delete NT first
+				// delete NT first
 				if (isOnline == false)
 				{
 					NTL temp_NTL = sketchedNTList;
@@ -3972,10 +3983,10 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 					else
 						qDebug() << "Cannot Find the Segment ";
 				}
-				//add two NT
+				// add two NT
 				NeuronTree splitNT1, splitNT2;
 				glm::vec3 directionsplit;
-				//split first half get splitdirection
+				// split first half get splitdirection
 				int splitNT2beginindex = 0;
 				int splitNT2size = 1;
 				for (int k = 0; k < nearestNT.listNeuron.size(); k++)
@@ -4002,7 +4013,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 					}
 				}
 
-				//create NT2's Topology
+				// create NT2's Topology
 				for (int j = splitNT2beginindex, k = 1; j < nearestNT.listNeuron.size(); j++, k++)
 				{
 					NeuronSWC tempSWC;
@@ -4038,9 +4049,9 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 				y2k.tm_mon = 0;
 				y2k.tm_mday = 1;						  // seconds since January 1, 2000 in UTC
 				time(&timer2);							  /* get current time; same as: timer = time(NULL)  */
-				seconds = difftime(timer2, timegm(&y2k)); //Timestamp LMG 27/9/2018
+				seconds = difftime(timer2, timegm(&y2k)); // Timestamp LMG 27/9/2018
 				qDebug("Timestamp at m_drawMode (VR) (seconds since January 1, 2000 in UTC): %.0f", seconds);
-				//copy data from second half into NT2
+				// copy data from second half into NT2
 				for (int j = splitNT2beginindex, k = 0; j < nearestNT.listNeuron.size(); j++, k++)
 				{
 					if (j == splitNT2beginindex)
@@ -4063,7 +4074,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 					splitNT2.listNeuron[k].type = nearestNT.listNeuron[j].type;
 				}
 
-				//add the two new NTs to NTList
+				// add the two new NTs to NTList
 				splitNT1.name = "sketch_" + QString("%1").arg(sketchNum++);
 				qDebug() << splitNT1.name;
 				sketchedNTList.push_back(splitNT1);
@@ -4085,21 +4096,21 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 			break;
 		}
 
-		//every time the trigger(right) is unpressd ,set the vertexcount to zero preparing for the next line
+		// every time the trigger(right) is unpressd ,set the vertexcount to zero preparing for the next line
 		vertexcount = 0;
 		READY_TO_SEND = true;
 		qDebug() << "READY_TO_SEND=true;";
 	}
 
 	// shuning right controller side btn
-	if ((event.trackedDeviceIndex == m_iControllerIDRight) && (event.data.controller.button == vr::k_EButton_Grip) && (event.eventType == vr::VREvent_ButtonUnpress))
+	if ((event.trackedDeviceIndex == m_iControllerIDRight) && (event.data.controller.button == vr::k_EButton_Grip) && (event.eventType == vr::VREvent_ButtonUnpress) && (!finish_ano))
 	{
 		qDebug() << "This function will become undo.";
 		// shuning: this is replaced by redo
 		RedoLastSketchedNT();
 		SetupAllMorphologyLine();
 
-		//use grip button(right) to change mode draw/delelte/drag/drawmarker/deletemarker
+		// use grip button(right) to change mode draw/delelte/drag/drawmarker/deletemarker
 
 		// m_modeControlGrip_R++;
 		// m_modeControlGrip_R%=6;
@@ -4127,7 +4138,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 		// 	break;
 		// }
 		// qDebug("m_modeGrip_R=%d",m_modeGrip_R);
-		//grip right button is used to control linewidth for now
+		// grip right button is used to control linewidth for now
 
 		//--------------------
 		// iLineWid += 2;
@@ -4136,26 +4147,26 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 		// 	iLineWid = 1;
 		// }
 	}
-	if ((event.trackedDeviceIndex == m_iControllerIDRight) && (event.data.controller.button == vr::k_EButton_ApplicationMenu) && (event.eventType == vr::VREvent_ButtonPress))
+	if ((event.trackedDeviceIndex == m_iControllerIDRight) && (event.data.controller.button == vr::k_EButton_ApplicationMenu) && (event.eventType == vr::VREvent_ButtonPress) && (!finish_ano))
 	{
 		// shuning: this function is replaced by undo
 		UndoLastSketchedNT();
 		SetupAllMorphologyLine();
 
-		//this func can 1.call top menu
-		//2.return to top menu from second menu and hide second menu meantime
-		//3.hide top menu
-		//4.when no menu show ,hide ray
+		// this func can 1.call top menu
+		// 2.return to top menu from second menu and hide second menu meantime
+		// 3.hide top menu
+		// 4.when no menu show ,hide ray
 		//---------------------
-		// showshootingPad = !showshootingPad; //show virtualPad
-		// if (showshootingPad)
-		// 	m_secondMenu = _nothing;
-		// if (!showshootingPad && m_secondMenu == _nothing) //when top menu and second menu dont show ,then hide ray
-		// 	showshootingray = false;
+		//  showshootingPad = !showshootingPad; //show virtualPad
+		//  if (showshootingPad)
+		//  	m_secondMenu = _nothing;
+		//  if (!showshootingPad && m_secondMenu == _nothing) //when top menu and second menu dont show ,then hide ray
+		//  	showshootingray = false;
 	}
 
-	//save swc
-	//if(sketchedNTList.size()>0)
+	// save swc
+	// if(sketchedNTList.size()>0)
 	//{   //save swc to file
 	//	QDateTime mytime = QDateTime::currentDateTime();
 	//	QString imageName = "FILE";
@@ -4168,10 +4179,10 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 	//	MergeNeuronTrees(mergedSketchNTL,&sketchedNTList);
 	//	writeSWC_file(filename, mergedSketchNTL);
 	//	qDebug("Successfully writeSWC_file");
-	//}
+	// }
 
-	//save markers
-	//if(!drawnMarkerList.empty())
+	// save markers
+	// if(!drawnMarkerList.empty())
 	//{
 	//	//save marker to file
 	//	QDateTime mytime = QDateTime::currentDateTime();
@@ -4190,34 +4201,34 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 	// _call_assemble_plugin = true;
 	// postVRFunctionCallMode = 1;
 
-	//2018-06-22 now this button is used for showing next two markers in sequence.
-	//2018-07-27 now this button is used for virtual button
-	// if (curveDrawingTestStatus == -1) //test not started;
-	// {
-	// 	if (markerVisibility.size() >= 2)
-	// 	{
-	// 		for(int i=2; i<markerVisibility.size();i++) markerVisibility[i] = 0;
-	// 		curveDrawingTestStatus = 1;//test started. //id of the second current visible marker.
-	// 		elapsedTimes.clear();
-	// 		timer1.start();
-	// 	}
-	// }
-	// else
-	// {
-	// 	qint64 etime = timer1.elapsed();
-	// 	elapsedTimes.push_back(etime);
-	// 	timer1.restart();
-	// 	markerVisibility[curveDrawingTestStatus] = markerVisibility[curveDrawingTestStatus-1] = 0;
-	// 	if (markerVisibility.size() > curveDrawingTestStatus+2)
-	// 	{
-	// 		curveDrawingTestStatus += 2;
-	// 		markerVisibility[curveDrawingTestStatus] = markerVisibility[curveDrawingTestStatus-1] = 1;
-	// 	}
-	// 	else // no more enough markers, test termination
-	// 	{
-	// 		for(int i=0; i<markerVisibility.size();i++) markerVisibility[i] = 1;
-	// 		curveDrawingTestStatus = -1;//test not started;
-	// 		for(int i=0; i<elapsedTimes.size();i++) qDebug()<<elapsedTimes[i]<< " milliseconds";
+	// 2018-06-22 now this button is used for showing next two markers in sequence.
+	// 2018-07-27 now this button is used for virtual button
+	//  if (curveDrawingTestStatus == -1) //test not started;
+	//  {
+	//  	if (markerVisibility.size() >= 2)
+	//  	{
+	//  		for(int i=2; i<markerVisibility.size();i++) markerVisibility[i] = 0;
+	//  		curveDrawingTestStatus = 1;//test started. //id of the second current visible marker.
+	//  		elapsedTimes.clear();
+	//  		timer1.start();
+	//  	}
+	//  }
+	//  else
+	//  {
+	//  	qint64 etime = timer1.elapsed();
+	//  	elapsedTimes.push_back(etime);
+	//  	timer1.restart();
+	//  	markerVisibility[curveDrawingTestStatus] = markerVisibility[curveDrawingTestStatus-1] = 0;
+	//  	if (markerVisibility.size() > curveDrawingTestStatus+2)
+	//  	{
+	//  		curveDrawingTestStatus += 2;
+	//  		markerVisibility[curveDrawingTestStatus] = markerVisibility[curveDrawingTestStatus-1] = 1;
+	//  	}
+	//  	else // no more enough markers, test termination
+	//  	{
+	//  		for(int i=0; i<markerVisibility.size();i++) markerVisibility[i] = 1;
+	//  		curveDrawingTestStatus = -1;//test not started;
+	//  		for(int i=0; i<elapsedTimes.size();i++) qDebug()<<elapsedTimes[i]<< " milliseconds";
 
 	//         //output time
 	//         if(1)
@@ -4263,7 +4274,7 @@ bool CMainApplication::isAnyNodeOutBBox(NeuronSWC S_temp)
 		return false;
 }
 
-//merge NTlist to Neuron Tree
+// merge NTlist to Neuron Tree
 void CMainApplication::MergeNeuronTrees(NeuronTree &ntree, const QList<NeuronTree> *NTlist)
 {
 
@@ -4301,13 +4312,13 @@ void CMainApplication::RenderFrame()
 		RenderControllerAxes();
 		SetupControllerTexture();
 		SetupControllerRay();
-		SetupMorphologyLine(1); //for currently drawn stroke(currentNT)
-		//FlashStuff(m_flashtype,FlashCoords);
-		//for all (synchronized) sketched strokes
-		//SetupMorphologySurface(currentNT,sketch_spheres,sketch_cylinders,sketch_spheresPos);
-		//SetupMorphologyLine(currentNT,m_unSketchMorphologyLineModeVAO,m_glSketchMorphologyLineModeVertBuffer,m_glSketchMorphologyLineModeIndexBuffer,m_uiSketchMorphologyLineModeVertcount,1);
+		SetupMorphologyLine(1); // for currently drawn stroke(currentNT)
+		// FlashStuff(m_flashtype,FlashCoords);
+		// for all (synchronized) sketched strokes
+		// SetupMorphologySurface(currentNT,sketch_spheres,sketch_cylinders,sketch_spheresPos);
+		// SetupMorphologyLine(currentNT,m_unSketchMorphologyLineModeVAO,m_glSketchMorphologyLineModeVertBuffer,m_glSketchMorphologyLineModeIndexBuffer,m_uiSketchMorphologyLineModeVertcount,1);
 
-		if (m_autoRotateON) //auto rotation is on
+		if (m_autoRotateON) // auto rotation is on
 		{
 			m_globalMatrix = glm::translate(m_globalMatrix, autoRotationCenter);
 			m_globalMatrix = glm::rotate(m_globalMatrix, 0.01f, glm::vec3(1, 0, 0));
@@ -4354,8 +4365,8 @@ void CMainApplication::RenderFrame()
 	// Spew out the controller and pose count whenever they change.
 	if (m_iTrackedControllerCount != m_iTrackedControllerCount_Last || m_iValidPoseCount != m_iValidPoseCount_Last)
 	{
-		m_iValidPoseCount_Last = m_iValidPoseCount;					//question: what are these? why keep count and count_last? just to observe change?
-		m_iTrackedControllerCount_Last = m_iTrackedControllerCount; //note: maybe used for drawing controllers
+		m_iValidPoseCount_Last = m_iValidPoseCount;					// question: what are these? why keep count and count_last? just to observe change?
+		m_iTrackedControllerCount_Last = m_iTrackedControllerCount; // note: maybe used for drawing controllers
 
 		dprintf("PoseCount:%d(%s) Controllers:%d\n", m_iValidPoseCount, m_strPoseClasses.c_str(), m_iTrackedControllerCount);
 	}
@@ -4442,7 +4453,7 @@ GLuint CMainApplication::CompileGLShader(const char *pchShaderName, const char *
 //-----------------------------------------------------------------------------
 // Purpose: Creates all the shaders used by HelloVR SDL
 //-----------------------------------------------------------------------------
-bool CMainApplication::CreateAllShaders() //todo: change shader code
+bool CMainApplication::CreateAllShaders() // todo: change shader code
 {
 	QString qappDirPath = QCoreApplication::applicationDirPath();
 	morphologyShader = new Shader(string(qappDirPath.toStdString() + "/materials/basic.vert").c_str(), string(qappDirPath.toStdString() + "/materials/basic.frag").c_str());
@@ -4482,7 +4493,7 @@ bool CMainApplication::CreateAllShaders() //todo: change shader code
 		return false;
 	}
 	m_unControllerTransformProgramID = CompileGLShader(
-		"Controller", //note: for axes
+		"Controller", // note: for axes
 
 		// vertex shader
 		"#version 410\n"
@@ -4512,7 +4523,7 @@ bool CMainApplication::CreateAllShaders() //todo: change shader code
 	}
 
 	m_unRenderModelProgramID = CompileGLShader(
-		"render model", //note: for 3D controller model
+		"render model", // note: for 3D controller model
 
 		// vertex shader
 		"#version 410\n"
@@ -4527,7 +4538,7 @@ bool CMainApplication::CreateAllShaders() //todo: change shader code
 		"	gl_Position = matrix * vec4(position.xyz, 1);\n"
 		"}\n",
 
-		//fragment shader
+		// fragment shader
 		"#version 410 core\n"
 		"uniform sampler2D diffuse;\n"
 		"in vec2 v2TexCoord;\n"
@@ -4569,7 +4580,7 @@ bool CMainApplication::CreateAllShaders() //todo: change shader code
 		"		outputColor = texture(mytexture, v2UV);\n"
 		"}\n");
 
-	//for  shootingrayshader
+	// for  shootingrayshader
 	m_unControllerRayProgramID = CompileGLShader(
 		"ControllerRay",
 		// vertex shader
@@ -4603,16 +4614,16 @@ bool CMainApplication::CreateAllShaders() //todo: change shader code
 }
 bool CMainApplication::SetupTexturemaps()
 {
-	//std::string sExecutableDirectory = Path_StripFilename( Path_GetExecutablePath() );
-	//std::string strFullPath = Path_MakeAbsolute( "../cube_texture.png", sExecutableDirectory );
-	//qDebug()<<"current applicationDirPath: "<<QCoreApplication::applicationDirPath();
-	//qDebug()<<"current currentPath: "<<QDir::currentPath();
+	// std::string sExecutableDirectory = Path_StripFilename( Path_GetExecutablePath() );
+	// std::string strFullPath = Path_MakeAbsolute( "../cube_texture.png", sExecutableDirectory );
+	// qDebug()<<"current applicationDirPath: "<<QCoreApplication::applicationDirPath();
+	// qDebug()<<"current currentPath: "<<QDir::currentPath();
 	QString qstrFullPath = QCoreApplication::applicationDirPath() + "/materials/controller_texture.png";
 
-	//std::string strFullPath ="../materials/controller_texture.png";//C:/Users/penglab/Documents/GitHub/v3d_external/v3d_main/v3d/release/
+	// std::string strFullPath ="../materials/controller_texture.png";//C:/Users/penglab/Documents/GitHub/v3d_external/v3d_main/v3d/release/
 	std::vector<unsigned char> imageRGBA;
 	unsigned nImageWidth, nImageHeight;
-	unsigned nError = lodepng::decode(imageRGBA, nImageWidth, nImageHeight, qstrFullPath.toStdString()); //strFullPath.c_str() );
+	unsigned nError = lodepng::decode(imageRGBA, nImageWidth, nImageHeight, qstrFullPath.toStdString()); // strFullPath.c_str() );
 
 	if (nError != 0)
 		return false;
@@ -4675,9 +4686,9 @@ void CMainApplication::SetupControllerTexture()
 	Vector4 ctrPOS = mat_R * Vector4(0, 0, 0, 1);
 	ctrSpherePos = glm::vec3(ctrPOS.x, ctrPOS.y, ctrPOS.z);
 
-	//left controller
+	// left controller
 	{
-		Vector4 point_A(-0.023f, -0.009f, 0.065f, 1); //grip no.1 dispaly "Mode Switch"
+		Vector4 point_A(-0.023f, -0.009f, 0.065f, 1); // grip no.1 dispaly "Mode Switch"
 		Vector4 point_B(-0.023f, -0.009f, 0.105f, 1);
 		Vector4 point_C(-0.02f, -0.025f, 0.065f, 1);
 		Vector4 point_D(-0.02f, -0.025f, 0.105f, 1);
@@ -4685,15 +4696,15 @@ void CMainApplication::SetupControllerTexture()
 		point_B = mat_L * point_B;
 		point_C = mat_L * point_C;
 		point_D = mat_L * point_D;
-		//Update PadFunc
-		// AddVertex(point_A.x,point_A.y,point_A.z,0,0.25f,vcVerts);
-		// AddVertex(point_B.x,point_B.y,point_B.z,0.34f,0.25f,vcVerts);
-		// AddVertex(point_C.x,point_C.y,point_C.z,0,0.375f,vcVerts);
-		// AddVertex(point_C.x,point_C.y,point_C.z,0,0.375f,vcVerts);
-		// AddVertex(point_D.x,point_D.y,point_D.z,0.34f,0.375f,vcVerts);
-		// AddVertex(point_B.x,point_B.y,point_B.z,0.34f,0.25f,vcVerts);
+		// Update PadFunc
+		//  AddVertex(point_A.x,point_A.y,point_A.z,0,0.25f,vcVerts);
+		//  AddVertex(point_B.x,point_B.y,point_B.z,0.34f,0.25f,vcVerts);
+		//  AddVertex(point_C.x,point_C.y,point_C.z,0,0.375f,vcVerts);
+		//  AddVertex(point_C.x,point_C.y,point_C.z,0,0.375f,vcVerts);
+		//  AddVertex(point_D.x,point_D.y,point_D.z,0.34f,0.375f,vcVerts);
+		//  AddVertex(point_B.x,point_B.y,point_B.z,0.34f,0.25f,vcVerts);
 
-		Vector4 point_A2(0.023f, -0.009f, 0.065f, 1); //grip no.2 dispaly "Mode Switch"
+		Vector4 point_A2(0.023f, -0.009f, 0.065f, 1); // grip no.2 dispaly "Mode Switch"
 		Vector4 point_B2(0.023f, -0.009f, 0.105f, 1);
 		Vector4 point_C2(0.02f, -0.025f, 0.065f, 1);
 		Vector4 point_D2(0.02f, -0.025f, 0.105f, 1);
@@ -4766,11 +4777,11 @@ void CMainApplication::SetupControllerTexture()
 			break;
 		}
 		case _ColorChange: // display "ok"
-		case _ResetImage:  //display"ok
+		case _ResetImage:  // display"ok
 		case _MovetoCreator:
 		case _TeraShift:
 		{ //_TeraShift
-			//qDebug() << "You clicked TeraVR Shift (1)." << endl;
+			// qDebug() << "You clicked TeraVR Shift (1)." << endl;
 			AddVertex(point_E.x, point_E.y, point_E.z, 0.17f, 0.5f, vcVerts);
 			AddVertex(point_F.x, point_F.y, point_F.z, 0.25f, 0.5f, vcVerts);
 			AddVertex(point_G.x, point_G.y, point_G.z, 0.17f, 0.625f, vcVerts);
@@ -4821,7 +4832,7 @@ void CMainApplication::SetupControllerTexture()
 		{
 			if (m_autoRotateON)
 			{
-				//qDebug()<<"You clicked autorotate 2"<<endl;
+				// qDebug()<<"You clicked autorotate 2"<<endl;
 				AddVertex(point_E.x, point_E.y, point_E.z, 0, 0.375f, vcVerts);
 				AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
 				AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
@@ -4831,7 +4842,7 @@ void CMainApplication::SetupControllerTexture()
 			}
 			else
 			{
-				//qDebug()<<"You clicked autorotate 3"<<endl;
+				// qDebug()<<"You clicked autorotate 3"<<endl;
 				AddVertex(point_E.x, point_E.y, point_E.z, 0.085f, 0.375f, vcVerts);
 				AddVertex(point_F.x, point_F.y, point_F.z, 0.165f, 0.375f, vcVerts);
 				AddVertex(point_G.x, point_G.y, point_G.z, 0.085f, 0.5f, vcVerts);
@@ -4856,7 +4867,17 @@ void CMainApplication::SetupControllerTexture()
 			break;
 		}
 
-		Vector4 point_I(-0.01f, 0.01f, 0.01f, 1); //for the menu button dispaly "QUIT"
+		if (!finish_ano)
+		{ // shuning: this is replaced by zoom
+			AddVertex(point_E.x, point_E.y, point_E.z, 0, 0.375f, vcVerts);
+			AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
+			AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
+			AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
+			AddVertex(point_H.x, point_H.y, point_H.z, 0.085f, 0.5f, vcVerts);
+			AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
+		}
+
+		Vector4 point_I(-0.01f, 0.01f, 0.01f, 1); // for the menu button dispaly "NEXT"
 		Vector4 point_J(0.01f, 0.01f, 0.01f, 1);
 		Vector4 point_K(-0.01f, 0.01f, 0.03f, 1);
 		Vector4 point_L(0.01f, 0.01f, 0.03f, 1); //*/
@@ -4871,7 +4892,7 @@ void CMainApplication::SetupControllerTexture()
 		AddVertex(point_L.x, point_L.y, point_L.z, 0.17f, 0.125f, vcVerts);
 		AddVertex(point_J.x, point_J.y, point_J.z, 0.17f, 0, vcVerts);
 
-		Vector4 point_M(-0.02f, 0.005f, 0.1f, 1); //for the current mode dispaly "Surface/line  Virtual finger  search ....."
+		Vector4 point_M(-0.02f, 0.005f, 0.1f, 1); // for the current mode dispaly "Surface/line  Virtual finger  search ....."
 		Vector4 point_N(0.02f, 0.005f, 0.1f, 1);
 		Vector4 point_O(-0.02f, 0.002f, 0.14f, 1);
 		Vector4 point_P(0.02f, 0.002f, 0.14f, 1); //*/
@@ -4883,11 +4904,11 @@ void CMainApplication::SetupControllerTexture()
 		switch (m_modeGrip_L)
 		{
 		case _donothing:
-		{ //donothing
+		{ // donothing
 			break;
 		}
 		case _Surface:
-		{ //surface
+		{ // surface
 			AddVertex(point_M.x, point_M.y, point_M.z, 0.085f, 0.125f, vcVerts);
 			AddVertex(point_N.x, point_N.y, point_N.z, 0.17f, 0.125f, vcVerts);
 			AddVertex(point_O.x, point_O.y, point_O.z, 0.085f, 0.25f, vcVerts);
@@ -4898,7 +4919,7 @@ void CMainApplication::SetupControllerTexture()
 		}
 		case _TeraShift:
 		{ //_TeraShift
-			//qDebug() << "You clicked TeraVR Shift (2)." << endl;
+			// qDebug() << "You clicked TeraVR Shift (2)." << endl;
 			AddVertex(point_M.x, point_M.y, point_M.z, 0.42f, 0.125f, vcVerts);
 			AddVertex(point_N.x, point_N.y, point_N.z, 0.5f, 0.125f, vcVerts);
 			AddVertex(point_O.x, point_O.y, point_O.z, 0.42f, 0.25f, vcVerts);
@@ -4908,7 +4929,7 @@ void CMainApplication::SetupControllerTexture()
 			break;
 		}
 		case _VirtualFinger:
-		{ //virtual finger
+		{ // virtual finger
 			AddVertex(point_M.x, point_M.y, point_M.z, 0.17f, 0, vcVerts);
 			AddVertex(point_N.x, point_N.y, point_N.z, 0.25f, 0, vcVerts);
 			AddVertex(point_O.x, point_O.y, point_O.z, 0.17f, 0.125f, vcVerts);
@@ -4918,7 +4939,7 @@ void CMainApplication::SetupControllerTexture()
 			break;
 		}
 		case _Freeze:
-		{ //freeze
+		{ // freeze
 			AddVertex(point_M.x, point_M.y, point_M.z, 0.335f, 0.125f, vcVerts);
 			AddVertex(point_N.x, point_N.y, point_N.z, 0.42f, 0.125f, vcVerts);
 			AddVertex(point_O.x, point_O.y, point_O.z, 0.335f, 0.25f, vcVerts);
@@ -4951,7 +4972,7 @@ void CMainApplication::SetupControllerTexture()
 		}
 		case _AutoRotate:
 		{
-			//qDebug()<<"You clicked autorotate 1"<<endl;
+			// qDebug()<<"You clicked autorotate 1"<<endl;
 			AddVertex(point_M.x, point_M.y, point_M.z, 0.42f, 0, vcVerts);
 			AddVertex(point_N.x, point_N.y, point_N.z, 0.5f, 0, vcVerts);
 			AddVertex(point_O.x, point_O.y, point_O.z, 0.42f, 0.125f, vcVerts);
@@ -5026,7 +5047,7 @@ void CMainApplication::SetupControllerTexture()
 	}
 	// right controller
 	{
-		Vector4 point_A(-0.023f, -0.009f, 0.065f, 1); //grip dispaly "Mode Switch: draw /delete /marker /pull"
+		Vector4 point_A(-0.023f, -0.009f, 0.065f, 1); // grip dispaly "Mode Switch: draw /delete /marker /pull"
 		Vector4 point_B(-0.023f, -0.009f, 0.105f, 1);
 		Vector4 point_C(-0.02f, -0.025f, 0.065f, 1);
 		Vector4 point_D(-0.02f, -0.025f, 0.105f, 1);
@@ -5042,7 +5063,7 @@ void CMainApplication::SetupControllerTexture()
 		// AddVertex(point_D.x,point_D.y,point_D.z,0.34f,0.375f,vcVerts);
 		// AddVertex(point_B.x,point_B.y,point_B.z,0.34f,0.25f,vcVerts);
 
-		Vector4 point_A2(0.023f, -0.009f, 0.065f, 1); //grip no.2 display "Mode Switch: draw /delete /marker /pull"
+		Vector4 point_A2(0.023f, -0.009f, 0.065f, 1); // grip no.2 display "Mode Switch: draw /delete /marker /pull"
 		Vector4 point_B2(0.023f, -0.009f, 0.105f, 1);
 		Vector4 point_C2(0.02f, -0.025f, 0.065f, 1);
 		Vector4 point_D2(0.02f, -0.025f, 0.105f, 1);
@@ -5078,61 +5099,67 @@ void CMainApplication::SetupControllerTexture()
 		// 		AddVertex(point_F.x,point_F.y,point_F.z,0.5f,0.375f,vcVerts);
 		// 		break;
 		// 	}
-		//case 1://translate
+		// case 1://translate
 
-		//terazoom
+		// terazoom
 		switch (m_modeTouchPad_R)
 		{
 		case tr_contrast:
 		{
-			AddVertex(point_E.x, point_E.y, point_E.z, 0.17f, 0.375f, vcVerts);
-			AddVertex(point_F.x, point_F.y, point_F.z, 0.25, 0.375f, vcVerts);
-			AddVertex(point_G.x, point_G.y, point_G.z, 0.17, 0.5f, vcVerts);
-			AddVertex(point_G.x, point_G.y, point_G.z, 0.17, 0.5f, vcVerts);
-			AddVertex(point_H.x, point_H.y, point_H.z, 0.25f, 0.5f, vcVerts);
-			AddVertex(point_F.x, point_F.y, point_F.z, 0.25f, 0.375f, vcVerts);
+			if (!finish_ano)
+			{
+				AddVertex(point_E.x, point_E.y, point_E.z, 0.17f, 0.375f, vcVerts);
+				AddVertex(point_F.x, point_F.y, point_F.z, 0.25, 0.375f, vcVerts);
+				AddVertex(point_G.x, point_G.y, point_G.z, 0.17, 0.5f, vcVerts);
+				AddVertex(point_G.x, point_G.y, point_G.z, 0.17, 0.5f, vcVerts);
+				AddVertex(point_H.x, point_H.y, point_H.z, 0.25f, 0.5f, vcVerts);
+				AddVertex(point_F.x, point_F.y, point_F.z, 0.25f, 0.375f, vcVerts);
+			}
 			break;
 		}
 		case tr_clipplane:
 		{
-			AddVertex(point_E.x, point_E.y, point_E.z, 0.42f, 0.635f, vcVerts);
-			AddVertex(point_F.x, point_F.y, point_F.z, 0.5, 0.635f, vcVerts);
-			AddVertex(point_G.x, point_G.y, point_G.z, 0.42f, 0.765f, vcVerts);
-			AddVertex(point_G.x, point_G.y, point_G.z, 0.42f, 0.765f, vcVerts);
-			AddVertex(point_H.x, point_H.y, point_H.z, 0.5, 0.765f, vcVerts);
-			AddVertex(point_F.x, point_F.y, point_F.z, 0.5, 0.635f, vcVerts);
-			break;
+			if (!finish_ano)
+			{
+				AddVertex(point_E.x, point_E.y, point_E.z, 0.42f, 0.635f, vcVerts);
+				AddVertex(point_F.x, point_F.y, point_F.z, 0.5, 0.635f, vcVerts);
+				AddVertex(point_G.x, point_G.y, point_G.z, 0.42f, 0.765f, vcVerts);
+				AddVertex(point_G.x, point_G.y, point_G.z, 0.42f, 0.765f, vcVerts);
+				AddVertex(point_H.x, point_H.y, point_H.z, 0.5, 0.765f, vcVerts);
+				AddVertex(point_F.x, point_F.y, point_F.z, 0.5, 0.635f, vcVerts);
+				break;
+			}
 		}
 		default:
 			break;
 		}
 
-		//break;
-		// case 2://rotate
-		// 	{
-		// 		AddVertex(point_E.x,point_E.y,point_E.z,0.25f,0.375f,vcVerts);
-		// 		AddVertex(point_F.x,point_F.y,point_F.z,0.335f,0.375f,vcVerts);
-		// 		AddVertex(point_G.x,point_G.y,point_G.z,0.25f,0.5f,vcVerts);
-		// 		AddVertex(point_G.x,point_G.y,point_G.z,0.25f,0.5f,vcVerts);
-		// 		AddVertex(point_H.x,point_H.y,point_H.z,0.335f,0.5f,vcVerts);
-		// 		AddVertex(point_F.x,point_F.y,point_F.z,0.335f,0.375f,vcVerts);
-		// 		break;
-		// 	}
-		// case 3://scale
-		// 	{
-		// 		AddVertex(point_E.x,point_E.y,point_E.z,0.335f,0.375f,vcVerts);
-		// 		AddVertex(point_F.x,point_F.y,point_F.z,0.42f,0.375f,vcVerts);
-		// 		AddVertex(point_G.x,point_G.y,point_G.z,0.335f,0.5f,vcVerts);
-		// 		AddVertex(point_G.x,point_G.y,point_G.z,0.335f,0.5f,vcVerts);
-		// 		AddVertex(point_H.x,point_H.y,point_H.z,0.42f,0.5f,vcVerts);
-		// 		AddVertex(point_F.x,point_F.y,point_F.z,0.42f,0.375f,vcVerts);
-		// 		break;
-		// 	}
-		// default:
-		// 	break;
-		// }
+		// break;
+		//  case 2://rotate
+		//  	{
+		//  		AddVertex(point_E.x,point_E.y,point_E.z,0.25f,0.375f,vcVerts);
+		//  		AddVertex(point_F.x,point_F.y,point_F.z,0.335f,0.375f,vcVerts);
+		//  		AddVertex(point_G.x,point_G.y,point_G.z,0.25f,0.5f,vcVerts);
+		//  		AddVertex(point_G.x,point_G.y,point_G.z,0.25f,0.5f,vcVerts);
+		//  		AddVertex(point_H.x,point_H.y,point_H.z,0.335f,0.5f,vcVerts);
+		//  		AddVertex(point_F.x,point_F.y,point_F.z,0.335f,0.375f,vcVerts);
+		//  		break;
+		//  	}
+		//  case 3://scale
+		//  	{
+		//  		AddVertex(point_E.x,point_E.y,point_E.z,0.335f,0.375f,vcVerts);
+		//  		AddVertex(point_F.x,point_F.y,point_F.z,0.42f,0.375f,vcVerts);
+		//  		AddVertex(point_G.x,point_G.y,point_G.z,0.335f,0.5f,vcVerts);
+		//  		AddVertex(point_G.x,point_G.y,point_G.z,0.335f,0.5f,vcVerts);
+		//  		AddVertex(point_H.x,point_H.y,point_H.z,0.42f,0.5f,vcVerts);
+		//  		AddVertex(point_F.x,point_F.y,point_F.z,0.42f,0.375f,vcVerts);
+		//  		break;
+		//  	}
+		//  default:
+		//  	break;
+		//  }
 
-		Vector4 point_I(-0.01f, 0.01f, 0.01f, 1); //for the menu button dispaly "SAVE"
+		Vector4 point_I(-0.01f, 0.01f, 0.01f, 1); // for the menu button dispaly "SAVE"
 		Vector4 point_J(0.01f, 0.01f, 0.01f, 1);
 		Vector4 point_K(-0.01f, 0.01f, 0.03f, 1);
 		Vector4 point_L(0.01f, 0.01f, 0.03f, 1); //*/
@@ -5140,14 +5167,17 @@ void CMainApplication::SetupControllerTexture()
 		point_J = mat_R * point_J;
 		point_K = mat_R * point_K;
 		point_L = mat_R * point_L;
-		AddVertex(point_I.x, point_I.y, point_I.z, 0, 0, vcVerts);
-		AddVertex(point_J.x, point_J.y, point_J.z, 0.085f, 0, vcVerts);
-		AddVertex(point_K.x, point_K.y, point_K.z, 0, 0.125f, vcVerts);
-		AddVertex(point_K.x, point_K.y, point_K.z, 0, 0.125f, vcVerts);
-		AddVertex(point_L.x, point_L.y, point_L.z, 0.085f, 0.125f, vcVerts);
-		AddVertex(point_J.x, point_J.y, point_J.z, 0.085f, 0, vcVerts);
+		if (!finish_ano)
+		{
+			AddVertex(point_I.x, point_I.y, point_I.z, 0, 0, vcVerts);
+			AddVertex(point_J.x, point_J.y, point_J.z, 0.085f, 0, vcVerts);
+			AddVertex(point_K.x, point_K.y, point_K.z, 0, 0.125f, vcVerts);
+			AddVertex(point_K.x, point_K.y, point_K.z, 0, 0.125f, vcVerts);
+			AddVertex(point_L.x, point_L.y, point_L.z, 0.085f, 0.125f, vcVerts);
+			AddVertex(point_J.x, point_J.y, point_J.z, 0.085f, 0, vcVerts);
+		}
 
-		//For NewPadtest
+		// For NewPadtest
 		Vector4 point_lefttop(-0.2f, 0.1f, -0.3f, 1);
 		Vector4 point_righttop(0.2f, 0.1f, -0.3f, 1);
 		Vector4 point_leftbottom(-0.2f, 0.02f, 0.03f, 1);
@@ -5166,7 +5196,7 @@ void CMainApplication::SetupControllerTexture()
 		colormenu_point_righttop = mat_L * colormenu_point_righttop;
 		colormenu_point_leftbottom = mat_L * colormenu_point_leftbottom;
 		colormenu_point_rightbottom = mat_L * colormenu_point_rightbottom;
-		if (showshootingPad)
+		if (showshootingPad && (!finish_ano))
 		{
 			AddVertex(point_lefttop.x, point_lefttop.y, point_lefttop.z, 0.5, 0.0f, vcVerts);
 			AddVertex(point_righttop.x, point_righttop.y, point_righttop.z, 1.0, 0.0f, vcVerts);
@@ -5175,15 +5205,15 @@ void CMainApplication::SetupControllerTexture()
 			AddVertex(point_rightbottom.x, point_rightbottom.y, point_rightbottom.z, 1.0, 0.5f, vcVerts);
 			AddVertex(point_righttop.x, point_righttop.y, point_righttop.z, 1.0, 0.0f, vcVerts);
 		}
-		//add vertex
-		//1------2/6
-		// |    /|
-		// |   / |
-		// |  /  |
-		// | /   |
-		// -------
-		// 3/4   5
-		else if (m_secondMenu == _colorPad)
+		// add vertex
+		// 1------2/6
+		//  |    /|
+		//  |   / |
+		//  |  /  |
+		//  | /   |
+		//  -------
+		//  3/4   5
+		else if (m_secondMenu == _colorPad && (!finish_ano))
 		{
 			AddVertex(colormenu_point_lefttop.x, colormenu_point_lefttop.y, colormenu_point_lefttop.z, 0.5518f, 0.5487f, vcVerts);
 			AddVertex(colormenu_point_righttop.x, colormenu_point_righttop.y, colormenu_point_righttop.z, 0.7174f, 0.5487f, vcVerts);
@@ -5193,7 +5223,7 @@ void CMainApplication::SetupControllerTexture()
 			AddVertex(colormenu_point_righttop.x, colormenu_point_righttop.y, colormenu_point_righttop.z, 0.7174, 0.5487f, vcVerts);
 		}
 
-		Vector4 point_M(-0.02f, 0.005f, 0.1f, 1); //for the current interact mode dispaly "draw / delete / marker /pull"
+		Vector4 point_M(-0.02f, 0.005f, 0.1f, 1); // for the current interact mode dispaly "draw / delete / marker /pull"
 		Vector4 point_N(0.02f, 0.005f, 0.1f, 1);
 		Vector4 point_O(-0.02f, 0.002f, 0.13f, 1);
 		Vector4 point_P(0.02f, 0.002f, 0.13f, 1); //*/
@@ -5202,79 +5232,82 @@ void CMainApplication::SetupControllerTexture()
 		point_O = mat_R * point_O;
 		point_P = mat_R * point_P;
 
-		switch (m_modeGrip_R)
+		if (!finish_ano)
 		{
-		case m_drawMode:
-		{ //draw line
-			AddVertex(point_M.x, point_M.y, point_M.z, 0.17f, 0.25f, vcVerts);
-			AddVertex(point_N.x, point_N.y, point_N.z, 0.25, 0.25f, vcVerts);
-			AddVertex(point_O.x, point_O.y, point_O.z, 0.17f, 0.375f, vcVerts);
-			AddVertex(point_O.x, point_O.y, point_O.z, 0.17f, 0.375f, vcVerts);
-			AddVertex(point_P.x, point_P.y, point_P.z, 0.25, 0.375f, vcVerts);
-			AddVertex(point_N.x, point_N.y, point_N.z, 0.25, 0.25f, vcVerts);
-			break;
-		}
-		case m_deleteMode:
-		{ //delete segment
-			AddVertex(point_M.x, point_M.y, point_M.z, 0.25, 0.25f, vcVerts);
-			AddVertex(point_N.x, point_N.y, point_N.z, 0.335f, 0.25f, vcVerts);
-			AddVertex(point_O.x, point_O.y, point_O.z, 0.25f, 0.375f, vcVerts);
-			AddVertex(point_O.x, point_O.y, point_O.z, 0.25f, 0.375f, vcVerts);
-			AddVertex(point_P.x, point_P.y, point_P.z, 0.335f, 0.375f, vcVerts);
-			AddVertex(point_N.x, point_N.y, point_N.z, 0.335f, 0.25f, vcVerts);
-			break;
-		}
-		// case m_markMode:
-		// 	{//draw marker
-		// 		AddVertex(point_M.x,point_M.y,point_M.z,0.335,0.25f,vcVerts);
-		// 		AddVertex(point_N.x,point_N.y,point_N.z,0.42f,0.25f,vcVerts);
-		// 		AddVertex(point_O.x,point_O.y,point_O.z,0.335f,0.375f,vcVerts);
-		// 		AddVertex(point_O.x,point_O.y,point_O.z,0.335f,0.375f,vcVerts);
-		// 		AddVertex(point_P.x,point_P.y,point_P.z,0.42f,0.375f,vcVerts);
-		// 		AddVertex(point_N.x,point_N.y,point_N.z,0.42f,0.25f,vcVerts);
-		// 		break;
-		// 	}
-		case m_dragMode:
-		{ //pull node
-			AddVertex(point_M.x, point_M.y, point_M.z, 0.42, 0.25f, vcVerts);
-			AddVertex(point_N.x, point_N.y, point_N.z, 0.5, 0.25f, vcVerts);
-			AddVertex(point_O.x, point_O.y, point_O.z, 0.42, 0.375f, vcVerts);
-			AddVertex(point_O.x, point_O.y, point_O.z, 0.42, 0.375f, vcVerts);
-			AddVertex(point_P.x, point_P.y, point_P.z, 0.5, 0.375f, vcVerts);
-			AddVertex(point_N.x, point_N.y, point_N.z, 0.5, 0.25f, vcVerts);
-			break;
-		}
-		case m_markMode:
-		{ // marker mode
-			AddVertex(point_M.x, point_M.y, point_M.z, 0.25, 0, vcVerts);
-			AddVertex(point_N.x, point_N.y, point_N.z, 0.335, 0, vcVerts);
-			AddVertex(point_O.x, point_O.y, point_O.z, 0.25, 0.125f, vcVerts);
-			AddVertex(point_O.x, point_O.y, point_O.z, 0.25, 0.125f, vcVerts);
-			AddVertex(point_P.x, point_P.y, point_P.z, 0.335, 0.125f, vcVerts);
-			AddVertex(point_N.x, point_N.y, point_N.z, 0.335, 0, vcVerts);
-			break;
-		}
-		case m_splitMode:
-		{ //split line mode
-			AddVertex(point_M.x, point_M.y, point_M.z, 0.0, 0.625f, vcVerts);
-			AddVertex(point_N.x, point_N.y, point_N.z, 0.08, 0.625f, vcVerts);
-			AddVertex(point_O.x, point_O.y, point_O.z, 0.0, 0.75f, vcVerts);
-			AddVertex(point_O.x, point_O.y, point_O.z, 0.0, 0.75f, vcVerts);
-			AddVertex(point_P.x, point_P.y, point_P.z, 0.08, 0.75f, vcVerts);
-			AddVertex(point_N.x, point_N.y, point_N.z, 0.08, 0.625f, vcVerts);
-		}
-		case m_insertnodeMode:
-		{ //split line mode
-			AddVertex(point_M.x, point_M.y, point_M.z, 0.25, 0.625f, vcVerts);
-			AddVertex(point_N.x, point_N.y, point_N.z, 0.335, 0.625f, vcVerts);
-			AddVertex(point_O.x, point_O.y, point_O.z, 0.25, 0.75f, vcVerts);
-			AddVertex(point_O.x, point_O.y, point_O.z, 0.25, 0.75f, vcVerts);
-			AddVertex(point_P.x, point_P.y, point_P.z, 0.335, 0.75f, vcVerts);
-			AddVertex(point_N.x, point_N.y, point_N.z, 0.335, 0.625f, vcVerts);
-		}
+			switch (m_modeGrip_R)
+			{
+			case m_drawMode:
+			{ // draw line
+				AddVertex(point_M.x, point_M.y, point_M.z, 0.17f, 0.25f, vcVerts);
+				AddVertex(point_N.x, point_N.y, point_N.z, 0.25, 0.25f, vcVerts);
+				AddVertex(point_O.x, point_O.y, point_O.z, 0.17f, 0.375f, vcVerts);
+				AddVertex(point_O.x, point_O.y, point_O.z, 0.17f, 0.375f, vcVerts);
+				AddVertex(point_P.x, point_P.y, point_P.z, 0.25, 0.375f, vcVerts);
+				AddVertex(point_N.x, point_N.y, point_N.z, 0.25, 0.25f, vcVerts);
+				break;
+			}
+			case m_deleteMode:
+			{ // delete segment
+				AddVertex(point_M.x, point_M.y, point_M.z, 0.25, 0.25f, vcVerts);
+				AddVertex(point_N.x, point_N.y, point_N.z, 0.335f, 0.25f, vcVerts);
+				AddVertex(point_O.x, point_O.y, point_O.z, 0.25f, 0.375f, vcVerts);
+				AddVertex(point_O.x, point_O.y, point_O.z, 0.25f, 0.375f, vcVerts);
+				AddVertex(point_P.x, point_P.y, point_P.z, 0.335f, 0.375f, vcVerts);
+				AddVertex(point_N.x, point_N.y, point_N.z, 0.335f, 0.25f, vcVerts);
+				break;
+			}
+			// case m_markMode:
+			// 	{//draw marker
+			// 		AddVertex(point_M.x,point_M.y,point_M.z,0.335,0.25f,vcVerts);
+			// 		AddVertex(point_N.x,point_N.y,point_N.z,0.42f,0.25f,vcVerts);
+			// 		AddVertex(point_O.x,point_O.y,point_O.z,0.335f,0.375f,vcVerts);
+			// 		AddVertex(point_O.x,point_O.y,point_O.z,0.335f,0.375f,vcVerts);
+			// 		AddVertex(point_P.x,point_P.y,point_P.z,0.42f,0.375f,vcVerts);
+			// 		AddVertex(point_N.x,point_N.y,point_N.z,0.42f,0.25f,vcVerts);
+			// 		break;
+			// 	}
+			case m_dragMode:
+			{ // pull node
+				AddVertex(point_M.x, point_M.y, point_M.z, 0.42, 0.25f, vcVerts);
+				AddVertex(point_N.x, point_N.y, point_N.z, 0.5, 0.25f, vcVerts);
+				AddVertex(point_O.x, point_O.y, point_O.z, 0.42, 0.375f, vcVerts);
+				AddVertex(point_O.x, point_O.y, point_O.z, 0.42, 0.375f, vcVerts);
+				AddVertex(point_P.x, point_P.y, point_P.z, 0.5, 0.375f, vcVerts);
+				AddVertex(point_N.x, point_N.y, point_N.z, 0.5, 0.25f, vcVerts);
+				break;
+			}
+			case m_markMode:
+			{ // marker mode
+				AddVertex(point_M.x, point_M.y, point_M.z, 0.25, 0, vcVerts);
+				AddVertex(point_N.x, point_N.y, point_N.z, 0.335, 0, vcVerts);
+				AddVertex(point_O.x, point_O.y, point_O.z, 0.25, 0.125f, vcVerts);
+				AddVertex(point_O.x, point_O.y, point_O.z, 0.25, 0.125f, vcVerts);
+				AddVertex(point_P.x, point_P.y, point_P.z, 0.335, 0.125f, vcVerts);
+				AddVertex(point_N.x, point_N.y, point_N.z, 0.335, 0, vcVerts);
+				break;
+			}
+			case m_splitMode:
+			{ // split line mode
+				AddVertex(point_M.x, point_M.y, point_M.z, 0.0, 0.625f, vcVerts);
+				AddVertex(point_N.x, point_N.y, point_N.z, 0.08, 0.625f, vcVerts);
+				AddVertex(point_O.x, point_O.y, point_O.z, 0.0, 0.75f, vcVerts);
+				AddVertex(point_O.x, point_O.y, point_O.z, 0.0, 0.75f, vcVerts);
+				AddVertex(point_P.x, point_P.y, point_P.z, 0.08, 0.75f, vcVerts);
+				AddVertex(point_N.x, point_N.y, point_N.z, 0.08, 0.625f, vcVerts);
+			}
+			case m_insertnodeMode:
+			{ // split line mode
+				AddVertex(point_M.x, point_M.y, point_M.z, 0.25, 0.625f, vcVerts);
+				AddVertex(point_N.x, point_N.y, point_N.z, 0.335, 0.625f, vcVerts);
+				AddVertex(point_O.x, point_O.y, point_O.z, 0.25, 0.75f, vcVerts);
+				AddVertex(point_O.x, point_O.y, point_O.z, 0.25, 0.75f, vcVerts);
+				AddVertex(point_P.x, point_P.y, point_P.z, 0.335, 0.75f, vcVerts);
+				AddVertex(point_N.x, point_N.y, point_N.z, 0.335, 0.625f, vcVerts);
+			}
 
-		default:
-			break;
+			default:
+				break;
+			}
 		}
 	}
 
@@ -5284,13 +5317,13 @@ void CMainApplication::SetupControllerTexture()
 	if (m_ControllerTexVAO == 0)
 
 	{
-		//setup vao and vbo stuff
+		// setup vao and vbo stuff
 
 		glGenVertexArrays(1, &m_ControllerTexVAO);
 
 		glGenBuffers(1, &m_ControllerTexVBO);
 
-		//now allocate buffers
+		// now allocate buffers
 
 		glBindVertexArray(m_ControllerTexVAO);
 
@@ -5342,7 +5375,7 @@ void CMainApplication::SetupControllerRay()
 	Vector3 color(1.0f, 0.0f, 0.0f);
 	m_uiControllerRayVertcount = 0;
 
-	//update ray endpos if ray intersect the pad
+	// update ray endpos if ray intersect the pad
 	glm::vec2 ShootingPadUV = calculateshootingPadUV(); // update shootingraycutPos
 	// Vector4 point_lefttop(-0.2f,0.1f,-0.3f,1);
 	// Vector4 point_righttop(0.2f,0.1f,-0.3f,1);
@@ -5363,7 +5396,7 @@ void CMainApplication::SetupControllerRay()
 		AddrayVertex(shootingraycutPos.x, shootingraycutPos.y, shootingraycutPos.z, color.x, color.y, color.z, vertdataarray);
 		m_uiControllerRayVertcount += 2;
 	}
-	//update  red logo on where you choose
+	// update  red logo on where you choose
 
 	if (m_iControllerRayVAO == 0)
 	{
@@ -5389,7 +5422,7 @@ void CMainApplication::SetupControllerRay()
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertdataarray.size(), &vertdataarray[0], GL_STREAM_DRAW);
 	}
 }
-//void CMainApplication::SetupMorphologySurface(NeuronTree neurontree,vector<Sphere*>& spheres,vector<Cylinder*>& cylinders,vector<glm::vec3>& spheresPos)
+// void CMainApplication::SetupMorphologySurface(NeuronTree neurontree,vector<Sphere*>& spheres,vector<Cylinder*>& cylinders,vector<glm::vec3>& spheresPos)
 //{
 //	NeuronSWC S0,S1;
 //	for(int i = spheres.size();i<neurontree.listNeuron.size();i++)
@@ -5409,12 +5442,12 @@ void CMainApplication::SetupControllerRay()
 //		//	cylinders.push_back(new Cylinder(S0.r,S0.r,0));//generate a degenerated cylinder
 //		//}
 //	}
-//}
+// }
 //
 ////-----------------------------------------------------------------------------
 //// Purpose: prepare data for line mode
 ////-----------------------------------------------------------------------------
-//void CMainApplication::SetupMorphologyLine( int drawMode)//pass 3 parameters: &neuronTree, VAO, VertVBO, IdxVBO
+// void CMainApplication::SetupMorphologyLine( int drawMode)//pass 3 parameters: &neuronTree, VAO, VertVBO, IdxVBO
 //{
 //	if(drawMode==0){
 //		SetupMorphologyLine(loadedNT_merged,m_unMorphologyLineModeVAO,m_glMorphologyLineModeVertBuffer,m_glMorphologyLineModeIndexBuffer,m_uiMorphologyLineModeVertcount,drawMode);
@@ -5423,102 +5456,102 @@ void CMainApplication::SetupControllerRay()
 //		SetupMorphologyLine(currentNT,m_unSketchMorphologyLineModeVAO,m_glSketchMorphologyLineModeVertBuffer,m_glSketchMorphologyLineModeIndexBuffer,m_uiSketchMorphologyLineModeVertcount,drawMode);
 //	}
 //
-//}//*/
+// }//*/
 //
 ////-----------------------------------------------------------------------------
-//void CMainApplication::SetupMorphologyLine(NeuronTree neuron_Tree,
-//                                           GLuint& LineModeVAO,
-//                                           GLuint& LineModeVBO,
-//                                           GLuint& LineModeIndex,
-//                                           unsigned int& Vertcount,
-//                                           int drawMode)
+// void CMainApplication::SetupMorphologyLine(NeuronTree neuron_Tree,
+//                                            GLuint& LineModeVAO,
+//                                            GLuint& LineModeVBO,
+//                                            GLuint& LineModeIndex,
+//                                            unsigned int& Vertcount,
+//                                            int drawMode)
 //{
 //	vector <glm::vec3> vertices;
 //	vector<GLuint> indices;
 //
 //	NeuronSWC S0,S1;
-//    if (neuron_Tree.listNeuron.size()<1)
+//     if (neuron_Tree.listNeuron.size()<1)
 //		return;
 //
-//    // try to be consistent with the 3D viewer window, by PHC 20170616
-//    const QList <NeuronSWC> & listNeuron = neuron_Tree.listNeuron;
-//    const QHash <int, int> & hashNeuron = neuron_Tree.hashNeuron;
-//    RGBA8 rgba = neuron_Tree.color;
-//    bool on    = neuron_Tree.on;
-//    bool editable = neuron_Tree.editable;
-//    int cur_linemode = neuron_Tree.linemode;
-//    //
+//     // try to be consistent with the 3D viewer window, by PHC 20170616
+//     const QList <NeuronSWC> & listNeuron = neuron_Tree.listNeuron;
+//     const QHash <int, int> & hashNeuron = neuron_Tree.hashNeuron;
+//     RGBA8 rgba = neuron_Tree.color;
+//     bool on    = neuron_Tree.on;
+//     bool editable = neuron_Tree.editable;
+//     int cur_linemode = neuron_Tree.linemode;
+//     //
 //
-//    for(int i=0; i<listNeuron.size(); i++)
+//     for(int i=0; i<listNeuron.size(); i++)
 //	{
-//        //S0 = listNeuron.at(i);
-//        //by PHC 20170616. also try to fix the bug of nonsorted neuron display
+//         //S0 = listNeuron.at(i);
+//         //by PHC 20170616. also try to fix the bug of nonsorted neuron display
 //
-//        S1 = listNeuron.at(i);   // at(i) faster than [i]
-//        bool valid = false;
-//        if (S1.pn == -1) // root end, 081105
-//        {
-//            S0 = S1;
-//            valid = true;
-//        }
-//        else if (S1.pn >= 0) //change to >=0 from >0, PHC 091123
-//        {
-//            // or using hash for finding parent node
-//            int j = hashNeuron.value(S1.pn, -1);
-//            if (j>=0 && j <listNeuron.size())
-//            {
-//                S0 = listNeuron.at(j);
-//                valid = true;
-//            }
-//        }
-//        if (! valid)
-//            continue;
+//         S1 = listNeuron.at(i);   // at(i) faster than [i]
+//         bool valid = false;
+//         if (S1.pn == -1) // root end, 081105
+//         {
+//             S0 = S1;
+//             valid = true;
+//         }
+//         else if (S1.pn >= 0) //change to >=0 from >0, PHC 091123
+//         {
+//             // or using hash for finding parent node
+//             int j = hashNeuron.value(S1.pn, -1);
+//             if (j>=0 && j <listNeuron.size())
+//             {
+//                 S0 = listNeuron.at(j);
+//                 valid = true;
+//             }
+//         }
+//         if (! valid)
+//             continue;
 //
-//        //
+//         //
 //
 //		vertices.push_back(glm::vec3(S0.x,S0.y,S0.z));
 //
-//        glm::vec3 vcolor_load(0,1,0);//green for loaded neuron tree
+//         glm::vec3 vcolor_load(0,1,0);//green for loaded neuron tree
 //
-//        //by PHC 20170616. Try to draw as consistent as possible as the 3D viewer
+//         //by PHC 20170616. Try to draw as consistent as possible as the 3D viewer
 //
-//        if (rgba.a==0 || editable) //make the skeleton be able to use the default color by adjusting alpha value
-//        {
-//            int type = S0.type;
-//            if (editable)
-//            {
-//                int ncolorused = neuron_type_color_num;
-//                if (neuron_type_color_num>19)
-//                    ncolorused = 19;
-//                type = S0.seg_id %(ncolorused -5)+5; //segment color using hanchuan's neuron_type_color
-//            }
-//            if (type >= 300 && type <= 555 )  // heat colormap index starts from 300 , for sequencial feature scalar visaulziation
-//            {
-//                vcolor_load[0] =  neuron_type_color_heat[ type - 300][0];
-//                vcolor_load[1] =  neuron_type_color_heat[ type - 300][1];
-//                vcolor_load[2] =  neuron_type_color_heat[ type - 300][2];
-//            }
-//            else
-//            {
-//                vcolor_load[0] =  neuron_type_color[ (type>=0 && type<neuron_type_color_num)? type : 0 ][0];
-//                vcolor_load[1] =  neuron_type_color[ (type>=0 && type<neuron_type_color_num)? type : 0 ][1];
-//                vcolor_load[2] =  neuron_type_color[ (type>=0 && type<neuron_type_color_num)? type : 0 ][2];
-//            }
-//        }
-//        else
-//        {
-//            vcolor_load[0] = rgba.c[0];
-//            vcolor_load[1] = rgba.c[1];
-//            vcolor_load[2] = rgba.c[2];
-//        }
+//         if (rgba.a==0 || editable) //make the skeleton be able to use the default color by adjusting alpha value
+//         {
+//             int type = S0.type;
+//             if (editable)
+//             {
+//                 int ncolorused = neuron_type_color_num;
+//                 if (neuron_type_color_num>19)
+//                     ncolorused = 19;
+//                 type = S0.seg_id %(ncolorused -5)+5; //segment color using hanchuan's neuron_type_color
+//             }
+//             if (type >= 300 && type <= 555 )  // heat colormap index starts from 300 , for sequencial feature scalar visaulziation
+//             {
+//                 vcolor_load[0] =  neuron_type_color_heat[ type - 300][0];
+//                 vcolor_load[1] =  neuron_type_color_heat[ type - 300][1];
+//                 vcolor_load[2] =  neuron_type_color_heat[ type - 300][2];
+//             }
+//             else
+//             {
+//                 vcolor_load[0] =  neuron_type_color[ (type>=0 && type<neuron_type_color_num)? type : 0 ][0];
+//                 vcolor_load[1] =  neuron_type_color[ (type>=0 && type<neuron_type_color_num)? type : 0 ][1];
+//                 vcolor_load[2] =  neuron_type_color[ (type>=0 && type<neuron_type_color_num)? type : 0 ][2];
+//             }
+//         }
+//         else
+//         {
+//             vcolor_load[0] = rgba.c[0];
+//             vcolor_load[1] = rgba.c[1];
+//             vcolor_load[2] = rgba.c[2];
+//         }
 //
-//        //
+//         //
 //
-//        glm::vec3 vcolor_draw(1,0,0);//red for drawing neuron tree
+//         glm::vec3 vcolor_draw(1,0,0);//red for drawing neuron tree
 //
-//        vertices.push_back((drawMode==0) ? vcolor_load : vcolor_draw);
+//         vertices.push_back((drawMode==0) ? vcolor_load : vcolor_draw);
 //
-//        //Yimin's original code which does not display nonsorted neuron correctly
+//         //Yimin's original code which does not display nonsorted neuron correctly
 ///*
 //		if (S0.pn != -1)
 //		{
@@ -5586,10 +5619,10 @@ void CMainApplication::SetupMorphologySurface(NeuronTree neurontree, vector<Sphe
 	{
 		S0 = listNeuron.at(i);
 
-		//draw sphere
+		// draw sphere
 		spheres.push_back(new Sphere((float)(S0.r)));
 		spheresPos.push_back(glm::vec3(S0.x, S0.y, S0.z));
-		//draw cylinder
+		// draw cylinder
 		if (S0.pn == -1)
 		{
 			cylinders.push_back(new Cylinder(S0.r, S0.r, 0, 3, 2));
@@ -5609,7 +5642,7 @@ void CMainApplication::SetupMorphologySurface(NeuronTree neurontree, vector<Sphe
 
 			float dist = glm::sqrt((S1.x - S0.x) * (S1.x - S0.x) + (S1.y - S0.y) * (S1.y - S0.y) + (S1.z - S0.z) * (S1.z - S0.z));
 			cylinders.push_back(new Cylinder(S0.r, S1.r, dist));
-			//qDebug("surface edge---- %d,%d\n",S0.n,S1.n);
+			// qDebug("surface edge---- %d,%d\n",S0.n,S1.n);
 		}
 	}
 }
@@ -5617,13 +5650,13 @@ void CMainApplication::SetupMorphologySurface(NeuronTree neurontree, vector<Sphe
 //-----------------------------------------------------------------------------
 // Purpose: prepare data for line mode
 //-----------------------------------------------------------------------------
-void CMainApplication::SetupMorphologyLine(int drawMode) //pass 3 parameters: &neuronTree, VAO, VertVBO, IdxVBO
+void CMainApplication::SetupMorphologyLine(int drawMode) // pass 3 parameters: &neuronTree, VAO, VertVBO, IdxVBO
 {
 	if (drawMode == 0) // 0 means drawmode = 0, which means this function is called out of mainloop
 	{
 		SetupMorphologyLine(loadedNT_merged, m_unMorphologyLineModeVAO, m_glMorphologyLineModeVertBuffer, m_glMorphologyLineModeIndexBuffer, m_uiMorphologyLineModeVertcount, drawMode);
 	}
-	else if (drawMode == 1) //1 means drawmode = 1, set up currentNT's VAO&VBO
+	else if (drawMode == 1) // 1 means drawmode = 1, set up currentNT's VAO&VBO
 	{
 		SetupMorphologyLine(currentNT, m_unSketchMorphologyLineModeVAO, m_glSketchMorphologyLineModeVertBuffer, m_glSketchMorphologyLineModeIndexBuffer, m_uiSketchMorphologyLineModeVertcount, drawMode);
 	}
@@ -5646,15 +5679,15 @@ void CMainApplication::SetupMorphologyLine(NeuronTree neuron_Tree,
 
 	vector<glm::vec3> vertices;
 	vector<GLuint> indices;
-	map<int, int> id2loc; //map neuron node id to location in vertices
+	map<int, int> id2loc; // map neuron node id to location in vertices
 
 	NeuronSWC S0, S1;
-	//if(neuron_Tree.listNeuron.size()<1)
+	// if(neuron_Tree.listNeuron.size()<1)
 	//{
 	//	vertices.clear();
 	//	indices.clear();
 	//	//return;
-	//}
+	// }
 
 	// try to be consistent with the 3D viewer window, by PHC 20170616
 	const QList<NeuronSWC> &listNeuron = neuron_Tree.listNeuron;
@@ -5665,36 +5698,36 @@ void CMainApplication::SetupMorphologyLine(NeuronTree neuron_Tree,
 	int cur_linemode = neuron_Tree.linemode;
 
 	if (rgba.a == 255)
-		rgba.a = 0; //special case
+		rgba.a = 0; // special case
 
-	//qDebug("rgba color---- %d,%d,%d,%d\n",rgba.c[0],rgba.c[1],rgba.c[2],rgba.a);
-	//if (editable) qDebug("editable\n"); else qDebug("not editable\n");
-	//rgba.a = 0;
+	// qDebug("rgba color---- %d,%d,%d,%d\n",rgba.c[0],rgba.c[1],rgba.c[2],rgba.a);
+	// if (editable) qDebug("editable\n"); else qDebug("not editable\n");
+	// rgba.a = 0;
 
-	//handle nodes
+	// handle nodes
 	for (int i = 0; i < listNeuron.size(); i++)
 	{
 		S1 = listNeuron.at(i);
 
-		//vertices[2*(S1.n-1)] = glm::vec3(S1.x,S1.y,S1.z);
+		// vertices[2*(S1.n-1)] = glm::vec3(S1.x,S1.y,S1.z);
 		vertices.push_back(glm::vec3(S1.x, S1.y, S1.z));
 		id2loc[S1.n] = i;
-		//qDebug("i=%d,S1.n=%d\n",i,S1.n);
+		// qDebug("i=%d,S1.n=%d\n",i,S1.n);
 
-		glm::vec3 vcolor_load(0, 1, 0); //green for loaded neuron tree
+		glm::vec3 vcolor_load(0, 1, 0); // green for loaded neuron tree
 
-		//by PHC 20170616. Try to draw as consistent as possible as the 3D viewer
+		// by PHC 20170616. Try to draw as consistent as possible as the 3D viewer
 
-		if (rgba.a == 0 || editable) //make the skeleton be able to use the default color by adjusting alpha value
+		if (rgba.a == 0 || editable) // make the skeleton be able to use the default color by adjusting alpha value
 		{
 			int type = S1.type;
-			//if (editable) //yw 2018-05-03, this code block assigns single color (pink) to editable neuron, now disabled.
+			// if (editable) //yw 2018-05-03, this code block assigns single color (pink) to editable neuron, now disabled.
 			//{
 			//	int ncolorused = neuron_type_color_num;
 			//	if (neuron_type_color_num>19)
 			//		ncolorused = 19;
 			//	type = S0.seg_id %(ncolorused -5)+5; //segment color using hanchuan's neuron_type_color
-			//}
+			// }
 			if (type >= 300 && type <= 555) // heat colormap index starts from 300 , for sequencial feature scalar visaulziation
 			{
 				vcolor_load[0] = neuron_type_color_heat[type - 300][0];
@@ -5706,7 +5739,7 @@ void CMainApplication::SetupMorphologyLine(NeuronTree neuron_Tree,
 				vcolor_load[0] = neuron_type_color[(type >= 0 && type < neuron_type_color_num) ? type : 0][0];
 				vcolor_load[1] = neuron_type_color[(type >= 0 && type < neuron_type_color_num) ? type : 0][1];
 				vcolor_load[2] = neuron_type_color[(type >= 0 && type < neuron_type_color_num) ? type : 0][2];
-				//qDebug("set in 2,type=%d\n",type);
+				// qDebug("set in 2,type=%d\n",type);
 			}
 		}
 		else
@@ -5714,35 +5747,35 @@ void CMainApplication::SetupMorphologyLine(NeuronTree neuron_Tree,
 			vcolor_load[0] = rgba.c[0];
 			vcolor_load[1] = rgba.c[1];
 			vcolor_load[2] = rgba.c[2];
-			//qDebug("set in 3\n");
+			// qDebug("set in 3\n");
 		}
 		for (int i = 0; i < 3; i++)
 			vcolor_load[i] /= 255.0;
-		//qDebug("color---- %f,%f,%f\n",vcolor_load[0],vcolor_load[1],vcolor_load[2]);
+		// qDebug("color---- %f,%f,%f\n",vcolor_load[0],vcolor_load[1],vcolor_load[2]);
 
 		glm::vec3 vcolor_draw(0.5, 0.5, 0.5); // for locally drawn structures that has not been synchronized yet.
 		// glm::vec3 vcolor_remote(1,0,0);//red
-		//vertices[2*(S1.n-1)+1] = (drawMode==0) ? vcolor_load : vcolor_draw;
-		//vertices.push_back((drawMode==0) ? vcolor_load : vcolor_draw);
+		// vertices[2*(S1.n-1)+1] = (drawMode==0) ? vcolor_load : vcolor_draw;
+		// vertices.push_back((drawMode==0) ? vcolor_load : vcolor_draw);
 		if (drawMode == 0)
 			vertices.push_back(vcolor_load);
 		else if (drawMode == 1)
 			vertices.push_back(vcolor_draw);
 		else if (drawMode == 2)
 			vertices.push_back(vcolor_load);
-		//vertices.push_back(vcolor_remote);
+		// vertices.push_back(vcolor_remote);
 		if (drawMode == 0)
 			loaded_spheresColor.push_back(vcolor_load);
 	}
 
-	//map<int,int>::iterator iter;
-	//for (iter = id2loc.begin();iter != id2loc.end();++iter)
+	// map<int,int>::iterator iter;
+	// for (iter = id2loc.begin();iter != id2loc.end();++iter)
 	//	qDebug("edge---- %d,%d\n",iter->first,iter->second);
 
-	//handle edges
+	// handle edges
 	for (int i = 0; i < listNeuron.size(); i++)
 	{
-		//by PHC 20170616. also try to fix the bug of nonsorted neuron display
+		// by PHC 20170616. also try to fix the bug of nonsorted neuron display
 
 		S1 = listNeuron.at(i); // at(i) faster than [i]
 		bool valid = false;
@@ -5751,7 +5784,7 @@ void CMainApplication::SetupMorphologyLine(NeuronTree neuron_Tree,
 			S0 = S1;
 			valid = true;
 		}
-		else if (S1.pn >= 0) //change to >=0 from >0, PHC 091123
+		else if (S1.pn >= 0) // change to >=0 from >0, PHC 091123
 		{
 			// or using hash for finding parent node
 			int j = hashNeuron.value(S1.pn, -1);
@@ -5778,12 +5811,12 @@ void CMainApplication::SetupMorphologyLine(NeuronTree neuron_Tree,
 
 	if (LineModeVAO == 0)
 	{
-		//setup vao and vbo stuff
+		// setup vao and vbo stuff
 		glGenVertexArrays(1, &LineModeVAO);
 		glGenBuffers(1, &LineModeVBO);
 		glGenBuffers(1, &LineModeIndex);
 
-		//now allocate buffers
+		// now allocate buffers
 		glBindVertexArray(LineModeVAO);
 
 		glBindBuffer(GL_ARRAY_BUFFER, LineModeVBO);
@@ -5809,7 +5842,7 @@ void CMainApplication::SetupMorphologyLine(NeuronTree neuron_Tree,
 //-----------------------------------------------------------------------------
 // Purpose: Draw all of the controllers as X/Y/Z lines
 //-----------------------------------------------------------------------------
-void CMainApplication::RenderControllerAxes() //note: note render, actually setup VAO and VBO for axes
+void CMainApplication::RenderControllerAxes() // note: note render, actually setup VAO and VBO for axes
 {
 	// don't draw controllers if somebody else has input focus
 	if (m_pHMD->IsInputFocusCapturedByAnotherProcess())
@@ -5837,7 +5870,7 @@ void CMainApplication::RenderControllerAxes() //note: note render, actually setu
 
 		Vector4 center = mat * Vector4(0, 0, 0, 1);
 
-		for (int i = 0; i < 2; ++i) //note: prepare data for axes and ray
+		for (int i = 0; i < 2; ++i) // note: prepare data for axes and ray
 		{
 			Vector3 color(0, 0, 0);
 			Vector4 point(0, 0, 0, 1);
@@ -5863,7 +5896,7 @@ void CMainApplication::RenderControllerAxes() //note: note render, actually setu
 			m_uiControllerVertcount += 2;
 		}
 
-		//prepare the shooting ray
+		// prepare the shooting ray
 
 		// if(showshootingPad && (unTrackedDevice ==vr::k_unTrackedDeviceIndex_Hmd + 3))  //only right controller render ray
 		// {		Vector4 start = mat * Vector4( 0, 0, -0.02f, 1 );
@@ -5947,10 +5980,10 @@ void CMainApplication::SetupGlobalMatrix()
 	float r_max = -1;
 	swcBB = NULL_BoundingBox;
 
-	//if (    !((img4d->getXDim()==0)  &&  (img4d->getYDim()==0)  &&  (img4d->getZDim()==0))    )
+	// if (    !((img4d->getXDim()==0)  &&  (img4d->getYDim()==0)  &&  (img4d->getZDim()==0))    )
 	if (m_bHasImage4D)
 	{
-		//have an image in the scene, further adjust the bounding box
+		// have an image in the scene, further adjust the bounding box
 		swcBB.expand(BoundingBox(XYZ(0, 0, 0), XYZ(img4d->getXDim(), img4d->getYDim(), img4d->getZDim())));
 	}
 	else
@@ -5972,7 +6005,7 @@ void CMainApplication::SetupGlobalMatrix()
 
 	float maxD = swcBB.Dmax();
 
-	//original center location
+	// original center location
 	loadedNTCenter.x = (swcBB.x0 + swcBB.x1) / 2;
 	loadedNTCenter.y = (swcBB.y0 + swcBB.y1) / 2 + 20;
 	loadedNTCenter.z = (swcBB.z0 + swcBB.z1) / 2 + 50;
@@ -5983,7 +6016,7 @@ void CMainApplication::SetupGlobalMatrix()
 	float trans_x = 0.6;
 	float trans_y = 1.5;
 	float trans_z = 0.4;
-	//printf("transform: scale = %f, translate = (%f,%f,%f)\n", scale,trans_x,trans_y,trans_z );
+	// printf("transform: scale = %f, translate = (%f,%f,%f)\n", scale,trans_x,trans_y,trans_z );
 	if (!m_pChaperone)
 	{
 		cout << "m_pChaperone is NULL" << endl;
@@ -6009,14 +6042,14 @@ void CMainApplication::SetupGlobalMatrix()
 	// cout<<"HmdQuadmax x == "<<HmdQuadmax.v[0]<<"HmdQuadmax y == "<<HmdQuadmax.v[1]<<"HmdQuadmax z == "<<HmdQuadmax.v[2]<<endl;
 
 	m_globalMatrix = glm::translate(m_globalMatrix, glm::vec3(HmdQuadImageOffset.v[0], HmdQuadImageOffset.v[1], HmdQuadImageOffset.v[2]));
-	//m_globalMatrix = glm::translate(m_globalMatrix,glm::vec3(trans_x,trans_y,trans_z) ); //fine tune
-	//glm::vec4 cntr = m_globalMatrix * glm::vec4(loadedNTCenter.x,loadedNTCenter.y,loadedNTCenter.z,1);
-	//qDebug("after scaling: center.x = %f,center.y = %f,center.z = %f\n",cntr.x,cntr.y,cntr.z);
+	// m_globalMatrix = glm::translate(m_globalMatrix,glm::vec3(trans_x,trans_y,trans_z) ); //fine tune
+	// glm::vec4 cntr = m_globalMatrix * glm::vec4(loadedNTCenter.x,loadedNTCenter.y,loadedNTCenter.z,1);
+	// qDebug("after scaling: center.x = %f,center.y = %f,center.z = %f\n",cntr.x,cntr.y,cntr.z);
 	m_globalMatrix = glm::scale(m_globalMatrix, glm::vec3(m_globalScale, m_globalScale, m_globalScale));
 	m_globalMatrix = glm::translate(m_globalMatrix, glm::vec3(-loadedNTCenter.x, -loadedNTCenter.y, -loadedNTCenter.z));
 
-	//cntr = m_globalMatrix * glm::vec4(loadedNTCenter.x,loadedNTCenter.y,loadedNTCenter.z,1);
-	//qDebug("after translation: center.x = %f,center.y = %f,center.z = %f\n",cntr.x,cntr.y,cntr.z);
+	// cntr = m_globalMatrix * glm::vec4(loadedNTCenter.x,loadedNTCenter.y,loadedNTCenter.z,1);
+	// qDebug("after translation: center.x = %f,center.y = %f,center.z = %f\n",cntr.x,cntr.y,cntr.z);
 
 	string s = "--------m_globalMatrix--------\n";
 	for (int i = 0; i < 4; i++)
@@ -6037,7 +6070,7 @@ void CMainApplication::SetupGlobalMatrix()
 // Purpose: Creates a frame buffer. Returns true if the buffer was set up.
 //          Returns false if the setup failed.
 //-----------------------------------------------------------------------------
-bool CMainApplication::CreateFrameBuffer(int nWidth, int nHeight, FramebufferDesc &framebufferDesc) //note: maybe no need to change
+bool CMainApplication::CreateFrameBuffer(int nWidth, int nHeight, FramebufferDesc &framebufferDesc) // note: maybe no need to change
 {
 	glGenFramebuffers(1, &framebufferDesc.m_nRenderFramebufferId);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebufferDesc.m_nRenderFramebufferId);
@@ -6093,7 +6126,7 @@ bool CMainApplication::SetupStereoRenderTargets()
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-void CMainApplication::SetupCompanionWindow() //question: what's the content here?
+void CMainApplication::SetupCompanionWindow() // question: what's the content here?
 {
 	if (!m_pHMD)
 		return;
@@ -6103,7 +6136,7 @@ void CMainApplication::SetupCompanionWindow() //question: what's the content her
 	// left eye verts
 	vVerts.push_back(VertexDataWindow(Vector2(-1, -1), Vector2(0, 0)));
 	vVerts.push_back(VertexDataWindow(Vector2(0, -1), Vector2(1, 0)));
-	vVerts.push_back(VertexDataWindow(Vector2(-1, 1), Vector2(0, 1))); //fix the problem of scene of the desktop window upside down
+	vVerts.push_back(VertexDataWindow(Vector2(-1, 1), Vector2(0, 1))); // fix the problem of scene of the desktop window upside down
 	vVerts.push_back(VertexDataWindow(Vector2(0, 1), Vector2(1, 1)));
 
 	// right eye verts
@@ -6153,7 +6186,7 @@ void CMainApplication::RenderStereoTargets()
 
 	glEnable(GL_MULTISAMPLE);
 	// Left Eye
-	glBindFramebuffer(GL_FRAMEBUFFER, leftEyeDesc.m_nRenderFramebufferId); //render scene to m_nRenderFramebufferId
+	glBindFramebuffer(GL_FRAMEBUFFER, leftEyeDesc.m_nRenderFramebufferId); // render scene to m_nRenderFramebufferId
 	glViewport(0, 0, m_nRenderWidth, m_nRenderHeight);
 	frameCount++;
 	if (GetTime() > 1.0f)
@@ -6161,8 +6194,8 @@ void CMainApplication::RenderStereoTargets()
 		fps = frameCount;
 		frameCount = 0;
 		StartTimer();
-		//cout<<fps<<endl;
-		//used for fps tess liqi
+		// cout<<fps<<endl;
+		// used for fps tess liqi
 	}
 
 	frameTime = GetFrameTime();
@@ -6170,7 +6203,7 @@ void CMainApplication::RenderStereoTargets()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glDisable(GL_MULTISAMPLE);
 
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, leftEyeDesc.m_nRenderFramebufferId); //copy m_nRenderFramebufferId to m_nResolveFramebufferId, which is later passed to VR.
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, leftEyeDesc.m_nRenderFramebufferId); // copy m_nRenderFramebufferId to m_nResolveFramebufferId, which is later passed to VR.
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, leftEyeDesc.m_nResolveFramebufferId);
 
 	glBlitFramebuffer(0, 0, m_nRenderWidth, m_nRenderHeight, 0, 0, m_nRenderWidth, m_nRenderHeight,
@@ -6209,7 +6242,7 @@ void CMainApplication::RenderScene(vr::Hmd_Eye nEye)
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
-	//if(nEye==vr::Eye_Left )
+	// if(nEye==vr::Eye_Left )
 	//{
 	//	// render text on Companion Window
 
@@ -6257,9 +6290,9 @@ void CMainApplication::RenderScene(vr::Hmd_Eye nEye)
 		raycastingShader->use();
 		SetUinformsForRayCasting();
 		RenderImage4D(raycastingShader, nEye, GL_FRONT); //*/
-		//to make the image not block the morphology surface
+		// to make the image not block the morphology surface
 		glEnable(GL_DEPTH_TEST);
-		//glClear(GL_DEPTH_BUFFER_BIT);
+		// glClear(GL_DEPTH_BUFFER_BIT);
 	}
 	//=================== draw agent postion with sphere ====================
 	{
@@ -6267,7 +6300,7 @@ void CMainApplication::RenderScene(vr::Hmd_Eye nEye)
 
 		morphologyShader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 		morphologyShader->setVec3("lightPos", 1.2f, 1.0f, 2.0f);
-		//morphologyShader->setVec3("lightPos",glm::vec3(m_EyeTransLeft * m_HMDTrans* glm::vec4( 0, 0, 0, 1 )));
+		// morphologyShader->setVec3("lightPos",glm::vec3(m_EyeTransLeft * m_HMDTrans* glm::vec4( 0, 0, 0, 1 )));
 
 		glm::mat4 projection, view;
 		if (nEye == vr::Eye_Left)
@@ -6286,12 +6319,12 @@ void CMainApplication::RenderScene(vr::Hmd_Eye nEye)
 		morphologyShader->setMat4("view", view);
 
 		for (int i = 0; i < Agents_spheres.size(); i++) // sketch neuron tree
-		{												//draw sphere
+		{												// draw sphere
 			glm::mat4 model;
 			Sphere *sphr = Agents_spheres[i];
 			glm::vec3 sPos = Agents_spheresPos[i];
-			//glm::vec3 sPos2 = glm::vec3(10,100,50);
-			//qDebug("%f    %f    %f",sPos.x,sPos.y,sPos.z);
+			// glm::vec3 sPos2 = glm::vec3(10,100,50);
+			// qDebug("%f    %f    %f",sPos.x,sPos.y,sPos.z);
 			model = glm::translate(glm::mat4(), sPos);
 
 			model = m_globalMatrix * model;
@@ -6306,6 +6339,7 @@ void CMainApplication::RenderScene(vr::Hmd_Eye nEye)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 		// draw a sphere on right controller center
+		if (!finish_ano)
 		{
 			glLineWidth(1);
 			glm::mat4 model;
@@ -6328,7 +6362,7 @@ void CMainApplication::RenderScene(vr::Hmd_Eye nEye)
 
 		morphologyShader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 		morphologyShader->setVec3("lightPos", 1.2f, 1.0f, 2.0f);
-		//morphologyShader->setVec3("lightPos",glm::vec3(m_EyeTransLeft * m_HMDTrans* glm::vec4( 0, 0, 0, 1 )));
+		// morphologyShader->setVec3("lightPos",glm::vec3(m_EyeTransLeft * m_HMDTrans* glm::vec4( 0, 0, 0, 1 )));
 
 		glm::mat4 projection, view;
 		if (nEye == vr::Eye_Left)
@@ -6347,14 +6381,14 @@ void CMainApplication::RenderScene(vr::Hmd_Eye nEye)
 		morphologyShader->setMat4("view", view);
 
 		for (int i = 0; i < Markers_spheres.size(); i++) // sketch neuron tree
-		{												 //draw sphere
+		{												 // draw sphere
 			if (!markerVisibility[i])
 				continue;
 			glm::mat4 model;
 			Sphere *sphr = Markers_spheres[i];
 			glm::vec3 sPos = Markers_spheresPos[i];
-			//glm::vec3 sPos2 = glm::vec3(10,100,50);
-			//qDebug("%f    %f    %f",sPos.x,sPos.y,sPos.z);
+			// glm::vec3 sPos2 = glm::vec3(10,100,50);
+			// qDebug("%f    %f    %f",sPos.x,sPos.y,sPos.z);
 			model = glm::translate(glm::mat4(), sPos);
 
 			model = m_globalMatrix * model;
@@ -6376,7 +6410,7 @@ void CMainApplication::RenderScene(vr::Hmd_Eye nEye)
 
 		morphologyShader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 		morphologyShader->setVec3("lightPos", 1.2f, 1.0f, 2.0f);
-		//morphologyShader->setVec3("lightPos",glm::vec3(m_EyeTransLeft * m_HMDTrans* glm::vec4( 0, 0, 0, 1 )));
+		// morphologyShader->setVec3("lightPos",glm::vec3(m_EyeTransLeft * m_HMDTrans* glm::vec4( 0, 0, 0, 1 )));
 
 		glm::mat4 projection, view;
 		if (nEye == vr::Eye_Left)
@@ -6399,19 +6433,19 @@ void CMainApplication::RenderScene(vr::Hmd_Eye nEye)
 		const QHash<int, int> &loaded_hashNeuron = loadedNT_merged.hashNeuron;
 		NeuronSWC S0, S1;
 
-		//freeze is used for brightness suppression
-		//if (!m_bFrozen) {
+		// freeze is used for brightness suppression
+		// if (!m_bFrozen) {
 		//	m_frozen_globalMatrix = m_globalMatrix;
-		//}
-		//else
-		// {
-		// 	m_globalMatrix = m_frozen_globalMatrix;
 		// }
+		// else
+		//  {
+		//  	m_globalMatrix = m_frozen_globalMatrix;
+		//  }
 
 		int cy_count = 0;
-		for (int i = 0; i < loaded_spheres.size(); i++) //loaded neuron tree
+		for (int i = 0; i < loaded_spheres.size(); i++) // loaded neuron tree
 		{
-			//draw sphere
+			// draw sphere
 			glm::mat4 model;
 			Sphere *sphr = loaded_spheres[i];
 			glm::vec3 sPos = loaded_spheresPos[i];
@@ -6420,7 +6454,7 @@ void CMainApplication::RenderScene(vr::Hmd_Eye nEye)
 			model = m_globalMatrix * model;
 
 			morphologyShader->setMat4("model", model);
-			morphologyShader->setVec3("objectColor", surfcolor); //loaded_spheresColor[i]);
+			morphologyShader->setVec3("objectColor", surfcolor); // loaded_spheresColor[i]);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			sphr->Render();
 			morphologyShader->setVec3("objectColor", loaded_spheresColor[i]); // wireframecolor);
@@ -6428,27 +6462,27 @@ void CMainApplication::RenderScene(vr::Hmd_Eye nEye)
 			sphr->Render();
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-			//draw cylinder
-			//int pn = loadedNT_merged.listNeuron[i].pn;
+			// draw cylinder
+			// int pn = loadedNT_merged.listNeuron[i].pn;
 			S0 = loaded_listNeuron.at(i);
 			if (S0.pn != -1)
 			{
 				int j = loaded_hashNeuron.value(S0.pn, -1);
 				S1 = loaded_listNeuron.at(j);
 
-				//cylinder between node i and (pn-1)
+				// cylinder between node i and (pn-1)
 				glm::vec3 v1(0.0f, -1.0f, 0.0f);
 				glm::vec3 v2; // = loaded_spheresPos[pn-1] - loaded_spheresPos[i];
 				v2.x = S1.x - S0.x;
 				v2.y = S1.y - S0.y;
 				v2.z = S1.z - S0.z;
-				float dist = glm::length(v2); //dprintf("dist= %f\n", dist);
-				//v1 = glm::normalize(v1);
+				float dist = glm::length(v2); // dprintf("dist= %f\n", dist);
+				// v1 = glm::normalize(v1);
 				v2 = glm::normalize(v2);
 				float cos_angle = glm::dot(v1, v2);
-				glm::vec3 axis = glm::cross(v1, v2); //todo-yimin: optimizable: these things can be pre-calculated
+				glm::vec3 axis = glm::cross(v1, v2); // todo-yimin: optimizable: these things can be pre-calculated
 
-				//handle degenerated axis. todo: verify
+				// handle degenerated axis. todo: verify
 				if (glm::length(axis) < 0.0001) //(cos_angle < -1 + 0.001f) { //if the angle is 180 degree, any axis will do.
 					axis = glm::cross(glm::vec3(1.0f, 0.0f, 0.0f), v1);
 
@@ -6460,7 +6494,7 @@ void CMainApplication::RenderScene(vr::Hmd_Eye nEye)
 				model = m_globalMatrix * model;
 
 				morphologyShader->setMat4("model", model);
-				morphologyShader->setVec3("objectColor", surfcolor); //loaded_spheresColor[i]);
+				morphologyShader->setVec3("objectColor", surfcolor); // loaded_spheresColor[i]);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 				cy->Render();
 				morphologyShader->setVec3("objectColor", loaded_spheresColor[i]); // wireframecolor);
@@ -6468,7 +6502,7 @@ void CMainApplication::RenderScene(vr::Hmd_Eye nEye)
 				cy->Render();
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			}
-			else //when a node's pn = -1, do not render it's cylinder
+			else // when a node's pn = -1, do not render it's cylinder
 			{
 				cy_count++;
 			}
@@ -6476,7 +6510,7 @@ void CMainApplication::RenderScene(vr::Hmd_Eye nEye)
 
 		cy_count = 0;
 		for (int i = 0; i < sketch_spheres.size(); i++) // sketch neuron tree
-		{												//draw sphere
+		{												// draw sphere
 			glm::mat4 model;
 			Sphere *sphr = sketch_spheres[i];
 			glm::vec3 sPos = sketch_spheresPos[i];
@@ -6493,20 +6527,20 @@ void CMainApplication::RenderScene(vr::Hmd_Eye nEye)
 			sphr->Render();
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-			//draw cylinder
+			// draw cylinder
 			int pn = currentNT.listNeuron[i].pn;
 			if (pn != -1)
 			{
-				//cylinder between node i and (pn-1)
+				// cylinder between node i and (pn-1)
 				glm::vec3 v1(0.0f, -1.0f, 0.0f);
 				glm::vec3 v2 = sketch_spheresPos[pn - 1] - sketch_spheresPos[i]; //+glm::vec3(0.0001,0.0001,0.0001);
-				float dist = glm::length(v2);									 //dprintf("dist= %f\n", dist);
-				//v1 = glm::normalize(v1);
+				float dist = glm::length(v2);									 // dprintf("dist= %f\n", dist);
+				// v1 = glm::normalize(v1);
 				v2 = glm::normalize(v2);
 				float cos_angle = glm::dot(v1, v2);
 				glm::vec3 axis = glm::cross(v1, v2);
 
-				//handle degenerated axis. todo: verify
+				// handle degenerated axis. todo: verify
 				if (glm::length(axis) < 0.0001) //(cos_angle < -1 + 0.001f) { //if the angle is 180 degree, any axis will do.
 					axis = glm::cross(glm::vec3(1.0f, 0.0f, 0.0f), v1);
 
@@ -6526,7 +6560,7 @@ void CMainApplication::RenderScene(vr::Hmd_Eye nEye)
 				cy->Render();
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			}
-			else //when a node's pn = -1, do not render it's cylinder
+			else // when a node's pn = -1, do not render it's cylinder
 			{
 				cy_count++;
 			}
@@ -6544,10 +6578,10 @@ void CMainApplication::RenderScene(vr::Hmd_Eye nEye)
 				globalMatrix_M[i * 4 + j] = m_globalMatrix[i][j];
 			}
 		}
-		Matrix4 model_M = GetCurrentViewProjectionMatrix(nEye) * globalMatrix_M; //eaquls m_mat4ProjectionRight * m_mat4eyePosRight *  m_mat4HMDPose * global;
-		//draw loaded lines (nonEditableLoadedNTL)
+		Matrix4 model_M = GetCurrentViewProjectionMatrix(nEye) * globalMatrix_M; // eaquls m_mat4ProjectionRight * m_mat4eyePosRight *  m_mat4HMDPose * global;
+		// draw loaded lines (nonEditableLoadedNTL)
 		glUseProgram(m_unControllerTransformProgramID);
-		glUniformMatrix4fv(m_nControllerMatrixLocation, 1, GL_FALSE, model_M.get()); //GetCurrentViewProjectionMatrix(nEye).get());// model = globalmatrix * model;?
+		glUniformMatrix4fv(m_nControllerMatrixLocation, 1, GL_FALSE, model_M.get()); // GetCurrentViewProjectionMatrix(nEye).get());// model = globalmatrix * model;?
 
 		// .get() is a const float * m[16], globalmatrix must be a glm::mat4
 		glBindVertexArray(m_unMorphologyLineModeVAO);
@@ -6555,12 +6589,12 @@ void CMainApplication::RenderScene(vr::Hmd_Eye nEye)
 		glDrawElements(GL_LINES, m_uiMorphologyLineModeVertcount, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 
-		//draw currently sketch lines(currentNT)
+		// draw currently sketch lines(currentNT)
 		glBindVertexArray(m_unSketchMorphologyLineModeVAO);
 		glDrawElements(GL_LINES, m_uiSketchMorphologyLineModeVertcount, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 
-		//draw all sketch lines(sketchedNTList)
+		// draw all sketch lines(sketchedNTList)
 		for (int i = 0; i < sketchedNTList.size(); i++)
 		{
 			glBindVertexArray(iSketchNTLMorphologyVAO.at(i));
@@ -6631,7 +6665,7 @@ void CMainApplication::RenderScene(vr::Hmd_Eye nEye)
 			glDisable(GL_BLEND);
 		}
 
-	} //if (m_bControllerModelON)
+	} // if (m_bControllerModelON)
 
 	glUseProgram(0);
 }
@@ -6741,7 +6775,7 @@ void CMainApplication::UpdateHMDMatrixPose()
 	{
 		if (m_rTrackedDevicePose[nDevice].bPoseIsValid)
 		{
-			m_iValidPoseCount++; //note: count all the valid devices? but the value is never used.
+			m_iValidPoseCount++; // note: count all the valid devices? but the value is never used.
 			m_rmat4DevicePose[nDevice] = ConvertSteamVRMatrixToMatrix4(m_rTrackedDevicePose[nDevice].mDeviceToAbsoluteTracking);
 			if (m_rDevClassChar[nDevice] == 0)
 			{
@@ -6773,8 +6807,8 @@ void CMainApplication::UpdateHMDMatrixPose()
 
 	if (m_rTrackedDevicePose[vr::k_unTrackedDeviceIndex_Hmd].bPoseIsValid)
 	{
-		//freeze is used for brightness suppression
-		//if(!m_bFrozen)
+		// freeze is used for brightness suppression
+		// if(!m_bFrozen)
 		{
 			m_mat4HMDPose = m_rmat4DevicePose[vr::k_unTrackedDeviceIndex_Hmd];
 			m_mat4HMDPose.invert();
@@ -6808,7 +6842,7 @@ QString CMainApplication::getHMDPOSstr()
 		}
 	}
 	mat = glm::inverse(m_globalMatrix) * mat;
-	//qDebug()<<" convertedHMD SEND POS  1 "<<mat[3][0]<<" "<<mat[3][1]<<" "<<mat[3][2];
+	// qDebug()<<" convertedHMD SEND POS  1 "<<mat[3][0]<<" "<<mat[3][1]<<" "<<mat[3][2];
 	XYZ convertPOS = ConvertLocaltoGlobalCoords(mat[3][0], mat[3][1], mat[3][2], CollaborationMaxResolution);
 	mat[3][0] = convertPOS.x;
 	mat[3][1] = convertPOS.y;
@@ -6827,25 +6861,25 @@ QString CMainApplication::getHMDPOSstr()
 			positionStr += " ";
 		}
 	}
-	//qDebug()<<"getHMDPOSstr"<<positionStr;
+	// qDebug()<<"getHMDPOSstr"<<positionStr;
 	return positionStr;
 }
 
 QString CMainApplication::NT2QString()
 {
-	//char messageBuff[8000]="";
-	//for(int i=0;(i<sketchNT.listNeuron.size())&&(i<120);i++)
+	// char messageBuff[8000]="";
+	// for(int i=0;(i<sketchNT.listNeuron.size())&&(i<120);i++)
 	//{
 	//	char packetbuff[300];
 	//	NeuronSWC S_temp;
 	//	S_temp=sketchNT.listNeuron.at(i);
 	//	sprintf(packetbuff,"%ld %d %5.3f %5.3f %5.3f %5.3f %ld ",S_temp.n,S_temp.type,S_temp.x,S_temp.y,S_temp.z,S_temp.r,S_temp.pn);
 	//	std::strcat(messageBuff,packetbuff);
-	//}
-	//string str_temp=messageBuff;
-	//QString str=QString::fromStdString(str_temp);
+	// }
+	// string str_temp=messageBuff;
+	// QString str=QString::fromStdString(str_temp);
 	////QString str="hello world";
-	//return str;
+	// return str;
 	string messageBuff = "";
 	for (int i = 0; (i < currentNT.listNeuron.size()) && (i < 120); i++)
 	{
@@ -6861,22 +6895,22 @@ QString CMainApplication::NT2QString()
 	return str;
 }
 
-void CMainApplication::UpdateNTList(QString &msg, int type) //may need to be changed to AddtoNTList( , )
+void CMainApplication::UpdateNTList(QString &msg, int type) // may need to be changed to AddtoNTList( , )
 {
 	QStringList qsl = QString(msg).trimmed().split(" ", QString::SkipEmptyParts);
-	int str_size = qsl.size() - (qsl.size() % 7); //to make sure that the string list size always be 7*N;
-	//qDebug()<<"qsl.size()"<<qsl.size()<<"str_size"<<str_size;
+	int str_size = qsl.size() - (qsl.size() % 7); // to make sure that the string list size always be 7*N;
+	// qDebug()<<"qsl.size()"<<qsl.size()<<"str_size"<<str_size;
 	NeuronSWC S_temp;
 	NeuronTree newTempNT;
 	newTempNT.listNeuron.clear();
 	newTempNT.hashNeuron.clear();
 	qDebug() << "type" << type << endl;
-	//each segment has a unique ID storing as its name
+	// each segment has a unique ID storing as its name
 	newTempNT.name = "sketch_" + QString("%1").arg(sketchNum++);
 	for (int i = 0; i < str_size; i++)
 	{
 		qsl[i].truncate(99);
-		//qDebug()<<qsl[i];
+		// qDebug()<<qsl[i];
 		int iy = i % 7;
 		if (iy == 0)
 		{
@@ -6905,7 +6939,7 @@ void CMainApplication::UpdateNTList(QString &msg, int type) //may need to be cha
 		else if (iy == 6)
 		{
 			S_temp.pn = qsl[i].toInt();
-			//converted received NT XYZ coords
+			// converted received NT XYZ coords
 			XYZ tempxyz = ConvertGlobaltoLocalCoords(S_temp.x, S_temp.y, S_temp.z);
 			S_temp.x = tempxyz.x;
 			S_temp.y = tempxyz.y;
@@ -6938,7 +6972,7 @@ void CMainApplication::ClearCurrentNT()
 QString CMainApplication::FindNearestSegment(glm::vec3 dPOS)
 {
 	QString ntnametofind = "";
-	//qDebug()<<sketchedNTList.size();
+	// qDebug()<<sketchedNTList.size();
 	if (sketchedNTList.size() < 1)
 		return ntnametofind;
 
@@ -6958,19 +6992,19 @@ QString CMainApplication::FindNearestSegment(glm::vec3 dPOS)
 				XYZ TargetresSS0POS = ConvertLocaltoGlobalCoords(SS0.x, SS0.y, SS0.z, collaborationTargetdelcurveRes);
 				dist = glm::sqrt((TargetresdPOS.x - TargetresSS0POS.x) * (TargetresdPOS.x - TargetresSS0POS.x) + (TargetresdPOS.y - TargetresSS0POS.y) * (TargetresdPOS.y - TargetresSS0POS.y) + (TargetresdPOS.z - TargetresSS0POS.z) * (TargetresdPOS.z - TargetresSS0POS.z));
 			}
-			//cal the dist between pos & current node'position, then compare with the threshold
+			// cal the dist between pos & current node'position, then compare with the threshold
 			if (dist < (dist_thres / m_globalScale * 5))
 			{
-				//once dist between pos & node < threshold, return the segment/neurontree' name that current node belong to
+				// once dist between pos & node < threshold, return the segment/neurontree' name that current node belong to
 				ntnametofind = nt.name;
 				return ntnametofind;
 			}
 		}
 	}
-	//if cannot find any matches, return ""
+	// if cannot find any matches, return ""
 	return ntnametofind;
 }
-NeuronSWC CMainApplication::FindNearestNode(NeuronTree NT, glm::vec3 dPOS) //lq
+NeuronSWC CMainApplication::FindNearestNode(NeuronTree NT, glm::vec3 dPOS) // lq
 {
 	NeuronSWC SS0;
 	for (int i = 0; i < NT.listNeuron.size(); i++)
@@ -6978,10 +7012,10 @@ NeuronSWC CMainApplication::FindNearestNode(NeuronTree NT, glm::vec3 dPOS) //lq
 
 		SS0 = NT.listNeuron.at(i);
 		float dist = glm::sqrt((dPOS.x - SS0.x) * (dPOS.x - SS0.x) + (dPOS.y - SS0.y) * (dPOS.y - SS0.y) + (dPOS.z - SS0.z) * (dPOS.z - SS0.z));
-		//cal the dist between pos & current node'position, then compare with the threshold
+		// cal the dist between pos & current node'position, then compare with the threshold
 		if (dist < (dist_thres / m_globalScale * 5))
 		{
-			//once dist between pos & node < threshold, return the the node
+			// once dist between pos & node < threshold, return the the node
 			return SS0;
 		}
 	}
@@ -7003,10 +7037,10 @@ void CMainApplication::UpdateDragNodeinNTList(int ntnum, int swcnum, float nodex
 
 bool CMainApplication::DeleteSegment(QString segName)
 {
-	//delete the segment that match with segName
+	// delete the segment that match with segName
 	cout << "segname is " << endl;
 	if (segName == "")
-		return false; //segName="" will do nothing
+		return false; // segName="" will do nothing
 	for (int i = 0; i < sketchedNTList.size(); i++)
 	{
 		QString NTname = "";
@@ -7014,13 +7048,13 @@ bool CMainApplication::DeleteSegment(QString segName)
 		if (segName == NTname)
 		{
 			cout << "find delete seg!@!!@" << endl;
-			//delete the segment in NTList,then return
+			// delete the segment in NTList,then return
 			sketchedNTList.removeAt(i);
 			SetupSingleMorphologyLine(i, 2);
 			return true;
 		}
 	}
-	//if cannot find any matches,return false
+	// if cannot find any matches,return false
 	return false;
 }
 
@@ -7176,14 +7210,14 @@ void CMainApplication::SetupRenderModelForTrackedDevice(vr::TrackedDeviceIndex_t
 //-----------------------------------------------------------------------------
 // Purpose: Create/destroy GL Render Models
 //-----------------------------------------------------------------------------
-void CMainApplication::SetupRenderModels() //question: purpose? for the 16 VR devices?
+void CMainApplication::SetupRenderModels() // question: purpose? for the 16 VR devices?
 {
 	memset(m_rTrackedDeviceToRenderModel, 0, sizeof(m_rTrackedDeviceToRenderModel));
 
 	if (!m_pHMD)
 		return;
 
-	for (uint32_t unTrackedDevice = vr::k_unTrackedDeviceIndex_Hmd + 1; unTrackedDevice < vr::k_unMaxTrackedDeviceCount; unTrackedDevice++) //note: don't include the hmd
+	for (uint32_t unTrackedDevice = vr::k_unTrackedDeviceIndex_Hmd + 1; unTrackedDevice < vr::k_unMaxTrackedDeviceCount; unTrackedDevice++) // note: don't include the hmd
 	{
 		if (!m_pHMD->IsTrackedDeviceConnected(unTrackedDevice))
 			continue;
@@ -7233,7 +7267,7 @@ void CMainApplication::RefineSketchCurve(int direction, NeuronTree &oldNTree, Ne
 	vector<Segment *> seg_list;
 	for (V3DLONG i = 0; i < siz; i++)
 	{
-		if (tree[i]->childNum != 1) //tip or branch point
+		if (tree[i]->childNum != 1) // tip or branch point
 		{
 			Segment *seg = new Segment;
 			Point *cur = tree[i];
@@ -7283,7 +7317,7 @@ void CMainApplication::RefineSketchCurve(int direction, NeuronTree &oldNTree, Ne
 				farpos_vec.push_back(MyMarker(loc1.x, loc1.y, loc1.z));
 			}
 
-			//fastmarching_drawing_dynamic(nearpos_vec, farpos_vec, (unsigned char*)data1d, outswc, N,M,P, 1, 5);
+			// fastmarching_drawing_dynamic(nearpos_vec, farpos_vec, (unsigned char*)data1d, outswc, N,M,P, 1, 5);
 			fastmarching_drawing_serialbboxes(nearpos_vec, farpos_vec, (unsigned char *)data1d, outswc, N, M, P, 1, 5);
 			qDebug() << "done fm function start smooth";
 			smooth_sketch_curve(outswc, 5);
@@ -7390,8 +7424,8 @@ void CMainApplication::RefineSketchCurve(int direction, NeuronTree &oldNTree, Ne
 	VectorResampling(outswc_final_vec, outswc_final_vec_resampled, 0.5f);
 	reverse(outswc_final_vec_resampled.begin(), outswc_final_vec_resampled.end());
 	VectorToNeuronTree(newNTree, outswc_final_vec_resampled, m_curMarkerColorType);
-	//can change current neurontree's color by using
-	//VectorToNeuronTree(newNTree,outswc_final_vec_resampled,type);
+	// can change current neurontree's color by using
+	// VectorToNeuronTree(newNTree,outswc_final_vec_resampled,type);
 	outswc_final_vec.clear();
 	outswc_final_vec_resampled.clear(); //*/
 
@@ -7402,7 +7436,7 @@ void CMainApplication::RefineSketchCurve(int direction, NeuronTree &oldNTree, Ne
 //-----------------------------------------------------------------------------
 // Purpose: Converts a SteamVR matrix to our local matrix class
 //-----------------------------------------------------------------------------
-Matrix4 CMainApplication::ConvertSteamVRMatrixToMatrix4(const vr::HmdMatrix34_t &matPose) //note: just called once.
+Matrix4 CMainApplication::ConvertSteamVRMatrixToMatrix4(const vr::HmdMatrix34_t &matPose) // note: just called once.
 {
 	Matrix4 matrixObj(
 		matPose.m[0][0], matPose.m[1][0], matPose.m[2][0], 0.0,
@@ -7417,7 +7451,7 @@ Matrix4 CMainApplication::ConvertSteamVRMatrixToMatrix4(const vr::HmdMatrix34_t 
 ***********************************/
 void CMainApplication::SetupCubeForImage4D()
 {
-	//qDebug("SetupCubeForImage4D() is called.");
+	// qDebug("SetupCubeForImage4D() is called.");
 
 	GLfloat vertices[24] = {
 		0.0, 0.0, 0.0,
@@ -7505,7 +7539,7 @@ void CMainApplication::SetupCubeForImage4D()
 // init the 1 dimentional texture for transfer function
 GLuint CMainApplication::initTFF1DTex()
 {
-	//qDebug("initTFF1DTex() is called.");
+	// qDebug("initTFF1DTex() is called.");
 
 	// read in the user defined data of transfer function
 	//    ifstream inFile(filename, ifstream::in);
@@ -7569,7 +7603,7 @@ GLuint CMainApplication::initTFF1DTex()
 // init the 2D texture for render backface 'bf' stands for backface
 GLuint CMainApplication::initFace2DTex(GLuint bfTexWidth, GLuint bfTexHeight)
 {
-	//qDebug("initFace2DTex() is called.");
+	// qDebug("initFace2DTex() is called.");
 
 	GLuint backFace2DTex;
 	glGenTextures(1, &backFace2DTex);
@@ -7608,7 +7642,7 @@ GLuint CMainApplication::initVol3DTex()
 		{
 		case 1:
 		{
-			//GLubyte * testData = new GLubyte[img4d->getTotalUnitNumberPerChannel() * 3];
+			// GLubyte * testData = new GLubyte[img4d->getTotalUnitNumberPerChannel() * 3];
 			glTexImage3D(GL_TEXTURE_3D, 0, GL_RED, w, h, d, 0, GL_RED, GL_UNSIGNED_BYTE, (GLubyte *)img4d->getRawData());
 		}
 		break;
@@ -7634,21 +7668,21 @@ GLuint CMainApplication::initVol3DTex()
 			break;
 		}
 
-		//glTexImage3D(GL_TEXTURE_3D, 0, GL_INTENSITY, w, h, d, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, (GLvoid*)data);
+		// glTexImage3D(GL_TEXTURE_3D, 0, GL_INTENSITY, w, h, d, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, (GLvoid*)data);
 		/*GLubyte * RData = img4d->getRawDataAtChannel(0);
 	GLubyte * GData = img4d->getRawDataAtChannel(1);
 	GLubyte * BData = img4d->getRawDataAtChannel(2);
 	GLubyte * RBGData = new GLubyte[img4d->getTotalUnitNumberPerChannel()*3];
 	cout<<"step 2"<<endl;
 	for(int i = 0;i<img4d->getTotalUnitNumberPerChannel()*3;)
-	{	
+	{
 		RBGData[i] = RData[i/3];
 		RBGData[i+1] = GData[i/3];
 		RBGData[i+2] = BData[i/3];
 		i+=3;
 	}
 	cout<<"step 3"<<endl;
-    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB, w, h, d, 0, GL_RGB, GL_UNSIGNED_BYTE, (GLubyte *)RBGData);*/
+	glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB, w, h, d, 0, GL_RGB, GL_UNSIGNED_BYTE, (GLubyte *)RBGData);*/
 
 		GL_ERROR();
 		cout << "volume texture created" << endl;
@@ -7698,7 +7732,7 @@ GLuint CMainApplication::initVolOctree3DTex(int step, GLuint g_volTexObj_octree)
 }
 void CMainApplication::initFrameBufferForVolumeRendering(GLuint texObj, GLuint texWidth, GLuint texHeight)
 {
-	//qDebug("initFrameBufferForVolumeRendering() is called.");
+	// qDebug("initFrameBufferForVolumeRendering() is called.");
 
 	// create a depth buffer for our framebuffer
 	GLuint depthBuffer;
@@ -7712,7 +7746,7 @@ void CMainApplication::initFrameBufferForVolumeRendering(GLuint texObj, GLuint t
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texObj, 0);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
 
-	//check Framebuffer Status
+	// check Framebuffer Status
 	GLenum complete = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	if (complete != GL_FRAMEBUFFER_COMPLETE)
 	{
@@ -7723,10 +7757,10 @@ void CMainApplication::initFrameBufferForVolumeRendering(GLuint texObj, GLuint t
 	glEnable(GL_DEPTH_TEST);
 }
 
-//setup container cube, 1D, 2D, 3D textures, and framebuffer for volume rendering
+// setup container cube, 1D, 2D, 3D textures, and framebuffer for volume rendering
 void CMainApplication::SetupVolumeRendering()
 {
-	//qDebug("SetupVolumeRendering() is called.");
+	// qDebug("SetupVolumeRendering() is called.");
 
 	g_texWidth = g_winWidth = m_nRenderWidth;
 	g_texHeight = g_winHeight = m_nRenderHeight;
@@ -7735,19 +7769,19 @@ void CMainApplication::SetupVolumeRendering()
 
 	SetupCubeForImage4D();
 
-	//g_tffTexObj = initTFF1DTex();
+	// g_tffTexObj = initTFF1DTex();
 	g_bfTexObj = initFace2DTex(g_texWidth, g_texHeight);
 	g_volTexObj = initVol3DTex();
-	//g_volTexObj_octree_8 = initVolOctree3DTex(8);
-	//g_volTexObj_octree_16 = initVolOctree3DTex(16,g_volTexObj_octree_16);
-	//g_volTexObj_octree_64 = initVolOctree3DTex(64,g_volTexObj_octree_64);
-	//g_volTexObj_octree_32 = initVolOctree3DTex(32);
+	// g_volTexObj_octree_8 = initVolOctree3DTex(8);
+	// g_volTexObj_octree_16 = initVolOctree3DTex(16,g_volTexObj_octree_16);
+	// g_volTexObj_octree_64 = initVolOctree3DTex(64,g_volTexObj_octree_64);
+	// g_volTexObj_octree_32 = initVolOctree3DTex(32);
 	initFrameBufferForVolumeRendering(g_bfTexObj, g_texWidth, g_texHeight);
 }
 
 bool CMainApplication::CreateVolumeRenderingShaders()
 {
-	//qDebug("CreateVolumeRenderingShaders() is called.");
+	// qDebug("CreateVolumeRenderingShaders() is called.");
 	QString qappDirPath = QCoreApplication::applicationDirPath();
 	raycastingShader = new Shader(string(qappDirPath.toStdString() + "/materials/raycasting.vert").c_str(), string(qappDirPath.toStdString() + "/materials/raycasting.frag").c_str());
 	backfaceShader = new Shader(string(qappDirPath.toStdString() + "/materials/backface.vert").c_str(), string(qappDirPath.toStdString() + "/materials/backface.frag").c_str());
@@ -7779,7 +7813,7 @@ void CMainApplication::RenderImage4D(Shader *shader, vr::Hmd_Eye nEye, GLenum cu
 
 	if (cullFace == GL_BACK)
 	{
-		//for the patch, tranform the coordinates from NDC space back to world space
+		// for the patch, tranform the coordinates from NDC space back to world space
 		clipPatchShader->use();
 		clipPatchShader->setMat4("MVP", mvp);
 		glBindVertexArray(m_clipPatchVAO);
@@ -7804,13 +7838,13 @@ void CMainApplication::SetUinformsForRayCasting()
 
 	raycastingShader->setVec2("ScreenSize", (float)g_winWidth, (float)g_winHeight);
 	raycastingShader->setFloat("StepSize", 0.001f);
-	//raycastingShader->setFloat("Stepsizeoctree8",0.01f);
-	//raycastingShader->setFloat("Stepsizeoctree16",0.02f);
-	//raycastingShader->setFloat("Stepsizeoctree32",0.04f);
-	//raycastingShader->setFloat("Stepsizeoctree64",0.08f);
+	// raycastingShader->setFloat("Stepsizeoctree8",0.01f);
+	// raycastingShader->setFloat("Stepsizeoctree16",0.02f);
+	// raycastingShader->setFloat("Stepsizeoctree32",0.04f);
+	// raycastingShader->setFloat("Stepsizeoctree64",0.08f);
 	raycastingShader->setVec2("ImageSettings", fContrast, fBrightness);
-	//raycastingShader->setFloat("contrast ",fContrast);
-	//raycastingShader->setFloat("brightness ",fBrightness);
+	// raycastingShader->setFloat("contrast ",fContrast);
+	// raycastingShader->setFloat("brightness ",fBrightness);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_1D, g_tffTexObj);
@@ -7839,7 +7873,7 @@ void CMainApplication::SetUinformsForRayCasting()
 	// glBindTexture(GL_TEXTURE_3D, g_volTexObj_octree_64);
 	// raycastingShader->setInt("VolumeTexoctree64", 6);
 
-	if (img4d->getCDim() == 1) //single channel image
+	if (img4d->getCDim() == 1) // single channel image
 		// to do
 		raycastingShader->setInt("channel", 0);
 
@@ -7869,7 +7903,7 @@ void CMainApplication::SetUinformsForRayCasting()
 //-----------------------------------------------------------------------------
 // Purpose: Create/destroy GL Render Models
 //-----------------------------------------------------------------------------
-CGLRenderModel::CGLRenderModel(const std::string &sRenderModelName) //todo: set vao vbo to zero
+CGLRenderModel::CGLRenderModel(const std::string &sRenderModelName) // todo: set vao vbo to zero
 	: m_sModelName(sRenderModelName)
 {
 	m_glIndexBuffer = 0;
@@ -7941,7 +7975,7 @@ bool CGLRenderModel::BInit(const vr::RenderModel_t &vrModel, const vr::RenderMod
 //-----------------------------------------------------------------------------
 // Purpose: Frees the GL resources for a render model
 //-----------------------------------------------------------------------------
-void CGLRenderModel::Cleanup() //todo: delete vao, vbo
+void CGLRenderModel::Cleanup() // todo: delete vao, vbo
 {
 	if (m_glVertBuffer)
 	{
@@ -7971,7 +8005,7 @@ void CGLRenderModel::Draw()
 
 void CMainApplication::SetupSingleMorphologyLine(int ntIndex, int processMode)
 {
-	//qDebug()<<"index = "<< ntIndex<<" and mode ="<<processMode;
+	// qDebug()<<"index = "<< ntIndex<<" and mode ="<<processMode;
 	if (processMode == 0)
 	// add a new VAO&VBO for new segment in sketchedNTList
 	{
@@ -8062,7 +8096,7 @@ glm::vec2 CMainApplication::calculateshootingPadUV()
 	point_leftbottom = mat_L * point_leftbottom;
 	point_rightbottom = mat_L * point_rightbottom;
 
-	//update shootingray data and Pad pos
+	// update shootingray data and Pad pos
 	glm::vec3 FuncPadPosV1 = glm::vec3(point_lefttop.x, point_lefttop.y, point_lefttop.z);
 	glm::vec3 FuncPadPosV0 = glm::vec3(point_leftbottom.x, point_leftbottom.y, point_leftbottom.z);
 	glm::vec3 FuncPadPosV2 = glm::vec3(point_rightbottom.x, point_rightbottom.y, point_rightbottom.z);
@@ -8103,7 +8137,7 @@ glm::vec2 CMainApplication::calculateshootingPadUV()
 	{
 		return glm::vec2(-1, -1);
 	}
-	//t means shooting Distance from the starting point of the ray to the point of intersection
+	// t means shooting Distance from the starting point of the ray to the point of intersection
 	float t = glm::dot(E2, Q);
 	float fInvDet = 1.0f / det;
 	t *= fInvDet;
@@ -8122,35 +8156,35 @@ void CMainApplication::ColorMenuChoose(glm::vec2 UV)
 	{
 		if (panelpos_x > 0 && panelpos_x <= 0.2)
 		{
-			m_curMarkerColorType = 0; //white
+			m_curMarkerColorType = 0; // white
 			ctrSphereColor[0] = neuron_type_color[m_curMarkerColorType][0] / 255.0;
 			ctrSphereColor[1] = neuron_type_color[m_curMarkerColorType][1] / 255.0;
 			ctrSphereColor[2] = neuron_type_color[m_curMarkerColorType][2] / 255.0;
 		}
 		if (panelpos_x <= 0.4 && panelpos_x >= 0.2)
 		{
-			m_curMarkerColorType = 1; //black
+			m_curMarkerColorType = 1; // black
 			ctrSphereColor[0] = neuron_type_color[m_curMarkerColorType][0] / 255.0;
 			ctrSphereColor[1] = neuron_type_color[m_curMarkerColorType][1] / 255.0;
 			ctrSphereColor[2] = neuron_type_color[m_curMarkerColorType][2] / 255.0;
 		}
 		if (panelpos_x <= 0.6 && panelpos_x >= 0.4)
 		{
-			m_curMarkerColorType = 2; //red
+			m_curMarkerColorType = 2; // red
 			ctrSphereColor[0] = neuron_type_color[m_curMarkerColorType][0] / 255.0;
 			ctrSphereColor[1] = neuron_type_color[m_curMarkerColorType][1] / 255.0;
 			ctrSphereColor[2] = neuron_type_color[m_curMarkerColorType][2] / 255.0;
 		}
 		if (panelpos_x <= 0.8 && panelpos_x >= 0.6)
 		{
-			m_curMarkerColorType = 3; //blue
+			m_curMarkerColorType = 3; // blue
 			ctrSphereColor[0] = neuron_type_color[m_curMarkerColorType][0] / 255.0;
 			ctrSphereColor[1] = neuron_type_color[m_curMarkerColorType][1] / 255.0;
 			ctrSphereColor[2] = neuron_type_color[m_curMarkerColorType][2] / 255.0;
 		}
 		if (panelpos_x <= 1 && panelpos_x >= 0.8)
 		{
-			m_curMarkerColorType = 4; //purple
+			m_curMarkerColorType = 4; // purple
 			ctrSphereColor[0] = neuron_type_color[m_curMarkerColorType][0] / 255.0;
 			ctrSphereColor[1] = neuron_type_color[m_curMarkerColorType][1] / 255.0;
 			ctrSphereColor[2] = neuron_type_color[m_curMarkerColorType][2] / 255.0;
@@ -8160,21 +8194,21 @@ void CMainApplication::ColorMenuChoose(glm::vec2 UV)
 	{
 		if (panelpos_x > 0 && panelpos_x <= 0.2)
 		{
-			m_curMarkerColorType = 5; //cyan
+			m_curMarkerColorType = 5; // cyan
 			ctrSphereColor[0] = neuron_type_color[m_curMarkerColorType][0] / 255.0;
 			ctrSphereColor[1] = neuron_type_color[m_curMarkerColorType][1] / 255.0;
 			ctrSphereColor[2] = neuron_type_color[m_curMarkerColorType][2] / 255.0;
 		}
 		if (panelpos_x <= 0.4 && panelpos_x >= 0.2)
 		{
-			m_curMarkerColorType = 6; //yellow
+			m_curMarkerColorType = 6; // yellow
 			ctrSphereColor[0] = neuron_type_color[m_curMarkerColorType][0] / 255.0;
 			ctrSphereColor[1] = neuron_type_color[m_curMarkerColorType][1] / 255.0;
 			ctrSphereColor[2] = neuron_type_color[m_curMarkerColorType][2] / 255.0;
 		}
 		if (panelpos_x <= 0.6 && panelpos_x >= 0.4)
 		{
-			m_curMarkerColorType = 7; //green
+			m_curMarkerColorType = 7; // green
 			ctrSphereColor[0] = neuron_type_color[m_curMarkerColorType][0] / 255.0;
 			ctrSphereColor[1] = neuron_type_color[m_curMarkerColorType][1] / 255.0;
 			ctrSphereColor[2] = neuron_type_color[m_curMarkerColorType][2] / 255.0;
@@ -8186,7 +8220,7 @@ void CMainApplication::MenuFunctionChoose(glm::vec2 UV)
 	float panelpos_x = UV.x;
 	float panelpos_y = UV.y;
 
-	//choose left controllerFunction
+	// choose left controllerFunction
 	if (panelpos_x <= 0.436)
 	{
 		if ((panelpos_x <= 0.26) && (panelpos_y <= 0.25) && (panelpos_y >= 0.075) && (panelpos_x >= 0.1))
@@ -8215,7 +8249,7 @@ void CMainApplication::MenuFunctionChoose(glm::vec2 UV)
 			m_modeGrip_L = _ColorChange;
 			m_secondMenu = _colorPad;
 			showshootingPad = false;
-			//hide top menu,show color menu
+			// hide top menu,show color menu
 		}
 		if ((panelpos_x <= 0.26) && (panelpos_y <= 0.8) && (panelpos_y >= 0.617) && (panelpos_x >= 0.1))
 		{
@@ -8228,11 +8262,11 @@ void CMainApplication::MenuFunctionChoose(glm::vec2 UV)
 		if ((panelpos_x <= 0.26) && (panelpos_y <= 1) && (panelpos_y >= 0.8) && (panelpos_x >= 0.1))
 		{
 			m_modeGrip_L = _RGBImage;
-			//m_modeGrip_L = _LineWidth;
+			// m_modeGrip_L = _LineWidth;
 		}
 		if ((panelpos_x <= 0.436) && (panelpos_y <= 1) && (panelpos_y >= 0.8) && (panelpos_x >= 0.27))
 		{
-			//m_modeGrip_L = _Contrast;
+			// m_modeGrip_L = _Contrast;
 			m_modeGrip_L = _StretchImage;
 		}
 		// else if((panelpos_x <= 0.26) && (panelpos_y<= 0.59)&&(panelpos_y >= 0.5)&&(panelpos_x >= 0.1))
@@ -8241,16 +8275,16 @@ void CMainApplication::MenuFunctionChoose(glm::vec2 UV)
 		// }
 		// else if((panelpos_x <= 0.436) && (panelpos_y<= 0.59)&&(panelpos_y >= 0.5)&&(panelpos_x >= 0.27))
 		// {
-		//m_modeGrip_L = _LineWidth;
+		// m_modeGrip_L = _LineWidth;
 		// }
 		// else if((panelpos_x <= 0.26) && (panelpos_y<= 0.68)&&(panelpos_y >= 0.59)&&(panelpos_x >= 0.1))
 		// {
 		// 	m_modeGrip_L = _MovetoCreator;
 		// }
 		//
-		//these function may be added in the future
+		// these function may be added in the future
 	}
-	//choose Right controllerFunction
+	// choose Right controllerFunction
 	if (panelpos_x >= 0.437)
 	{
 		if ((panelpos_x >= 0.437) && (panelpos_x <= 0.626) && (panelpos_y >= 0.07) && (panelpos_y <= 0.25))
@@ -8264,12 +8298,12 @@ void CMainApplication::MenuFunctionChoose(glm::vec2 UV)
 		if ((panelpos_x >= 0.437) && (panelpos_x <= 0.626) && (panelpos_y >= 0.25) && (panelpos_y <= 0.44))
 		{
 			m_modeGrip_R = m_insertnodeMode;
-			//m_modeGrip_R = m_markMode;
+			// m_modeGrip_R = m_markMode;
 		}
 		else if ((panelpos_x >= 0.626) && (panelpos_x <= 0.806) && (panelpos_y >= 0.25) && (panelpos_y <= 0.44))
 		{
 			m_modeGrip_R = m_markMode;
-			//m_modeGrip_R = m_ConnectMode;
+			// m_modeGrip_R = m_ConnectMode;
 		}
 		if ((panelpos_x >= 0.437) && (panelpos_x <= 0.626) && (panelpos_y >= 0.44) && (panelpos_y <= 0.617))
 		{
@@ -8287,16 +8321,16 @@ void CMainApplication::MenuFunctionChoose(glm::vec2 UV)
 		{
 			m_modeGrip_L = _Contrast;
 		}
-		//else if((panelpos_x >= 0.437)&&(panelpos_x <= 0.626)&&(panelpos_y >= 0.617)&&(panelpos_y <= 0.8))
+		// else if((panelpos_x >= 0.437)&&(panelpos_x <= 0.626)&&(panelpos_y >= 0.617)&&(panelpos_y <= 0.8))
 		//{
 		//	m_modeGrip_R = m_clipplaneMode;
-		//}
-		//else if((panelpos_x >= 0.626)&&(panelpos_x <= 0.806)&&(panelpos_y >= 0.617)&&(panelpos_y <= 0.8))
+		// }
+		// else if((panelpos_x >= 0.626)&&(panelpos_x <= 0.806)&&(panelpos_y >= 0.617)&&(panelpos_y <= 0.8))
 		//{
 		//	m_modeGrip_R = m_slabplaneMode;
-		//}
+		// }
 	}
-	if (panelpos_x >= 0.806) //switch touchpad right function
+	if (panelpos_x >= 0.806) // switch touchpad right function
 	{
 		if ((panelpos_y >= 0.09) && (panelpos_y <= 0.305))
 		{
@@ -8308,7 +8342,7 @@ void CMainApplication::MenuFunctionChoose(glm::vec2 UV)
 		}
 	}
 }
-XYZ CMainApplication::ConvertLocaltoGlobalCoords(float x, float y, float z, XYZ targetRes) //localtogolbal
+XYZ CMainApplication::ConvertLocaltoGlobalCoords(float x, float y, float z, XYZ targetRes) // localtogolbal
 {
 	x += (CmainVRVolumeStartPoint.x - 1);
 	y += (CmainVRVolumeStartPoint.y - 1);
@@ -8329,7 +8363,7 @@ XYZ CMainApplication::ConvertGlobaltoLocalCoords(float x, float y, float z)
 
 	return XYZ(x, y, z);
 }
-//bool CMainApplication::FlashStuff(FlashType type,XYZ coords)
+// bool CMainApplication::FlashStuff(FlashType type,XYZ coords)
 //{
 //	switch (type)
 //	{
@@ -8380,7 +8414,7 @@ XYZ CMainApplication::ConvertGlobaltoLocalCoords(float x, float y, float z)
 //		break;
 //	}
 //	return true;
-//}
+// }
 template <class T>
 MinMaxOctree<T>::MinMaxOctree(int width, int height, int depth, int step)
 {
@@ -8416,14 +8450,14 @@ void MinMaxOctree<T>::build(T *volumeData, int volumeWidth, int volumeHeight, in
 	cout << "octree width height depth = " << this->width << " " << this->height << " " << this->depth << " end" << endl;
 	int octreeIndex, volumeIndex;
 
-	//v3d image data  stored order : width , height ,depth .see m3dimage.cpp row 273
+	// v3d image data  stored order : width , height ,depth .see m3dimage.cpp row 273
 	for (int w = 0; w < this->width; w++)
 	{
 		for (int h = 0; h < this->height; h++)
 		{
 			for (int d = 0; d < this->depth; d++)
 			{
-				//cout<<"row   "<<w<<"column   "<<h<<"depth "<<d<<endl;
+				// cout<<"row   "<<w<<"column   "<<h<<"depth "<<d<<endl;
 				int volumeindexDep, volumeindexWid, volumeindexHeight;
 				for (int vw = 0; vw < step; vw++)
 				{
@@ -8437,7 +8471,7 @@ void MinMaxOctree<T>::build(T *volumeData, int volumeWidth, int volumeHeight, in
 							break;
 						for (int vd = 0; vd < step; vd++)
 						{
-							//cout<<"volume row   "<<w+vw<<"column   "<<h+vh<<"depth "<<d+vd<<endl;
+							// cout<<"volume row   "<<w+vw<<"column   "<<h+vh<<"depth "<<d+vd<<endl;
 							volumeindexDep = (d * step + vd) >= volumeDepth ? (volumeDepth - 1) : (d * step + vd);
 							if (volumeindexDep == volumeDepth - 1)
 								break;
