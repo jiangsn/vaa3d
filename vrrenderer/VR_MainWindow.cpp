@@ -18,12 +18,20 @@ VR_MainWindow::VR_MainWindow(V3dR_Communicator *TeraflyCommunicator) : QWidget()
 	QRegExp regex("^[a-zA-Z]\\w+");
 	socket = new QTcpSocket(this);
 	VR_Communicator = TeraflyCommunicator;
+<<<<<<< HEAD
 	// disconnect(VR_Communicator->socket, SIGNAL(readyRead()), VR_Communicator, SLOT(VR_Communicator->onReadyRead()));
+=======
+	//disconnect(VR_Communicator->socket, SIGNAL(readyRead()), VR_Communicator, SLOT(VR_Communicator->onReadyRead()));
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 	connect(VR_Communicator->socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
 	connect(this, SIGNAL(sendPoolHead()), this, SLOT(onReadySend()));
 	userName = TeraflyCommunicator->userName;
 	CURRENT_DATA_IS_SENT = false;
+<<<<<<< HEAD
 	numreceivedmessage = 0; // for debug hl
+=======
+	numreceivedmessage = 0; //for debug hl
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 	numsendmessage = 0;
 }
 
@@ -48,7 +56,11 @@ bool VR_MainWindow::SendLoginRequest(bool resume)
 		if (!ok1 || serverName.isEmpty())
 		{
 			qDebug() << "WRONG!EMPTY! ";
+<<<<<<< HEAD
 			// return SendLoginRequest();
+=======
+			//return SendLoginRequest();
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 			return 0;
 		}
 		else
@@ -65,7 +77,11 @@ bool VR_MainWindow::SendLoginRequest(bool resume)
 			if (!ok2 || vr_Port.isEmpty())
 			{
 				qDebug() << "WRONG!EMPTY! ";
+<<<<<<< HEAD
 				// return SendLoginRequest();
+=======
+				//return SendLoginRequest();
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 				return 0;
 			}
 			else
@@ -82,7 +98,11 @@ bool VR_MainWindow::SendLoginRequest(bool resume)
 				if (!ok3 || userName.isEmpty())
 				{
 					qDebug() << "WRONG!EMPTY! ";
+<<<<<<< HEAD
 					// return SendLoginRequest();
+=======
+					//return SendLoginRequest();
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 					return 0;
 				}
 				else
@@ -90,9 +110,15 @@ bool VR_MainWindow::SendLoginRequest(bool resume)
 			}
 
 			Agent agent00 = {
+<<<<<<< HEAD
 				// with local information
 				userName,
 				true, // means this struct point to itself,no need to render
+=======
+				//with local information
+				userName,
+				true, //means this struct point to itself,no need to render
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 				21,
 				0,
 			};
@@ -112,9 +138,15 @@ bool VR_MainWindow::SendLoginRequest(bool resume)
 		userName = userNameDefault;
 		settings.setValue("vr_userName", userName);
 		Agent agent00 = {
+<<<<<<< HEAD
 			// with local information
 			userName,
 			true, // means this struct point to itself,no need to render
+=======
+			//with local information
+			userName,
+			true, //means this struct point to itself,no need to render
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 			21,
 			0};
 		Agents.push_back(agent00);
@@ -179,6 +211,7 @@ void VR_MainWindow::onReadyRead()
 		if (usersRex.indexIn(line) != -1)
 		{
 			QStringList users = usersRex.cap(1).split(",");
+<<<<<<< HEAD
 			// qDebug()<<"Current users are:";
 			foreach (QString user, users)
 			{
@@ -186,6 +219,15 @@ void VR_MainWindow::onReadyRead()
 				if (user == userName)
 					continue; // skip itself
 				// traverse the user list. Create new item for Agents[] if there is a new agent.
+=======
+			//qDebug()<<"Current users are:";
+			foreach (QString user, users)
+			{
+				//qDebug()<<user;
+				if (user == userName)
+					continue; // skip itself
+				//traverse the user list. Create new item for Agents[] if there is a new agent.
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 				bool findSameAgent = false;
 				for (int i = 0; i < VR_Communicator->Agents.size(); i++)
 				{
@@ -210,35 +252,61 @@ void VR_MainWindow::onReadyRead()
 		}
 		else if (systemRex.indexIn(line) != -1)
 		{
+<<<<<<< HEAD
 			// QString msg = systemRex.cap(1);
 			// qDebug()<<"System's Broadcast:"<<msg;
 			QStringList sysMSGs = systemRex.cap(1).split(" ");
 			if (sysMSGs.size() < 2)
 				return;
 			// Update Agents[] on user login/logout
+=======
+			//QString msg = systemRex.cap(1);
+			//qDebug()<<"System's Broadcast:"<<msg;
+			QStringList sysMSGs = systemRex.cap(1).split(" ");
+			if (sysMSGs.size() < 2)
+				return;
+			//Update Agents[] on user login/logout
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 			QString user = sysMSGs.at(0);
 			QString Action = sysMSGs.at(1);
 			if ((user != userName) && (Action == "joined"))
 			{
 				qDebug() << "user: " << user << "joined";
+<<<<<<< HEAD
 				// the message is user ... joined
 				Agent agent00 = {
 					user,
 					false,
 					21, // colortypr
 					0,	// POS
+=======
+				//the message is user ... joined
+				Agent agent00 = {
+					user,
+					false,
+					21, //colortypr
+					0,	//POS
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 				};
 				VR_Communicator->Agents.push_back(agent00);
 			}
 			else if ((user != userName) && (Action == "left"))
 			{
 				qDebug() << "user: " << user << "left";
+<<<<<<< HEAD
 				// the message is user ... left
+=======
+				//the message is user ... left
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 				for (int i = 0; i < VR_Communicator->Agents.size(); i++)
 				{
 					if (user == VR_Communicator->Agents.at(i).name)
 					{
+<<<<<<< HEAD
 						// qDebug()<<"before erase "<<Agents.size();
+=======
+						//qDebug()<<"before erase "<<Agents.size();
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 						VR_Communicator->Agents.erase(VR_Communicator->Agents.begin() + i);
 						i--;
 						// qDebug()<<"before erase "<<Agents.size();
@@ -248,15 +316,24 @@ void VR_MainWindow::onReadyRead()
 		}
 		else if (hmdposRex.indexIn(line) != -1)
 		{
+<<<<<<< HEAD
 			// qDebug()<<"run hmd";
 			// QString POSofHMD = hmdposRex.cap(1);
+=======
+			//qDebug()<<"run hmd";
+			//QString POSofHMD = hmdposRex.cap(1);
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 			QStringList hmdMSGs = hmdposRex.cap(1).split(" ");
 			if (hmdMSGs.size() < 17)
 				return;
 
 			QString user = hmdMSGs.at(0);
 			if (user == userName)
+<<<<<<< HEAD
 				return; // the msg is the position of the current user,do nothing
+=======
+				return; //the msg is the position of the current user,do nothing
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 			qDebug() << "get user hmd pos info"
 					 << "       " << user;
 			for (int i = 0; i < VR_Communicator->Agents.size(); i++)
@@ -266,8 +343,13 @@ void VR_MainWindow::onReadyRead()
 					for (int j = 0; j < 16; j++)
 					{
 						VR_Communicator->Agents.at(i).position[j] = hmdMSGs.at(j + 1).toFloat();
+<<<<<<< HEAD
 						// qDebug("Agents.at(i).position[15]=%f",Agents.at(i).position[i]);
 						// qDebug()<<"Agent["<<i<<"] "<<" user: "<<Agents.at(i).name<<"HMD Position ="<<Agents.at(i).position[15];
+=======
+						//qDebug("Agents.at(i).position[15]=%f",Agents.at(i).position[i]);
+						//qDebug()<<"Agent["<<i<<"] "<<" user: "<<Agents.at(i).name<<"HMD Position ="<<Agents.at(i).position[15];
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 					}
 					break;
 				}
@@ -275,9 +357,15 @@ void VR_MainWindow::onReadyRead()
 		}
 		else if (colorRex.indexIn(line) != -1)
 		{
+<<<<<<< HEAD
 			// qDebug()<<"run color";
 			// QString colorFromServer = colorRex.cap(1);
 			// qDebug()<<"the color receieved is :"<<colorFromServer;
+=======
+			//qDebug()<<"run color";
+			//QString colorFromServer = colorRex.cap(1);
+			//qDebug()<<"the color receieved is :"<<colorFromServer;
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 			QStringList clrMSGs = colorRex.cap(1).split(" ");
 
 			if (clrMSGs.size() < 2)
@@ -288,7 +376,11 @@ void VR_MainWindow::onReadyRead()
 			{
 				if (VR_Communicator->Agents.at(i).name != user)
 					continue;
+<<<<<<< HEAD
 				// update agent color
+=======
+				//update agent color
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 				VR_Communicator->Agents.at(i).colorType = clrtype.toInt();
 				qDebug() << "user:" << user << " receievedColorTYPE=" << VR_Communicator->Agents.at(i).colorType;
 				if (user == userName)
@@ -298,8 +390,13 @@ void VR_MainWindow::onReadyRead()
 		else if (creatorRex.indexIn(line) != -1)
 		{
 			qDebug() << "get creator message";
+<<<<<<< HEAD
 			// QString colorFromServer = colorRex.cap(1);
 			// qDebug()<<"the color receieved is :"<<colorFromServer;
+=======
+			//QString colorFromServer = colorRex.cap(1);
+			//qDebug()<<"the color receieved is :"<<colorFromServer;
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 			QStringList creatorMSGs = creatorRex.cap(1).split(" ");
 			QString user = creatorMSGs.at(0);
 			QString creator_Res = creatorMSGs.at(1);
@@ -471,10 +568,17 @@ void VR_MainWindow::onReadyRead()
 			}
 			pMainApplication->UpdateDragNodeinNTList(ntnum, swcnum, converreceivexyz.x, converreceivexyz.y, converreceivexyz.z);
 		}
+<<<<<<< HEAD
 		// dragnodeRex
 		else if (messageRex.indexIn(line) != -1)
 		{
 			qDebug() << "recive NO." << numreceivedmessage << " :" << line; // hl debug
+=======
+		//dragnodeRex
+		else if (messageRex.indexIn(line) != -1)
+		{
+			qDebug() << "recive NO." << numreceivedmessage << " :" << line; //hl debug
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 			QStringList MSGs = messageRex.cap(1).split(" ");
 			for (int i = 0; i < MSGs.size(); i++)
 			{
@@ -483,6 +587,7 @@ void VR_MainWindow::onReadyRead()
 			QString user = MSGs.at(0);
 			QString message;
 			for (int i = 1; i < MSGs.size(); i++)
+<<<<<<< HEAD
 			{
 				message += MSGs.at(i);
 				if (i != MSGs.size() - 1)
@@ -493,6 +598,18 @@ void VR_MainWindow::onReadyRead()
 			qDebug() << "user, " << user << " said: " << message;
 			if (pMainApplication)
 			{
+=======
+			{
+				message += MSGs.at(i);
+				if (i != MSGs.size() - 1)
+					message += " ";
+
+				qDebug() << MSGs.at(i) << endl;
+			}
+			qDebug() << "user, " << user << " said: " << message;
+			if (pMainApplication)
+			{
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 				if (user == userName)
 				{
 					pMainApplication->READY_TO_SEND = false;
@@ -525,7 +642,11 @@ void VR_MainWindow::onConnected()
 void VR_MainWindow::onDisconnected()
 {
 	qDebug("Now disconnect with the server.");
+<<<<<<< HEAD
 	// Agents.clear();
+=======
+	//Agents.clear();
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 	emit VRSocketDisconnect();
 	if (pMainApplication)
 		pMainApplication->isOnline = false;
@@ -540,8 +661,13 @@ int VR_MainWindow::StartVRScene(QList<NeuronTree> *ntlist, My4DImage *i4d, MainW
 	pMainApplication->mainwindow = pmain;
 
 	pMainApplication->isOnline = isLinkSuccess;
+<<<<<<< HEAD
 	// pMainApplication->loadedNT.listNeuron.clear();
 	// pMainApplication->loadedNT.hashNeuron.clear();
+=======
+	//pMainApplication->loadedNT.listNeuron.clear();
+	//pMainApplication->loadedNT.hashNeuron.clear();
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 	GetResindexandStartPointfromVRInfo(ImageVolumeInfo, MaxResolution);
 	if (ntlist != NULL)
 	{
@@ -579,11 +705,19 @@ int VR_MainWindow::StartVRScene(QList<NeuronTree> *ntlist, My4DImage *i4d, MainW
 		}
 	}
 	pMainApplication->loadedNTList = ntlist;
+<<<<<<< HEAD
 	// if(pMainApplication->loadedNTList->size()>0)
 	//{
 	//	pMainApplication->loadedNT.listNeuron = ntlist->at(0).listNeuron;
 	//	pMainApplication->loadedNT.hashNeuron = ntlist->at(0).hashNeuron;
 	// }
+=======
+	//if(pMainApplication->loadedNTList->size()>0)
+	//{
+	//	pMainApplication->loadedNT.listNeuron = ntlist->at(0).listNeuron;
+	//	pMainApplication->loadedNT.hashNeuron = ntlist->at(0).hashNeuron;
+	//}
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 	if (i4d->valid())
 	{
 		pMainApplication->img4d = i4d;
@@ -597,7 +731,11 @@ int VR_MainWindow::StartVRScene(QList<NeuronTree> *ntlist, My4DImage *i4d, MainW
 	}
 	SendVRconfigInfo();
 	RunVRMainloop(zoomPOS);
+<<<<<<< HEAD
 	// pMainApplication->Shutdown();
+=======
+	//pMainApplication->Shutdown();
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 	qDebug() << "Now quit VR";
 	int _call_that_function = pMainApplication->postVRFunctionCallMode;
 	zoomPOS->x = pMainApplication->teraflyPOS.x;
@@ -617,7 +755,11 @@ void VR_MainWindow::SendHMDPosition()
 {
 	if (!pMainApplication)
 		return;
+<<<<<<< HEAD
 	// get hmd position
+=======
+	//get hmd position
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 	QString PositionStr = pMainApplication->getHMDPOSstr();
 
 	// send hmd position
@@ -635,6 +777,7 @@ void VR_MainWindow::RunVRMainloop(XYZ *zoomPOS)
 
 	while (!bQuit)
 	{
+<<<<<<< HEAD
 		// update agents position if necessary
 		if (VR_Communicator->Agents.size() > 0)
 			pMainApplication->SetupAgentModels(VR_Communicator->Agents);
@@ -649,13 +792,33 @@ void VR_MainWindow::RunVRMainloop(XYZ *zoomPOS)
 		// server sends the same data back to client;
 		// READY_TO_SEND is set to false in onReadyRead();
 		// CURRENT_DATA_IS_SENT is used to ensure that each data is only sent once.
+=======
+		//update agents position if necessary
+		if (VR_Communicator->Agents.size() > 0)
+			pMainApplication->SetupAgentModels(VR_Communicator->Agents);
+
+		//handle one rendering loop, and handle user interaction
+		bQuit = pMainApplication->HandleOneIteration();
+
+		//send local data to server
+		if ((pMainApplication->READY_TO_SEND == true) && (CURRENT_DATA_IS_SENT == false))
+		//READY_TO_SEND is set to true by the "trigger button up" event;
+		//client sends data to server (using onReadySend());
+		//server sends the same data back to client;
+		//READY_TO_SEND is set to false in onReadyRead();
+		//CURRENT_DATA_IS_SENT is used to ensure that each data is only sent once.
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 		{
 			if (pMainApplication->m_modeGrip_R == m_drawMode)
 			{
 				if (pMainApplication->NT2QString().size() != 0)
 					CollaborationSendPool.emplace_back(pMainApplication->NT2QString());
 				pMainApplication->ClearCurrentNT();
+<<<<<<< HEAD
 				// cout<<"pMainApplication->ClearCurrentNT();"<<endl;
+=======
+				//cout<<"pMainApplication->ClearCurrentNT();"<<endl;
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 				sendPoolHead();
 				CURRENT_DATA_IS_SENT = true;
 				qDebug() << "CURRENT_DATA_IS_SENT=true;";
@@ -666,8 +829,13 @@ void VR_MainWindow::RunVRMainloop(XYZ *zoomPOS)
 				qDebug() << "delname = " << pMainApplication->delName;
 				qDebug() << "delcurvePOS = " << pMainApplication->delcurvePOS;
 				if (pMainApplication->delName != "")
+<<<<<<< HEAD
 				// socket->write(QString("/del_curve:" + pMainApplication->delName + "\n").toUtf8());
 				// else
+=======
+				//socket->write(QString("/del_curve:" + pMainApplication->delName + "\n").toUtf8());
+				//else
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 				{
 					QString ConverteddelcurvePOS = ConvertsendCoords(pMainApplication->delcurvePOS);
 					qDebug() << "Converted marker position = " << ConverteddelcurvePOS;
@@ -692,14 +860,22 @@ void VR_MainWindow::RunVRMainloop(XYZ *zoomPOS)
 				VR_Communicator->socket->write(QString("/marker:" + ConvertedmarkerPOS + " " + QSCurrentRes + "\n").toUtf8());
 				CURRENT_DATA_IS_SENT = true;
 			}
+<<<<<<< HEAD
 			// else if(pMainApplication->m_modeGrip_R==m_delmarkMode)
+=======
+			//else if(pMainApplication->m_modeGrip_R==m_delmarkMode)
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 			//{
 			//	qDebug()<<"marker to be delete position = "<<pMainApplication->delmarkerPOS;
 			//	QString ConverteddelmarkerPOS = ConvertsendCoords(pMainApplication->delmarkerPOS);
 			//	qDebug()<<"Converted delete marker position = "<<ConverteddelmarkerPOS;
 			//	socket->write(QString("/del_marker:" + ConverteddelmarkerPOS + "\n").toUtf8());
 			//	CURRENT_DATA_IS_SENT=true;
+<<<<<<< HEAD
 			// }
+=======
+			//}
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 			else if (pMainApplication->m_modeGrip_R == m_dragMode)
 			{
 				qDebug() << "drag node new position = " << pMainApplication->dragnodePOS;
@@ -708,15 +884,24 @@ void VR_MainWindow::RunVRMainloop(XYZ *zoomPOS)
 				VR_Communicator->socket->write(QString("/drag_node:" + ConverteddragnodePOS + "\n").toUtf8());
 				CURRENT_DATA_IS_SENT = true;
 			}
+<<<<<<< HEAD
 			// if(pMainApplication->READY_TO_SEND==true)
 			//	CURRENT_DATA_IS_SENT=true;
 		}
 		sendHMDPOScout++;
 		// if(sendHMDPOScout>30)
+=======
+			//if(pMainApplication->READY_TO_SEND==true)
+			//	CURRENT_DATA_IS_SENT=true;
+		}
+		sendHMDPOScout++;
+		//if(sendHMDPOScout>30)
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 		//{
 		//	SendHMDPosition();
 		//	socket->write(QString("/ask:message \n").toUtf8());
 		//	sendHMDPOScout = 0;}
+<<<<<<< HEAD
 		// }
 		if (sendHMDPOScout % 20 == 0)
 		{
@@ -727,6 +912,18 @@ void VR_MainWindow::RunVRMainloop(XYZ *zoomPOS)
 			SendHMDPosition();
 			sendHMDPOScout = 0;
 		}
+=======
+		//}
+		if (sendHMDPOScout % 20 == 0)
+		{
+			VR_Communicator->socket->write(QString("/ask:message \n").toUtf8());
+		}
+		if (sendHMDPOScout % 60 == 0)
+		{
+			SendHMDPosition();
+			sendHMDPOScout = 0;
+		}
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 		// switch (sendHMDPOScout/20)
 		// {
 		// case 1:
@@ -740,19 +937,31 @@ void VR_MainWindow::RunVRMainloop(XYZ *zoomPOS)
 		// 	break;
 		// }
 	}
+<<<<<<< HEAD
 	// QTimer::singleShot(20, this, SLOT(RunVRMainloop()));
+=======
+	//QTimer::singleShot(20, this, SLOT(RunVRMainloop()));
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 	return;
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: for standalone VR.
 //-----------------------------------------------------------------------------
+<<<<<<< HEAD
 int startStandaloneVRScene(QList<NeuronTree> *ntlist, My4DImage *i4d, iDrawExternalParameter *idep, MainWindow *pmain, XYZ *zoomPOS) // shuning: we use this one
+=======
+int startStandaloneVRScene(QList<NeuronTree> *ntlist, My4DImage *i4d, iDrawExternalParameter *idep, MainWindow *pmain, XYZ *zoomPOS) //shuning: we use this one
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 // bool startStandaloneVRScene(QList<NeuronTree>* ntlist, My4DImage *i4d, MainWindow *pmain)
 {
 
 	CMainApplication *pMainApplication = new CMainApplication(0, 0);
+<<<<<<< HEAD
 	// pMainApplication->setnetworkmodefalse();//->NetworkModeOn=false;
+=======
+	//pMainApplication->setnetworkmodefalse();//->NetworkModeOn=false;
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 	pMainApplication->mainwindow = pmain;
 	pMainApplication->_idep = idep;
 	pMainApplication->isOnline = false;
@@ -801,7 +1010,11 @@ int startStandaloneVRScene(QList<NeuronTree> *ntlist, My4DImage *i4d, iDrawExter
 	}
 	if (!pMainApplication->BInit())
 	{
+<<<<<<< HEAD
 		qDebug() << "You clicked quit 3." << endl;
+=======
+		// qDebug() << "You clicked quit 3." << endl;
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 		pMainApplication->Shutdown();
 		return 0;
 	}
@@ -888,9 +1101,15 @@ void VR_MainWindow::SendVRconfigInfo()
 
 XYZ VR_MainWindow::ConvertreceiveCoords(float x, float y, float z)
 {
+<<<<<<< HEAD
 	// QString str1 = coords.section(' ',0, 0);  // str == "bin/myapp"
 	// QString str2 = coords.section(' ',1, 1);  // str == "bin/myapp"
 	// QString str3 = coords.section(' ',2, 2);  // str == "bin/myapp"
+=======
+	//QString str1 = coords.section(' ',0, 0);  // str == "bin/myapp"
+	//QString str2 = coords.section(' ',1, 1);  // str == "bin/myapp"
+	//QString str3 = coords.section(' ',2, 2);  // str == "bin/myapp"
+>>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 	float dividex = VRvolumeMaxRes.x / VRVolumeCurrentRes.x;
 	float dividey = VRvolumeMaxRes.y / VRVolumeCurrentRes.y;
 	float dividez = VRvolumeMaxRes.z / VRVolumeCurrentRes.z;

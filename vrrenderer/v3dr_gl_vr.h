@@ -22,6 +22,7 @@
 #include "mainwindow.h"
 
 #include "../basic_c_fun/v3d_interface.h"
+#include "../3drenderer/v3dr_glwidget.h"
 
 
 enum ModelControlR
