@@ -1401,32 +1401,18 @@ bool CMainApplication::HandleInput()
 		}
 		if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonPress) && (event.data.controller.button == vr::k_EButton_ApplicationMenu))
 		{
-<<<<<<< HEAD
 			if (finish_ano)
 			{
 				// shuning replace quit with quit & loadnext
-=======
-			if (_idep->glWidget->notFinishedFlag)
-			{
-				_idep->glWidget->notFinishedFlag = false;
-			}
-			else
-			{
-				//shuning replace quit with quit & loadnext
->>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 				loadNextQuit = true;
 
 				// bRet = true;
 				return bRet;
 			}
-<<<<<<< HEAD
 			else
 			{
 				finish_ano = true;
 			}
-=======
-			
->>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 		}
 	}
 
@@ -1460,21 +1446,8 @@ bool CMainApplication::HandleInput()
 						glm::vec4 ctrlRightPos = mat * glm::vec4(0, 0, 0, 1);
 
 						// shuning track right controller drawing
-<<<<<<< HEAD
 						qDebug(" DrawCtrlRightPos = %.2f,%.2f,%.2f\n", ctrlRightPos.x, ctrlRightPos.y, ctrlRightPos.z);
 						string mat_out = "------right controller drawing------\n";
-=======
-						qDebug(" DrawctrlRightPos = %.2f,%.2f,%.2f\n", ctrlRightPos.x, ctrlRightPos.y, ctrlRightPos.z);
-
-						string mat_out = "------------------------------------\n";
-
-						float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
-						mat_out += "Time: " + std::to_string(elapsed_time) + "\n";
-
-						// float elapsed_time = exptime.elapsed() * 0.001;
-						// qDebug() << "Time cost: " << elapsed_time << endl;
-						mat_out += "------right controller drawing------\n";
->>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 						for (size_t i = 0; i < 4; i++)
 						{
 							for (size_t j = 0; j < 4; j++)
@@ -1942,17 +1915,7 @@ bool CMainApplication::HandleInput()
 				m_ctrlChangeMatrix = mat * glm::inverse(m_oldCtrlMatrix);
 				m_globalMatrix = m_ctrlChangeMatrix * m_oldGlobalMatrix;
 
-<<<<<<< HEAD
 				if (!finish_ano)
-=======
-				// shuning track rotation
-				string s = "------------------------------------\n";
-
-				float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
-				s += "Time: " + std::to_string(elapsed_time) + "\n";
-				s += "--------m_globalMatrix--------\n";
-				for (int i = 0; i < 4; i++)
->>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 				{
 					// shuning track rotation
 					string s = "--------m_globalMatrix--------\n";
@@ -1969,19 +1932,6 @@ bool CMainApplication::HandleInput()
 					outfile << s;
 					outfile.close();
 				}
-<<<<<<< HEAD
-=======
-				s += "------------------------------------\n";
-				// qDebug() << QString::fromStdString(s);
-				if (_idep->glWidget->notFinishedFlag)
-				{
-					std::ofstream outfile;
-					outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
-					outfile << s;
-					outfile.close();
-				}
-				
->>>>>>> d7d0ad5ec1f6cbe5db55970104d4254d71567bd3
 			}
 
 			if ((state.ulButtonTouched & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad)) &&
