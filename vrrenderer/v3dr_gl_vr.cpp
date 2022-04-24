@@ -1412,6 +1412,16 @@ bool CMainApplication::HandleInput()
 			else
 			{
 				finish_ano = true;
+				_idep->glWidget->recordExpTime();
+
+				// QString swcName = _idep->V3Dmainwindow->currentImgPath;
+				// swcName = swcName.replace("tif", "swc");
+				// ifstream swcFile(swcName.toUtf8().constData());
+				// if (swcFile.good() && _idep->V3Dmainwindow->trainMode)
+				// {
+				// 	qDebug() << "Loading swc: " << swcName << endl;
+				// 	_idep->glWidget->loadObjectFromFile(swcName);
+				// }
 			}
 		}
 	}

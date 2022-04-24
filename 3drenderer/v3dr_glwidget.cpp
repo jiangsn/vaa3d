@@ -375,11 +375,30 @@ void V3dR_GLWidget::autoSaveSwc()
 	qDebug() << "V3dR_GLWidget::autoSaveSwc()";
 	((Renderer_gl2 *)renderer)->saveNeuronTree(0, _idep->V3Dmainwindow->currentSwcPath);
 	// renderer->saveNeuronTree(0, _idep->V3Dmainwindow->currentImgPath);
-	float elapsed_time = exptime.elapsed() * 0.001;
+	float elapsed_time;
+	if (!_idep->V3Dmainwindow->vrMode)
+		elapsed_time = exptime.elapsed() * 0.001;
+	else
+		elapsed_time = finishexptime;
 	qDebug() << "Time cost: " << elapsed_time << endl;
 	appendInfoToSwc("#Time cost: " + to_string(elapsed_time));
 
 	notFinishedFlag = false;
+
+	// show ground truth if under training mode
+	QString swcName = _idep->V3Dmainwindow->currentImgPath;
+	swcName = swcName.replace("tif", "swc");
+	ifstream swcFile(swcName.toUtf8().constData());
+	if (swcFile.good() && _idep->V3Dmainwindow->trainMode && !_idep->V3Dmainwindow->vrMode)
+	{
+		qDebug() << "Loading swc: " << swcName << endl;
+		loadObjectFromFile(swcName);
+	}
+}
+
+void V3dR_GLWidget::recordExpTime()
+{
+	finishexptime = exptime.elapsed() * 0.001;
 }
 
 void V3dR_GLWidget::appendInfoToSwc(string info)
@@ -436,7 +455,7 @@ void V3dR_GLWidget::initializeGL()
 	QString swcName = _idep->V3Dmainwindow->currentImgPath;
 	swcName = swcName.replace("tif", "swc");
 	ifstream swcFile(swcName.toUtf8().constData());
-	if (swcFile.good())
+	if (swcFile.good() && _idep->V3Dmainwindow->trainMode)
 	{
 		// qDebug() << "Loading swc: " << swcName << endl;
 		// loadObjectFromFile(swcName);
@@ -799,7 +818,7 @@ void V3dR_GLWidget::stillPaint()
 
 void V3dR_GLWidget::mousePressEvent(QMouseEvent *event)
 {
-	if (!notFinishedFlag)
+	if (!notFinishedFlag && !_idep->V3Dmainwindow->trainMode)
 		return;
 	// 091025: use QMouseEvent::button()== not buttonS()&
 	// qDebug("V3dR_GLWidget::mousePressEvent  button = %d", event->button());
@@ -831,7 +850,7 @@ void V3dR_GLWidget::mousePressEvent(QMouseEvent *event)
 		}
 	}
 
-	if (event->button() == Qt::RightButton && renderer) // right-click
+	if (event->button() == Qt::RightButton && renderer && notFinishedFlag) // right-click
 	{
 		if (renderer->hitPoint(event->x(), event->y())) // pop-up menu (selectObj) or marker definition (hitPen)
 		{
@@ -843,7 +862,7 @@ void V3dR_GLWidget::mousePressEvent(QMouseEvent *event)
 
 void V3dR_GLWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-	if (!notFinishedFlag)
+	if (!notFinishedFlag && !_idep->V3Dmainwindow->trainMode)
 		return;
 	// 091025: use 'QMouseEvent::button()==' instead of 'buttons()&'
 	// qDebug("V3dR_GLWidget::mouseReleaseEvent  button = %d", event->button());
@@ -861,7 +880,7 @@ void V3dR_GLWidget::mouseReleaseEvent(QMouseEvent *event)
 
 	mouse_held = 0;
 
-	if (event->button() == Qt::RightButton && renderer) // right-drag end
+	if (event->button() == Qt::RightButton && renderer && notFinishedFlag) // right-drag end
 	{
 		(renderer->movePen(event->x(), event->y(), false)); // create curve or nothing
 		// qDebug() << "done drawing\n";
@@ -873,7 +892,7 @@ void V3dR_GLWidget::mouseReleaseEvent(QMouseEvent *event)
 
 void V3dR_GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
-	if (!notFinishedFlag)
+	if (!notFinishedFlag && !_idep->V3Dmainwindow->trainMode)
 		return;
 	// 091025: use 'QMouseEvent::buttons()&' instead of 'button()=='
 	// qDebug()<<"V3dR_GLWidget::mouseMoveEvent  buttons = "<< event->buttons();
@@ -892,7 +911,7 @@ void V3dR_GLWidget::mouseMoveEvent(QMouseEvent *event)
 	int dy = event->y() - lastPos.y();
 	lastPos = event->pos();
 
-	if ((event->buttons() & Qt::RightButton) && renderer) // right-drag for 3d curve
+	if ((event->buttons() & Qt::RightButton) && renderer && notFinishedFlag) // right-drag for 3d curve
 		if (ABS(dx) + ABS(dy) >= 2)
 		{
 			(renderer->movePen(event->x(), event->y(), true));
@@ -944,7 +963,7 @@ void V3dR_GLWidget::mouseMoveEvent(QMouseEvent *event)
 
 void V3dR_GLWidget::wheelEvent(QWheelEvent *event)
 {
-	if (!notFinishedFlag)
+	if (!notFinishedFlag && !_idep->V3Dmainwindow->trainMode)
 		return;
 	// qDebug()<<"V3dR_GLWidget::wheelEvent ... ...";
 
@@ -2146,7 +2165,7 @@ void V3dR_GLWidget::setCSTransparent(int t)
 
 void V3dR_GLWidget::setContrast(int t)
 {
-	if (!notFinishedFlag)
+	if (!notFinishedFlag && !_idep->V3Dmainwindow->trainMode)
 		return;
 
 	t = -t;
@@ -2504,6 +2523,9 @@ void V3dR_GLWidget::doimageVRView(bool bCanCoMode) // 0518
 		call_neuron_assembler_live_plugin((MainWindow *)(this->getMainWindow()));
 	}
 }
+
+
+
 void V3dR_GLWidget::doclientView(bool check_flag)
 {
 
