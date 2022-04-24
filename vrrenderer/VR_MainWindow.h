@@ -28,7 +28,7 @@ class VR_MainWindow : public QWidget
 public:
 	explicit VR_MainWindow(V3dR_Communicator *TeraflyCommunicator);
 	~VR_MainWindow();
-	//void onReadySend(QString &send_MSG);
+	// void onReadySend(QString &send_MSG);
 	bool SendLoginRequest(bool resume = false);
 	int StartVRScene(QList<NeuronTree> *ntlist, My4DImage *i4d, MainWindow *pmain, bool isLinkSuccess, QString ImageVolumeInfo, int &CreatorRes, V3dR_Communicator *TeraflyCommunicator, XYZ *zoomPOS = 0, XYZ *CreatorPos = 0, XYZ MaxResolution = 0);
 	XYZ VRVolumeStartPoint;
@@ -67,14 +67,15 @@ public:
 	XYZ ConvertreceiveCoords(float x, float y, float z);
 
 private:
-	int numreceivedmessage; //for debug HL
+	int numreceivedmessage; // for debug HL
 	int numsendmessage;
-	//Prevent receiving/sending conflicts  LiQi
+	// Prevent receiving/sending conflicts  LiQi
 	vector<QString> CollaborationSendPool;
 	void SendVRconfigInfo();
 };
 
 // bool startStandaloneVRScene(QList<NeuronTree> *ntlist, My4DImage *img4d, MainWindow *pmain);
 int startStandaloneVRScene(QList<NeuronTree> *ntlist, My4DImage *img4d, iDrawExternalParameter *idep, MainWindow *pmain, XYZ *zoomPOS = 0);
+int startStandaloneVRSceneWrapper(QList<NeuronTree> *ntlist, My4DImage *img4d, iDrawExternalParameter *idep, MainWindow *pmain, QList<NeuronTree> *gtlist, XYZ *zoomPOS = 0);
 
 #endif // VR_MainWindow_H

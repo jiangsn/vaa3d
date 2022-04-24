@@ -137,7 +137,7 @@ void VR_MainWindow::onReadySend()
 
 	if (!CollaborationSendPool.empty())
 	{
-		cout << "CollaborationSendPool.size()" << CollaborationSendPool.size() << endl;
+		qDebug() << "CollaborationSendPool.size()" << CollaborationSendPool.size() << endl;
 		QString send_MSG = *CollaborationSendPool.begin();
 		CollaborationSendPool.erase(CollaborationSendPool.begin());
 		if ((send_MSG != "exit") && (send_MSG != "quit"))
@@ -153,7 +153,7 @@ void VR_MainWindow::onReadySend()
 	}
 	else
 	{
-		cout << "CollaborationSendPool is empty";
+		qDebug() << "CollaborationSendPool is empty";
 	}
 }
 
@@ -409,7 +409,7 @@ void VR_MainWindow::onReadyRead()
 			// pMainApplication->SetupMarkerandSurface(converreceivexyz.x,converreceivexyz.y,converreceivexyz.z,colortype);
 			bool IsmarkerValid = false;
 			IsmarkerValid = pMainApplication->RemoveMarkerandSurface(converreceivexyz.x, converreceivexyz.y, converreceivexyz.z);
-			cout << "IsmarkerValid is " << IsmarkerValid << endl;
+			qDebug() << "IsmarkerValid is " << IsmarkerValid << endl;
 			if (!IsmarkerValid)
 			{
 				pMainApplication->SetupMarkerandSurface(converreceivexyz.x, converreceivexyz.y, converreceivexyz.z, colortype);
@@ -747,8 +747,89 @@ void VR_MainWindow::RunVRMainloop(XYZ *zoomPOS)
 //-----------------------------------------------------------------------------
 // Purpose: for standalone VR.
 //-----------------------------------------------------------------------------
-int startStandaloneVRScene(QList<NeuronTree> *ntlist, My4DImage *i4d, iDrawExternalParameter *idep, MainWindow *pmain, XYZ *zoomPOS) // shuning: we use this one
-// bool startStandaloneVRScene(QList<NeuronTree>* ntlist, My4DImage *i4d, MainWindow *pmain)
+int startStandaloneVRSceneWrapper(QList<NeuronTree> *ntlist, My4DImage *i4d, iDrawExternalParameter *idep, MainWindow *pmain, QList<NeuronTree> *gtlist, XYZ *zoomPOS)
+{
+	// CMainApplication *pMainApplication = new CMainApplication(0, 0);
+	// // pMainApplication->setnetworkmodefalse();//->NetworkModeOn=false;
+	// pMainApplication->mainwindow = pmain;
+	// pMainApplication->_idep = idep;
+	// pMainApplication->isOnline = false;
+
+	// if (ntlist != NULL)
+	// {
+	// 	if ((ntlist->size() == 1) && (ntlist->at(0).name.isEmpty()))
+	// 	{
+	// 		qDebug() << "\nEditable NeuronTree loaded.\n";
+	// 		// means there is only a reloaded annotation in terafly
+	// 		// we rename it as vaa3d_traced_neuron
+	// 		// qDebug() << "means this is terafly special condition.do something";
+	// 		NeuronTree newS;
+	// 		newS.color = XYZW(0, 0, 255, 255);
+	// 		newS = ntlist->at(0);
+	// 		newS.n = 1;
+	// 		newS.on = true;
+	// 		newS.name = "vaa3d_traced_neuron";
+	// 		newS.file = "vaa3d_traced_neuron";
+	// 		pMainApplication->editableLoadedNTL.append(newS);
+	// 		qDebug() << "Editable NeuronTree size: " << pMainApplication->editableLoadedNTL.size() << endl;
+	// 	}
+	// 	else
+	// 	{
+	// 		for (int i = 0; i < ntlist->size(); i++)
+	// 		{
+	// 			if ((ntlist->at(i).name == "vaa3d_traced_neuron") && (ntlist->at(i).file == "vaa3d_traced_neuron"))
+	// 			{
+	// 				// means there is a NT named "vaa3d_traced_neuron", we only need to edit this NT.
+	// 				pMainApplication->editableLoadedNTL.append(ntlist->at(i));
+	// 			}
+	// 			else if (!ntlist->at(0).name.isEmpty())
+	// 			{
+	// 				qDebug() << "Non-editable NeuronTree loaded.\n";
+	// 				// means it is a loaded Neuron in 3D View,currently we do not allow to edit this neuron in VR
+	// 				pMainApplication->nonEditableLoadedNTL.append(ntlist->at(i));
+	// 			}
+	// 			// else if (ntlist->at(0).name.isEmpty())
+	// 			// means it is an reloaded annotation in terafly, currently we do not show this neuron in VR
+	// 		}
+	// 	}
+	// }
+	// pMainApplication->loadedNTList = ntlist;
+
+	// if (i4d->valid())
+	// {
+	// 	pMainApplication->img4d = i4d;
+	// 	pMainApplication->m_bHasImage4D = true;
+	// }
+	// if (!pMainApplication->BInit())
+	// {
+	// 	qDebug() << "You clicked quit 3." << endl;
+	// 	pMainApplication->Shutdown();
+	// 	return 0;
+	// }
+	// pMainApplication->SetupCurrentUserInformation("local user", 13);
+
+	// pMainApplication->RunMainLoop();
+
+	// pMainApplication->Shutdown();
+
+	// // bool _call_that_plugin = pMainApplication->_call_assemble_plugin;
+	// int _call_that_function = pMainApplication->postVRFunctionCallMode;
+	// if (pMainApplication->loadNextQuit)
+	// {
+	// 	_call_that_function = 965;
+	// }
+	// zoomPOS->x = pMainApplication->teraflyPOS.x;
+	// zoomPOS->y = pMainApplication->teraflyPOS.y;
+	// zoomPOS->z = pMainApplication->teraflyPOS.z;
+	// delete pMainApplication;
+	// pMainApplication = NULL;
+
+	// // return _call_that_plugin;
+	// return _call_that_function;
+	return 0;
+}
+
+int startStandaloneVRScene(QList<NeuronTree> *ntlist, My4DImage *i4d, iDrawExternalParameter *idep, MainWindow *pmain, XYZ *zoomPOS)
 {
 
 	CMainApplication *pMainApplication = new CMainApplication(0, 0);
@@ -761,6 +842,7 @@ int startStandaloneVRScene(QList<NeuronTree> *ntlist, My4DImage *i4d, iDrawExter
 	{
 		if ((ntlist->size() == 1) && (ntlist->at(0).name.isEmpty()))
 		{
+			qDebug() << "\nEditable NeuronTree loaded.\n";
 			// means there is only a reloaded annotation in terafly
 			// we rename it as vaa3d_traced_neuron
 			qDebug() << "means this is terafly special condition.do something";
@@ -772,6 +854,7 @@ int startStandaloneVRScene(QList<NeuronTree> *ntlist, My4DImage *i4d, iDrawExter
 			newS.name = "vaa3d_traced_neuron";
 			newS.file = "vaa3d_traced_neuron";
 			pMainApplication->editableLoadedNTL.append(newS);
+			qDebug() << "\nEditable NeuronTree size: " << pMainApplication->editableLoadedNTL.size() << endl;
 		}
 		else
 		{
@@ -784,6 +867,7 @@ int startStandaloneVRScene(QList<NeuronTree> *ntlist, My4DImage *i4d, iDrawExter
 				}
 				else if (!ntlist->at(0).name.isEmpty())
 				{
+					qDebug() << "\nNon-editable NeuronTree loaded.\n";
 					// means it is a loaded Neuron in 3D View,currently we do not allow to edit this neuron in VR
 					pMainApplication->nonEditableLoadedNTL.append(ntlist->at(i));
 				}
@@ -793,6 +877,8 @@ int startStandaloneVRScene(QList<NeuronTree> *ntlist, My4DImage *i4d, iDrawExter
 		}
 	}
 	pMainApplication->loadedNTList = ntlist;
+	pMainApplication->loadedNTList->clear();
+	// pMainApplication->loadedNTList = new QList<NeuronTree>;
 
 	if (i4d->valid())
 	{
@@ -826,6 +912,7 @@ int startStandaloneVRScene(QList<NeuronTree> *ntlist, My4DImage *i4d, iDrawExter
 	// return _call_that_plugin;
 	return _call_that_function;
 }
+
 void VR_MainWindow::GetResindexandStartPointfromVRInfo(QString VRinfo, XYZ CollaborationMaxResolution)
 {
 	qDebug() << "GetResindexandStartPointfromVRInfo........";
@@ -894,12 +981,12 @@ XYZ VR_MainWindow::ConvertreceiveCoords(float x, float y, float z)
 	float dividex = VRvolumeMaxRes.x / VRVolumeCurrentRes.x;
 	float dividey = VRvolumeMaxRes.y / VRVolumeCurrentRes.y;
 	float dividez = VRvolumeMaxRes.z / VRVolumeCurrentRes.z;
-	cout << "dividex = " << dividex << "dividey = " << dividey << "dividez = " << dividez << endl;
+	qDebug() << "dividex = " << dividex << "dividey = " << dividey << "dividez = " << dividez << endl;
 	x /= (VRvolumeMaxRes.x / VRVolumeCurrentRes.x);
 	y /= (VRvolumeMaxRes.y / VRVolumeCurrentRes.y);
 	z /= (VRvolumeMaxRes.z / VRVolumeCurrentRes.z);
-	cout << " x = "
-		 << "y = " << y << "z = " << z << endl;
+	qDebug() << " x = "
+			 << "y = " << y << "z = " << z << endl;
 	x -= (VRVolumeStartPoint.x - 1);
 	y -= (VRVolumeStartPoint.y - 1);
 	z -= (VRVolumeStartPoint.z - 1);

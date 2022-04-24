@@ -380,6 +380,28 @@ void V3dR_GLWidget::autoSaveSwc()
 	appendInfoToSwc("#Time cost: " + to_string(elapsed_time));
 
 	notFinishedFlag = false;
+
+	// auto load ground truth for training
+	QString swcName = _idep->V3Dmainwindow->currentImgPath;
+	swcName = swcName.replace("tif", "swc");
+	ifstream swcFile(swcName.toUtf8().constData());
+	if (swcFile.good())
+	{
+		qDebug() << "Loading swc: " << swcName << endl;
+		loadObjectFromFile(swcName);
+	}
+}
+
+void V3dR_GLWidget::autoSaveSwcVR()
+{
+	qDebug() << "V3dR_GLWidget::autoSaveSwcVR()";
+	((Renderer_gl2 *)renderer)->saveNeuronTree(0, _idep->V3Dmainwindow->currentSwcPath);
+	// renderer->saveNeuronTree(0, _idep->V3Dmainwindow->currentImgPath);
+	float elapsed_time = exptime.elapsed() * 0.001;
+	qDebug() << "Time cost: " << elapsed_time << endl;
+	appendInfoToSwc("#Time cost: " + to_string(elapsed_time));
+
+	notFinishedFlag = false;
 }
 
 void V3dR_GLWidget::appendInfoToSwc(string info)
@@ -799,8 +821,8 @@ void V3dR_GLWidget::stillPaint()
 
 void V3dR_GLWidget::mousePressEvent(QMouseEvent *event)
 {
-	if (!notFinishedFlag)
-		return;
+	// if (!notFinishedFlag)
+	// 	return;
 	// 091025: use QMouseEvent::button()== not buttonS()&
 	// qDebug("V3dR_GLWidget::mousePressEvent  button = %d", event->button());
 
@@ -831,7 +853,7 @@ void V3dR_GLWidget::mousePressEvent(QMouseEvent *event)
 		}
 	}
 
-	if (event->button() == Qt::RightButton && renderer) // right-click
+	if (event->button() == Qt::RightButton && renderer && notFinishedFlag) // right-click
 	{
 		if (renderer->hitPoint(event->x(), event->y())) // pop-up menu (selectObj) or marker definition (hitPen)
 		{
@@ -843,8 +865,8 @@ void V3dR_GLWidget::mousePressEvent(QMouseEvent *event)
 
 void V3dR_GLWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-	if (!notFinishedFlag)
-		return;
+	// if (!notFinishedFlag)
+	// 	return;
 	// 091025: use 'QMouseEvent::button()==' instead of 'buttons()&'
 	// qDebug("V3dR_GLWidget::mouseReleaseEvent  button = %d", event->button());
 	if (event->button() == Qt::RightButton && renderer && (renderer->selectMode == 28 || renderer->selectMode == 31) && notFinishedFlag)
@@ -861,7 +883,7 @@ void V3dR_GLWidget::mouseReleaseEvent(QMouseEvent *event)
 
 	mouse_held = 0;
 
-	if (event->button() == Qt::RightButton && renderer) // right-drag end
+	if (event->button() == Qt::RightButton && renderer && notFinishedFlag) // right-drag end
 	{
 		(renderer->movePen(event->x(), event->y(), false)); // create curve or nothing
 		// qDebug() << "done drawing\n";
@@ -873,8 +895,8 @@ void V3dR_GLWidget::mouseReleaseEvent(QMouseEvent *event)
 
 void V3dR_GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
-	if (!notFinishedFlag)
-		return;
+	// if (!notFinishedFlag)
+	// 	return;
 	// 091025: use 'QMouseEvent::buttons()&' instead of 'button()=='
 	// qDebug()<<"V3dR_GLWidget::mouseMoveEvent  buttons = "<< event->buttons();
 
@@ -892,7 +914,7 @@ void V3dR_GLWidget::mouseMoveEvent(QMouseEvent *event)
 	int dy = event->y() - lastPos.y();
 	lastPos = event->pos();
 
-	if ((event->buttons() & Qt::RightButton) && renderer) // right-drag for 3d curve
+	if ((event->buttons() & Qt::RightButton) && renderer && notFinishedFlag) // right-drag for 3d curve
 		if (ABS(dx) + ABS(dy) >= 2)
 		{
 			(renderer->movePen(event->x(), event->y(), true));
@@ -944,8 +966,8 @@ void V3dR_GLWidget::mouseMoveEvent(QMouseEvent *event)
 
 void V3dR_GLWidget::wheelEvent(QWheelEvent *event)
 {
-	if (!notFinishedFlag)
-		return;
+	// if (!notFinishedFlag)
+	// 	return;
 	// qDebug()<<"V3dR_GLWidget::wheelEvent ... ...";
 
 	// 20170804 RZC: add zoomin_sign in global_setting.b_scrollupZoomin
@@ -2147,23 +2169,23 @@ void V3dR_GLWidget::setCSTransparent(int t)
 void V3dR_GLWidget::setContrast(int t)
 {
 	if (!notFinishedFlag)
-		return;
+	{
+		std::ofstream eventlog;
+		eventlog.open(_idep->V3Dmainwindow->currentEventPath.toUtf8().constData(), std::ios_base::app);
+		eventlog << "--------------------------------\n";
+		float elapsed_time = exptime.elapsed() * 0.001;
+		eventlog << "Time: " << elapsed_time << endl;
+
+		eventlog << "-----------------contrast change---------------------" << endl;
+		string mat_out = "contrast change: ";
+		mat_out += to_string(t) + " \n";
+		eventlog << mat_out;
+		eventlog << "-----------------contrast change---------------------" << endl;
+
+		eventlog.close();
+	}
 
 	t = -t;
-
-	std::ofstream eventlog;
-	eventlog.open(_idep->V3Dmainwindow->currentEventPath.toUtf8().constData(), std::ios_base::app);
-	eventlog << "--------------------------------\n";
-	float elapsed_time = exptime.elapsed() * 0.001;
-	eventlog << "Time: " << elapsed_time << endl;
-
-	eventlog << "-----------------contrast change---------------------" << endl;
-	string mat_out = "contrast change: ";
-	mat_out += to_string(t) + " \n";
-	eventlog << mat_out;
-	eventlog << "-----------------contrast change---------------------" << endl;
-
-	eventlog.close();
 
 	Renderer_gl2 *curr_renderer = (Renderer_gl2 *)(getRenderer());
 
@@ -2478,8 +2500,22 @@ void V3dR_GLWidget::process3Dwindow(bool show)
 void V3dR_GLWidget::doimageVRView(bool bCanCoMode) // 0518
 {
 	Renderer_gl1 *tempptr = (Renderer_gl1 *)renderer;
+
 	QList<NeuronTree> *listNeuronTrees = tempptr->getHandleNeuronTrees();
+
+	// auto load ground truth for training
+	QString swcName = _idep->V3Dmainwindow->currentImgPath;
+	swcName = swcName.replace("tif", "swc");
+	ifstream swcFile(swcName.toUtf8().constData());
+	if (swcFile.good())
+	{
+		qDebug() << "Loading swc: " << swcName << endl;
+		loadObjectFromFile(swcName);
+	}
+	QList<NeuronTree> *gtNeuronTrees = tempptr->getHandleNeuronTrees();
+
 	cout << "vr listNeuronTrees.size()" << listNeuronTrees->size();
+
 	My4DImage *img4d = this->getiDrawExternalParameter()->image4d;
 	this->getMainWindow()->hide();
 	// process3Dwindow(false);
@@ -2487,6 +2523,7 @@ void V3dR_GLWidget::doimageVRView(bool bCanCoMode) // 0518
 	// bool _Call_ZZ_Plugin = startStandaloneVRScene(listNeuronTrees, img4d, (MainWindow *)(this->getMainWindow())); // both nt and img4d can be empty.
 	_idep->glWidget = this;
 	int _call_that_func = startStandaloneVRScene(listNeuronTrees, img4d, _idep, (MainWindow *)(this->getMainWindow()), &teraflyZoomInPOS); // both nt and img4d can be empty.
+	// int _call_that_func = startStandaloneVRSceneWrapper(listNeuronTrees, img4d, _idep, (MainWindow *)(this->getMainWindow()), gtNeuronTrees, &teraflyZoomInPOS); // both nt and img4d can be empty.
 	qDebug() << "result is " << _call_that_func;
 	qDebug() << "xxxxxxxxxxxxx ==%1 y ==%2 z ==%3" << teraflyZoomInPOS.x << teraflyZoomInPOS.y << teraflyZoomInPOS.z;
 	updateWithTriView();

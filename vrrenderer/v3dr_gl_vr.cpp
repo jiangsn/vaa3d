@@ -982,7 +982,7 @@ bool CMainApplication::BInitGL()
 
 	SetupGlobalMatrix();
 
-	SetupMorphologyLine(0);
+	// SetupMorphologyLine(0);
 	// SetupMorphologyLine(2);
 	// SetupMorphologyLine(loadedNT_merged,m_unMorphologyLineModeVAO,m_glMorphologyLineModeVertBuffer,m_glMorphologyLineModeIndexBuffer,m_uiMorphologyLineModeVertcount,0);
 	// SetupMorphologySurface(loadedNT_merged,loaded_spheres,loaded_cylinders,loaded_spheresPos);
@@ -1412,6 +1412,8 @@ bool CMainApplication::HandleInput()
 			else
 			{
 				finish_ano = true;
+				SetupMorphologyLine(0); // for showing ground truth when annotation is finished
+				_idep->glWidget->autoSaveSwcVR();
 			}
 		}
 	}
@@ -1533,7 +1535,7 @@ bool CMainApplication::HandleInput()
 								currentNT = InputNT;
 								tempNT.listNeuron.clear();
 								tempNT.hashNeuron.clear();
-								qDebug() << "virtual finger done  goto next frame";
+								qDebug() << "virtual finger done goto next frame";
 							}
 						}
 					}
@@ -1785,7 +1787,7 @@ bool CMainApplication::HandleInput()
 				return bRet;
 				}//*/
 				// if(m_contrastMode==true)//into translate mode
-				if (m_modeTouchPad_R == tr_contrast && (!finish_ano))
+				if (m_modeTouchPad_R == tr_contrast)
 				{
 					if (m_fTouchPosY > 0.1)
 					{
@@ -1899,7 +1901,8 @@ bool CMainApplication::HandleInput()
 		vr::VRControllerState_t state;
 		if (m_pHMD->GetControllerState(m_iControllerIDLeft, &state, sizeof(state)))
 		{
-			if (state.ulButtonPressed & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Trigger) && (!finish_ano))
+			// rotation
+			if (state.ulButtonPressed & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Trigger))
 			{
 				const Matrix4 &mat_M = m_rmat4DevicePose[m_iControllerIDLeft];
 				glm::mat4 mat = glm::mat4();
@@ -1936,8 +1939,9 @@ bool CMainApplication::HandleInput()
 				}
 			}
 
+			// zoom
 			if ((state.ulButtonTouched & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad)) &&
-				!(state.ulButtonPressed & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad)) && (!finish_ano)) //&&!(showshootingPad))
+				!(state.ulButtonPressed & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad))) //&&!(showshootingPad))
 			{
 				float m_fTouchPosY;
 				float m_fTouchPosX;
@@ -1964,24 +1968,27 @@ bool CMainApplication::HandleInput()
 					// m_globalMatrix = glm::scale(m_globalMatrix, glm::vec3(m_globalScale, m_globalScale, m_globalScale));
 					m_globalMatrix = glm::scale(m_globalMatrix, glm::vec3(1.01, 1.01, 1.01));
 
-					string s = "------------------------------------\n";
-					float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
-					s += "Time: " + std::to_string(elapsed_time) + "\n";
-					s += "--------m_globalMatrix--------\n";
-					for (int i = 0; i < 4; i++)
+					if (!finish_ano)
 					{
-						for (int j = 0; j < 4; j++)
-							s += to_string(m_globalMatrix[i][j]) + ", ";
-						s += '\n';
-					}
-					s += "------------------------------------\n";
-					// qDebug() << QString::fromStdString(s);
-					if (_idep->glWidget->notFinishedFlag)
-					{
-						std::ofstream outfile;
-						outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
-						outfile << s;
-						outfile.close();
+						string s = "------------------------------------\n";
+						float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
+						s += "Time: " + std::to_string(elapsed_time) + "\n";
+						s += "--------m_globalMatrix--------\n";
+						for (int i = 0; i < 4; i++)
+						{
+							for (int j = 0; j < 4; j++)
+								s += to_string(m_globalMatrix[i][j]) + ", ";
+							s += '\n';
+						}
+						s += "------------------------------------\n";
+						// qDebug() << QString::fromStdString(s);
+						if (_idep->glWidget->notFinishedFlag)
+						{
+							std::ofstream outfile;
+							outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
+							outfile << s;
+							outfile.close();
+						}
 					}
 				}
 				else if (m_fTouchPosY < -0.1)
@@ -1989,24 +1996,27 @@ bool CMainApplication::HandleInput()
 					// m_globalScale -= 0.1;
 					// m_globalMatrix = glm::scale(m_globalMatrix, glm::vec3(m_globalScale, m_globalScale, m_globalScale));
 					m_globalMatrix = glm::scale(m_globalMatrix, glm::vec3(0.99, 0.99, 0.99));
-					string s = "------------------------------------\n";
-					float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
-					s += "Time: " + std::to_string(elapsed_time) + "\n";
-					s += "--------m_globalMatrix--------\n";
-					for (int i = 0; i < 4; i++)
+					if (!finish_ano)
 					{
-						for (int j = 0; j < 4; j++)
-							s += to_string(m_globalMatrix[i][j]) + ", ";
-						s += '\n';
-					}
-					s += "------------------------------------\n";
-					// qDebug() << QString::fromStdString(s);
-					if (_idep->glWidget->notFinishedFlag)
-					{
-						std::ofstream outfile;
-						outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
-						outfile << s;
-						outfile.close();
+						string s = "------------------------------------\n";
+						float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
+						s += "Time: " + std::to_string(elapsed_time) + "\n";
+						s += "--------m_globalMatrix--------\n";
+						for (int i = 0; i < 4; i++)
+						{
+							for (int j = 0; j < 4; j++)
+								s += to_string(m_globalMatrix[i][j]) + ", ";
+							s += '\n';
+						}
+						s += "------------------------------------\n";
+						// qDebug() << QString::fromStdString(s);
+						if (_idep->glWidget->notFinishedFlag)
+						{
+							std::ofstream outfile;
+							outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
+							outfile << s;
+							outfile.close();
+						}
 					}
 				}
 			}
@@ -2423,7 +2433,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 	// if(event.data.controller.button==vr::k_ebutton_steamvr_trigger)
 
 	////////////////////////////////LEFT
-	if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonPress) && (event.data.controller.button == vr::k_EButton_Grip))
+	if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonPress) && (event.data.controller.button == vr::k_EButton_Grip) && (!finish_ano))
 	{
 		// m_modeControlGrip_L++;
 		// m_modeControlGrip_L%=11;
@@ -5712,13 +5722,19 @@ void CMainApplication::SetupMorphologySurface(NeuronTree neurontree, vector<Sphe
 //-----------------------------------------------------------------------------
 void CMainApplication::SetupMorphologyLine(int drawMode) // pass 3 parameters: &neuronTree, VAO, VertVBO, IdxVBO
 {
-	if (drawMode == 0) // 0 means drawmode = 0, which means this function is called out of mainloop
+	if (drawMode == 0 && finish_ano) // 0 means drawmode = 0, which means this function is called out of mainloop
 	{
+		qDebug() << "\nCMainApplication::SetupMorphologyLine(int " << drawMode << ")" << endl;
 		SetupMorphologyLine(loadedNT_merged, m_unMorphologyLineModeVAO, m_glMorphologyLineModeVertBuffer, m_glMorphologyLineModeIndexBuffer, m_uiMorphologyLineModeVertcount, drawMode);
 	}
 	else if (drawMode == 1) // 1 means drawmode = 1, set up currentNT's VAO&VBO
 	{
 		SetupMorphologyLine(currentNT, m_unSketchMorphologyLineModeVAO, m_glSketchMorphologyLineModeVertBuffer, m_glSketchMorphologyLineModeIndexBuffer, m_uiSketchMorphologyLineModeVertcount, drawMode);
+	}
+	if (drawMode == 2) // 0 means drawmode = 0, which means this function is called out of mainloop
+	{
+		qDebug() << "\nCMainApplication::SetupMorphologyLine(int " << drawMode << ")" << endl;
+		SetupMorphologyLine(loadedNT_merged, m_unMorphologyLineModeVAO, m_glMorphologyLineModeVertBuffer, m_glMorphologyLineModeIndexBuffer, m_uiMorphologyLineModeVertcount, drawMode);
 	}
 	// else if(drawMode==2)// 2 for setting up sketchNTL's VAO&VBO
 	// {
