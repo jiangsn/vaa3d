@@ -1150,28 +1150,29 @@ void V3dR_GLWidget::handleKeyPressEvent(QKeyEvent *e) // 090428 RZC: make public
 	case Qt::Key_Backspace:
 	{
 		resetZoomShift();
+		resetRotation();
 	}
 	break;
 	case Qt::Key_Backslash:
 		if (IS_CTRL_MODIFIER)
 		{
-			emit changeOrthoView(!_orthoView);
+			// emit changeOrthoView(!_orthoView);
 		}
 		else
 		{
-			resetRotation();
+			// resetRotation();
 		}
 		break;
 	case Qt::Key_Comma:
 		break;
 		{
-			emit changeFrontCut(_fCut - 1);
+			// emit changeFrontCut(_fCut - 1);
 		}
 		break;
 	case Qt::Key_Period:
 		break;
 		{
-			emit changeFrontCut(_fCut + 1);
+			// emit changeFrontCut(_fCut + 1);
 		}
 		break;
 	case Qt::Key_Slash:
@@ -2521,7 +2522,7 @@ void V3dR_GLWidget::doimageVRView(bool bCanCoMode) // 0518
 	// --------------------------------------
 	// QList<NeuronTree> *listNeuronTrees = tempptr->getHandleNeuronTrees();
 
-		// QList<NeuronTree> *gtNeuronTrees = tempptr->getHandleNeuronTrees();
+	// QList<NeuronTree> *gtNeuronTrees = tempptr->getHandleNeuronTrees();
 	// ---------------------------------------------
 
 	cout << "vr listNeuronTrees.size()" << listNeuronTrees->size() << endl;

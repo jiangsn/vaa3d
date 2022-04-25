@@ -3,9 +3,8 @@
  * All rights reserved.
  */
 
-
 /************
-                                            ********* LICENSE NOTICE ************
+											********* LICENSE NOTICE ************
 
 This folder contains all source codes for the V3D project, which is subject to the following conditions if you want to use it.
 
@@ -24,8 +23,6 @@ Peng, H, Ruan, Z., Atasoy, D., and Sternson, S. (2010) “Automatic reconstructi
 4. Neither the name of the Howard Hughes Medical Institute, Janelia Farm Research Campus, nor Hanchuan Peng, may be used to endorse or promote products derived from this software without specific prior written permission.
 
 *************/
-
-
 
 //---
 /****************************************************************************
@@ -70,14 +67,14 @@ using namespace std;
 //#include "v3d_version_info.h"
 //#include "../plugin_loader/v3d_plugin_loader.h"
 
-//void printHelp_v3d();
-//void printHelp_align();
-//void printHelp_straight();
-//void printHelp_trace();
+// void printHelp_v3d();
+// void printHelp_align();
+// void printHelp_straight();
+// void printHelp_trace();
 
-V3dApplication* V3dApplication::theApp = 0;
+V3dApplication *V3dApplication::theApp = 0;
 //
-//void printHelp_v3d()
+// void printHelp_v3d()
 //{
 //	cout<<endl<<"Vaa3D: a 3D image visualization and analysis platform developed by Hanchuan Peng and colleagues."<<endl;
 //	cout<<endl<<"Usage: v3d -h -M moduleCode [all other options specific to different modules]"<<endl;
@@ -113,42 +110,42 @@ V3dApplication* V3dApplication::theApp = 0;
 
 int main(int argc, char **argv)
 {
-	printf("Hello World!\n");
+	printf("Vaa3D\n");
 	Q_INIT_RESOURCE(v3d);
-	V3dApplication* app = V3dApplication::getInstance(argc, argv);
+	V3dApplication *app = V3dApplication::getInstance(argc, argv);
 	app->activateMainWindow();
-	MainWindow* mainWin = app->getMainWindow();
+	MainWindow *mainWin = app->getMainWindow();
 	app->installEventFilter(mainWin);
 	mainWin->show();
 	return app->exec();
 
-	//for (int myii=0; myii<argc;myii++)
+	// for (int myii=0; myii<argc;myii++)
 	//{
 	//	v3d_msg(QString("[%1]").arg(argv[myii]));
-	//}
+	// }
 
-	//CLP parser;
+	// CLP parser;
 
-	//parser.parse(argc, argv, printHelp_v3d); // parse command lines to v3d_cl_interface Nov. 23, 2010 by YuY
+	// parser.parse(argc, argv, printHelp_v3d); // parse command lines to v3d_cl_interface Nov. 23, 2010 by YuY
 
-	//if(parser.i_v3d.clp_finished)
+	// if(parser.i_v3d.clp_finished)
 	//{
 	//	return false;
-	//}
-	//else
+	// }
+	// else
 	//{
 	//	if(parser.i_v3d.openV3D)
 	//	{
 	//		// ------ V3D GUI handling module ---------------------
 	//		Q_INIT_RESOURCE(v3d);
 
- //           V3dApplication* app = V3dApplication::getInstance(argc, argv);
- //           if(!parser.i_v3d.hideV3D)
- //           {
- //               app->activateMainWindow();
- //           }
+	//           V3dApplication* app = V3dApplication::getInstance(argc, argv);
+	//           if(!parser.i_v3d.hideV3D)
+	//           {
+	//               app->activateMainWindow();
+	//           }
 
- //           MainWindow* mainWin=app->getMainWindow();
+	//           MainWindow* mainWin=app->getMainWindow();
 
 	//		if (!mainWin)
 	//		{
@@ -156,25 +153,25 @@ int main(int argc, char **argv)
 	//			return false;
 	//		}
 
- //           app->installEventFilter(mainWin);
+	//           app->installEventFilter(mainWin);
 
- //           if (mainWin)
- //           {
- //               mainWin->v3dclp.copy(parser.i_v3d);
+	//           if (mainWin)
+	//           {
+	//               mainWin->v3dclp.copy(parser.i_v3d);
 
- //               if(!parser.i_v3d.hideV3D)
- //               {
- //                   mainWin->show();
- //               }
- //           }
+	//               if(!parser.i_v3d.hideV3D)
+	//               {
+	//                   mainWin->show();
+	//               }
+	//           }
 
 	//		// launch v3d
 	//		try
 	//		{
- //               if(!parser.i_v3d.hideV3D)
- //                   return app->exec();
- //               else
- //                   return false;
+	//               if(!parser.i_v3d.hideV3D)
+	//                   return app->exec();
+	//               else
+	//                   return false;
 	//		}
 	//		catch (...)
 	//		{
@@ -190,5 +187,4 @@ int main(int argc, char **argv)
 	//	}
 
 	//}
-
 }

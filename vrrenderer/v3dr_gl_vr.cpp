@@ -4806,21 +4806,21 @@ void CMainApplication::SetupControllerTexture()
 			if (m_bShowMorphologySurface)
 			{
 
-				AddVertex(point_E.x, point_E.y, point_E.z, 0.085f, 0.375f, vcVerts);
-				AddVertex(point_F.x, point_F.y, point_F.z, 0.165f, 0.375f, vcVerts);
-				AddVertex(point_G.x, point_G.y, point_G.z, 0.085f, 0.5f, vcVerts);
-				AddVertex(point_G.x, point_G.y, point_G.z, 0.085f, 0.5f, vcVerts);
-				AddVertex(point_H.x, point_H.y, point_H.z, 0.165f, 0.5f, vcVerts);
-				AddVertex(point_F.x, point_F.y, point_F.z, 0.165f, 0.375f, vcVerts);
+				// AddVertex(point_E.x, point_E.y, point_E.z, 0.085f, 0.375f, vcVerts);
+				// AddVertex(point_F.x, point_F.y, point_F.z, 0.165f, 0.375f, vcVerts);
+				// AddVertex(point_G.x, point_G.y, point_G.z, 0.085f, 0.5f, vcVerts);
+				// AddVertex(point_G.x, point_G.y, point_G.z, 0.085f, 0.5f, vcVerts);
+				// AddVertex(point_H.x, point_H.y, point_H.z, 0.165f, 0.5f, vcVerts);
+				// AddVertex(point_F.x, point_F.y, point_F.z, 0.165f, 0.375f, vcVerts);
 			}
 			else
 			{
-				AddVertex(point_E.x, point_E.y, point_E.z, 0, 0.375f, vcVerts);
-				AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
-				AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
-				AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
-				AddVertex(point_H.x, point_H.y, point_H.z, 0.085f, 0.5f, vcVerts);
-				AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
+				// AddVertex(point_E.x, point_E.y, point_E.z, 0, 0.375f, vcVerts);
+				// AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
+				// AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
+				// AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
+				// AddVertex(point_H.x, point_H.y, point_H.z, 0.085f, 0.5f, vcVerts);
+				// AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
 			}
 			break;
 		}
@@ -4828,21 +4828,21 @@ void CMainApplication::SetupControllerTexture()
 		{
 			if (m_bVirtualFingerON)
 			{
-				AddVertex(point_E.x, point_E.y, point_E.z, 0, 0.375f, vcVerts);
-				AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
-				AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
-				AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
-				AddVertex(point_H.x, point_H.y, point_H.z, 0.085f, 0.5f, vcVerts);
-				AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
+				// AddVertex(point_E.x, point_E.y, point_E.z, 0, 0.375f, vcVerts);
+				// AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
+				// AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
+				// AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
+				// AddVertex(point_H.x, point_H.y, point_H.z, 0.085f, 0.5f, vcVerts);
+				// AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
 			}
 			else
 			{
-				AddVertex(point_E.x, point_E.y, point_E.z, 0.085f, 0.375f, vcVerts);
-				AddVertex(point_F.x, point_F.y, point_F.z, 0.165f, 0.375f, vcVerts);
-				AddVertex(point_G.x, point_G.y, point_G.z, 0.085f, 0.5f, vcVerts);
-				AddVertex(point_G.x, point_G.y, point_G.z, 0.085f, 0.5f, vcVerts);
-				AddVertex(point_H.x, point_H.y, point_H.z, 0.165f, 0.5f, vcVerts);
-				AddVertex(point_F.x, point_F.y, point_F.z, 0.165f, 0.375f, vcVerts);
+				// AddVertex(point_E.x, point_E.y, point_E.z, 0.085f, 0.375f, vcVerts);
+				// AddVertex(point_F.x, point_F.y, point_F.z, 0.165f, 0.375f, vcVerts);
+				// AddVertex(point_G.x, point_G.y, point_G.z, 0.085f, 0.5f, vcVerts);
+				// AddVertex(point_G.x, point_G.y, point_G.z, 0.085f, 0.5f, vcVerts);
+				// AddVertex(point_H.x, point_H.y, point_H.z, 0.165f, 0.5f, vcVerts);
+				// AddVertex(point_F.x, point_F.y, point_F.z, 0.165f, 0.375f, vcVerts);
 			}
 			break;
 		}
@@ -4852,12 +4852,12 @@ void CMainApplication::SetupControllerTexture()
 		case _TeraShift:
 		{ //_TeraShift
 			// qDebug() << "You clicked TeraVR Shift (1)." << endl;
-			AddVertex(point_E.x, point_E.y, point_E.z, 0.17f, 0.5f, vcVerts);
-			AddVertex(point_F.x, point_F.y, point_F.z, 0.25f, 0.5f, vcVerts);
-			AddVertex(point_G.x, point_G.y, point_G.z, 0.17f, 0.625f, vcVerts);
-			AddVertex(point_G.x, point_G.y, point_G.z, 0.17f, 0.625f, vcVerts);
-			AddVertex(point_H.x, point_H.y, point_H.z, 0.25f, 0.625f, vcVerts);
-			AddVertex(point_F.x, point_F.y, point_F.z, 0.25f, 0.5f, vcVerts);
+			// AddVertex(point_E.x, point_E.y, point_E.z, 0.17f, 0.5f, vcVerts);
+			// AddVertex(point_F.x, point_F.y, point_F.z, 0.25f, 0.5f, vcVerts);
+			// AddVertex(point_G.x, point_G.y, point_G.z, 0.17f, 0.625f, vcVerts);
+			// AddVertex(point_G.x, point_G.y, point_G.z, 0.17f, 0.625f, vcVerts);
+			// AddVertex(point_H.x, point_H.y, point_H.z, 0.25f, 0.625f, vcVerts);
+			// AddVertex(point_F.x, point_F.y, point_F.z, 0.25f, 0.5f, vcVerts);
 			break;
 		}
 		case _Freeze:
@@ -4865,22 +4865,22 @@ void CMainApplication::SetupControllerTexture()
 			if (m_bFrozen)
 			{
 
-				AddVertex(point_E.x, point_E.y, point_E.z, 0.085f, 0.375f, vcVerts);
-				AddVertex(point_F.x, point_F.y, point_F.z, 0.165f, 0.375f, vcVerts);
-				AddVertex(point_G.x, point_G.y, point_G.z, 0.085f, 0.5f, vcVerts);
-				AddVertex(point_G.x, point_G.y, point_G.z, 0.085f, 0.5f, vcVerts);
-				AddVertex(point_H.x, point_H.y, point_H.z, 0.165f, 0.5f, vcVerts);
-				AddVertex(point_F.x, point_F.y, point_F.z, 0.165f, 0.375f, vcVerts);
+				// AddVertex(point_E.x, point_E.y, point_E.z, 0.085f, 0.375f, vcVerts);
+				// AddVertex(point_F.x, point_F.y, point_F.z, 0.165f, 0.375f, vcVerts);
+				// AddVertex(point_G.x, point_G.y, point_G.z, 0.085f, 0.5f, vcVerts);
+				// AddVertex(point_G.x, point_G.y, point_G.z, 0.085f, 0.5f, vcVerts);
+				// AddVertex(point_H.x, point_H.y, point_H.z, 0.165f, 0.5f, vcVerts);
+				// AddVertex(point_F.x, point_F.y, point_F.z, 0.165f, 0.375f, vcVerts);
 			}
 			else
 			{
 
-				AddVertex(point_E.x, point_E.y, point_E.z, 0, 0.375f, vcVerts);
-				AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
-				AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
-				AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
-				AddVertex(point_H.x, point_H.y, point_H.z, 0.085f, 0.5f, vcVerts);
-				AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
+				// AddVertex(point_E.x, point_E.y, point_E.z, 0, 0.375f, vcVerts);
+				// AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
+				// AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
+				// AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
+				// AddVertex(point_H.x, point_H.y, point_H.z, 0.085f, 0.5f, vcVerts);
+				// AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
 			}
 			break;
 		}
@@ -4890,12 +4890,12 @@ void CMainApplication::SetupControllerTexture()
 		case _RGBImage:
 		case _Contrast:
 		{
-			AddVertex(point_E.x, point_E.y, point_E.z, 0.25, 0.125f, vcVerts);
-			AddVertex(point_F.x, point_F.y, point_F.z, 0.335f, 0.125f, vcVerts);
-			AddVertex(point_G.x, point_G.y, point_G.z, 0.25, 0.25f, vcVerts);
-			AddVertex(point_G.x, point_G.y, point_G.z, 0.25, 0.25f, vcVerts);
-			AddVertex(point_H.x, point_H.y, point_H.z, 0.335f, 0.25f, vcVerts);
-			AddVertex(point_F.x, point_F.y, point_F.z, 0.335f, 0.125f, vcVerts);
+			// AddVertex(point_E.x, point_E.y, point_E.z, 0.25, 0.125f, vcVerts);
+			// AddVertex(point_F.x, point_F.y, point_F.z, 0.335f, 0.125f, vcVerts);
+			// AddVertex(point_G.x, point_G.y, point_G.z, 0.25, 0.25f, vcVerts);
+			// AddVertex(point_G.x, point_G.y, point_G.z, 0.25, 0.25f, vcVerts);
+			// AddVertex(point_H.x, point_H.y, point_H.z, 0.335f, 0.25f, vcVerts);
+			// AddVertex(point_F.x, point_F.y, point_F.z, 0.335f, 0.125f, vcVerts);
 			break;
 		}
 		case _AutoRotate:
@@ -4903,33 +4903,33 @@ void CMainApplication::SetupControllerTexture()
 			if (m_autoRotateON)
 			{
 				// qDebug()<<"You clicked autorotate 2"<<endl;
-				AddVertex(point_E.x, point_E.y, point_E.z, 0, 0.375f, vcVerts);
-				AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
-				AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
-				AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
-				AddVertex(point_H.x, point_H.y, point_H.z, 0.085f, 0.5f, vcVerts);
-				AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
+				// AddVertex(point_E.x, point_E.y, point_E.z, 0, 0.375f, vcVerts);
+				// AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
+				// AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
+				// AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
+				// AddVertex(point_H.x, point_H.y, point_H.z, 0.085f, 0.5f, vcVerts);
+				// AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
 			}
 			else
 			{
 				// qDebug()<<"You clicked autorotate 3"<<endl;
-				AddVertex(point_E.x, point_E.y, point_E.z, 0.085f, 0.375f, vcVerts);
-				AddVertex(point_F.x, point_F.y, point_F.z, 0.165f, 0.375f, vcVerts);
-				AddVertex(point_G.x, point_G.y, point_G.z, 0.085f, 0.5f, vcVerts);
-				AddVertex(point_G.x, point_G.y, point_G.z, 0.085f, 0.5f, vcVerts);
-				AddVertex(point_H.x, point_H.y, point_H.z, 0.165f, 0.5f, vcVerts);
-				AddVertex(point_F.x, point_F.y, point_F.z, 0.165f, 0.375f, vcVerts);
+				// AddVertex(point_E.x, point_E.y, point_E.z, 0.085f, 0.375f, vcVerts);
+				// AddVertex(point_F.x, point_F.y, point_F.z, 0.165f, 0.375f, vcVerts);
+				// AddVertex(point_G.x, point_G.y, point_G.z, 0.085f, 0.5f, vcVerts);
+				// AddVertex(point_G.x, point_G.y, point_G.z, 0.085f, 0.5f, vcVerts);
+				// AddVertex(point_H.x, point_H.y, point_H.z, 0.165f, 0.5f, vcVerts);
+				// AddVertex(point_F.x, point_F.y, point_F.z, 0.165f, 0.375f, vcVerts);
 			}
 			break;
 		}
 		case _UndoRedo:
 		{
-			AddVertex(point_E.x, point_E.y, point_E.z, 0.17f, 0.125f, vcVerts);
-			AddVertex(point_F.x, point_F.y, point_F.z, 0.25, 0.125f, vcVerts);
-			AddVertex(point_G.x, point_G.y, point_G.z, 0.17f, 0.25f, vcVerts);
-			AddVertex(point_G.x, point_G.y, point_G.z, 0.17f, 0.25f, vcVerts);
-			AddVertex(point_H.x, point_H.y, point_H.z, 0.25, 0.25f, vcVerts);
-			AddVertex(point_F.x, point_F.y, point_F.z, 0.25, 0.125f, vcVerts);
+			// AddVertex(point_E.x, point_E.y, point_E.z, 0.17f, 0.125f, vcVerts);
+			// AddVertex(point_F.x, point_F.y, point_F.z, 0.25, 0.125f, vcVerts);
+			// AddVertex(point_G.x, point_G.y, point_G.z, 0.17f, 0.25f, vcVerts);
+			// AddVertex(point_G.x, point_G.y, point_G.z, 0.17f, 0.25f, vcVerts);
+			// AddVertex(point_H.x, point_H.y, point_H.z, 0.25, 0.25f, vcVerts);
+			// AddVertex(point_F.x, point_F.y, point_F.z, 0.25, 0.125f, vcVerts);
 			break;
 		}
 
@@ -4937,15 +4937,17 @@ void CMainApplication::SetupControllerTexture()
 			break;
 		}
 
-		if (!finish_ano)
-		{ // shuning: this is replaced by zoom
-			AddVertex(point_E.x, point_E.y, point_E.z, 0, 0.375f, vcVerts);
-			AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
-			AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
-			AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
-			AddVertex(point_H.x, point_H.y, point_H.z, 0.085f, 0.5f, vcVerts);
-			AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
-		}
+		// if (!finish_ano)
+		// {
+		// shuning: this is replaced by zoom
+		// left controller center
+		AddVertex(point_E.x, point_E.y, point_E.z, 0, 0.375f, vcVerts);
+		AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
+		AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
+		AddVertex(point_G.x, point_G.y, point_G.z, 0, 0.5f, vcVerts);
+		AddVertex(point_H.x, point_H.y, point_H.z, 0.085f, 0.5f, vcVerts);
+		AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
+		// }
 
 		Vector4 point_I(-0.01f, 0.01f, 0.01f, 1); // for the menu button dispaly "NEXT"
 		Vector4 point_J(0.01f, 0.01f, 0.01f, 1);
@@ -4955,12 +4957,29 @@ void CMainApplication::SetupControllerTexture()
 		point_J = mat_L * point_J;
 		point_K = mat_L * point_K;
 		point_L = mat_L * point_L;
-		AddVertex(point_I.x, point_I.y, point_I.z, 0.085f, 0, vcVerts);
-		AddVertex(point_J.x, point_J.y, point_J.z, 0.17f, 0, vcVerts);
-		AddVertex(point_K.x, point_K.y, point_K.z, 0.085f, 0.125f, vcVerts);
-		AddVertex(point_K.x, point_K.y, point_K.z, 0.085f, 0.125f, vcVerts);
-		AddVertex(point_L.x, point_L.y, point_L.z, 0.17f, 0.125f, vcVerts);
-		AddVertex(point_J.x, point_J.y, point_J.z, 0.17f, 0, vcVerts);
+
+		if (!finish_ano)
+		{
+			// finish
+			AddVertex(point_I.x, point_I.y, point_I.z, 0.085f, 0.5f, vcVerts);
+			AddVertex(point_J.x, point_J.y, point_J.z, 0.17f, 0.5f, vcVerts);
+			AddVertex(point_K.x, point_K.y, point_K.z, 0.085f, 0.625f, vcVerts);
+			AddVertex(point_K.x, point_K.y, point_K.z, 0.085f, 0.625f, vcVerts);
+			AddVertex(point_L.x, point_L.y, point_L.z, 0.17f, 0.625f, vcVerts);
+			AddVertex(point_J.x, point_J.y, point_J.z, 0.17f, 0.5f, vcVerts);
+		}
+		else
+		{ // x(h), y(v)
+			// next
+			AddVertex(point_I.x, point_I.y, point_I.z, 0.085f, 0, vcVerts);
+			AddVertex(point_J.x, point_J.y, point_J.z, 0.17f, 0, vcVerts);
+			AddVertex(point_K.x, point_K.y, point_K.z, 0.085f, 0.125f, vcVerts);
+			AddVertex(point_K.x, point_K.y, point_K.z, 0.085f, 0.125f, vcVerts);
+			AddVertex(point_L.x, point_L.y, point_L.z, 0.17f, 0.125f, vcVerts);
+			AddVertex(point_J.x, point_J.y, point_J.z, 0.17f, 0, vcVerts);
+		}
+
+		// qDebug() << "\n---- for the menu button dispaly \"NEXT\" -----------" << endl;
 
 		Vector4 point_M(-0.02f, 0.005f, 0.1f, 1); // for the current mode dispaly "Surface/line  Virtual finger  search ....."
 		Vector4 point_N(0.02f, 0.005f, 0.1f, 1);
@@ -5176,27 +5195,27 @@ void CMainApplication::SetupControllerTexture()
 		{
 		case tr_contrast:
 		{
-			if (!finish_ano)
-			{
-				AddVertex(point_E.x, point_E.y, point_E.z, 0.17f, 0.375f, vcVerts);
-				AddVertex(point_F.x, point_F.y, point_F.z, 0.25, 0.375f, vcVerts);
-				AddVertex(point_G.x, point_G.y, point_G.z, 0.17, 0.5f, vcVerts);
-				AddVertex(point_G.x, point_G.y, point_G.z, 0.17, 0.5f, vcVerts);
-				AddVertex(point_H.x, point_H.y, point_H.z, 0.25f, 0.5f, vcVerts);
-				AddVertex(point_F.x, point_F.y, point_F.z, 0.25f, 0.375f, vcVerts);
-			}
+			// if (!finish_ano)
+			// {
+			AddVertex(point_E.x, point_E.y, point_E.z, 0.17f, 0.375f, vcVerts);
+			AddVertex(point_F.x, point_F.y, point_F.z, 0.25, 0.375f, vcVerts);
+			AddVertex(point_G.x, point_G.y, point_G.z, 0.17, 0.5f, vcVerts);
+			AddVertex(point_G.x, point_G.y, point_G.z, 0.17, 0.5f, vcVerts);
+			AddVertex(point_H.x, point_H.y, point_H.z, 0.25f, 0.5f, vcVerts);
+			AddVertex(point_F.x, point_F.y, point_F.z, 0.25f, 0.375f, vcVerts);
+			// }
 			break;
 		}
 		case tr_clipplane:
 		{
 			if (!finish_ano)
 			{
-				AddVertex(point_E.x, point_E.y, point_E.z, 0.42f, 0.635f, vcVerts);
-				AddVertex(point_F.x, point_F.y, point_F.z, 0.5, 0.635f, vcVerts);
-				AddVertex(point_G.x, point_G.y, point_G.z, 0.42f, 0.765f, vcVerts);
-				AddVertex(point_G.x, point_G.y, point_G.z, 0.42f, 0.765f, vcVerts);
-				AddVertex(point_H.x, point_H.y, point_H.z, 0.5, 0.765f, vcVerts);
-				AddVertex(point_F.x, point_F.y, point_F.z, 0.5, 0.635f, vcVerts);
+				// AddVertex(point_E.x, point_E.y, point_E.z, 0.42f, 0.635f, vcVerts);
+				// AddVertex(point_F.x, point_F.y, point_F.z, 0.5, 0.635f, vcVerts);
+				// AddVertex(point_G.x, point_G.y, point_G.z, 0.42f, 0.765f, vcVerts);
+				// AddVertex(point_G.x, point_G.y, point_G.z, 0.42f, 0.765f, vcVerts);
+				// AddVertex(point_H.x, point_H.y, point_H.z, 0.5, 0.765f, vcVerts);
+				// AddVertex(point_F.x, point_F.y, point_F.z, 0.5, 0.635f, vcVerts);
 			}
 			break;
 		}
@@ -5229,7 +5248,7 @@ void CMainApplication::SetupControllerTexture()
 		//  	break;
 		//  }
 
-		Vector4 point_I(-0.01f, 0.01f, 0.01f, 1); // for the menu button dispaly "SAVE"
+		Vector4 point_I(-0.01f, 0.01f, 0.01f, 1); // for the menu button dispaly "Redo"
 		Vector4 point_J(0.01f, 0.01f, 0.01f, 1);
 		Vector4 point_K(-0.01f, 0.01f, 0.03f, 1);
 		Vector4 point_L(0.01f, 0.01f, 0.03f, 1); //*/
@@ -5239,6 +5258,7 @@ void CMainApplication::SetupControllerTexture()
 		point_L = mat_R * point_L;
 		if (!finish_ano)
 		{
+			// right controller redo
 			AddVertex(point_I.x, point_I.y, point_I.z, 0, 0, vcVerts);
 			AddVertex(point_J.x, point_J.y, point_J.z, 0.085f, 0, vcVerts);
 			AddVertex(point_K.x, point_K.y, point_K.z, 0, 0.125f, vcVerts);
@@ -5268,12 +5288,12 @@ void CMainApplication::SetupControllerTexture()
 		colormenu_point_rightbottom = mat_L * colormenu_point_rightbottom;
 		if (showshootingPad && (!finish_ano))
 		{
-			AddVertex(point_lefttop.x, point_lefttop.y, point_lefttop.z, 0.5, 0.0f, vcVerts);
-			AddVertex(point_righttop.x, point_righttop.y, point_righttop.z, 1.0, 0.0f, vcVerts);
-			AddVertex(point_leftbottom.x, point_leftbottom.y, point_leftbottom.z, 0.5, 0.5f, vcVerts);
-			AddVertex(point_leftbottom.x, point_leftbottom.y, point_leftbottom.z, 0.5, 0.5f, vcVerts);
-			AddVertex(point_rightbottom.x, point_rightbottom.y, point_rightbottom.z, 1.0, 0.5f, vcVerts);
-			AddVertex(point_righttop.x, point_righttop.y, point_righttop.z, 1.0, 0.0f, vcVerts);
+			// AddVertex(point_lefttop.x, point_lefttop.y, point_lefttop.z, 0.5, 0.0f, vcVerts);
+			// AddVertex(point_righttop.x, point_righttop.y, point_righttop.z, 1.0, 0.0f, vcVerts);
+			// AddVertex(point_leftbottom.x, point_leftbottom.y, point_leftbottom.z, 0.5, 0.5f, vcVerts);
+			// AddVertex(point_leftbottom.x, point_leftbottom.y, point_leftbottom.z, 0.5, 0.5f, vcVerts);
+			// AddVertex(point_rightbottom.x, point_rightbottom.y, point_rightbottom.z, 1.0, 0.5f, vcVerts);
+			// AddVertex(point_righttop.x, point_righttop.y, point_righttop.z, 1.0, 0.0f, vcVerts);
 		}
 		// add vertex
 		// 1------2/6
@@ -5285,12 +5305,12 @@ void CMainApplication::SetupControllerTexture()
 		//  3/4   5
 		else if (m_secondMenu == _colorPad && (!finish_ano))
 		{
-			AddVertex(colormenu_point_lefttop.x, colormenu_point_lefttop.y, colormenu_point_lefttop.z, 0.5518f, 0.5487f, vcVerts);
-			AddVertex(colormenu_point_righttop.x, colormenu_point_righttop.y, colormenu_point_righttop.z, 0.7174f, 0.5487f, vcVerts);
-			AddVertex(colormenu_point_leftbottom.x, colormenu_point_leftbottom.y, colormenu_point_leftbottom.z, 0.5518f, 0.6458f, vcVerts);
-			AddVertex(colormenu_point_leftbottom.x, colormenu_point_leftbottom.y, colormenu_point_leftbottom.z, 0.5518f, 0.6458f, vcVerts);
-			AddVertex(colormenu_point_rightbottom.x, colormenu_point_rightbottom.y, colormenu_point_rightbottom.z, 0.7174, 0.6458f, vcVerts);
-			AddVertex(colormenu_point_righttop.x, colormenu_point_righttop.y, colormenu_point_righttop.z, 0.7174, 0.5487f, vcVerts);
+			// AddVertex(colormenu_point_lefttop.x, colormenu_point_lefttop.y, colormenu_point_lefttop.z, 0.5518f, 0.5487f, vcVerts);
+			// AddVertex(colormenu_point_righttop.x, colormenu_point_righttop.y, colormenu_point_righttop.z, 0.7174f, 0.5487f, vcVerts);
+			// AddVertex(colormenu_point_leftbottom.x, colormenu_point_leftbottom.y, colormenu_point_leftbottom.z, 0.5518f, 0.6458f, vcVerts);
+			// AddVertex(colormenu_point_leftbottom.x, colormenu_point_leftbottom.y, colormenu_point_leftbottom.z, 0.5518f, 0.6458f, vcVerts);
+			// AddVertex(colormenu_point_rightbottom.x, colormenu_point_rightbottom.y, colormenu_point_rightbottom.z, 0.7174, 0.6458f, vcVerts);
+			// AddVertex(colormenu_point_righttop.x, colormenu_point_righttop.y, colormenu_point_righttop.z, 0.7174, 0.5487f, vcVerts);
 		}
 
 		Vector4 point_M(-0.02f, 0.005f, 0.1f, 1); // for the current interact mode dispaly "draw / delete / marker /pull"
@@ -5302,7 +5322,7 @@ void CMainApplication::SetupControllerTexture()
 		point_O = mat_R * point_O;
 		point_P = mat_R * point_P;
 
-		if (!finish_ano)
+		if (!finish_ano && false)
 		{
 			switch (m_modeGrip_R)
 			{
