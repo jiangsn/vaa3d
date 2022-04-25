@@ -1,4 +1,4 @@
-//last touch by Hanchuan Peng, 20170615.
+// last touch by Hanchuan Peng, 20170615.
 
 #ifndef __V3DR_GL_VR_H__
 #define __V3DR_GL_VR_H__
@@ -11,7 +11,7 @@
 #include <openvr.h>
 #include "lodepng.h"
 
-#include "Matrices.h"//todo-yimin: this header is removable
+#include "Matrices.h" //todo-yimin: this header is removable
 ////#include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -24,23 +24,22 @@
 #include "../basic_c_fun/v3d_interface.h"
 #include "../3drenderer/v3dr_glwidget.h"
 
-
 enum ModelControlR
 {
 	m_drawMode = 0,
 	m_deleteMode,
 	m_dragMode,
 	m_markMode,
-    m_delmarkMode,
+	m_delmarkMode,
 	m_splitMode,
 	m_insertnodeMode,
 	m_clipplaneMode,
 	m_ConnectMode
-	//m_slabplaneMode
+	// m_slabplaneMode
 };
 enum ModeControlSettings
 {
-	
+
 	_donothing = 0,
 	_TeraShift,
 	_TeraZoom,
@@ -48,7 +47,7 @@ enum ModeControlSettings
 	_UndoRedo,
 	_ColorChange,
 	_Surface,
-	_VirtualFinger,	
+	_VirtualFinger,
 	_Freeze,
 	_LineWidth,
 	_AutoRotate,
@@ -74,7 +73,7 @@ enum SecondeMenu
 {
 	_nothing = 0,
 	_colorPad = 1,
-//	_cutplane = 2
+	//	_cutplane = 2
 };
 enum FlashType
 {
@@ -93,13 +92,13 @@ class MainWindow;
 class CGLRenderModel
 {
 public:
-	CGLRenderModel( const std::string & sRenderModelName );
+	CGLRenderModel(const std::string &sRenderModelName);
 	~CGLRenderModel();
 
-	bool BInit( const vr::RenderModel_t & vrModel, const vr::RenderModel_TextureMap_t & vrDiffuseTexture );
+	bool BInit(const vr::RenderModel_t &vrModel, const vr::RenderModel_TextureMap_t &vrDiffuseTexture);
 	void Cleanup();
 	void Draw();
-	const std::string & GetName() const { return m_sModelName; }
+	const std::string &GetName() const { return m_sModelName; }
 
 private:
 	GLuint m_glVertBuffer;
@@ -109,17 +108,18 @@ private:
 	GLsizei m_unVertexCount;
 	std::string m_sModelName;
 };
-template<class T>
+template <class T>
 class MinMaxOctree
 {
 public:
-	MinMaxOctree(int width, int height, int depth,int step);
+	MinMaxOctree(int width, int height, int depth, int step);
 	~MinMaxOctree();
 	void build(T *volumeData, int volumeWidth, int volumeHeight, int volumeDepth);
 	int getWidth() { return width; }
 	int getHeight() { return height; }
 	int getDepth() { return depth; }
-	T* GetData() { return data; }
+	T *GetData() { return data; }
+
 private:
 	T *data;
 	int width;
@@ -131,7 +131,7 @@ private:
 class TransferControlPoint
 {
 public:
-	TransferControlPoint(float r,float g,float b,int isovalue)
+	TransferControlPoint(float r, float g, float b, int isovalue)
 	{
 		Color.x = r;
 		Color.y = g;
@@ -139,7 +139,7 @@ public:
 		Color.w = 1.0f;
 		Isovalue = isovalue;
 	}
-	TransferControlPoint(float alpha,int isovalue)
+	TransferControlPoint(float alpha, int isovalue)
 	{
 		Color.x = 0.0f;
 		Color.y = 0.0f;
@@ -149,8 +149,6 @@ public:
 	}
 	glm::vec4 Color;
 	int Isovalue;
-
-
 };
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -165,50 +163,50 @@ public:
 	bool BInitGL();
 	bool BInitCompositor();
 
-	void UpdateNTList(QString &msg, int type);//add the receieved message/NT to sketchedNTList
-    QString NT2QString(); // prepare the message to be sent from currentNT.
-	XYZ ConvertLocaltoGlobalCoords(float x,float y,float z,XYZ targetRes);
-	XYZ ConvertGlobaltoLocalCoords(float x,float y,float z);
-	//bool FlashStuff(FlashType type,XYZ coords);
-	void ClearCurrentNT();//clear the currently drawn stroke, and all the flags
-	bool HandleOneIteration();//used in collaboration mode 
-	QString getHMDPOSstr();//get current HMD position, and prepare the message to be sent to server
+	void UpdateNTList(QString &msg, int type); // add the receieved message/NT to sketchedNTList
+	QString NT2QString();					   // prepare the message to be sent from currentNT.
+	XYZ ConvertLocaltoGlobalCoords(float x, float y, float z, XYZ targetRes);
+	XYZ ConvertGlobaltoLocalCoords(float x, float y, float z);
+	// bool FlashStuff(FlashType type,XYZ coords);
+	void ClearCurrentNT();	   // clear the currently drawn stroke, and all the flags
+	bool HandleOneIteration(); // used in collaboration mode
+	QString getHMDPOSstr();	   // get current HMD position, and prepare the message to be sent to server
 	void SetupCurrentUserInformation(string name, int typeNumber);
-	void SetupAgentModels(vector<Agent> &curAgents);//generate spheres models to illustrate the locations of other users and get Collaboration creator Pos
-	void RefineSketchCurve(int direction, NeuronTree &oldNT, NeuronTree &newNT);//use Virtual Finger to improve curve
+	void SetupAgentModels(vector<Agent> &curAgents);							 // generate spheres models to illustrate the locations of other users and get Collaboration creator Pos
+	void RefineSketchCurve(int direction, NeuronTree &oldNT, NeuronTree &newNT); // use Virtual Finger to improve curve
 	QString FindNearestSegment(glm::vec3 dPOS);
 	bool DeleteSegment(QString segName);
-	NeuronSWC FindNearestNode(NeuronTree NT,glm::vec3 dPOS);
-	void MergeNeuronTrees(NeuronTree &ntree, const QList<NeuronTree> * NTlist);//merge NTlist to single neurontree
+	NeuronSWC FindNearestNode(NeuronTree NT, glm::vec3 dPOS);
+	void MergeNeuronTrees(NeuronTree &ntree, const QList<NeuronTree> *NTlist); // merge NTlist to single neurontree
 	bool isAnyNodeOutBBox(NeuronSWC S_temp);
-	void UpdateDragNodeinNTList(int ntnum,int swcnum,float nodex,float nodey,float nodez);
+	void UpdateDragNodeinNTList(int ntnum, int swcnum, float nodex, float nodey, float nodez);
 
 	void SetupRenderModels();
 
 	void Shutdown();
 
 	void RunMainLoop();
-	bool HandleInput();//handle controller and keyboard input
-	void ProcessVREvent( const vr::VREvent_t & event );
+	bool HandleInput(); // handle controller and keyboard input
+	void ProcessVREvent(const vr::VREvent_t &event);
 	void RenderFrame();
-	
-	bool SetupTexturemaps();//load controller textures and setup properties
-	void AddVertex( float fl0, float fl1, float fl2, float fl3, float fl4, std::vector<float> &vertdata );
-	void SetupControllerTexture();//update texture coordinates according to controller's new location
+
+	bool SetupTexturemaps(); // load controller textures and setup properties
+	void AddVertex(float fl0, float fl1, float fl2, float fl3, float fl4, std::vector<float> &vertdata);
+	void SetupControllerTexture(); // update texture coordinates according to controller's new location
 	void SetupControllerRay();
-	void AddrayVertex(float fl0, float fl1, float fl2, float fl3, float fl4,float fl5, std::vector<float> &vertdata);
+	void AddrayVertex(float fl0, float fl1, float fl2, float fl3, float fl4, float fl5, std::vector<float> &vertdata);
 	void SetupMorphologyLine(int drawMode);
-	void SetupMorphologyLine(NeuronTree neuron_Tree,GLuint& LineModeVAO, GLuint& LineModeVBO, GLuint& LineModeIndex,unsigned int& Vertcount,int drawMode);
-	void SetupMorphologySurface(NeuronTree neurontree,vector<Sphere*>& spheres,vector<Cylinder*>& cylinders,vector<glm::vec3>& spheresPos);
+	void SetupMorphologyLine(NeuronTree neuron_Tree, GLuint &LineModeVAO, GLuint &LineModeVBO, GLuint &LineModeIndex, unsigned int &Vertcount, int drawMode);
+	void SetupMorphologySurface(NeuronTree neurontree, vector<Sphere *> &spheres, vector<Cylinder *> &cylinders, vector<glm::vec3> &spheresPos);
 	void SetupSingleMorphologyLine(int ntIndex, int procvessMode = 0);
 	void SetupAllMorphologyLine();
 
-	void SetupMarkerandSurface(double x,double y,double z,int type =3);
-	void SetupMarkerandSurface(double x,double y,double z,int colorR,int colorG,int colorB);
+	void SetupMarkerandSurface(double x, double y, double z, int type = 3);
+	void SetupMarkerandSurface(double x, double y, double z, int colorR, int colorG, int colorB);
 
-	bool RemoveMarkerandSurface(double x,double y,double z,int type=3);
+	bool RemoveMarkerandSurface(double x, double y, double z, int type = 3);
 
-	void RenderControllerAxes();//draw XYZ axes on the base point of the controllers 
+	void RenderControllerAxes(); // draw XYZ axes on the base point of the controllers
 
 	bool SetupStereoRenderTargets();
 	void SetupCompanionWindow();
@@ -217,46 +215,47 @@ public:
 
 	void MenuFunctionChoose(glm::vec2 UV);
 	void ColorMenuChoose(glm::vec2 UV);
-	//undo redo
+	// undo redo
 	void UndoLastSketchedNT();
 	void RedoLastSketchedNT();
 	void ClearUndoRedoVectors();
 
-	void SetupGlobalMatrix();//matrix for glabal transformation
+	void SetupGlobalMatrix(); // matrix for glabal transformation
 	void RenderStereoTargets();
 	void RenderCompanionWindow();
-	void RenderScene( vr::Hmd_Eye nEye );
+	void RenderScene(vr::Hmd_Eye nEye);
 
-	Matrix4 GetHMDMatrixProjectionEye( vr::Hmd_Eye nEye );
-	Matrix4 GetHMDMatrixPoseEye( vr::Hmd_Eye nEye );
-	Matrix4 GetCurrentViewProjectionMatrix( vr::Hmd_Eye nEye );
+	Matrix4 GetHMDMatrixProjectionEye(vr::Hmd_Eye nEye);
+	Matrix4 GetHMDMatrixPoseEye(vr::Hmd_Eye nEye);
+	Matrix4 GetCurrentViewProjectionMatrix(vr::Hmd_Eye nEye);
 	void UpdateHMDMatrixPose();
 
 	void AppendMovetoFile();
 
-	Matrix4 ConvertSteamVRMatrixToMatrix4( const vr::HmdMatrix34_t &matPose );
+	Matrix4 ConvertSteamVRMatrixToMatrix4(const vr::HmdMatrix34_t &matPose);
 
-	GLuint CompileGLShader( const char *pchShaderName, const char *pchVertexShader, const char *pchFragmentShader );
+	GLuint CompileGLShader(const char *pchShaderName, const char *pchVertexShader, const char *pchFragmentShader);
 	bool CreateAllShaders();
 
-	void SetupRenderModelForTrackedDevice( vr::TrackedDeviceIndex_t unTrackedDeviceIndex );
-	CGLRenderModel *FindOrLoadRenderModel( const char *pchRenderModelName );
+	void SetupRenderModelForTrackedDevice(vr::TrackedDeviceIndex_t unTrackedDeviceIndex);
+	CGLRenderModel *FindOrLoadRenderModel(const char *pchRenderModelName);
 
 	float GetGlobalScale();
+
 public:
 	bool finish_ano;
 	bool loadNextQuit;
-	iDrawExternalParameter* _idep;
+	iDrawExternalParameter *_idep;
 	MainWindow *mainwindow;
 	My4DImage *img4d;
 	static My4DImage *img4d_replace;
 	bool replacetexture;
-	QList<NeuronTree> *loadedNTList; // neuron trees brought to the VR view from the 3D view.	
+	QList<NeuronTree> *loadedNTList; // neuron trees brought to the VR view from the 3D view.
 	NTL editableLoadedNTL;
 	NTL nonEditableLoadedNTL;
 	bool READY_TO_SEND;
 	bool isOnline;
-	static ModelControlR  m_modeGrip_R;
+	static ModelControlR m_modeGrip_R;
 	QString delName;
 	QString markerPOS;
 	QString delmarkerPOS;
@@ -273,7 +272,8 @@ public:
 	XYZ CollaborationCurrentRes;
 	XYZ CollaborationTargetMarkerRes;
 	XYZ collaborationTargetdelcurveRes;
-private: 
+
+private:
 	std::string current_agent_color;
 	std::string current_agent_name;
 	bool m_bDebugOpenGL;
@@ -286,17 +286,18 @@ private:
 	bool m_bControllerModelON;
 	bool m_bShowMorphologyMarker;
 
-	int  sketchNum; // a unique ID for neuron strokes, useful in deleting neurons
+	int sketchNum;				// a unique ID for neuron strokes, useful in deleting neurons
 	NeuronTree loadedNT_merged; // merged result of loadedNTList
-	
-	QList<NeuronTree> sketchedNTList; //neuron trees drawn in the VR view.	
-	public:
-	NeuronTree currentNT;// currently drawn stroke of neuron
-	private:
-	NeuronTree tempNT;//used somewhere, can be change to a local variable
+
+	QList<NeuronTree> sketchedNTList; // neuron trees drawn in the VR view.
+public:
+	NeuronTree gtNT;	  // Ground truth NT
+	NeuronTree currentNT; // currently drawn stroke of neuron
+private:
+	NeuronTree tempNT; // used somewhere, can be change to a local variable
 	BoundingBox swcBB;
 	QList<ImageMarker> drawnMarkerList;
-	vector<int> markerVisibility; //control the visibility of individual markers. temporarily used for VR experiment.
+	vector<int> markerVisibility; // control the visibility of individual markers. temporarily used for VR experiment.
 	vector<qint64> elapsedTimes;
 	QElapsedTimer timer1;
 	int curveDrawingTestStatus;
@@ -309,13 +310,13 @@ private:
 	vr::HmdVector3_t HmdQuadImageOffset;
 	std::string m_strDriver;
 	std::string m_strDisplay;
-	vr::TrackedDevicePose_t m_rTrackedDevicePose[ vr::k_unMaxTrackedDeviceCount ]; //note: contain everything: validity, matrix, ...
-	Matrix4 m_rmat4DevicePose[ vr::k_unMaxTrackedDeviceCount ]; //note: store device transform matrices, copied from m_rTrackedDevicePose
-	bool m_rbShowTrackedDevice[ vr::k_unMaxTrackedDeviceCount ];
+	vr::TrackedDevicePose_t m_rTrackedDevicePose[vr::k_unMaxTrackedDeviceCount]; // note: contain everything: validity, matrix, ...
+	Matrix4 m_rmat4DevicePose[vr::k_unMaxTrackedDeviceCount];					 // note: store device transform matrices, copied from m_rTrackedDevicePose
+	bool m_rbShowTrackedDevice[vr::k_unMaxTrackedDeviceCount];
 
-	//gltext::Font * font_VR;//font for render text
+	// gltext::Font * font_VR;//font for render text
 
-	//undo redo
+	// undo redo
 	bool bIsUndoEnable;
 	bool bIsRedoEnable;
 	vector<NTL> vUndoList;
@@ -335,13 +336,13 @@ private: // OpenGL bookkeeping
 	int m_iTrackedControllerCount_Last;
 	int m_iValidPoseCount;
 	int m_iValidPoseCount_Last;
-	static bool m_bFrozen; //freeze the view
+	static bool m_bFrozen; // freeze the view
 	static bool m_bVirtualFingerON;
 
-	//control main functions in right controller
-	int  m_modeControlTouchPad_R;
+	// control main functions in right controller
+	int m_modeControlTouchPad_R;
 	int m_modeControlGrip_R;
-	//control other functions in left controller
+	// control other functions in left controller
 	static int m_modeControlGrip_L;
 	static ModeControlSettings m_modeGrip_L;
 	static ModeTouchPadR m_modeTouchPad_R;
@@ -365,19 +366,17 @@ private: // OpenGL bookkeeping
 
 	int pick_point_index_A;
 	int pick_point_index_B;
-	NeuronSWC * pick_node;
+	NeuronSWC *pick_node;
 
 	float detX;
 	float detY;
-	
+
 	glm::vec3 loadedNTCenter;
 	glm::vec3 autoRotationCenter;
 	long int vertexcount, swccount;
-	std::string m_strPoseClasses;                            // what classes we saw poses for this frame
-	char m_rDevClassChar[ vr::k_unMaxTrackedDeviceCount ];   // for each device, a character representing its class
+	std::string m_strPoseClasses;						 // what classes we saw poses for this frame
+	char m_rDevClassChar[vr::k_unMaxTrackedDeviceCount]; // for each device, a character representing its class
 
-
-	
 	float m_fNearClip;
 
 	float m_fFarClip;
@@ -388,35 +387,35 @@ private: // OpenGL bookkeeping
 	GLuint m_unCtrTexProgramID;
 	GLint m_nCtrTexMatrixLocation;
 	unsigned int m_uiControllerTexIndexSize;
-	
-	//volume rendering
-	//MinMaxOctree* minmaxOctree_step8;
-	//MinMaxOctree* minmaxOctree_step16;
-	//MinMaxOctree* minmaxOctree_step32;
-	//right controller shootingray VAO/VBO
+
+	// volume rendering
+	// MinMaxOctree* minmaxOctree_step8;
+	// MinMaxOctree* minmaxOctree_step16;
+	// MinMaxOctree* minmaxOctree_step32;
+	// right controller shootingray VAO/VBO
 	GLuint m_iControllerRayVAO;
 	GLuint m_iControllerRayVBO;
 	// controller index , get them in HandleInput()
-	int	m_iControllerIDLeft;
-	int	m_iControllerIDRight;
+	int m_iControllerIDLeft;
+	int m_iControllerIDRight;
 
-	//unsigned int m_uiVertcount;
+	// unsigned int m_uiVertcount;
 
-	//VAO/VBO for surface and line of loaded neuron
-	vector<Sphere*> loaded_spheres;
-	vector<Cylinder*> loaded_cylinders;
+	// VAO/VBO for surface and line of loaded neuron
+	vector<Sphere *> loaded_spheres;
+	vector<Cylinder *> loaded_cylinders;
 	vector<glm::vec3> loaded_spheresPos;
 	vector<glm::vec3> loaded_spheresColor;
 
-	vector<Sphere*> Agents_spheres;
+	vector<Sphere *> Agents_spheres;
 	vector<glm::vec3> Agents_spheresPos;
 	vector<glm::vec3> Agents_spheresColor;
 
-	vector<Sphere*> Markers_spheres;
+	vector<Sphere *> Markers_spheres;
 	vector<glm::vec3> Markers_spheresPos;
 	vector<glm::vec3> Markers_spheresColor;
 
-	Sphere* ctrSphere; // indicate the origin for curve drawing
+	Sphere *ctrSphere; // indicate the origin for curve drawing
 	glm::vec3 ctrSpherePos;
 	glm::vec3 ctrSphereColor;
 	glm::vec3 u_clipnormal;
@@ -427,28 +426,26 @@ private: // OpenGL bookkeeping
 	GLuint m_glMorphologyLineModeIndexBuffer;
 	unsigned int m_uiMorphologyLineModeVertcount;
 
-	//VAO/VBO for surface and line of loaded neuron
-	vector<Sphere*> sketch_spheres; //2017/11/13, wym: kind of obselete, drawn curves are not shown in surface mode 
-	vector<Cylinder*> sketch_cylinders;
+	// VAO/VBO for surface and line of loaded neuron
+	vector<Sphere *> sketch_spheres; // 2017/11/13, wym: kind of obselete, drawn curves are not shown in surface mode
+	vector<Cylinder *> sketch_cylinders;
 	vector<glm::vec3> sketch_spheresPos;
 
-	GLuint m_unSketchMorphologyLineModeVAO;//for local sketch swc
+	GLuint m_unSketchMorphologyLineModeVAO; // for local sketch swc
 	GLuint m_glSketchMorphologyLineModeVertBuffer;
 	GLuint m_glSketchMorphologyLineModeIndexBuffer;
 	unsigned int m_uiSketchMorphologyLineModeVertcount;
 
-
-
-	GLuint m_unCompanionWindowVAO; //two 2D boxes
+	GLuint m_unCompanionWindowVAO; // two 2D boxes
 	GLuint m_glCompanionWindowIDVertBuffer;
 	GLuint m_glCompanionWindowIDIndexBuffer;
 	unsigned int m_uiCompanionWindowIndexSize;
 
 	GLuint m_glControllerVertBuffer;
-	GLuint m_unControllerVAO;//note: axes for controller
+	GLuint m_unControllerVAO; // note: axes for controller
 	unsigned int m_uiControllerVertcount;
-	unsigned int m_uiControllerRayVertcount;//note: used to draw controller ray
-	Matrix4 m_mat4HMDPose;//note: m_rmat4DevicePose[hmd].invert()
+	unsigned int m_uiControllerRayVertcount; // note: used to draw controller ray
+	Matrix4 m_mat4HMDPose;					 // note: m_rmat4DevicePose[hmd].invert()
 	Matrix4 m_mat4eyePosLeft;
 	Matrix4 m_mat4eyePosRight;
 
@@ -456,10 +453,10 @@ private: // OpenGL bookkeeping
 	Matrix4 m_mat4ProjectionLeft;
 	Matrix4 m_mat4ProjectionRight;
 
-	//for morphology rendering
+	// for morphology rendering
 	glm::mat4 m_HMDTrans;
-	glm::mat4 m_EyeTransLeft;//head to eye
-	glm::mat4 m_EyeTransRight; 
+	glm::mat4 m_EyeTransLeft; // head to eye
+	glm::mat4 m_EyeTransRight;
 	glm::vec3 m_EyePosLeft;
 	glm::vec3 m_EyePosRight;
 	glm::mat4 m_ProjTransLeft;
@@ -470,29 +467,27 @@ private: // OpenGL bookkeeping
 	glm::mat4 m_oldGlobalMatrix;
 	glm::mat4 m_ctrlChangeMatrix;
 	glm::mat4 m_oldCtrlMatrix;
-	   
 
-	//matrices to store frozen state
+	// matrices to store frozen state
 	Matrix4 m_frozen_mat4HMDPose;
 	glm::mat4 m_frozen_HMDTrans;
 	glm::mat4 m_frozen_globalMatrix;
 
-
-	struct VertexDataScene//question: why define this? only used for sizeof()
+	struct VertexDataScene // question: why define this? only used for sizeof()
 	{
 		Vector3 position;
 		Vector2 texCoord;
 	};
 
-	struct VertexDataWindow//question: companion window just uses the projected data points from HMD?
+	struct VertexDataWindow // question: companion window just uses the projected data points from HMD?
 	{
 		Vector2 position;
 		Vector2 texCoord;
 
-		VertexDataWindow( const Vector2 & pos, const Vector2 tex ) :  position(pos), texCoord(tex) {	}
+		VertexDataWindow(const Vector2 &pos, const Vector2 tex) : position(pos), texCoord(tex) {}
 	};
 
-	Shader* morphologyShader;
+	Shader *morphologyShader;
 	GLuint m_unCompanionWindowProgramID;
 	GLuint m_unControllerTransformProgramID;
 	GLuint m_unRenderModelProgramID;
@@ -512,62 +507,61 @@ private: // OpenGL bookkeeping
 	FramebufferDesc leftEyeDesc;
 	FramebufferDesc rightEyeDesc;
 
-	bool CreateFrameBuffer( int nWidth, int nHeight, FramebufferDesc &framebufferDesc );
-	
+	bool CreateFrameBuffer(int nWidth, int nHeight, FramebufferDesc &framebufferDesc);
+
 	uint32_t m_nRenderWidth;
 	uint32_t m_nRenderHeight;
 
-	std::vector< CGLRenderModel * > m_vecRenderModels; //note: a duplicated access to below. used in shutdown destroy, check existence routines;
-	CGLRenderModel *m_rTrackedDeviceToRenderModel[ vr::k_unMaxTrackedDeviceCount ]; //note: maintain all the render models for VR devices; used in drawing
+	std::vector<CGLRenderModel *> m_vecRenderModels;							  // note: a duplicated access to below. used in shutdown destroy, check existence routines;
+	CGLRenderModel *m_rTrackedDeviceToRenderModel[vr::k_unMaxTrackedDeviceCount]; // note: maintain all the render models for VR devices; used in drawing
 
-
-	//sketchNTL all NTs' VAO&VBO
+	// sketchNTL all NTs' VAO&VBO
 	vector<GLuint> iSketchNTLMorphologyVAO;
 	vector<GLuint> iSketchNTLMorphologyVertBuffer;
-	vector<GLuint> iSketchNTLMorphologyIndexBuffer; 
+	vector<GLuint> iSketchNTLMorphologyIndexBuffer;
 	vector<unsigned int> iSketchNTLMorphologyVertcount;
-/***********************************
-***    volume image rendering    ***
-***********************************/
+	/***********************************
+	***    volume image rendering    ***
+	***********************************/
 public:
 	void SetupCubeForImage4D();
 	GLuint initTFF1DTex();
 	GLuint initFace2DTex(GLuint texWidth, GLuint texHeight);
 	GLuint initVol3DTex();
-	GLuint initVolOctree3DTex(int step,GLuint octreestep);
+	GLuint initVolOctree3DTex(int step, GLuint octreestep);
 	void initFrameBufferForVolumeRendering(GLuint texObj, GLuint texWidth, GLuint texHeight);
 	void SetupVolumeRendering();
 	bool CreateVolumeRenderingShaders();
-	void RenderImage4D(Shader* shader, vr::Hmd_Eye nEye, GLenum cullFace);
+	void RenderImage4D(Shader *shader, vr::Hmd_Eye nEye, GLenum cullFace);
 	void SetUinformsForRayCasting();
 
 public:
 	bool m_bHasImage4D;
+
 private:
-	
-	void * RGBImageTexData;
+	void *RGBImageTexData;
 	GLuint m_clipPatchVAO;
 	GLuint m_VolumeImageVAO;
-	Shader* backfaceShader;//back face, first pass
-	Shader* raycastingShader;//ray casting front face, second pass
-	Shader* clipPatchShader;//ray casting front face, second pass
+	Shader *backfaceShader;	  // back face, first pass
+	Shader *raycastingShader; // ray casting front face, second pass
+	Shader *clipPatchShader;  // ray casting front face, second pass
 
-	GLuint g_winWidth; //todo: may be removable. wym
+	GLuint g_winWidth; // todo: may be removable. wym
 	GLuint g_winHeight;
-	GLuint g_frameBufferBackface; //render backface to frameBufferBackface
-	GLuint g_tffTexObj;	// transfer function
+	GLuint g_frameBufferBackface; // render backface to frameBufferBackface
+	GLuint g_tffTexObj;			  // transfer function
 	GLuint g_bfTexObj;
 	GLuint g_texWidth;
 	GLuint g_texHeight;
 	GLuint g_volTexObj;
 	GLuint g_volTexObj_octree_8;
 	GLuint g_volTexObj_octree_16;
-	GLuint g_volTexObj_octree_32;	
+	GLuint g_volTexObj_octree_32;
 	GLuint g_volTexObj_octree_64;
-	GLuint g_volTexObj_octree_128;			
+	GLuint g_volTexObj_octree_128;
 	static float fBrightness;
 	static float fContrast;
-	float fSlabwidth;//used to control slabplane width
+	float fSlabwidth; // used to control slabplane width
 
 	double countsPerSecond;
 	__int64 CounterStart;
@@ -584,24 +578,23 @@ private:
 
 	static float iLineWid;
 	static float iscaleZ;
-	public:
+
+public:
 	static bool showshootingPad;
 
-	glm::vec3  shootingraystartPos;
-	glm::vec3  shootingrayDir;
+	glm::vec3 shootingraystartPos;
+	glm::vec3 shootingrayDir;
 	glm::vec3 shootingraycutPos;
 	glm::vec2 calculateshootingPadUV();
-	
+
 	bool showshootingray;
 	QString collaboration_creator_name;
 	int collaboration_creator_res;
-	template<typename T>
+	template <typename T>
 	void HelpFunc_createOctreetexture(int step);
 	void bindTexturePara();
 };
 
-//Help Function
-
+// Help Function
 
 #endif
-

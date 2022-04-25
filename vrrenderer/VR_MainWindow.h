@@ -75,7 +75,6 @@ private:
 };
 
 // bool startStandaloneVRScene(QList<NeuronTree> *ntlist, My4DImage *img4d, MainWindow *pmain);
-int startStandaloneVRScene(QList<NeuronTree> *ntlist, My4DImage *img4d, iDrawExternalParameter *idep, MainWindow *pmain, XYZ *zoomPOS = 0);
-int startStandaloneVRSceneWrapper(QList<NeuronTree> *ntlist, My4DImage *img4d, iDrawExternalParameter *idep, MainWindow *pmain, QList<NeuronTree> *gtlist, XYZ *zoomPOS = 0);
+int startStandaloneVRScene(QList<NeuronTree> *ntlist, QList<NeuronTree> *gtlist, My4DImage *img4d, iDrawExternalParameter *idep, MainWindow *pmain, XYZ *zoomPOS = 0);
 
 #endif // VR_MainWindow_H

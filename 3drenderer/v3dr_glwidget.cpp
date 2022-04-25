@@ -2502,8 +2502,9 @@ void V3dR_GLWidget::doimageVRView(bool bCanCoMode) // 0518
 	Renderer_gl1 *tempptr = (Renderer_gl1 *)renderer;
 
 	QList<NeuronTree> *listNeuronTrees = tempptr->getHandleNeuronTrees();
+	QList<NeuronTree> *gtNeuronTrees = tempptr->getGtNeuronTrees();
 
-	// auto load ground truth for training
+	// auto load ground truth for training, loaded into *listNeuronTrees
 	QString swcName = _idep->V3Dmainwindow->currentImgPath;
 	swcName = swcName.replace("tif", "swc");
 	ifstream swcFile(swcName.toUtf8().constData());
@@ -2512,9 +2513,19 @@ void V3dR_GLWidget::doimageVRView(bool bCanCoMode) // 0518
 		qDebug() << "Loading swc: " << swcName << endl;
 		loadObjectFromFile(swcName);
 	}
-	QList<NeuronTree> *gtNeuronTrees = tempptr->getHandleNeuronTrees();
+	// swap gtNeuronTree and listNeuronTree
+	QList<NeuronTree> tmpqlist = tempptr->gtNeuronTree;
+	tempptr->gtNeuronTree = tempptr->listNeuronTree;
+	tempptr->listNeuronTree = tmpqlist;
 
-	cout << "vr listNeuronTrees.size()" << listNeuronTrees->size();
+	// --------------------------------------
+	// QList<NeuronTree> *listNeuronTrees = tempptr->getHandleNeuronTrees();
+
+		// QList<NeuronTree> *gtNeuronTrees = tempptr->getHandleNeuronTrees();
+	// ---------------------------------------------
+
+	cout << "vr listNeuronTrees.size()" << listNeuronTrees->size() << endl;
+	cout << "vr gtNeuronTrees.size()" << gtNeuronTrees->size() << endl;
 
 	My4DImage *img4d = this->getiDrawExternalParameter()->image4d;
 	this->getMainWindow()->hide();
@@ -2522,7 +2533,7 @@ void V3dR_GLWidget::doimageVRView(bool bCanCoMode) // 0518
 
 	// bool _Call_ZZ_Plugin = startStandaloneVRScene(listNeuronTrees, img4d, (MainWindow *)(this->getMainWindow())); // both nt and img4d can be empty.
 	_idep->glWidget = this;
-	int _call_that_func = startStandaloneVRScene(listNeuronTrees, img4d, _idep, (MainWindow *)(this->getMainWindow()), &teraflyZoomInPOS); // both nt and img4d can be empty.
+	int _call_that_func = startStandaloneVRScene(listNeuronTrees, gtNeuronTrees, img4d, _idep, (MainWindow *)(this->getMainWindow()), &teraflyZoomInPOS); // both nt and img4d can be empty.
 	// int _call_that_func = startStandaloneVRSceneWrapper(listNeuronTrees, img4d, _idep, (MainWindow *)(this->getMainWindow()), gtNeuronTrees, &teraflyZoomInPOS); // both nt and img4d can be empty.
 	qDebug() << "result is " << _call_that_func;
 	qDebug() << "xxxxxxxxxxxxx ==%1 y ==%2 z ==%3" << teraflyZoomInPOS.x << teraflyZoomInPOS.y << teraflyZoomInPOS.z;

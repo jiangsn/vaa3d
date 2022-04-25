@@ -1412,7 +1412,7 @@ bool CMainApplication::HandleInput()
 			else
 			{
 				finish_ano = true;
-				SetupMorphologyLine(0); // for showing ground truth when annotation is finished
+				SetupMorphologyLine(2); // for showing ground truth when annotation is finished
 				_idep->glWidget->autoSaveSwcVR();
 			}
 		}
@@ -5197,8 +5197,8 @@ void CMainApplication::SetupControllerTexture()
 				AddVertex(point_G.x, point_G.y, point_G.z, 0.42f, 0.765f, vcVerts);
 				AddVertex(point_H.x, point_H.y, point_H.z, 0.5, 0.765f, vcVerts);
 				AddVertex(point_F.x, point_F.y, point_F.z, 0.5, 0.635f, vcVerts);
-				break;
 			}
+			break;
 		}
 		default:
 			break;
@@ -5731,10 +5731,10 @@ void CMainApplication::SetupMorphologyLine(int drawMode) // pass 3 parameters: &
 	{
 		SetupMorphologyLine(currentNT, m_unSketchMorphologyLineModeVAO, m_glSketchMorphologyLineModeVertBuffer, m_glSketchMorphologyLineModeIndexBuffer, m_uiSketchMorphologyLineModeVertcount, drawMode);
 	}
-	if (drawMode == 2) // 0 means drawmode = 0, which means this function is called out of mainloop
+	if (drawMode == 2) // show gtNeuronTrees
 	{
 		qDebug() << "\nCMainApplication::SetupMorphologyLine(int " << drawMode << ")" << endl;
-		SetupMorphologyLine(loadedNT_merged, m_unMorphologyLineModeVAO, m_glMorphologyLineModeVertBuffer, m_glMorphologyLineModeIndexBuffer, m_uiMorphologyLineModeVertcount, drawMode);
+		SetupMorphologyLine(gtNT, m_unMorphologyLineModeVAO, m_glMorphologyLineModeVertBuffer, m_glMorphologyLineModeIndexBuffer, m_uiMorphologyLineModeVertcount, drawMode);
 	}
 	// else if(drawMode==2)// 2 for setting up sketchNTL's VAO&VBO
 	// {

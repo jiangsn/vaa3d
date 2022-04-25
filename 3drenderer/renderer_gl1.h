@@ -253,7 +253,7 @@ public:
 	QString info_SurfVertex(int vertex_i, Triangle *triangle, int label);
 
 	QList<NeuronTree> *getHandleNeuronTrees() { return &listNeuronTree; }
-	QList<NeuronTree> *getDummuNeuronTrees() { return &dummyListNeuronTree; }
+	QList<NeuronTree> *getGtNeuronTrees() { return &gtNeuronTree; }
 	V3DLONG findNearestNeuronNode_WinXY(int cx, int cy, NeuronTree *ptree, double &best_dist); // find the nearest node in a neuron in XY project of the display window.//return the index of the respective neuron node
 
 #ifdef _NEURON_ASSEMBLER_
@@ -817,7 +817,7 @@ public:
 	BoundingBox apoBB;
 
 	// neuron swc
-	QList<NeuronTree> dummyListNeuronTree;
+	QList<NeuronTree> gtNeuronTree;
 	QList<NeuronTree> listNeuronTree;
 	QList<NeuronTree> listNeuronTree_old;
 	bool b_editDroppedNeuron;

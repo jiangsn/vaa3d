@@ -747,89 +747,8 @@ void VR_MainWindow::RunVRMainloop(XYZ *zoomPOS)
 //-----------------------------------------------------------------------------
 // Purpose: for standalone VR.
 //-----------------------------------------------------------------------------
-int startStandaloneVRSceneWrapper(QList<NeuronTree> *ntlist, My4DImage *i4d, iDrawExternalParameter *idep, MainWindow *pmain, QList<NeuronTree> *gtlist, XYZ *zoomPOS)
-{
-	// CMainApplication *pMainApplication = new CMainApplication(0, 0);
-	// // pMainApplication->setnetworkmodefalse();//->NetworkModeOn=false;
-	// pMainApplication->mainwindow = pmain;
-	// pMainApplication->_idep = idep;
-	// pMainApplication->isOnline = false;
 
-	// if (ntlist != NULL)
-	// {
-	// 	if ((ntlist->size() == 1) && (ntlist->at(0).name.isEmpty()))
-	// 	{
-	// 		qDebug() << "\nEditable NeuronTree loaded.\n";
-	// 		// means there is only a reloaded annotation in terafly
-	// 		// we rename it as vaa3d_traced_neuron
-	// 		// qDebug() << "means this is terafly special condition.do something";
-	// 		NeuronTree newS;
-	// 		newS.color = XYZW(0, 0, 255, 255);
-	// 		newS = ntlist->at(0);
-	// 		newS.n = 1;
-	// 		newS.on = true;
-	// 		newS.name = "vaa3d_traced_neuron";
-	// 		newS.file = "vaa3d_traced_neuron";
-	// 		pMainApplication->editableLoadedNTL.append(newS);
-	// 		qDebug() << "Editable NeuronTree size: " << pMainApplication->editableLoadedNTL.size() << endl;
-	// 	}
-	// 	else
-	// 	{
-	// 		for (int i = 0; i < ntlist->size(); i++)
-	// 		{
-	// 			if ((ntlist->at(i).name == "vaa3d_traced_neuron") && (ntlist->at(i).file == "vaa3d_traced_neuron"))
-	// 			{
-	// 				// means there is a NT named "vaa3d_traced_neuron", we only need to edit this NT.
-	// 				pMainApplication->editableLoadedNTL.append(ntlist->at(i));
-	// 			}
-	// 			else if (!ntlist->at(0).name.isEmpty())
-	// 			{
-	// 				qDebug() << "Non-editable NeuronTree loaded.\n";
-	// 				// means it is a loaded Neuron in 3D View,currently we do not allow to edit this neuron in VR
-	// 				pMainApplication->nonEditableLoadedNTL.append(ntlist->at(i));
-	// 			}
-	// 			// else if (ntlist->at(0).name.isEmpty())
-	// 			// means it is an reloaded annotation in terafly, currently we do not show this neuron in VR
-	// 		}
-	// 	}
-	// }
-	// pMainApplication->loadedNTList = ntlist;
-
-	// if (i4d->valid())
-	// {
-	// 	pMainApplication->img4d = i4d;
-	// 	pMainApplication->m_bHasImage4D = true;
-	// }
-	// if (!pMainApplication->BInit())
-	// {
-	// 	qDebug() << "You clicked quit 3." << endl;
-	// 	pMainApplication->Shutdown();
-	// 	return 0;
-	// }
-	// pMainApplication->SetupCurrentUserInformation("local user", 13);
-
-	// pMainApplication->RunMainLoop();
-
-	// pMainApplication->Shutdown();
-
-	// // bool _call_that_plugin = pMainApplication->_call_assemble_plugin;
-	// int _call_that_function = pMainApplication->postVRFunctionCallMode;
-	// if (pMainApplication->loadNextQuit)
-	// {
-	// 	_call_that_function = 965;
-	// }
-	// zoomPOS->x = pMainApplication->teraflyPOS.x;
-	// zoomPOS->y = pMainApplication->teraflyPOS.y;
-	// zoomPOS->z = pMainApplication->teraflyPOS.z;
-	// delete pMainApplication;
-	// pMainApplication = NULL;
-
-	// // return _call_that_plugin;
-	// return _call_that_function;
-	return 0;
-}
-
-int startStandaloneVRScene(QList<NeuronTree> *ntlist, My4DImage *i4d, iDrawExternalParameter *idep, MainWindow *pmain, XYZ *zoomPOS)
+int startStandaloneVRScene(QList<NeuronTree> *ntlist, QList<NeuronTree> *gtlist, My4DImage *i4d, iDrawExternalParameter *idep, MainWindow *pmain, XYZ *zoomPOS)
 {
 
 	CMainApplication *pMainApplication = new CMainApplication(0, 0);
@@ -877,7 +796,9 @@ int startStandaloneVRScene(QList<NeuronTree> *ntlist, My4DImage *i4d, iDrawExter
 		}
 	}
 	pMainApplication->loadedNTList = ntlist;
-	pMainApplication->loadedNTList->clear();
+	if (gtlist->size() > 0)
+		pMainApplication->gtNT = gtlist->at(0);
+	// pMainApplication->loadedNTList->clear();
 	// pMainApplication->loadedNTList = new QList<NeuronTree>;
 
 	if (i4d->valid())
