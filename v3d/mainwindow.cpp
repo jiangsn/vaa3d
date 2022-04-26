@@ -517,7 +517,7 @@ void MainWindow::handleCoordinatedCloseEvent_real()
 		if (p3DView)
 		{
 			p3DView->postClose(); // 151117. PHC
-			//        v3d_msg("haha");
+								  //        v3d_msg("haha");
 		}
 	}
 	// exit(1); //this is one bruteforce way to disable the strange seg fault. 080430. A simple to enhance this is to set a b_changedContent flag indicates if there is any unsaved edit of an image,
@@ -2195,62 +2195,68 @@ void MainWindow::updateProcessingMenu()
 
 void MainWindow::startExp()
 {
-	bool ok;
-	pID = QInputDialog::getText(this, "", tr("Please input your ID:"), QLineEdit::Normal, "", &ok);
-	if (!ok || pID.isEmpty())
-		return;
-
-	QMessageBox::StandardButton reply;
-	reply = QMessageBox::question(this, "", "VR Mode?",
-								  QMessageBox::Yes | QMessageBox::No);
-	if (reply == QMessageBox::Yes)
-		vrMode = true;
-	else
-		vrMode = false;
-
-	img_path_prefix = "/data/image/selected_center_200/";
-	swc_path_prefix = "/data/swc/selected_center_200/";
-	event_path_prefix = "/data/events/";
-	expDir = QDir(QDir::currentPath());
-	qDebug() << expDir.currentPath();
-	QString csv_path = expDir.currentPath() + "/data/df_select_200.csv";
-	selectedImages = QStringList();
-	expImages = QStringList();
-	int rowidx;
-	ifstream fin;
-	fin.open(csv_path.toUtf8().constData());
-	string str;
-	while (getline(fin, str))
+	if (!isTrained)
 	{
-		QString qstr = QString::fromStdString(str);
-		if (qstr.contains("name"))
-		{
-			qDebug() << qstr;
-			qDebug() << qstr.split(",");
-			qDebug() << QString("P") + QString(pID);
-			rowidx = qstr.split(",").indexOf(QString("P") + QString(pID));
-			if (rowidx <= 0)
-				return;
-			qDebug() << rowidx;
-		}
-		else
-		{
-			if (qstr.split(",")[rowidx] == "1")
-			{
-				expImages.append(expDir.currentPath() + img_path_prefix + qstr.split(",")[0]);
-				imagesAttributes.append(qstr);
+		trainNum = 5;
 
-				if (qstr.contains("yes"))
-					selectedImages.append(expDir.currentPath() + img_path_prefix + qstr.split(",")[0]);
+		bool ok;
+		pID = QInputDialog::getText(this, "", tr("Please input your ID:"), QLineEdit::Normal, "", &ok);
+		if (!ok || pID.isEmpty())
+			return;
+
+		QMessageBox::StandardButton reply;
+		reply = QMessageBox::question(this, "", "VR Mode?",
+									  QMessageBox::Yes | QMessageBox::No);
+		if (reply == QMessageBox::Yes)
+			vrMode = true;
+		else
+			vrMode = false;
+
+		img_path_prefix = "/data/image/selected_center_200/";
+		swc_path_prefix = "/data/swc/selected_center_200/";
+		event_path_prefix = "/data/events/";
+		expDir = QDir(QDir::currentPath());
+		qDebug() << expDir.currentPath();
+		QString csv_path = expDir.currentPath() + "/data/df_select_200.csv";
+		selectedImages = QStringList();
+		expImages = QStringList();
+		int rowidx;
+		ifstream fin;
+		fin.open(csv_path.toUtf8().constData());
+		string str;
+		while (getline(fin, str))
+		{
+			QString qstr = QString::fromStdString(str);
+			if (qstr.contains("name"))
+			{
+				qDebug() << qstr;
+				qDebug() << qstr.split(",");
+				qDebug() << QString("P") + QString(pID);
+				rowidx = qstr.split(",").indexOf(QString("P") + QString(pID));
+				if (rowidx <= 0)
+					return;
+				qDebug() << rowidx;
+			}
+			else
+			{
+				if (qstr.split(",")[rowidx] == "1")
+				{
+					expImages.append(expDir.currentPath() + img_path_prefix + qstr.split(",")[0]);
+					imagesAttributes.append(qstr);
+
+					if (qstr.contains("yes"))
+						selectedImages.append(expDir.currentPath() + img_path_prefix + qstr.split(",")[0]);
+				}
 			}
 		}
+
+		fin.close();
+		if (expImages.size() <= 0)
+			return;
+		qDebug() << expImages;
+		currentImgIdx = 0;
 	}
 
-	fin.close();
-	if (expImages.size() <= 0)
-		return;
-	qDebug() << expImages;
-	currentImgIdx = 0;
 	currentImgPath = expImages.at(currentImgIdx);
 	currentImgName = currentImgPath.split('/').last().replace(".tif", "");
 	currentSwcPath = expDir.currentPath() + swc_path_prefix + currentImgName + "_" + pID + "_" + (vrMode ? "vr" : "desktop") + ".swc";
@@ -2278,9 +2284,15 @@ void MainWindow::loadNextImage()
 	}
 
 	currentImgIdx++;
+	if (currentImgIdx == trainNum)
+	{
+		isTrained = true;
+		return;
+	}
 	if (currentImgIdx >= expImages.size())
 	{
-		currentImgIdx--;
+		currentImgIdx = 0;
+		isTrained = false;
 		return;
 	}
 	// currentImgPath = expDir.absoluteFilePath(expImages.at(currentImgIdx));
@@ -2373,15 +2385,15 @@ void MainWindow::selectImage()
 
 void MainWindow::createActions()
 {
-	newAct = new QAction(QIcon(":/pic/new.png"), tr("&New"), this);
-	newAct->setShortcut(tr("Ctrl+N"));
-	newAct->setStatusTip(tr("Create a new file"));
-	connect(newAct, SIGNAL(triggered()), this, SLOT(newFile()));
+	// newAct = new QAction(QIcon(":/pic/new.png"), tr("&New"), this);
+	// newAct->setShortcut(tr("Ctrl+N"));
+	// newAct->setStatusTip(tr("Create a new file"));
+	// connect(newAct, SIGNAL(triggered()), this, SLOT(newFile()));
 
-	openAct = new QAction(QIcon(":/pic/open.png"), tr("&Open image/stack/surface_file in a new window ..."), this);
-	openAct->setShortcut(tr("Ctrl+O"));
-	openAct->setStatusTip(tr("Open an existing image"));
-	connect(openAct, SIGNAL(triggered()), this, SLOT(open()));
+	// openAct = new QAction(QIcon(":/pic/open.png"), tr("&Open image/stack/surface_file in a new window ..."), this);
+	// openAct->setShortcut(tr("Ctrl+O"));
+	// openAct->setStatusTip(tr("Open an existing image"));
+	// connect(openAct, SIGNAL(triggered()), this, SLOT(open()));
 
 	// by shuning start exp
 	expAct = new QAction(QIcon(":/pic/open.png"), tr("Start &Exp"), this);
@@ -2731,7 +2743,7 @@ void MainWindow::createActions()
 void MainWindow::createMenus()
 {
 	fileMenu = menuBar()->addMenu(tr("&File"));
-	fileMenu->addAction(openAct);
+	// fileMenu->addAction(openAct);
 	fileMenu->addAction(expAct);
 	// fileMenu->addAction(openWebUrlAct);
 	// fileMenu->addAction(saveAct);
@@ -2811,7 +2823,7 @@ void MainWindow::createToolBars()
 	addToolBar(Qt::LeftToolBarArea, fileToolBar);
 	//    fileToolBar = addToolBar(tr("File"));
 	// fileToolBar->addAction(newAct); //commented on 080313
-	fileToolBar->addAction(openAct);
+	// fileToolBar->addAction(openAct);
 	fileToolBar->addAction(expAct);
 	// fileToolBar->addAction(openWebUrlAct);
 	//

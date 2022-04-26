@@ -1,7 +1,7 @@
 /*
-* Copyright (c)2006-2010  Hanchuan Peng (Janelia Farm, Howard Hughes Medical Institute).
-* All rights reserved.
-*/
+ * Copyright (c)2006-2010  Hanchuan Peng (Janelia Farm, Howard Hughes Medical Institute).
+ * All rights reserved.
+ */
 /************
 ********* LICENSE NOTICE ************
 This folder contains all source codes for the V3D project, which is subject to the following conditions if you want to use it.
@@ -27,8 +27,6 @@ Peng, H, Ruan, Z., Atasoy, D., and Sternson, S. (2010) “Automatic reconstructi
 2010-06-01: add more plugin interface for global setting and swc curves
 **
 ****************************************************************************/
-
-
 
 ///////////////////////////////////////////////////////////////////
 
@@ -65,8 +63,8 @@ Peng, H, Ruan, Z., Atasoy, D., and Sternson, S. (2010) “Automatic reconstructi
 #include <set>
 #ifdef __V3DWSDEVELOP__
 #include "../webservice/src/v3dwebservice.hpp" // YuY March-16-2011
-class V3DWebService; //110315 YuY
-class soappara; //110315 YuY
+class V3DWebService;						   // 110315 YuY
+class soappara;								   // 110315 YuY
 #endif
 class V3d_PluginLoader;
 class Image4DSimple;
@@ -79,25 +77,25 @@ class XFormWidget;
 class V3dR_MainWindow;
 class Vaa3DPluginMenu;
 
-//class QList <V3dR_MainWindow *>;
-//struct LocationSimple; //080107
-//class QList <LocationSimple>; //080107
+// class QList <V3dR_MainWindow *>;
+// struct LocationSimple; //080107
+// class QList <LocationSimple>; //080107
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 public:
 	MainWindow();
 	~MainWindow();
-	XFormWidget ** retrieveAllMdiChild(int & nchild);
-	QList <LocationSimple> buffer_landmark_pts; //080107
+	XFormWidget **retrieveAllMdiChild(int &nchild);
+	QList<LocationSimple> buffer_landmark_pts; // 080107
 	// CMB 12-Nov-2010
 	// Intercept QFileOpenEvent on Mac - drag-onto-app
 	bool eventFilter(QObject *obj, QEvent *event);
-//shuning
-//#ifdef _ALLOW_WORKMODE_MENU_
-//	void setV3DDefaultModeCheck(bool checkState);
-//	void setNeuronAnnotatorModeCheck(bool checkState);
-//#endif
+	// shuning
+	//#ifdef _ALLOW_WORKMODE_MENU_
+	//	void setV3DDefaultModeCheck(bool checkState);
+	//	void setNeuronAnnotatorModeCheck(bool checkState);
+	//#endif
 protected:
 	void closeEvent(QCloseEvent *event);
 	void dragEnterEvent(QDragEnterEvent *event);
@@ -105,26 +103,24 @@ protected:
 	void dragLeaveEvent(QDragLeaveEvent *event);
 	void dropEvent(QDropEvent *event);
 
-
-	public slots:
+public slots:
 	void newFile();
 	void open();
 	void startExp();
 
-	
-	//void openWebUrl(); // By CMB 08-Oct-2010
+	// void openWebUrl(); // By CMB 08-Oct-2010
 #ifdef _ALLOW_TERAFLY_MENU_
 	void func_open_terafly();
 	void func_open_teraconverter();
 	void func_open_neuron_game(); // By T Pavlik 20151020
 #endif
-//shuning
-//#ifdef __v3d_custom_toolbar__
-//	void addCustomToolbar(); // By Hang 06-Aug-2011
-//#endif
+	// shuning
+	//#ifdef __v3d_custom_toolbar__
+	//	void addCustomToolbar(); // By Hang 06-Aug-2011
+	//#endif
 	void finishedLoadingWebImage(QUrl url, QString fileName, bool b_cacheFile, bool b_forceopen3dviewer); // By CMB 08-Oct-2010
-	//void checkForUpdates(bool b_informOnNoUpdate = true); // CMB Oct-22-2010
-	//void generateVersionInfo(); //PHC 20130830
+	// void checkForUpdates(bool b_informOnNoUpdate = true); // CMB Oct-22-2010
+	// void generateVersionInfo(); //PHC 20130830
 	void atlasView();
 	void save();
 	void saveAs();
@@ -134,23 +130,23 @@ protected:
 	// void about();
 	void openRecentFile();
 	void updateMenus();
-	void updatePluginMenu(); //PHC 20130904
-//
-//#ifdef _ALLOW_WORKMODE_MENU_
-//	void updateModeMenu();
-//#endif
+	void updatePluginMenu(); // PHC 20130904
+	//
+	//#ifdef _ALLOW_WORKMODE_MENU_
+	//	void updateModeMenu();
+	//#endif
 	void updateWindowMenu();
 	void exit();
 	void updateProcessingMenu();
 	//    MdiChild *createMdiChild();
-	XFormWidget * createMdiChild();
+	XFormWidget *createMdiChild();
 	//    MdiChild *activeMdiChild();
 	//    MdiChild *findMdiChild(const QString &fileName);
 	XFormWidget *activeMdiChild();
 	XFormWidget *findMdiChild(const QString &fileName);
 	void loadV3DFile(QString filename, bool b_putinrecentfilelist = true, bool b_forceopen3dviewer = false);
 	void loadV3DUrl(QUrl url, bool b_cacheLocalFile = true, bool b_forceopen3dviewer = false); // by CMB Oct-14-2010
-	//the following are public slot processing functions
+	// the following are public slot processing functions
 	void func_procLandmarkManager();
 	void func_procAtlasViewer();
 	void func_proc3DViewer();
@@ -205,7 +201,7 @@ protected:
 	void func_procGeneral_scaleandconvert28bit();
 	void func_procGeneral_scaleandconvert28bit_1percent();
 	void func_procGeneral_indexedimg2rgb();
-	//void func_procGeneral_open_image_in_windows();
+	// void func_procGeneral_open_image_in_windows();
 	void func_procGeneral_save_image();
 	void func_procElongated_randomSeeding();
 	void func_procElongated_minSpanTree();
@@ -245,19 +241,18 @@ protected:
 	void func_procTracing_clear();
 	void func_procTracing_update3Dview();
 	void func_procTracing_save();
-//shuning
-//#ifdef _ALLOW_WORKMODE_MENU_
-//	// Mode
-//	void func_procModeDefault();
-//	void func_procModeNeuronAnnotator();
-//#endif
-
+	// shuning
+	//#ifdef _ALLOW_WORKMODE_MENU_
+	//	// Mode
+	//	void func_procModeDefault();
+	//	void func_procModeNeuronAnnotator();
+	//#endif
 
 	// Dec-20-2010 YuY
 signals:
 	void triviewUpdateTriggered();
 	void imageLoaded2Plugin();
-	public slots:
+public slots:
 	void transactionStart();
 	void allTransactionsDone();
 	void updateTriview();
@@ -268,9 +263,8 @@ signals:
 	void loadPrevImage();
 	void selectImage();
 
-	void handleCoordinatedCloseEvent_real(); //move down here, PHC 20151117
-	void handleCoordinatedCloseEvent(QCloseEvent *event); //move down here, PHC 20151117
-
+	void handleCoordinatedCloseEvent_real();			  // move down here, PHC 20151117
+	void handleCoordinatedCloseEvent(QCloseEvent *event); // move down here, PHC 20151117
 
 	// April-26-2011 YuY
 public:
@@ -283,6 +277,7 @@ public:
 	char *getPluginFunc();
 	void triggerRunPlugin();
 	V3D_CL_INTERFACE v3dclp;
+
 private:
 	void createActions();
 	void createMenus();
@@ -294,15 +289,15 @@ private:
 	void updateRecentFileActions();
 	QString strippedName(const QString &fullFileName);
 	void addTransaction(Transaction *transact); // Dec-20-2010 YuY
-	TransactionThread sub_thread; // Dec-20-2010 YuY
-	bool cl_plugin; // command line call a plugin
+	TransactionThread sub_thread;				// Dec-20-2010 YuY
+	bool cl_plugin;								// command line call a plugin
 	char *pluginname;
 	char *pluginmethod;
 	char *pluginfunc;
 	QString curFile;
-	XFormWidget * curHiddenSelectedXWidget;
+	XFormWidget *curHiddenSelectedXWidget;
 	// save data for 3d view quick display. ZJL 111020
-	//void saveDataFor3DViewer(iDrawExternalParameter* _idep);
+	// void saveDataFor3DViewer(iDrawExternalParameter* _idep);
 #ifdef __v3d_custom_toolbar__
 public:
 #if defined(USE_Qt5)
@@ -322,10 +317,10 @@ private:
 	QMenu *fileMenu;
 	QMenu *editMenu;
 	QMenu *windowMenu;
-//shuning
-//#ifdef _ALLOW_WORKMODE_MENU_
-//	QMenu *modeMenu;
-//#endif
+	// shuning
+	//#ifdef _ALLOW_WORKMODE_MENU_
+	//	QMenu *modeMenu;
+	//#endif
 	QMenu *helpMenu;
 	QMenu *basicProcMenu, *advancedProcMenu, *pipelineProcMenu, *visualizeProcMenu;
 	QMenu *proc_export_menu;
@@ -348,7 +343,7 @@ private:
 	QAction *newAct;
 	QAction *expAct;
 	QAction *openAct;
-	//QAction *openWebUrlAct; // for web loading CMB
+	// QAction *openWebUrlAct; // for web loading CMB
 #ifdef __v3d_custom_toolbar__
 	QAction *customToolbarAct;
 #endif
@@ -368,109 +363,108 @@ private:
 	QAction *nextAct;
 	QAction *previousAct;
 	QAction *separator_ImgWindows_Act;
-	//QAction *checkForUpdatesAct; // CMB Oct-22-2010
-	///QAction *generateVersionInfoAct;
+	// QAction *checkForUpdatesAct; // CMB Oct-22-2010
+	/// QAction *generateVersionInfoAct;
 
-	//v3d::ShowV3dAboutDialogAction *aboutAct;
-	//    QAction *aboutQtAct;
-	//all the image processing menu items are listed below
-	QAction * procLandmarkManager;
-	QAction * procAtlasViewer;
-	QAction * proc3DViewer;
+	// v3d::ShowV3dAboutDialogAction *aboutAct;
+	//     QAction *aboutQtAct;
+	// all the image processing menu items are listed below
+	QAction *procLandmarkManager;
+	QAction *procAtlasViewer;
+	QAction *proc3DViewer;
 
-	QAction * proc3DLocalRoiViewer;
-	QAction * procSettings;
-	QAction * proc_plugin_manager;
-	QAction * procIO_export_to_vano_format;
-	QAction * procIO_export_to_movie;
-	QAction * procIO_export_landmark_to_pointcloud;
-	QAction * procIO_export_landmark_to_swc;
-	QAction * procIO_export_tracedneuron_to_swc;
-	QAction * import_GeneralImageFileAct;
-	QAction * import_LeicaAct;
-	QAction * procIO_import_atlas_imgfolder;
-	QAction * procIO_import_atlas_apofolder;
-	QAction * procPC_Atlas_edit_atlaslinkerfile;
-	QAction * procPC_Atlas_create_atlaslinkerfile;
-	QAction * procPC_Atlas_view_atlas;
-	QAction * procPC_Atlas_view_atlas_computeVanoObjStat;
-	QAction * procGeneral_rotate_paxis;
-	QAction * procGeneral_rotate_angle;
-	QAction * procGeneral_flip;
-	QAction * procGeneral_clear_all_landmark;
-	QAction * procGeneral_toggle_landmark_label;
-	QAction * procGeneral_clear_connectmap;
-	QAction * procGeneral_rescale_landmarks_only;
-	QAction * procGeneral_automarker_entireimg;
-	QAction * procGeneral_automarker_roi;
-	QAction * procGeneral_split_channels;
-	QAction * procGeneral_extract_a_channel;
-	QAction * procGeneral_crop_image_minMaxBox;
-	QAction * procGeneral_crop_bbox_roi;
-	QAction * procGeneral_mask_roi;
-	QAction * procGeneral_mask_nonroi_xy;
-	QAction * procGeneral_mask_channel;
-	QAction * procGeneral_clear_roi;
-	QAction * procGeneral_resample_image;
-	QAction * procGeneral_projection_max;
-	QAction * procGeneral_blend_image;
-	QAction * procGeneral_stitch_image;
-	QAction * procGeneral_display_histogram;
-	QAction * procGeneral_linear_adjustment;
-	QAction * procGeneral_histogram_equalization;
-	QAction * procGeneral_intensity_rescale;
-	QAction * procGeneral_intensity_threshold;
-	QAction * procGeneral_intensity_binarize;
-	QAction * procGeneral_intensity_updateminmax;
-	QAction * procGeneral_color_invert;
-	QAction * procGeneral_16bit_to_8bit;
-	QAction * procGeneral_32bit_to_8bit;
-	QAction * procGeneral_scaleandconvert28bit;
-	QAction * procGeneral_scaleandconvert28bit_1percent;
-	QAction * procGeneral_indexedimg2rgb;
-	//QAction * procGeneral_open_image_in_windows;
-	QAction * procGeneral_save_image;
-	QAction * procElongated_randomSeeding;
-	QAction * procElongated_minSpanTree;
-	QAction * procElongated_mstDiameter;
-	QAction * procElongated_genCuttingPlaneLocations;
-	QAction * procElongated_restackingCuttingPlanes;
-	QAction * procElongated_bdbminus;
-	QAction * procReg_gridSeeding;
-	QAction * procReg_randomSeeding;
-	QAction * procReg_bigGradient_edge_Seeding;
-	QAction * procReg_big_curvature_corner_Seeding;
-	QAction * procReg_fileSeeding;
-	QAction * procReg_global_align;
-	QAction * procReg_affine_markers_align;
-	QAction * procReg_flybrain_lobeseg;
-	QAction * procReg_detect_matching;
-	QAction * procReg_detect_matching_1pt;
-	QAction * procReg_warp_using_landmarks;
-	QAction * procReg_all_in_one_warp;
-	QAction * procTracing_topdownSkeleton;
-	QAction * procTracing_bottomupSearch;
-	QAction * procTracing_glocal_combine;
-	QAction * procTracing_manualCorrect;
-	QAction * procTracing_APP2auto;
-	QAction * procTracing_one2others;
-	QAction * procTracing_trace_a_curve;
-	QAction * procTracing_undo_laststep;
-	QAction * procTracing_redo_laststep;
-	QAction * procTracing_clear;
-	QAction * procTracing_update3Dview;
-	QAction * procTracing_save;
-	QAction * procCellSeg_localTemplate;
-	QAction * procCellSeg_cellcounting;
-	QAction * procCellSeg_watershed;
-	QAction * procCellSeg_levelset;
-	QAction * procCellSeg_Gaussian_fit_1_spot_1_Gauss;
-	QAction * procCellSeg_Gaussian_fit_1_spot_N_Gauss;
-	QAction * procCellSeg_Gaussian_partition;
-	QAction * procCellSeg_manualCorrect;
-	
+	QAction *proc3DLocalRoiViewer;
+	QAction *procSettings;
+	QAction *proc_plugin_manager;
+	QAction *procIO_export_to_vano_format;
+	QAction *procIO_export_to_movie;
+	QAction *procIO_export_landmark_to_pointcloud;
+	QAction *procIO_export_landmark_to_swc;
+	QAction *procIO_export_tracedneuron_to_swc;
+	QAction *import_GeneralImageFileAct;
+	QAction *import_LeicaAct;
+	QAction *procIO_import_atlas_imgfolder;
+	QAction *procIO_import_atlas_apofolder;
+	QAction *procPC_Atlas_edit_atlaslinkerfile;
+	QAction *procPC_Atlas_create_atlaslinkerfile;
+	QAction *procPC_Atlas_view_atlas;
+	QAction *procPC_Atlas_view_atlas_computeVanoObjStat;
+	QAction *procGeneral_rotate_paxis;
+	QAction *procGeneral_rotate_angle;
+	QAction *procGeneral_flip;
+	QAction *procGeneral_clear_all_landmark;
+	QAction *procGeneral_toggle_landmark_label;
+	QAction *procGeneral_clear_connectmap;
+	QAction *procGeneral_rescale_landmarks_only;
+	QAction *procGeneral_automarker_entireimg;
+	QAction *procGeneral_automarker_roi;
+	QAction *procGeneral_split_channels;
+	QAction *procGeneral_extract_a_channel;
+	QAction *procGeneral_crop_image_minMaxBox;
+	QAction *procGeneral_crop_bbox_roi;
+	QAction *procGeneral_mask_roi;
+	QAction *procGeneral_mask_nonroi_xy;
+	QAction *procGeneral_mask_channel;
+	QAction *procGeneral_clear_roi;
+	QAction *procGeneral_resample_image;
+	QAction *procGeneral_projection_max;
+	QAction *procGeneral_blend_image;
+	QAction *procGeneral_stitch_image;
+	QAction *procGeneral_display_histogram;
+	QAction *procGeneral_linear_adjustment;
+	QAction *procGeneral_histogram_equalization;
+	QAction *procGeneral_intensity_rescale;
+	QAction *procGeneral_intensity_threshold;
+	QAction *procGeneral_intensity_binarize;
+	QAction *procGeneral_intensity_updateminmax;
+	QAction *procGeneral_color_invert;
+	QAction *procGeneral_16bit_to_8bit;
+	QAction *procGeneral_32bit_to_8bit;
+	QAction *procGeneral_scaleandconvert28bit;
+	QAction *procGeneral_scaleandconvert28bit_1percent;
+	QAction *procGeneral_indexedimg2rgb;
+	// QAction * procGeneral_open_image_in_windows;
+	QAction *procGeneral_save_image;
+	QAction *procElongated_randomSeeding;
+	QAction *procElongated_minSpanTree;
+	QAction *procElongated_mstDiameter;
+	QAction *procElongated_genCuttingPlaneLocations;
+	QAction *procElongated_restackingCuttingPlanes;
+	QAction *procElongated_bdbminus;
+	QAction *procReg_gridSeeding;
+	QAction *procReg_randomSeeding;
+	QAction *procReg_bigGradient_edge_Seeding;
+	QAction *procReg_big_curvature_corner_Seeding;
+	QAction *procReg_fileSeeding;
+	QAction *procReg_global_align;
+	QAction *procReg_affine_markers_align;
+	QAction *procReg_flybrain_lobeseg;
+	QAction *procReg_detect_matching;
+	QAction *procReg_detect_matching_1pt;
+	QAction *procReg_warp_using_landmarks;
+	QAction *procReg_all_in_one_warp;
+	QAction *procTracing_topdownSkeleton;
+	QAction *procTracing_bottomupSearch;
+	QAction *procTracing_glocal_combine;
+	QAction *procTracing_manualCorrect;
+	QAction *procTracing_APP2auto;
+	QAction *procTracing_one2others;
+	QAction *procTracing_trace_a_curve;
+	QAction *procTracing_undo_laststep;
+	QAction *procTracing_redo_laststep;
+	QAction *procTracing_clear;
+	QAction *procTracing_update3Dview;
+	QAction *procTracing_save;
+	QAction *procCellSeg_localTemplate;
+	QAction *procCellSeg_cellcounting;
+	QAction *procCellSeg_watershed;
+	QAction *procCellSeg_levelset;
+	QAction *procCellSeg_Gaussian_fit_1_spot_1_Gauss;
+	QAction *procCellSeg_Gaussian_fit_1_spot_N_Gauss;
+	QAction *procCellSeg_Gaussian_partition;
+	QAction *procCellSeg_manualCorrect;
 
-//shuning
+// shuning
 //#ifdef _ALLOW_WORKMODE_MENU_
 //	// Mode
 //	QAction * procModeDefault;
@@ -480,7 +474,7 @@ private:
 private:
 	soappara *pSoapPara;
 	V3DWebService *v3dws;
-	public slots:
+public slots:
 	void webserviceResponse();
 	void initWebService(V3DWebService *pws);
 	void quitWebService(V3DWebService *pws);
@@ -488,16 +482,16 @@ private:
 	void do3dfunc();
 	void switch3dviewercontrol(V3dR_MainWindow *existing_3dviewer);
 #endif
-public: //for image processing, some of the parameters should be globally set
-	//080822
+public: // for image processing, some of the parameters should be globally set
+	// 080822
 	BDB_Minus_ConfigParameter flybrain_lobeseg_para;
 	void setup_global_imgproc_parameter_default();
-	//080901
+	// 080901
 	//	DFComputeMethodType GPara_df_compute_method; //the DF computing method
 	//	PointMatchMethodType GPara_landmarkMatchingMethod; //the landmark matching method.   should be PointMatchMethodType but I will force to convert to that type in the code
 	V3D_GlobalSetting global_setting;
 
-	//shuning
+	// shuning
 	QDir expDir;
 	QStringList nameFilters;
 	QStringList expImages;
@@ -512,14 +506,19 @@ public: //for image processing, some of the parameters should be globally set
 	QString currentEventPath;
 	QString currentImgAttributes;
 	QString pID;
+	int trainNum;
+	bool isTrained;
 	QString img_path_prefix;
 	QString swc_path_prefix;
 	QString event_path_prefix;
 
-	enum { MaxRecentFiles = 20 };
+	enum
+	{
+		MaxRecentFiles = 20
+	};
 	QAction *recentFileActs[MaxRecentFiles];
-	QList <V3dR_MainWindow *> list_3Dview_win; //need to free later in the destructor //081002
-	V3dR_MainWindow * find3DViewer(QString fileName);
+	QList<V3dR_MainWindow *> list_3Dview_win; // need to free later in the destructor //081002
+	V3dR_MainWindow *find3DViewer(QString fileName);
 	//    QMdiArea *get_workspace_handle() {return workspace;}
 	void updateWorkspace()
 	{
@@ -528,9 +527,11 @@ public: //for image processing, some of the parameters should be globally set
 			workspace->update();
 
 #if defined(USE_Qt5)
-			foreach(QWidget* w, workspace->subWindowList()) w->update();
+			foreach (QWidget *w, workspace->subWindowList())
+				w->update();
 #else
-			foreach(QWidget* w, workspace->windowList()) w->update();
+			foreach (QWidget *w, workspace->windowList())
+				w->update();
 #endif
 		}
 	}
@@ -538,43 +539,46 @@ public: //for image processing, some of the parameters should be globally set
 	{
 
 #if defined(USE_Qt5)
-		if (workspace) workspace->cascadeSubWindows();
+		if (workspace)
+			workspace->cascadeSubWindows();
 #else
-		if (workspace) workspace->cascade();
+		if (workspace)
+			workspace->cascade();
 #endif
 	}
 #define __used_by_v3d_interface__
-	//Vaa3DPluginMenu *pluginProcMenu;
+	// Vaa3DPluginMenu *pluginProcMenu;
 	QMenu *pluginProcMenu; // for dynamically hooking plug-in menu
 	V3d_PluginLoader *pluginLoader;
-public:	//2009-2010: used by V3D_PluginLoader 	// in mainwindow_interface.cpp
-	XFormWidget* currentImageWindow();
-	My4DImage* currentImage();
-	XFormWidget* curHiddenSelectedWindow() { return curHiddenSelectedXWidget; }
-	bool setCurHiddenSelectedWindow(XFormWidget* a);
-	bool setCurHiddenSelectedWindow_withoutcheckwinlist(XFormWidget* a); // added by YuY, Dec 16, 2010.
-	QList<void*> allWindowList();
-	XFormWidget* validateImageWindow(void* window);
-	QString getWindowName(void* window);
+
+public: // 2009-2010: used by V3D_PluginLoader 	// in mainwindow_interface.cpp
+	XFormWidget *currentImageWindow();
+	My4DImage *currentImage();
+	XFormWidget *curHiddenSelectedWindow() { return curHiddenSelectedXWidget; }
+	bool setCurHiddenSelectedWindow(XFormWidget *a);
+	bool setCurHiddenSelectedWindow_withoutcheckwinlist(XFormWidget *a); // added by YuY, Dec 16, 2010.
+	QList<void *> allWindowList();
+	XFormWidget *validateImageWindow(void *window);
+	QString getWindowName(void *window);
 	QStringList allWindowNameList();
-	XFormWidget* newImageWindow(const QString &name);
-	XFormWidget* updateImageWindow(void* window);
-	XFormWidget* updateImageWindow(void* window, bool b_forceUpdateChannelMinMaxValues); //20120412
-	XFormWidget* setImageName(void* window, const QString &name);
-	My4DImage* getImage(void* window);
-	bool setImage(void* window, Image4DSimple *image);
-	QList<LocationSimple> getLandmark(void* window);
-	bool setLandmark(void* window, QList<LocationSimple>& landmark_list);
-	QList<QPolygon> getROI(void* window);
-	bool setROI(void* window, QList<QPolygon>& roi_list);
-	NeuronTree getSWC(void* window);
-	bool setSWC(void* window, NeuronTree & nt);
+	XFormWidget *newImageWindow(const QString &name);
+	XFormWidget *updateImageWindow(void *window);
+	XFormWidget *updateImageWindow(void *window, bool b_forceUpdateChannelMinMaxValues); // 20120412
+	XFormWidget *setImageName(void *window, const QString &name);
+	My4DImage *getImage(void *window);
+	bool setImage(void *window, Image4DSimple *image);
+	QList<LocationSimple> getLandmark(void *window);
+	bool setLandmark(void *window, QList<LocationSimple> &landmark_list);
+	QList<QPolygon> getROI(void *window);
+	bool setROI(void *window, QList<QPolygon> &roi_list);
+	NeuronTree getSWC(void *window);
+	bool setSWC(void *window, NeuronTree &nt);
 	V3D_GlobalSetting getGlobalSetting();
 	bool setGlobalSetting(V3D_GlobalSetting &gs);
 
-	int setSWC_noDecompose(V3dR_MainWindow* window, const char* fileName);
-	bool hideSWC(V3dR_MainWindow* window, int treeIndex);
-	bool displaySWC(V3dR_MainWindow* window, int treeIndex);
-	QList<NeuronTree> loadedNeurons(V3dR_MainWindow* window, QList<string>& loadedSurfaces);
+	int setSWC_noDecompose(V3dR_MainWindow *window, const char *fileName);
+	bool hideSWC(V3dR_MainWindow *window, int treeIndex);
+	bool displaySWC(V3dR_MainWindow *window, int treeIndex);
+	QList<NeuronTree> loadedNeurons(V3dR_MainWindow *window, QList<string> &loadedSurfaces);
 };
 #endif

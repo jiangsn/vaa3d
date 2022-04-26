@@ -2509,7 +2509,7 @@ void V3dR_GLWidget::doimageVRView(bool bCanCoMode) // 0518
 	QString swcName = _idep->V3Dmainwindow->currentImgPath;
 	swcName = swcName.replace("tif", "swc");
 	ifstream swcFile(swcName.toUtf8().constData());
-	if (swcFile.good())
+	if (swcFile.good() && !_idep->V3Dmainwindow->isTrained)
 	{
 		qDebug() << "Loading swc: " << swcName << endl;
 		loadObjectFromFile(swcName);
