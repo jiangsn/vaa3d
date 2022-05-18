@@ -224,6 +224,8 @@ void V3dR_GLWidget::choiceRenderer()
 	_isSoftwareGL = false;
 	GLeeInit();
 
+	setRenderMode_Mip(true, false);
+
 	//==============================================================================
 	// OpenGL hardware supporting detection
 	// standard method

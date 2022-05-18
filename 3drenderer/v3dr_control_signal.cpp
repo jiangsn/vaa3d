@@ -142,7 +142,7 @@ void V3dR_MainWindow::createControlWidgets()
 	QGridLayout *layout_mainDisplayOptGroup = new QGridLayout(volDisplayOptGroup);
 	layout_mainDisplayOptGroup->setContentsMargins(10, 1, 1, 1);
 
-	dispType_maxip = new QRadioButton("MIP", volDisplayOptGroup);
+	// dispType_maxip = new QRadioButton("MIP", volDisplayOptGroup);
 	// dispType_minip = new QRadioButton("mIP", volDisplayOptGroup);
 
 	// dispType_alpha = new QRadioButton("Alpha", volDisplayOptGroup);
@@ -172,7 +172,7 @@ void V3dR_MainWindow::createControlWidgets()
 	// checkBox_volCompress->setToolTip("Compressed format can improve\n interactive speed of static volume");
 	//".\nUncompressed format for very large volume may cause system halt!");
 
-	layout_mainDisplayOptGroup->addWidget(dispType_maxip, 1, 0, 1, 5);
+	// layout_mainDisplayOptGroup->addWidget(dispType_maxip, 1, 0, 1, 5);
 	/*
 	layout_mainDisplayOptGroup->addWidget(dispType_minip, 1, 5, 1, 5);
 	layout_mainDisplayOptGroup->addWidget(dispType_alpha, 1, 5+5, 1, 7);

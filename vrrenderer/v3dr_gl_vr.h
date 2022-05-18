@@ -245,6 +245,8 @@ public:
 public:
 	bool finish_ano;
 	bool loadNextQuit;
+	QTime pressTime;
+	int pressElapsed;
 	iDrawExternalParameter *_idep;
 	MainWindow *mainwindow;
 	My4DImage *img4d;

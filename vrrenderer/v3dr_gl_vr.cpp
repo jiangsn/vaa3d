@@ -1413,9 +1413,17 @@ bool CMainApplication::HandleInput()
 			{
 				if (sketchedNTList.size() > 0)
 				{
-					finish_ano = true;
-					SetupMorphologyLine(2); // for showing ground truth when annotation is finished
-					_idep->glWidget->autoSaveSwcVR();
+					int currentElapsed = pressTime.elapsed();
+					if (currentElapsed - pressElapsed <= 500)
+					{
+						finish_ano = true;
+						SetupMorphologyLine(2); // for showing ground truth when annotation is finished
+						_idep->glWidget->autoSaveSwcVR();
+					}
+					else
+					{
+						pressElapsed = currentElapsed;
+					}
 				}
 			}
 		}
@@ -2194,6 +2202,9 @@ void CMainApplication::RunMainLoop()
 	bool bQuit = false;
 	loadNextQuit = false;
 	finish_ano = false;
+
+	pressTime.start();
+	pressElapsed = 0;
 
 	while (!bQuit && !loadNextQuit)
 	// while (!loadNextQuit)
@@ -4212,7 +4223,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 
 		float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
 		mat_out += "Time: " + std::to_string(elapsed_time) + "\n";
-		mat_out += "Redo";
+		mat_out += "Undo";
 		mat_out += to_string(fContrast) + "\n";
 		mat_out += "------------------------------------\n";
 
