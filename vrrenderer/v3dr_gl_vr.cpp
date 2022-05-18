@@ -71,7 +71,7 @@ bool CMainApplication::m_bVirtualFingerON = true;
 float CMainApplication::iLineWid = 10;
 float CMainApplication::iscaleZ = 1;
 float CMainApplication::fBrightness = 0.0;
-int CMainApplication::m_curMarkerColorType = 6;
+int CMainApplication::m_curMarkerColorType = 3;
 int CMainApplication::m_modeControlGrip_L = 0;
 glm::mat4 CMainApplication::m_globalMatrix = glm::mat4();
 My4DImage *CMainApplication::img4d_replace = nullptr;
@@ -2040,7 +2040,6 @@ bool CMainApplication::HandleInput()
 	// inlcuding translate,rotate and zoom with touchpad; pull a specific point to another POS with trigger
 	//{
 	//	vr::VRControllerState_t state;
-
 	//		if( m_pHMD->GetControllerState( m_iControllerIDLeft, &state, sizeof(state) ) )
 	//		{
 	//		//	//whenever touchpad is unpressed, set bool flag  m_TouchFirst = true;
@@ -2077,15 +2076,12 @@ bool CMainApplication::HandleInput()
 	//		//		{
 	//		//			const Matrix4 & mat_M = m_rmat4DevicePose[m_iControllerIDLeft];
 	//		//			Vector4 direction(0,0,0,1);
-
 	//		//			Vector4 start_Y = mat_M * Vector4( 0, 0, 0, 1 );
 	//		//			Vector4 end_Y = mat_M * Vector4( 0, 0, -1.0f, 1 );
 	//		//			Vector4 direction_Y = end_Y - start_Y;
-
 	//		//			Vector4 start_X = mat_M * Vector4( 0, 0, 0, 1 );
 	//		//			Vector4 end_X = mat_M * Vector4( 1.0f, 0, 0, 1 );
 	//		//			Vector4 direction_X = end_X - start_X;
-
 	//		//			if(fabs(m_fTouchPosX) > fabs(m_fTouchPosY)) //move across axis
 	//		//			{
 	//		//				if(m_fTouchPosX<0) direction = direction_X * -1;
@@ -2096,7 +2092,6 @@ bool CMainApplication::HandleInput()
 	//		//				else direction = direction_Y;
 	//		//			}
 	//		//			direction = direction.normalize() * 0.01;
-
 	//		//			glm::mat4 temp_mat = glm::translate(glm::mat4(),glm::vec3(direction.x,direction.y,direction.z));
 	//		//			//glm::mat4 temp_mat = glm::translate(glm::mat4(),glm::vec3(detX/300,0,detY/300));
 	//		//			m_globalMatrix = temp_mat * m_globalMatrix;
@@ -2115,7 +2110,6 @@ bool CMainApplication::HandleInput()
 	//		//			m_globalMatrix = glm::translate(m_globalMatrix,-loadedNTCenter);
 	//		//		}
 	//		//	}
-
 	//			//pick up the nearest node and pull it to new locations
 	//			//note: this part of code only serves as a demonstration, and does not handle complicated cases well.
 	//			//also, can only pull drawn neurons, not loaded ones.
@@ -2149,7 +2143,6 @@ bool CMainApplication::HandleInput()
 	//						minvalue = glm::min(minvalue,dist);
 	//						if(minvalue==dist)
 	//							pick_point = i;
-
 	//					}
 	//					if(pick_point!=-1){
 	//						m_pickUpState = true;
@@ -2183,7 +2176,6 @@ bool CMainApplication::HandleInput()
 	//					//}
 	//				}
 	//			}
-
 	//			if(!(state.ulButtonPressed & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Trigger)))
 	//			{
 	//				m_pickUpState = false;
@@ -2490,239 +2482,204 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 		// default:
 		// 	break;
 		// }
-		if (isOnline == false)
+
+		// shuning: reset view replaced by toggle VF
+		// if (isOnline == false)
+		// {
+		// 	m_globalMatrix = glm::mat4();
+		// 	SetupGlobalMatrix();
+		// 	qDebug() << "reset view" << endl;
+		// }
+
+		if (m_bVirtualFingerON)
 		{
-			m_globalMatrix = glm::mat4();
-			SetupGlobalMatrix();
-			qDebug() << "reset view" << endl;
+			m_bVirtualFingerON = false;
+			m_curMarkerColorType = 2; // red
+			ctrSphereColor[0] = neuron_type_color[m_curMarkerColorType][0] / 255.0;
+			ctrSphereColor[1] = neuron_type_color[m_curMarkerColorType][1] / 255.0;
+			ctrSphereColor[2] = neuron_type_color[m_curMarkerColorType][2] / 255.0;
+		}
+		else
+		{
+			m_bVirtualFingerON = true;
+			m_curMarkerColorType = 3; // blue
+			ctrSphereColor[0] = neuron_type_color[m_curMarkerColorType][0] / 255.0;
+			ctrSphereColor[1] = neuron_type_color[m_curMarkerColorType][1] / 255.0;
+			ctrSphereColor[2] = neuron_type_color[m_curMarkerColorType][2] / 255.0;
 		}
 	}
 
-	if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonPress) && (event.data.controller.button == vr::k_EButton_SteamVR_Touchpad) && (!showshootingray))
-	{
-		vr::VRControllerState_t state;
-		m_pHMD->GetControllerState(m_iControllerIDLeft, &state, sizeof(state));
-		float temp_x = state.rAxis[0].x;
-		// bool ONorOFF=false;
-		// if(temp_x>0)
-		// {
-		// 	ONorOFF = false;
-		// }
-		// else
-		// {
-		// 	ONorOFF = true;
-		// }
-		switch (m_modeGrip_L)
+	/*  // shuning: works together with menu (see switch{} part), now is replaced by toggle VF
+		if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonPress) && (event.data.controller.button == vr::k_EButton_SteamVR_Touchpad) && (!showshootingray))
 		{
-		case _donothing:
-			break;
-		case _Surface:
-		{
-			m_bShowMorphologySurface = !m_bShowMorphologySurface;
-			m_bShowMorphologyLine = !m_bShowMorphologyLine;
-			m_bShowMorphologyMarker = !m_bShowMorphologyMarker;
-			if (m_bShowMorphologySurface)
-				qDebug() << "m_bShowMorphologySurface ON";
-			else
-				qDebug() << "m_bShowMorphologySurface OFF";
-			break;
-		}
-		case _VirtualFinger:
-		{
-			qDebug() << "Run virtual finger chooose";
-			m_bVirtualFingerON = !m_bVirtualFingerON;
-			if (m_bVirtualFingerON)
-				qDebug() << "virtual finger ON";
-			else
-				qDebug() << "virtual finger OFF";
-			break;
-		}
-		case _Freeze: // now temporarily used for brightness supression
-		{
-			// m_bControllerModelON = !m_bControllerModelON;
-			// m_bFrozen is used to control texture
-			m_bFrozen = !m_bFrozen;
+			vr::VRControllerState_t state;
+			m_pHMD->GetControllerState(m_iControllerIDLeft, &state, sizeof(state));
+			float temp_x = state.rAxis[0].x;
+			// bool ONorOFF=false;
+			// if(temp_x>0)
+			// {
+			// 	ONorOFF = false;
+			// }
+			// else
+			// {
+			// 	ONorOFF = true;
+			// }
+			switch (m_modeGrip_L)
+			{
+			case _donothing:
+				break;
+			case _Surface:
+			{
+				m_bShowMorphologySurface = !m_bShowMorphologySurface;
+				m_bShowMorphologyLine = !m_bShowMorphologyLine;
+				m_bShowMorphologyMarker = !m_bShowMorphologyMarker;
+				if (m_bShowMorphologySurface)
+					qDebug() << "m_bShowMorphologySurface ON";
+				else
+					qDebug() << "m_bShowMorphologySurface OFF";
+				break;
+			}
+			case _VirtualFinger:
+			{
+				qDebug() << "Run virtual finger chooose";
+				m_bVirtualFingerON = !m_bVirtualFingerON;
+				if (m_bVirtualFingerON)
+					qDebug() << "virtual finger ON";
+				else
+					qDebug() << "virtual finger OFF";
+				break;
+			}
+			case _Freeze: // now temporarily used for brightness supression
+			{
+				// m_bControllerModelON = !m_bControllerModelON;
+				// m_bFrozen is used to control texture
+				m_bFrozen = !m_bFrozen;
 
-			if (fBrightness >= -0.9)
-				fBrightness = -1.0;
-			else
-				fBrightness = 0.0;
+				if (fBrightness >= -0.9)
+					fBrightness = -1.0;
+				else
+					fBrightness = 0.0;
 
-			break;
-		}
-		case _Contrast: // contrast func is moved to right controller touch pad , grip button+/-
-		{
-			qDebug() << "Run contrast adjustment";
-			if (temp_x > 0)
-			{
-				fBrightness += 0.02f;
-				if (fBrightness > 0.9f)
-					fBrightness = 0.9f;
+				break;
 			}
-			else
+			case _Contrast: // contrast func is moved to right controller touch pad , grip button+/-
 			{
-				fBrightness -= 0.02f;
-				if (fBrightness < -0.9)
-					fBrightness = -0.9;
-			}
-
-			break;
-		}
-		case _UndoRedo:
-		{
-			qDebug() << "Undo/Redo Operation. Lines Only.";
-			if (temp_x > 0)
-			{
-				RedoLastSketchedNT();
-				SetupAllMorphologyLine();
-			}
-			else
-			{
-				UndoLastSketchedNT();
-				SetupAllMorphologyLine();
-			}
-			break;
-		}
-		case _LineWidth:
-		{
-			qDebug() << "enter zoom mode";
-			{
-				// m_globalMatrix = glm::translate(m_globalMatrix, loadedNTCenter);
-				// m_globalMatrix = glm::scale(m_globalMatrix, glm::vec3(1, 1, 1 + m_fTouchPosY / 15));
-				// m_globalMatrix = glm::translate(m_globalMatrix, -loadedNTCenter);
-			}
-
-			break;
-		}
-		case 200: // org _LineWidth: //line width
-		{
-			qDebug() << "Clear all sketch Neuron";
-			if (temp_x > 0)
-			{
-				iLineWid += 1;
-				if (iLineWid > 10)
-					iLineWid = 10;
-			}
-			else
-			{
-				iLineWid -= 1;
-				if (iLineWid < 1)
-					iLineWid = 1;
-			}
-
-			break;
-		}
-		case _AutoRotate: // actually for auto-rotation
-		{
-			// qDebug()<<"stop input";
-			// SDL_StopTextInput();
-			// qDebug()<<"now shut down";
-			// Shutdown();
-			// qDebug()<<"load next image";
-			// qDebug() << _idep->V3Dmainwindow->currentImgPath;
-			// _idep->V3Dmainwindow->loadNextImage();
-
-			qDebug() << "loadNextQuit changed to true" << endl;
-			loadNextQuit = true;
-			if (m_autoRotateON)
-			{
-				m_autoRotateON = false;
-			}
-			else
-			{
-				m_autoRotateON = true;
-			}
-
-			break;
-		}
-		case 100: // org autorotate
-		{
-			qDebug() << "Auto rotation";
-			if (m_autoRotateON)
-			{
-				m_autoRotateON = false;
-			}
-			else
-			{
-				m_autoRotateON = true;
-
-				const Matrix4 &mat_M = m_rmat4DevicePose[m_iControllerIDLeft]; // mat means current controller pos
-				glm::mat4 mat = glm::mat4();
-				for (size_t i = 0; i < 4; i++)
+				qDebug() << "Run contrast adjustment";
+				if (temp_x > 0)
 				{
-					for (size_t j = 0; j < 4; j++)
-					{
-						mat[i][j] = *(mat_M.get() + i * 4 + j);
-					}
+					fBrightness += 0.02f;
+					if (fBrightness > 0.9f)
+						fBrightness = 0.9f;
 				}
-				mat = glm::inverse(m_globalMatrix) * mat;
-				glm::vec4 ctrlLeftPos = mat * glm::vec4(0, 0, 0, 1);
-
-				autoRotationCenter.x = ctrlLeftPos.x;
-				autoRotationCenter.y = ctrlLeftPos.y;
-				autoRotationCenter.z = ctrlLeftPos.z;
-			}
-
-			break;
-		}
-		case _TeraShift:
-		{
-			qDebug() << "You clicked TeraVR Shift (4)." << endl;
-			const Matrix4 &mat_M = m_rmat4DevicePose[m_iControllerIDLeft]; // mat means current controller pos
-			glm::mat4 mat = glm::mat4();
-			for (size_t i = 0; i < 4; i++)
-			{
-				for (size_t j = 0; j < 4; j++)
+				else
 				{
-					mat[i][j] = *(mat_M.get() + i * 4 + j);
+					fBrightness -= 0.02f;
+					if (fBrightness < -0.9)
+						fBrightness = -0.9;
 				}
+
+				break;
 			}
-			mat = glm::inverse(m_globalMatrix) * mat;
-			glm::vec4 ctrlLeftPos = mat * glm::vec4(0, 0, 0, 1);
-			teraflyPOS = XYZ(ctrlLeftPos.x, ctrlLeftPos.y, ctrlLeftPos.z);
-			float _deltaX = fabs(ctrlLeftPos.x - loadedNTCenter.x);
-			float _deltaY = fabs(ctrlLeftPos.y - loadedNTCenter.y);
-			float _deltaZ = fabs(ctrlLeftPos.z - loadedNTCenter.z);
-			float _maxDelta = MAX(MAX(_deltaX, _deltaY), _deltaZ);
-			if (teraflyPOS.x < swcBB.x0)
-				teraflyPOS.x = swcBB.x0;
-			else if (teraflyPOS.x > swcBB.x1)
-				teraflyPOS.x = swcBB.x1;
-			if (teraflyPOS.y < swcBB.y0)
-				teraflyPOS.y = swcBB.y0;
-			else if (teraflyPOS.y > swcBB.y1)
-				teraflyPOS.y = swcBB.y1;
-			if (teraflyPOS.z < swcBB.z0)
-				teraflyPOS.z = swcBB.z0;
-			else if (teraflyPOS.y > swcBB.y1)
-				teraflyPOS.z = swcBB.z1;
-			/*if (_maxDelta == _deltaX)
-					{
-						postVRFunctionCallMode = (ctrlLeftPos.x - loadedNTCenter.x) > 0 ? 1 : 2;
-						teraflyPOS.x = loadedNTCenter.x;
-					}
-					else if (_maxDelta == _deltaY)
-					{
-						postVRFunctionCallMode = (ctrlLeftPos.y - loadedNTCenter.y) > 0 ? 3 : 4;
-						teraflyPOS.y = loadedNTCenter.y;
-					}
-					else if (_maxDelta == _deltaZ)
-					{
-						postVRFunctionCallMode = (ctrlLeftPos.z - loadedNTCenter.z) > 0 ? 5 : 6;
-						teraflyPOS.z = loadedNTCenter.z;
-					}
-					else
-						qDebug() << "oh no! Something wrong!Please check!";
-					cout<<"postVRFunctionCallMode"<<postVRFunctionCallMode<<endl;*/
-
-			break;
-		}
-		case _TeraZoom:
-		{
-			if (temp_x > 0)
+			case _UndoRedo:
 			{
-				// zoom in
+				qDebug() << "Undo/Redo Operation. Lines Only.";
+				if (temp_x > 0)
+				{
+					RedoLastSketchedNT();
+					SetupAllMorphologyLine();
+				}
+				else
+				{
+					UndoLastSketchedNT();
+					SetupAllMorphologyLine();
+				}
+				break;
+			}
+			case _LineWidth:
+			{
+				qDebug() << "enter zoom mode";
+				{
+					// m_globalMatrix = glm::translate(m_globalMatrix, loadedNTCenter);
+					// m_globalMatrix = glm::scale(m_globalMatrix, glm::vec3(1, 1, 1 + m_fTouchPosY / 15));
+					// m_globalMatrix = glm::translate(m_globalMatrix, -loadedNTCenter);
+				}
 
+				break;
+			}
+			case 200: // org _LineWidth: //line width
+			{
+				qDebug() << "Clear all sketch Neuron";
+				if (temp_x > 0)
+				{
+					iLineWid += 1;
+					if (iLineWid > 10)
+						iLineWid = 10;
+				}
+				else
+				{
+					iLineWid -= 1;
+					if (iLineWid < 1)
+						iLineWid = 1;
+				}
+
+				break;
+			}
+			case _AutoRotate: // actually for auto-rotation
+			{
+				// qDebug()<<"stop input";
+				// SDL_StopTextInput();
+				// qDebug()<<"now shut down";
+				// Shutdown();
+				// qDebug()<<"load next image";
+				// qDebug() << _idep->V3Dmainwindow->currentImgPath;
+				// _idep->V3Dmainwindow->loadNextImage();
+
+				qDebug() << "loadNextQuit changed to true" << endl;
+				loadNextQuit = true;
+				if (m_autoRotateON)
+				{
+					m_autoRotateON = false;
+				}
+				else
+				{
+					m_autoRotateON = true;
+				}
+
+				break;
+			}
+			case 100: // org autorotate
+			{
+				qDebug() << "Auto rotation";
+				if (m_autoRotateON)
+				{
+					m_autoRotateON = false;
+				}
+				else
+				{
+					m_autoRotateON = true;
+
+					const Matrix4 &mat_M = m_rmat4DevicePose[m_iControllerIDLeft]; // mat means current controller pos
+					glm::mat4 mat = glm::mat4();
+					for (size_t i = 0; i < 4; i++)
+					{
+						for (size_t j = 0; j < 4; j++)
+						{
+							mat[i][j] = *(mat_M.get() + i * 4 + j);
+						}
+					}
+					mat = glm::inverse(m_globalMatrix) * mat;
+					glm::vec4 ctrlLeftPos = mat * glm::vec4(0, 0, 0, 1);
+
+					autoRotationCenter.x = ctrlLeftPos.x;
+					autoRotationCenter.y = ctrlLeftPos.y;
+					autoRotationCenter.z = ctrlLeftPos.z;
+				}
+
+				break;
+			}
+			case _TeraShift:
+			{
+				qDebug() << "You clicked TeraVR Shift (4)." << endl;
 				const Matrix4 &mat_M = m_rmat4DevicePose[m_iControllerIDLeft]; // mat means current controller pos
 				glm::mat4 mat = glm::mat4();
 				for (size_t i = 0; i < 4; i++)
@@ -2735,133 +2692,189 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 				mat = glm::inverse(m_globalMatrix) * mat;
 				glm::vec4 ctrlLeftPos = mat * glm::vec4(0, 0, 0, 1);
 				teraflyPOS = XYZ(ctrlLeftPos.x, ctrlLeftPos.y, ctrlLeftPos.z);
+				float _deltaX = fabs(ctrlLeftPos.x - loadedNTCenter.x);
+				float _deltaY = fabs(ctrlLeftPos.y - loadedNTCenter.y);
+				float _deltaZ = fabs(ctrlLeftPos.z - loadedNTCenter.z);
+				float _maxDelta = MAX(MAX(_deltaX, _deltaY), _deltaZ);
+				if (teraflyPOS.x < swcBB.x0)
+					teraflyPOS.x = swcBB.x0;
+				else if (teraflyPOS.x > swcBB.x1)
+					teraflyPOS.x = swcBB.x1;
+				if (teraflyPOS.y < swcBB.y0)
+					teraflyPOS.y = swcBB.y0;
+				else if (teraflyPOS.y > swcBB.y1)
+					teraflyPOS.y = swcBB.y1;
+				if (teraflyPOS.z < swcBB.z0)
+					teraflyPOS.z = swcBB.z0;
+				else if (teraflyPOS.y > swcBB.y1)
+					teraflyPOS.z = swcBB.z1;
+				// if (_maxDelta == _deltaX)
+				// 		{
+				// 			postVRFunctionCallMode = (ctrlLeftPos.x - loadedNTCenter.x) > 0 ? 1 : 2;
+				// 			teraflyPOS.x = loadedNTCenter.x;
+				// 		}
+				// 		else if (_maxDelta == _deltaY)
+				// 		{
+				// 			postVRFunctionCallMode = (ctrlLeftPos.y - loadedNTCenter.y) > 0 ? 3 : 4;
+				// 			teraflyPOS.y = loadedNTCenter.y;
+				// 		}
+				// 		else if (_maxDelta == _deltaZ)
+				// 		{
+				// 			postVRFunctionCallMode = (ctrlLeftPos.z - loadedNTCenter.z) > 0 ? 5 : 6;
+				// 			teraflyPOS.z = loadedNTCenter.z;
+				// 		}
+				// 		else
+				// 			qDebug() << "oh no! Something wrong!Please check!";
+				// 		cout<<"postVRFunctionCallMode"<<postVRFunctionCallMode<<endl;
 
-				if ((teraflyPOS.x < swcBB.x0) || (teraflyPOS.y < swcBB.y0) || (teraflyPOS.z < swcBB.z0) || (teraflyPOS.x > swcBB.x1) || (teraflyPOS.y > swcBB.y1) || (teraflyPOS.z > swcBB.z1))
-					qDebug() << "Out of the bounding box.Ignored!";
+				break;
+			}
+			case _TeraZoom:
+			{
+				if (temp_x > 0)
+				{
+					// zoom in
+
+					const Matrix4 &mat_M = m_rmat4DevicePose[m_iControllerIDLeft]; // mat means current controller pos
+					glm::mat4 mat = glm::mat4();
+					for (size_t i = 0; i < 4; i++)
+					{
+						for (size_t j = 0; j < 4; j++)
+						{
+							mat[i][j] = *(mat_M.get() + i * 4 + j);
+						}
+					}
+					mat = glm::inverse(m_globalMatrix) * mat;
+					glm::vec4 ctrlLeftPos = mat * glm::vec4(0, 0, 0, 1);
+					teraflyPOS = XYZ(ctrlLeftPos.x, ctrlLeftPos.y, ctrlLeftPos.z);
+
+					if ((teraflyPOS.x < swcBB.x0) || (teraflyPOS.y < swcBB.y0) || (teraflyPOS.z < swcBB.z0) || (teraflyPOS.x > swcBB.x1) || (teraflyPOS.y > swcBB.y1) || (teraflyPOS.z > swcBB.z1))
+						qDebug() << "Out of the bounding box.Ignored!";
+					else
+						postVRFunctionCallMode = 7;
+				}
+				else // zoom out
+					postVRFunctionCallMode = 8;
+				break;
+			}
+			case _ColorChange:
+			{
+				// if(isOnline == false)
+				// {
+				// 	// range 0 ~ 7  neuron_type_color_num=276
+				// 	m_curMarkerColorType = (++m_curMarkerColorType)%8;
+				// 	int color_id = (m_curMarkerColorType>=0 && m_curMarkerColorType<neuron_type_color_num)? m_curMarkerColorType : 0;
+				// 	ctrSphereColor[0] =  neuron_type_color[color_id][0] /255.0;
+				// 	ctrSphereColor[1] =  neuron_type_color[color_id][1] /255.0;
+				// 	ctrSphereColor[2] =  neuron_type_color[color_id][2] /255.0;
+				// 	cout<<"neuron_type_color_num"<<neuron_type_color_num<<endl;
+				// }
+				break;
+			}
+			case _ResetImage:
+			{
+				if (isOnline == false)
+				{
+					m_globalMatrix = glm::mat4();
+					SetupGlobalMatrix();
+				}
+				break;
+			}
+			case _MovetoCreator:
+			{
+				if (isOnline == true)
+				{
+					if (CollaborationCreatorPos.x != 0 && CollaborationCreatorPos.y != 0 && CollaborationCreatorPos.z != 0)
+					{
+						qDebug() << "get creator pos";
+						teraflyPOS = XYZ(CollaborationCreatorPos.x, CollaborationCreatorPos.y, CollaborationCreatorPos.z); // liqi
+						postVRFunctionCallMode = 9;
+					}
+				}
+			}
+			case _RGBImage: // line width
+			{
+				if (temp_x > 0)
+				{
+					switch (m_rgbChannel)
+					{
+					case channel_rgb:
+					{
+						m_rgbChannel = channel_r;
+						break;
+					}
+					case channel_r:
+					{
+						m_rgbChannel = channel_g;
+						break;
+					}
+					case channel_g:
+					{
+						m_rgbChannel = channel_b;
+						break;
+					}
+					case channel_b:
+					{
+						m_rgbChannel = channel_rgb;
+						break;
+					}
+					default:
+						break;
+					}
+				}
 				else
-					postVRFunctionCallMode = 7;
-			}
-			else // zoom out
-				postVRFunctionCallMode = 8;
-			break;
-		}
-		case _ColorChange:
-		{
-			// if(isOnline == false)
-			// {
-			// 	// range 0 ~ 7  neuron_type_color_num=276
-			// 	m_curMarkerColorType = (++m_curMarkerColorType)%8;
-			// 	int color_id = (m_curMarkerColorType>=0 && m_curMarkerColorType<neuron_type_color_num)? m_curMarkerColorType : 0;
-			// 	ctrSphereColor[0] =  neuron_type_color[color_id][0] /255.0;
-			// 	ctrSphereColor[1] =  neuron_type_color[color_id][1] /255.0;
-			// 	ctrSphereColor[2] =  neuron_type_color[color_id][2] /255.0;
-			// 	cout<<"neuron_type_color_num"<<neuron_type_color_num<<endl;
-			// }
-			break;
-		}
-		case _ResetImage:
-		{
-			if (isOnline == false)
-			{
-				m_globalMatrix = glm::mat4();
-				SetupGlobalMatrix();
-			}
-			break;
-		}
-		case _MovetoCreator:
-		{
-			if (isOnline == true)
-			{
-				if (CollaborationCreatorPos.x != 0 && CollaborationCreatorPos.y != 0 && CollaborationCreatorPos.z != 0)
 				{
-					qDebug() << "get creator pos";
-					teraflyPOS = XYZ(CollaborationCreatorPos.x, CollaborationCreatorPos.y, CollaborationCreatorPos.z); // liqi
-					postVRFunctionCallMode = 9;
+					switch (m_rgbChannel)
+					{
+					case channel_rgb:
+					{
+						m_rgbChannel = channel_b;
+						break;
+					}
+					case channel_r:
+					{
+						m_rgbChannel = channel_rgb;
+						break;
+					}
+					case channel_g:
+					{
+						m_rgbChannel = channel_r;
+						break;
+					}
+					case channel_b:
+					{
+						m_rgbChannel = channel_g;
+						break;
+					}
+					default:
+						break;
+					}
 				}
-			}
-		}
-		case _RGBImage: // line width
-		{
-			if (temp_x > 0)
-			{
-				switch (m_rgbChannel)
-				{
-				case channel_rgb:
-				{
-					m_rgbChannel = channel_r;
-					break;
-				}
-				case channel_r:
-				{
-					m_rgbChannel = channel_g;
-					break;
-				}
-				case channel_g:
-				{
-					m_rgbChannel = channel_b;
-					break;
-				}
-				case channel_b:
-				{
-					m_rgbChannel = channel_rgb;
-					break;
-				}
-				default:
-					break;
-				}
-			}
-			else
-			{
-				switch (m_rgbChannel)
-				{
-				case channel_rgb:
-				{
-					m_rgbChannel = channel_b;
-					break;
-				}
-				case channel_r:
-				{
-					m_rgbChannel = channel_rgb;
-					break;
-				}
-				case channel_g:
-				{
-					m_rgbChannel = channel_r;
-					break;
-				}
-				case channel_b:
-				{
-					m_rgbChannel = channel_g;
-					break;
-				}
-				default:
-					break;
-				}
+				break;
 			}
 			break;
-		}
-		break;
-		case _StretchImage:
-		{
-			if (temp_x > 0 && iscaleZ <= 5)
+			case _StretchImage:
 			{
-				iscaleZ++;
-				m_globalMatrix = glm::translate(m_globalMatrix, loadedNTCenter);
-				m_globalMatrix = glm::scale(m_globalMatrix, glm::vec3(1, 1, 5.0 / 4.0));
-				m_globalMatrix = glm::translate(m_globalMatrix, -loadedNTCenter);
+				if (temp_x > 0 && iscaleZ <= 5)
+				{
+					iscaleZ++;
+					m_globalMatrix = glm::translate(m_globalMatrix, loadedNTCenter);
+					m_globalMatrix = glm::scale(m_globalMatrix, glm::vec3(1, 1, 5.0 / 4.0));
+					m_globalMatrix = glm::translate(m_globalMatrix, -loadedNTCenter);
+				}
+				else if (temp_x < 0 && iscaleZ > 1)
+				{
+					iscaleZ--;
+					m_globalMatrix = glm::translate(m_globalMatrix, loadedNTCenter);
+					m_globalMatrix = glm::scale(m_globalMatrix, glm::vec3(1, 1, 4.0 / 5.0));
+					m_globalMatrix = glm::translate(m_globalMatrix, -loadedNTCenter);
+				}
 			}
-			else if (temp_x < 0 && iscaleZ > 1)
-			{
-				iscaleZ--;
-				m_globalMatrix = glm::translate(m_globalMatrix, loadedNTCenter);
-				m_globalMatrix = glm::scale(m_globalMatrix, glm::vec3(1, 1, 4.0 / 5.0));
-				m_globalMatrix = glm::translate(m_globalMatrix, -loadedNTCenter);
+			default:
+				break;
 			}
 		}
-		default:
-			break;
-		}
-	}
+		*/
 	if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonPress) && (event.data.controller.button == vr::k_EButton_SteamVR_Trigger))
 	{
 
@@ -2877,6 +2890,28 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 		m_oldCtrlMatrix = mat;
 		m_oldGlobalMatrix = m_globalMatrix;
 	}
+
+	// // toggle VF
+	// if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonPress) && (event.data.controller.button == vr::k_EButton_SteamVR_Touchpad))
+	// {
+	// 	if (m_bVirtualFingerON)
+	// 	{
+	// 		m_bVirtualFingerON = false;
+	// 		m_curMarkerColorType = 2; // red
+	// 		ctrSphereColor[0] = neuron_type_color[m_curMarkerColorType][0] / 255.0;
+	// 		ctrSphereColor[1] = neuron_type_color[m_curMarkerColorType][1] / 255.0;
+	// 		ctrSphereColor[2] = neuron_type_color[m_curMarkerColorType][2] / 255.0;
+	// 	}
+	// 	else
+	// 	{
+	// 		m_bVirtualFingerON = true;
+	// 		m_curMarkerColorType = 3; // blue
+	// 		ctrSphereColor[0] = neuron_type_color[m_curMarkerColorType][0] / 255.0;
+	// 		ctrSphereColor[1] = neuron_type_color[m_curMarkerColorType][1] / 255.0;
+	// 		ctrSphereColor[2] = neuron_type_color[m_curMarkerColorType][2] / 255.0;
+	// 	}
+	// }
+
 	//    if((event.trackedDeviceIndex==m_iControllerIDLeft)&&(event.eventType==vr::VREvent_ButtonPress)&&(event.data.controller.button==vr::k_EButton_SteamVR_Trigger))
 	//    {
 	//
