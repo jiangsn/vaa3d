@@ -372,6 +372,8 @@ void V3dR_GLWidget::preparingRenderer() // renderer->setupData & init, 100719 ex
 
 void V3dR_GLWidget::autoSaveSwc()
 {
+	if (((Renderer_gl1 *)renderer)->getHandleNeuronTrees()->size() == 0)
+		return;
 	qDebug() << "V3dR_GLWidget::autoSaveSwc()";
 	((Renderer_gl2 *)renderer)->saveNeuronTree(0, _idep->V3Dmainwindow->currentSwcPath);
 	// renderer->saveNeuronTree(0, _idep->V3Dmainwindow->currentImgPath);
@@ -518,6 +520,25 @@ void V3dR_GLWidget::paintGL()
 {
 	if (renderer && renderer->hasError())
 		POST_CLOSE(this);
+
+	if (((Renderer_gl1 *)renderer)->getHandleNeuronTrees()->size() > 0)
+	{
+		if (notFinishedFlag)
+		{
+			_idep->window3D->enableFinish();
+		}
+
+		else
+		{
+			_idep->window3D->enableNextImg();
+		}
+	}
+	else
+	{
+		_idep->window3D->disableFinish();
+	}
+
+	// qDebug() << "NT size: " << ((Renderer_gl1 *)renderer)->getHandleNeuronTrees()->size() << endl;
 
 	// QTime qtime; qtime.start();
 
@@ -1982,6 +2003,34 @@ void V3dR_GLWidget::handleKeyReleaseEvent(QKeyEvent *e) // 090428 RZC: make publ
 	}
 	update(); // 091030: must be here for correct MarkerPos's view matrix
 	return;
+}
+
+void V3dR_GLWidget::anoUndo()
+{
+	std::ofstream eventlog;
+	eventlog.open(_idep->V3Dmainwindow->currentEventPath.toUtf8().constData(), std::ios_base::app);
+	eventlog << "--------------------------------\n";
+	float elapsed_time = exptime.elapsed() * 0.001;
+	eventlog << "Time: " << elapsed_time << endl;
+	eventlog << "Undo\n";
+	eventlog << "--------------------------------\n";
+	v3dr_getImage4d(_idep)->proj_trace_history_undo();
+	v3dr_getImage4d(_idep)->update_3drenderer_neuron_view(this, (Renderer_gl1 *)renderer); // 090924
+	update();
+}
+
+void V3dR_GLWidget::anoRedo()
+{
+	std::ofstream eventlog;
+	eventlog.open(_idep->V3Dmainwindow->currentEventPath.toUtf8().constData(), std::ios_base::app);
+	eventlog << "--------------------------------\n";
+	float elapsed_time = exptime.elapsed() * 0.001;
+	eventlog << "Time: " << elapsed_time << endl;
+	eventlog << "Redo\n";
+	eventlog << "--------------------------------\n";
+	v3dr_getImage4d(_idep)->proj_trace_history_redo();
+	v3dr_getImage4d(_idep)->update_3drenderer_neuron_view(this, (Renderer_gl1 *)renderer); // 090924
+	update();
 }
 
 QString V3dR_GLWidget::Cut_altTip(int dim_i, int v, int minv, int maxv, int offset)

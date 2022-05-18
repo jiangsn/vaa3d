@@ -193,6 +193,9 @@ public slots:
 	void autoSaveSwc();
 	void autoSaveSwcVR();
 
+	void anoUndo();
+	void anoRedo();
+
 	void appendInfoToSwc(string info);
 
 #define __view3dcontrol_interface__

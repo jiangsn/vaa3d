@@ -4,7 +4,7 @@
  */
 
 /************
-                                            ********* LICENSE NOTICE ************
+											********* LICENSE NOTICE ************
 
 This folder contains all source codes for the V3D project, which is subject to the following conditions if you want to use it.
 
@@ -78,17 +78,23 @@ void V3dR_MainWindow::TimeSlot()
 
 	timerWindow->display(anoTime);
 
-	//qDebug() << minutestr << ":" << secondstr << endl;
+	// qDebug() << minutestr << ":" << secondstr << endl;
 }
 
 void V3dR_MainWindow::createControlWidgets()
 {
-	//qDebug("V3dR_MainWindow::createControlWigdets");
+	// qDebug("V3dR_MainWindow::createControlWigdets");
 	int i;
+
+	opBtnGroup = new QWidget;
+	QHBoxLayout *layout_opBtnGroup = new QHBoxLayout(opBtnGroup);
+	undoBtn = new QPushButton("Undo");
+	redoBtn = new QPushButton("Redo");
+	layout_opBtnGroup->addWidget(undoBtn);
+	layout_opBtnGroup->addWidget(redoBtn);
 
 	navBtnGroup = new QWidget;
 	QHBoxLayout *layout_navBtnGroup = new QHBoxLayout(navBtnGroup);
-
 	finishBtn = new QPushButton("Finish");
 	prevImgBtn = new QPushButton("Previous Image");
 	nextImgBtn = new QPushButton("Next Image");
@@ -110,15 +116,15 @@ void V3dR_MainWindow::createControlWidgets()
 	QHBoxLayout *layout_timerGroup = new QHBoxLayout(timerGroup);
 	timerWindow = new QLCDNumber();
 	timerWindow->setSegmentStyle(QLCDNumber::Flat);
-	//layout_timerGroup->addWidget(timerWindow, 2);
+	// layout_timerGroup->addWidget(timerWindow, 2);
 
 	toolBtnGroup = new QWidget;
 	QHBoxLayout *layout_toolBtnGroup = new QHBoxLayout(toolBtnGroup);
 
 	volumeColormapButton = new QPushButton("Vol Colormap");
-	surfobjManagerButton = new QPushButton("Object Manager"); //Pick/Color"); // 090422 RZC
-	//layout_toolBtnGroup->addWidget(volumeColormapButton);
-	//layout_toolBtnGroup->addWidget(surfobjManagerButton);
+	surfobjManagerButton = new QPushButton("Object Manager"); // Pick/Color"); // 090422 RZC
+	// layout_toolBtnGroup->addWidget(volumeColormapButton);
+	// layout_toolBtnGroup->addWidget(surfobjManagerButton);
 
 	// add timer
 	countTemp = 0;
@@ -128,42 +134,42 @@ void V3dR_MainWindow::createControlWidgets()
 
 #define __volume_display_option_box__
 	//------------------------------------------------------------------------------
-	//volume display option box
+	// volume display option box
 
 	QWidget *volDisplayOptGroup = new QWidget;
-	//QGroupBox *volDisplayOptGroup = new QGroupBox();
-	//volDisplayOptGroup->setTitle("Volume display options");
+	// QGroupBox *volDisplayOptGroup = new QGroupBox();
+	// volDisplayOptGroup->setTitle("Volume display options");
 	QGridLayout *layout_mainDisplayOptGroup = new QGridLayout(volDisplayOptGroup);
 	layout_mainDisplayOptGroup->setContentsMargins(10, 1, 1, 1);
 
 	dispType_maxip = new QRadioButton("MIP", volDisplayOptGroup);
-	//dispType_minip = new QRadioButton("mIP", volDisplayOptGroup);
+	// dispType_minip = new QRadioButton("mIP", volDisplayOptGroup);
 
-	//dispType_alpha = new QRadioButton("Alpha", volDisplayOptGroup);
-	//dispType_cs3d = new QRadioButton("X-section", volDisplayOptGroup);
-	//dispType_maxip->setToolTip("Maximum Intensity Projection");
-	//dispType_minip->setToolTip("Minimum Intensity Projection");
-	//dispType_alpha->setToolTip("Alpha Blending Projection\n (affected by background color)"); //110714
-	//dispType_cs3d->setToolTip("Cross-section");
+	// dispType_alpha = new QRadioButton("Alpha", volDisplayOptGroup);
+	// dispType_cs3d = new QRadioButton("X-section", volDisplayOptGroup);
+	// dispType_maxip->setToolTip("Maximum Intensity Projection");
+	// dispType_minip->setToolTip("Minimum Intensity Projection");
+	// dispType_alpha->setToolTip("Alpha Blending Projection\n (affected by background color)"); //110714
+	// dispType_cs3d->setToolTip("Cross-section");
 
-	//QLabel *labelline = new QLabel; labelline->setFrameStyle(QFrame::HLine | QFrame::Raised); labelline->setLineWidth(1);
+	// QLabel *labelline = new QLabel; labelline->setFrameStyle(QFrame::HLine | QFrame::Raised); labelline->setLineWidth(1);
 
 	transparentSlider = createTranparentSlider();
 	contrastSlider = createContrastSlider();
 
-	//zthicknessBox = createThicknessSpinBox();
-	//comboBox_channel = createChannelComboBox();
-	//zthicknessBox->setToolTip("more thick more Slow!");
-	//comboBox_channel->setToolTip("Set the default channel for pinpointing in 3D image.");
+	// zthicknessBox = createThicknessSpinBox();
+	// comboBox_channel = createChannelComboBox();
+	// zthicknessBox->setToolTip("more thick more Slow!");
+	// comboBox_channel->setToolTip("Set the default channel for pinpointing in 3D image.");
 
-	//checkBox_channelR = new QCheckBox("R", volDisplayOptGroup);
-	//checkBox_channelG = new QCheckBox("G", volDisplayOptGroup);
-	//checkBox_channelB = new QCheckBox("B", volDisplayOptGroup);
-	//checkBox_volCompress = new QCheckBox("Compress", volDisplayOptGroup);
-	//checkBox_channelR->setToolTip("output Red color on screen");
-	//checkBox_channelG->setToolTip("output Green color on screen");
-	//checkBox_channelB->setToolTip("output Blue color on screen");
-	//checkBox_volCompress->setToolTip("Compressed format can improve\n interactive speed of static volume");
+	// checkBox_channelR = new QCheckBox("R", volDisplayOptGroup);
+	// checkBox_channelG = new QCheckBox("G", volDisplayOptGroup);
+	// checkBox_channelB = new QCheckBox("B", volDisplayOptGroup);
+	// checkBox_volCompress = new QCheckBox("Compress", volDisplayOptGroup);
+	// checkBox_channelR->setToolTip("output Red color on screen");
+	// checkBox_channelG->setToolTip("output Green color on screen");
+	// checkBox_channelB->setToolTip("output Blue color on screen");
+	// checkBox_volCompress->setToolTip("Compressed format can improve\n interactive speed of static volume");
 	//".\nUncompressed format for very large volume may cause system halt!");
 
 	layout_mainDisplayOptGroup->addWidget(dispType_maxip, 1, 0, 1, 5);
@@ -172,22 +178,22 @@ void V3dR_MainWindow::createControlWidgets()
 	layout_mainDisplayOptGroup->addWidget(dispType_alpha, 1, 5+5, 1, 7);
 	layout_mainDisplayOptGroup->addWidget(dispType_cs3d, 1, 5+5+7, 1, 9);
 */
-	//layout_mainDisplayOptGroup->addWidget(labelline, 2, 0, 1, 21);
+	// layout_mainDisplayOptGroup->addWidget(labelline, 2, 0, 1, 21);
 
 	/*layout_mainDisplayOptGroup->addWidget(transparentSlider_Label = new QLabel("Transparency"), 2, 0, 1, 9);
-    layout_mainDisplayOptGroup->addWidget(transparentSlider,       2, 9-1, 1, 13);
+	layout_mainDisplayOptGroup->addWidget(transparentSlider,       2, 9-1, 1, 13);
 
-    layout_mainDisplayOptGroup->addWidget(new QLabel("Z-thick"), 3, 0, 1, 8);
-    layout_mainDisplayOptGroup->addWidget(zthicknessBox,         3, 5, 1, 7);
+	layout_mainDisplayOptGroup->addWidget(new QLabel("Z-thick"), 3, 0, 1, 8);
+	layout_mainDisplayOptGroup->addWidget(zthicknessBox,         3, 5, 1, 7);
 
-    layout_mainDisplayOptGroup->addWidget(new QLabel("M-chan"), 3, 12, 1, 8);
-    layout_mainDisplayOptGroup->addWidget(comboBox_channel,    3, 12+5, 1, 5);
+	layout_mainDisplayOptGroup->addWidget(new QLabel("M-chan"), 3, 12, 1, 8);
+	layout_mainDisplayOptGroup->addWidget(comboBox_channel,    3, 12+5, 1, 5);
 
-    layout_mainDisplayOptGroup->addWidget(checkBox_channelR,      4, 0, 1, 4);
-    layout_mainDisplayOptGroup->addWidget(checkBox_channelG,      4, 0+4, 1, 4);
-    layout_mainDisplayOptGroup->addWidget(checkBox_channelB,      4, 0+4+4, 1, 4);*/
+	layout_mainDisplayOptGroup->addWidget(checkBox_channelR,      4, 0, 1, 4);
+	layout_mainDisplayOptGroup->addWidget(checkBox_channelG,      4, 0+4, 1, 4);
+	layout_mainDisplayOptGroup->addWidget(checkBox_channelB,      4, 0+4+4, 1, 4);*/
 
-	//layout_mainDisplayOptGroup->addWidget(checkBox_volCompress, 4, 12+1, 1, 9);
+	// layout_mainDisplayOptGroup->addWidget(checkBox_volCompress, 4, 12+1, 1, 9);
 
 	layout_mainDisplayOptGroup->addWidget(contrastSlider_Label = new QLabel("Contrast"), 5, 0, 1, 9);
 	layout_mainDisplayOptGroup->addWidget(contrastSlider, 5, 9 - 1, 1, 13);
@@ -197,7 +203,7 @@ void V3dR_MainWindow::createControlWidgets()
 
 #define __surface_display_option_box__
 	//------------------------------------------------------------------------------
-	//surface display option box
+	// surface display option box
 
 	QWidget *surfDisplayOptGroup = new QWidget;
 	QGridLayout *surfDisplayOptLayout = new QGridLayout(surfDisplayOptGroup);
@@ -212,22 +218,22 @@ void V3dR_MainWindow::createControlWidgets()
 	updateLandmarkButton = new QPushButton("Sync Tri-view Objs");
 	loadSaveObjectsButton = new QPushButton("Load/Save Surf >>");
 
-	spinBox_markerSize = createMarkerSizeSpinBox(); //marker size is related with voxel size
+	spinBox_markerSize = createMarkerSizeSpinBox(); // marker size is related with voxel size
 	checkBox_markerLabel = new QCheckBox("Label");
 	checkBox_surfStretch = new QCheckBox("Stretch with Volume");
 	checkBox_surfZLock = new QCheckBox("Z-Lock with Volume");
 
 	/*
 	surfDisplayOptLayout->addWidget(checkBox_displayMarkers, 1, 0, 1, 7);
-    surfDisplayOptLayout->addWidget(updateLandmarkButton, 1, 7, 1, 20-6);
-    surfDisplayOptLayout->addWidget(checkBox_markerLabel, 2, 2, 1, 10);
-    surfDisplayOptLayout->addWidget(new QLabel("Size"), 2, 9, 1, 10);
-    surfDisplayOptLayout->addWidget(spinBox_markerSize, 2, 12, 1, 21-12);
+	surfDisplayOptLayout->addWidget(updateLandmarkButton, 1, 7, 1, 20-6);
+	surfDisplayOptLayout->addWidget(checkBox_markerLabel, 2, 2, 1, 10);
+	surfDisplayOptLayout->addWidget(new QLabel("Size"), 2, 9, 1, 10);
+	surfDisplayOptLayout->addWidget(spinBox_markerSize, 2, 12, 1, 21-12);
 
-    surfDisplayOptLayout->addWidget(checkBox_displaySurf, 3, 0, 1, 7);
-    surfDisplayOptLayout->addWidget(loadSaveObjectsButton, 3, 7, 1, 20-6);
-    surfDisplayOptLayout->addWidget(checkBox_surfStretch, 4, 2, 1, 20-2);
-    surfDisplayOptLayout->addWidget(checkBox_surfZLock, 5, 2, 1, 20-2);
+	surfDisplayOptLayout->addWidget(checkBox_displaySurf, 3, 0, 1, 7);
+	surfDisplayOptLayout->addWidget(loadSaveObjectsButton, 3, 7, 1, 20-6);
+	surfDisplayOptLayout->addWidget(checkBox_surfStretch, 4, 2, 1, 20-2);
+	surfDisplayOptLayout->addWidget(checkBox_surfZLock, 5, 2, 1, 20-2);
 	*/
 
 	//    surfDisplayOptLayout->setRowStretch( 1, 21 );
@@ -235,7 +241,7 @@ void V3dR_MainWindow::createControlWidgets()
 
 #define __others_display_option_box__
 	//------------------------------------------------------------------
-	//others display option box
+	// others display option box
 
 	QWidget *miscDisplayOptGroup = new QWidget(); // 090422 RZC
 												  //    QGroupBox *miscDisplayOptGroup = new QGroupBox();
@@ -253,8 +259,8 @@ void V3dR_MainWindow::createControlWidgets()
 	movieSaveButton = new QPushButton("Save Movie", miscDisplayOptGroup);
 	animateButton = new QPushButton("Animate >>", miscDisplayOptGroup);
 	resOfOriginalImage = new QPushButton("Set corresponding image voxel size");
-	//BrainAtlas = new QPushButton("Start Brain Atlas");
-	//reloadDataButton = new QPushButton("Reload", miscDisplayOptGroup);
+	// BrainAtlas = new QPushButton("Start Brain Atlas");
+	// reloadDataButton = new QPushButton("Reload", miscDisplayOptGroup);
 
 	layout_miscDisplayOptGroup->addWidget(checkBox_displayAxes, 1, 0, 1, 20);
 	layout_miscDisplayOptGroup->addWidget(checkBox_displayBoundingBox, 2, 0, 1, 20);
@@ -263,37 +269,37 @@ void V3dR_MainWindow::createControlWidgets()
 
 	layout_miscDisplayOptGroup->addWidget(movieSaveButton, 1, 1 + 11, 1, 21 - 12);
 	layout_miscDisplayOptGroup->addWidget(animateButton, 2, 1 + 11, 1, 21 - 12);
-	//layout_miscDisplayOptGroup->addWidget(reloadDataButton, 3, 1+11, 1, 21-12);
+	// layout_miscDisplayOptGroup->addWidget(reloadDataButton, 3, 1+11, 1, 21-12);
 	layout_miscDisplayOptGroup->addWidget(backgroundColorSwitchButton, 3, 1 + 11, 1, 21 - 12);
 	layout_miscDisplayOptGroup->addWidget(brightButton, 4, 1 + 11, 1, 21 - 12);
 	layout_miscDisplayOptGroup->addWidget(resOfOriginalImage, 5, 0, 1, 21);
-	//layout_miscDisplayOptGroup->addWidget(BrainAtlas, 6, 0, 1, 21);
+	// layout_miscDisplayOptGroup->addWidget(BrainAtlas, 6, 0, 1, 21);
 
 	//==============================================================================
-	//volume/surface/misc tab box
+	// volume/surface/misc tab box
 
-	tabOptions = new QTabWidget(); //AutoTabWidget(); //commented by PHC, 090117
+	tabOptions = new QTabWidget(); // AutoTabWidget(); //commented by PHC, 090117
 	tabOptions->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	i = tabOptions->addTab(volDisplayOptGroup, "Volume");
-	//i= tabOptions->addTab(surfDisplayOptGroup, "Surf/Object");
-	//i= tabOptions->addTab(miscDisplayOptGroup, "Others");
+	// i= tabOptions->addTab(surfDisplayOptGroup, "Surf/Object");
+	// i= tabOptions->addTab(miscDisplayOptGroup, "Others");
 	tabOptions->setTabToolTip(0, "Volume Image");
-	//tabOptions->setTabToolTip(1, "Surface/Object");
-	//tabOptions->setTabToolTip(2, "Other Options");
+	// tabOptions->setTabToolTip(1, "Surface/Object");
+	// tabOptions->setTabToolTip(2, "Other Options");
 
 	//==============================================================================
 
 #define __rotation_slider_box__
 	//------------------------------------------------------------------------------
-	//rotation sliders
+	// rotation sliders
 
 	QWidget *rotateBarGroup = new QWidget;
-	//QGroupBox *rotateBarGroup = new QGroupBox();
-	//rotateBarGroup->setTitle("Rotations around axes");
+	// QGroupBox *rotateBarGroup = new QGroupBox();
+	// rotateBarGroup->setTitle("Rotations around axes");
 	QGridLayout *rotateBarBoxLayout = new QGridLayout(rotateBarGroup);
 
-	//QFont smallFont;   smallFont.setPixelSize(12); smallFont.setBold(false);
-	//rotateBarGroup->setFont(smallFont); // no any use
+	// QFont smallFont;   smallFont.setPixelSize(12); smallFont.setBold(false);
+	// rotateBarGroup->setFont(smallFont); // no any use
 
 	xRotSlider = createRotateSlider();
 	yRotSlider = createRotateSlider();
@@ -334,7 +340,7 @@ void V3dR_MainWindow::createControlWidgets()
 	rotateBarBoxLayout->addWidget(rotAbsolute, 3, 7 + 1, 1, 7);
 	rotateBarBoxLayout->addWidget(rotReset, 3, 14 + 2, 1, 7);
 
-	//rotateBarBoxLayout->setContentsMargins(0,0,0,0);
+	// rotateBarBoxLayout->setContentsMargins(0,0,0,0);
 
 	// Next Prev Image
 	QWidget *imgNavigationGroup = new QWidget;
@@ -345,14 +351,14 @@ void V3dR_MainWindow::createControlWidgets()
 	// zoom & shift slider
 
 	QWidget *zoomBarGroup = new QWidget;
-	//QGroupBox *zoomBarGroup = new QGroupBox();
-	//zoomBarGroup->setTitle("Zoom && Shift-");
+	// QGroupBox *zoomBarGroup = new QGroupBox();
+	// zoomBarGroup->setTitle("Zoom && Shift-");
 	QGridLayout *zoomBarBoxLayout = new QGridLayout(zoomBarGroup);
 
-	zoomSlider = createZoomSlider(Qt::Vertical); //080930
+	zoomSlider = createZoomSlider(Qt::Vertical); // 080930
 	zoomReset = new QPushButton("Reset", zoomBarGroup);
 	xShiftSlider = createShiftSlider();
-	yShiftSlider = createShiftSlider(Qt::Vertical); //080930
+	yShiftSlider = createShiftSlider(Qt::Vertical); // 080930
 	xShiftBox = createShiftSpinBox();
 	yShiftBox = createShiftSpinBox();
 	zoomBox = createZoomSpinBox();
@@ -376,11 +382,11 @@ void V3dR_MainWindow::createControlWidgets()
 	zoomSlider->setToolTip(zoom_tip);
 	zoomBox->setToolTip(zoom_tip);
 
-	//zoomBarBoxLayout->addWidget(new QLabel("Hori"), 3, 1+3+3, 1, 3);
+	// zoomBarBoxLayout->addWidget(new QLabel("Hori"), 3, 1+3+3, 1, 3);
 	zoomBarBoxLayout->addWidget(xShiftSlider, 4, 3, 1, 16);
 	zoomBarBoxLayout->addWidget(xShiftBox, 3, 3 + (16 - 6) / 2, 1, 6);
 
-	//zoomBarBoxLayout->addWidget(new QLabel("Vert"), 1, 20-3-3, 1, 3);
+	// zoomBarBoxLayout->addWidget(new QLabel("Vert"), 1, 20-3-3, 1, 3);
 	zoomBarBoxLayout->addWidget(yShiftSlider, 1, 21 - 3, 4, 3);
 	zoomBarBoxLayout->addWidget(yShiftBox, 2, 21 - 3 - 6, 1, 6);
 
@@ -389,7 +395,7 @@ void V3dR_MainWindow::createControlWidgets()
 	//=============================================================================
 	// rotation/zoom-shift tab box
 
-	tabRotZoom = new QTabWidget(); //tabRotZoom = new AutoTabWidget(); //commented by PHC, 090117
+	tabRotZoom = new QTabWidget(); // tabRotZoom = new AutoTabWidget(); //commented by PHC, 090117
 	tabRotZoom->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	// i= tabRotZoom->addTab(rotateBarGroup, "Rotation");
 	// i= tabRotZoom->addTab(zoomBarGroup,   "Zoom && Shift");
@@ -401,7 +407,7 @@ void V3dR_MainWindow::createControlWidgets()
 #define __cut_plane_slider_box__
 
 	//-----------------------------------------------------------------------------
-	//cut-plane boxes (1-volume & 2-section shared same place, 3-surface)
+	// cut-plane boxes (1-volume & 2-section shared same place, 3-surface)
 
 	QWidget *cutPlaneGroup[1 + 3];
 	cutPlaneGroup[1] = new QWidget;
@@ -528,7 +534,7 @@ void V3dR_MainWindow::createControlWidgets()
 	//========================================================================
 	// cut-planes tab box
 
-	tabCutPlane = new QTabWidget(); //new AutoTabWidget(); //commented by PHC, 090117
+	tabCutPlane = new QTabWidget(); // new AutoTabWidget(); //commented by PHC, 090117
 	tabCutPlane->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	//	i= tabCutPlane->insertTab(1, cutPlaneGroup[1], "Volume");    // qDebug("insertTab(1) = %d", i);
 	//  i= tabCutPlane->insertTab(2, cutPlaneGroup[2], "X-section"); // qDebug("insertTab(2) = %d", i);
@@ -546,16 +552,16 @@ void V3dR_MainWindow::createControlWidgets()
 
 #define __manage_layout_and_call_connect_signal__
 	//===========================================================================================
-	//Managing the layout
+	// Managing the layout
 
 	QGroupBox *viewGroup = new QGroupBox();
-	//QFrame *viewGroup = new QFrame;  viewGroup->setFrameStyle(QFrame::StyledPanel);
+	// QFrame *viewGroup = new QFrame;  viewGroup->setFrameStyle(QFrame::StyledPanel);
 
 	glWidgetArea = new QScrollArea;
 	glWidgetArea->setWidgetResizable(true);
 	glWidgetArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	glWidgetArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	glWidgetArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding); //QSizePolicy::Ignored, QSizePolicy::Ignored);
+	glWidgetArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding); // QSizePolicy::Ignored, QSizePolicy::Ignored);
 	glWidgetArea->setMinimumSize(MINVIEW_SIZEX, MINVIEW_SIZEY);
 	if (glWidget)
 		glWidgetArea->setWidget(glWidget);
@@ -573,32 +579,33 @@ void V3dR_MainWindow::createControlWidgets()
 	//------------------------------------------------
 
 	controlGroup = new QGroupBox();
-	//QFrame *controlGroup = new QFrame;  controlGroup->setFrameStyle(QFrame::StyledPanel);
+	// QFrame *controlGroup = new QFrame;  controlGroup->setFrameStyle(QFrame::StyledPanel);
 	controlGroup->setFixedWidth(CTRL_SIZEX);
 	controlGroup->setTitle("Controls");
 	controlGroup->setFocusPolicy(Qt::StrongFocus);
 
 	QVBoxLayout *controlLayout = new QVBoxLayout(controlGroup);
-	controlLayout->addWidget(tabOptions);  //mainDisplayOptGroup);
-										   //controlLayout->addWidget(toolBtnGroup); //090712 RZC
-	controlLayout->addWidget(navBtnGroup); //090712 RZC
-	controlLayout->addWidget(selectBtnGroup);
-	controlLayout->addWidget(timerGroup);
-	//controlLayout->addWidget(tabCutPlane); //cutPlaneGroup);
-	controlLayout->addWidget(tabRotZoom); //rotateBarGroup);
+	controlLayout->addWidget(tabOptions);  // mainDisplayOptGroup);
+										   // controlLayout->addWidget(toolBtnGroup); //090712 RZC
+	controlLayout->addWidget(opBtnGroup);  // 090712 RZC
+	controlLayout->addWidget(navBtnGroup); // 090712 RZC
+										   // controlLayout->addWidget(selectBtnGroup);
+										   // controlLayout->addWidget(timerGroup);
+										   // controlLayout->addWidget(tabCutPlane); //cutPlaneGroup);
+										   // controlLayout->addWidget(tabRotZoom); // rotateBarGroup);
 
 #ifdef __ALLOW_VR_FUNCS__
 	//=============================================================================
-	//collaboration
-	//rotCView = new QCheckBox("Start collaboration mode in 3D view.");
-	//rotCView = new QPushButton("collaborate in VR", controlGroup);
-	//rotCView->setToolTip("You can edit current image in collaboration mode.");
-	//controlLayout->addWidget(rotCView);
-	//VR
+	// collaboration
+	// rotCView = new QCheckBox("Start collaboration mode in 3D view.");
+	// rotCView = new QPushButton("collaborate in VR", controlGroup);
+	// rotCView->setToolTip("You can edit current image in collaboration mode.");
+	// controlLayout->addWidget(rotCView);
+	// VR
 	// shuning: jump from 3D to VR is prohibited
-	//rotVRView = new QPushButton("See in VR Env", controlGroup);
-	//rotVRView->setToolTip("You can see current image in VR environment.");
-	//controlLayout->addWidget(rotVRView);
+	// rotVRView = new QPushButton("See in VR Env", controlGroup);
+	// rotVRView->setToolTip("You can see current image in VR environment.");
+	// controlLayout->addWidget(rotVRView);
 
 #endif
 
@@ -616,13 +623,13 @@ void V3dR_MainWindow::createControlWidgets()
 	hideDisplayControlsButton->setMaximumWidth(25);
 	hideDisplayControlsButton->setFixedHeight(100);
 	connect(hideDisplayControlsButton, SIGNAL(clicked()), this, SLOT(hideDisplayControls()));
-	//hideDisplayControlsButton->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+	// hideDisplayControlsButton->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
 	centralLayout = new QHBoxLayout(this);
 	centralLayout->addWidget(viewGroup, 1);
-	centralLayout->addWidget(hideDisplayControlsButton, 0);
+	// centralLayout->addWidget(hideDisplayControlsButton, 0);
 	centralLayout->addWidget(controlGroup);
-	//centralLayout->setContentsMargins(10,10,10,10);
+	// centralLayout->setContentsMargins(10,10,10,10);
 	setLayout(centralLayout);
 
 	////////////////////////////////////////////////////////////////////////////////////
@@ -639,7 +646,7 @@ void V3dR_MainWindow::createControlWidgets()
 	SliderTipFilter *TsliderTip = new SliderTipFilter(this, "time = ", "", 0);
 	timeSlider->installEventFilter(TsliderTip);
 
-	//SliderTipFilter *VsliderTip = new SliderTipFilter(this, "", "", 1);
+	// SliderTipFilter *VsliderTip = new SliderTipFilter(this, "", "", 1);
 	SliderTipFilter *xVsliderTip = new SliderTipFilter(this, "", "", 1, xCut_altTip);
 	SliderTipFilter *yVsliderTip = new SliderTipFilter(this, "", "", 1, yCut_altTip);
 	SliderTipFilter *zVsliderTip = new SliderTipFilter(this, "", "", 1, zCut_altTip);
@@ -699,7 +706,7 @@ void V3dR_MainWindow::connectSignal()
 		return;
 
 #define __connect_volume__
-	//volume display option box ///////////////////////////////////
+	// volume display option box ///////////////////////////////////
 
 	if (timeSlider)
 	{
@@ -730,11 +737,11 @@ void V3dR_MainWindow::connectSignal()
 		connect(dispType_cs3d, SIGNAL(toggled(bool)), glWidget, SLOT(setRenderMode_Cs3d(bool)));
 	}
 
-	//if (transparentSlider) {
+	// if (transparentSlider) {
 	//	connect(glWidget, SIGNAL(changeTransparentSliderLabel(const QString&)), transparentSlider_Label, SLOT(setText(const QString&)));
 	//	connect(transparentSlider, SIGNAL(valueChanged(int)), glWidget, SLOT(setCSTransparent(int)));
 	//	//connect(glWidget, SIGNAL(enableTransparentSlider(bool)), transparentSlider, SLOT(setEnabled(bool)));
-	//}
+	// }
 
 	if (contrastSlider)
 	{
@@ -743,9 +750,9 @@ void V3dR_MainWindow::connectSignal()
 
 	if (thicknessSlider)
 	{
-		//connect(thicknessSlider, SIGNAL(valueChanged(int)), glWidget, SLOT(setThickness(int)));
-		//connect(glWidget, SIGNAL(enableThicknessSlider(bool)), thicknessSlider_Label, SLOT(setEnabled(bool)));
-		//connect(glWidget, SIGNAL(enableThicknessSlider(bool)), thicknessSlider, SLOT(setEnabled(bool)));
+		// connect(thicknessSlider, SIGNAL(valueChanged(int)), glWidget, SLOT(setThickness(int)));
+		// connect(glWidget, SIGNAL(enableThicknessSlider(bool)), thicknessSlider_Label, SLOT(setEnabled(bool)));
+		// connect(glWidget, SIGNAL(enableThicknessSlider(bool)), thicknessSlider, SLOT(setEnabled(bool)));
 	}
 	if (comboBox_channel)
 	{
@@ -769,18 +776,26 @@ void V3dR_MainWindow::connectSignal()
 	}
 
 	/*if (checkBox_volCompress){
-		
+
 		connect(checkBox_volCompress, SIGNAL(toggled(bool)), glWidget, SLOT(setVolCompress(bool)));
 		connect(glWidget, SIGNAL(changeVolCompress(bool)), checkBox_volCompress, SLOT(setChecked(bool)));
 		connect(glWidget, SIGNAL(changeEnableVolCompress(bool)), checkBox_volCompress, SLOT(setEnabled(bool)));
 		checkBox_volCompress->setEnabled(true);
-		
+
 	}*/
 	if (volumeColormapButton)
 	{
-		//connect(volumeColormapButton, SIGNAL(clicked()), glWidget, SLOT(volumeColormapDialog()));
-		//connect(glWidget, SIGNAL(changeEnableVolColormap(bool)), volumeColormapButton, SLOT(setEnabled(bool)));
-		//volumeColormapButton->setEnabled(false);
+		// connect(volumeColormapButton, SIGNAL(clicked()), glWidget, SLOT(volumeColormapDialog()));
+		// connect(glWidget, SIGNAL(changeEnableVolColormap(bool)), volumeColormapButton, SLOT(setEnabled(bool)));
+		// volumeColormapButton->setEnabled(false);
+	}
+	if (undoBtn)
+	{
+		connect(undoBtn, SIGNAL(clicked()), glWidget, SLOT(anoUndo()));
+	}
+	if (redoBtn)
+	{
+		connect(redoBtn, SIGNAL(clicked()), glWidget, SLOT(anoRedo()));
 	}
 	if (finishBtn)
 	{
@@ -789,11 +804,11 @@ void V3dR_MainWindow::connectSignal()
 	}
 	if (nextImgBtn)
 	{
-		//connect(nextImgBtn, SIGNAL(clicked()), _idep->xwidget->p_mainWindow, SLOT(loadNextImage()));
+		// connect(nextImgBtn, SIGNAL(clicked()), _idep->xwidget->p_mainWindow, SLOT(loadNextImage()));
 		connect(nextImgBtn, SIGNAL(clicked()), _idep->V3Dmainwindow, SLOT(loadNextImage()));
 		nextImgBtn->setEnabled(false);
-		//connect(glWidget, SIGNAL(changeEnableVolColormap(bool)), volumeColormapButton, SLOT(setEnabled(bool)));
-		//volumeColormapButton->setEnabled(false);
+		// connect(glWidget, SIGNAL(changeEnableVolColormap(bool)), volumeColormapButton, SLOT(setEnabled(bool)));
+		// volumeColormapButton->setEnabled(false);
 	}
 	if (prevImgBtn)
 	{
@@ -805,12 +820,12 @@ void V3dR_MainWindow::connectSignal()
 	}
 	if (showCenterBtn)
 	{
-		//connect(showCenterBtn, SIGNAL(clicked()), this, SLOT(toggleCenterCutRange()));
+		// connect(showCenterBtn, SIGNAL(clicked()), this, SLOT(toggleCenterCutRange()));
 		connect(showCenterBtn, SIGNAL(clicked()), glWidget, SLOT(toggleCenterCutRange()));
 	}
 
 #define __connect_surface__
-	//surface display option box ///////////////////////////////////////
+	// surface display option box ///////////////////////////////////////
 
 	if (checkBox_displayMarkers)
 		connect(checkBox_displayMarkers, SIGNAL(stateChanged(int)), glWidget, SLOT(setShowMarkers(int)));
@@ -840,8 +855,8 @@ void V3dR_MainWindow::connectSignal()
 
 	if (surfobjManagerButton)
 	{
-		//connect(surfobjManagerButton, SIGNAL(clicked()), glWidget, SLOT(surfaceSelectDialog()));
-		//surfobjManagerButton->setEnabled(false);
+		// connect(surfobjManagerButton, SIGNAL(clicked()), glWidget, SLOT(surfaceSelectDialog()));
+		// surfobjManagerButton->setEnabled(false);
 	}
 
 	if (checkBox_surfZLock)
@@ -850,7 +865,7 @@ void V3dR_MainWindow::connectSignal()
 	}
 
 #define __connect_rotation__
-	//rotation group //////////////////////////////////////////////////
+	// rotation group //////////////////////////////////////////////////
 
 	if (xRotSlider)
 	{
@@ -1081,7 +1096,7 @@ void V3dR_MainWindow::connectSignal()
 	}
 
 #define __connect_others__
-	//others display option box
+	// others display option box
 
 	if (checkBox_displayAxes)
 		connect(checkBox_displayAxes, SIGNAL(toggled(bool)), glWidget, SLOT(enableShowAxes(bool)));
@@ -1097,7 +1112,7 @@ void V3dR_MainWindow::connectSignal()
 		connect(colorButton, SIGNAL(clicked()), glWidget, SLOT(setBackgroundColor()));
 	if (brightButton)
 		connect(brightButton, SIGNAL(clicked()), glWidget, SLOT(setBright()));
-	//if (reloadDataButton)
+	// if (reloadDataButton)
 	//		connect(reloadDataButton, SIGNAL(clicked()), glWidget, SLOT(reloadData()));
 	if (backgroundColorSwitchButton)
 		connect(backgroundColorSwitchButton, SIGNAL(clicked()), glWidget, SLOT(switchBackgroundColor()));
@@ -1113,12 +1128,12 @@ void V3dR_MainWindow::connectSignal()
 	if (resOfOriginalImage)
 		connect(resOfOriginalImage, SIGNAL(clicked()), glWidget, SLOT(setVoxSize()));
 
-	//if (BrainAtlas) connect(BrainAtlas, SIGNAL(clicked()), glWidget, SLOT(callUpBrainAtlas()));
+	// if (BrainAtlas) connect(BrainAtlas, SIGNAL(clicked()), glWidget, SLOT(callUpBrainAtlas()));
 
 	connect(glWidget, SIGNAL(signalVolumeCutRange()), this, SLOT(initVolumeCutRange())); // 081122
 	connect(glWidget, SIGNAL(signalInitControlValue()), this, SLOT(initControlValue())); // 081122
 	connect(glWidget, SIGNAL(signalOnlySurfaceObj()), this, SLOT(onlySurfaceObjTab()));	 // 110809
-	connect(glWidget, SIGNAL(signalStartVR()), this, SLOT(doimage3DVRView()));			 //shuning
+	connect(glWidget, SIGNAL(signalStartVR()), this, SLOT(doimage3DVRView()));			 // shuning
 
 	return;
 }
@@ -1135,7 +1150,7 @@ void V3dR_MainWindow::initControlValue()
 
 	if (checkBox_fCS)
 	{
-		checkBox_fCS->setChecked(true); //100729 default turn on
+		checkBox_fCS->setChecked(true); // 100729 default turn on
 	}
 	if (checkBox_xCS)
 	{
@@ -1162,10 +1177,10 @@ void V3dR_MainWindow::initControlValue()
 	if (dispType_maxip)
 		dispType_maxip->setChecked(true);
 	if (transparentSlider)
-		transparentSlider->setValue(0); //10. max=100
+		transparentSlider->setValue(0); // 10. max=100
 	if (contrastSlider)
 		contrastSlider->setValue(0);
-	//if (thicknessSlider) thicknessSlider->setValue(1);    //1, max=10
+	// if (thicknessSlider) thicknessSlider->setValue(1);    //1, max=10
 	if (zthicknessBox)
 	{
 		float curthickness = 1.0;
@@ -1174,11 +1189,11 @@ void V3dR_MainWindow::initControlValue()
 		{
 			float tmpthickness = 2.0 * _idep->image4d->getRezZ() / (_idep->image4d->getRezX() + _idep->image4d->getRezY());
 			curthickness = CLAMP(1, ZTHICK_RANGE, tmpthickness);
-			//v3d_msg(QString("the clamped default z thickness is %1\n").arg(curthickness),0);
+			// v3d_msg(QString("the clamped default z thickness is %1\n").arg(curthickness),0);
 		}
 #endif
-		zthicknessBox->setValue(curthickness); //1
-											   //v3d_msg(QString("set the default 3d viewer widget zthickness %1\n").arg(zthicknessBox->value()), 0);
+		zthicknessBox->setValue(curthickness); // 1
+											   // v3d_msg(QString("set the default 3d viewer widget zthickness %1\n").arg(zthicknessBox->value()), 0);
 	}
 
 	if (checkBox_channelR)
@@ -1193,23 +1208,23 @@ void V3dR_MainWindow::initControlValue()
 	{
 		checkBox_channelB->setChecked(true);
 	}
-	//if (checkBox_volCompress && glWidget)	{
-	//checkBox_volCompress->setChecked(glWidget->isVolCompress());
-	//}
+	// if (checkBox_volCompress && glWidget)	{
+	// checkBox_volCompress->setChecked(glWidget->isVolCompress());
+	// }
 
 	// surf/obj tab
 	////////////////////////////////////////////////////////////////////////////////////
 	if (checkBox_displayMarkers)
 	{
-		//checkBox_displayMarkers->setCheckState(Qt::PartiallyChecked);
+		// checkBox_displayMarkers->setCheckState(Qt::PartiallyChecked);
 		checkBox_displayMarkers->setCheckState(Qt::Checked);
-		//checkBox_displayMarkers->setCheckState(Qt::Unchecked);
+		// checkBox_displayMarkers->setCheckState(Qt::Unchecked);
 	}
 	if (checkBox_displaySurf)
 	{
-		//checkBox_displaySurf->setCheckState(Qt::PartiallyChecked);
+		// checkBox_displaySurf->setCheckState(Qt::PartiallyChecked);
 		checkBox_displaySurf->setCheckState(Qt::Checked);
-		//checkBox_displaySurf->setCheckState(Qt::Unchecked);
+		// checkBox_displaySurf->setCheckState(Qt::Unchecked);
 	}
 	if (checkBox_markerLabel)
 	{
@@ -1230,7 +1245,7 @@ void V3dR_MainWindow::initControlValue()
 			spinBox_markerSize->setValue(25);
 	}
 
-	//others tab
+	// others tab
 	///////////////////////////////////////////////////////////////////////////////
 	if (checkBox_displayAxes && glWidget)
 	{
@@ -1243,7 +1258,7 @@ void V3dR_MainWindow::initControlValue()
 	if (checkBox_OrthoView)
 	{
 		checkBox_OrthoView->setChecked(false);
-		//emit checkBox_OrthoView->toggled(false); //it's protected member, must use self-defined signal
+		// emit checkBox_OrthoView->toggled(false); //it's protected member, must use self-defined signal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -1328,14 +1343,14 @@ void V3dR_MainWindow::initVolumeTimeRange()
 
 void V3dR_MainWindow::toggleCenterCutRange()
 {
-	//qDebug() << "V3dR_MainWindow::toggleCenterCutRange()" << endl;
+	// qDebug() << "V3dR_MainWindow::toggleCenterCutRange()" << endl;
 	int d1, d2, d3;
 	d1 = MAX(0, glWidget->dataDim1() - 1);
 	d2 = MAX(0, glWidget->dataDim2() - 1);
 	d3 = MAX(0, glWidget->dataDim3() - 1);
 	qDebug() << d1 << "---" << d2 << "---" << d3 << endl;
 
-	//qDebug() << glWidget->xCut0() << endl;
+	// qDebug() << glWidget->xCut0() << endl;
 	if (glWidget->xCut0())
 	{
 		glWidget->setXCut0(0);
@@ -1376,11 +1391,11 @@ void V3dR_MainWindow::initVolumeCutRange()
 	d3 = MAX(0, glWidget->dataDim3() - 1);
 
 	if (comboBox_channel)
-	{ //100802 //110811 combo-box from spin-box
+	{ // 100802 //110811 combo-box from spin-box
 		int dc = CLAMP(0, 3, glWidget->dataDim4());
-		comboBox_channel->setEnabled(dc > 0); //090922
+		comboBox_channel->setEnabled(dc > 0); // 090922
 		comboBox_channel->clear();
-		comboBox_channel->addItem("all (only for markers)"); //index=0
+		comboBox_channel->addItem("all (only for markers)"); // index=0
 		for (int i = 1; i <= dc; i++)
 		{
 			comboBox_channel->addItem(QString("%1").arg(i));
@@ -1390,11 +1405,11 @@ void V3dR_MainWindow::initVolumeCutRange()
 
 	if (fcutSlider)
 	{
-		fcutSlider->setEnabled(glWidget->dataDim4() > 0); //090922
+		fcutSlider->setEnabled(glWidget->dataDim4() > 0); // 090922
 	}
 	if (fCSSlider)
 	{
-		fCSSlider->setEnabled(glWidget->dataDim4() > 0); //090922
+		fCSSlider->setEnabled(glWidget->dataDim4() > 0); // 090922
 	}
 
 	if (xcminSlider)
@@ -1483,19 +1498,31 @@ void V3dR_MainWindow::createMenuOfAnimate()
 	menuAnimate.addAction(Act);
 
 	Act = new QAction(tr("&Set Time-points per Rotation"), this);
-	//connect(Act, SIGNAL(triggered()), this, SLOT(setAnimatevRotTimePoints()));
-	//menuAnimate.addAction(Act);
+	// connect(Act, SIGNAL(triggered()), this, SLOT(setAnimatevRotTimePoints()));
+	// menuAnimate.addAction(Act);
 }
 
 void V3dR_MainWindow::enableNextImg()
 {
 	finishBtn->setEnabled(false);
 	nextImgBtn->setEnabled(true);
+	redoBtn->setEnabled(false);
+	undoBtn->setEnabled(false);
+}
+void V3dR_MainWindow::enableFinish()
+{
+	finishBtn->setEnabled(true);
+	nextImgBtn->setEnabled(false);
+}
+void V3dR_MainWindow::disableFinish()
+{
+	finishBtn->setEnabled(false);
+	nextImgBtn->setEnabled(false);
 }
 
 void V3dR_MainWindow::doMenuOfAnimate()
 {
-	try //080927
+	try // 080927
 	{
 		menuAnimate.exec(QCursor::pos());
 	}
@@ -1506,7 +1533,7 @@ void V3dR_MainWindow::doMenuOfAnimate()
 }
 
 static const char *i2strRGB[] = //{"R", "G", "B"};
-	{"1", "2", "3"};			//081230
+	{"1", "2", "3"};			// 081230
 
 void V3dR_MainWindow::createMenuOfSurfFile()
 {
@@ -1558,7 +1585,7 @@ void V3dR_MainWindow::createMenuOfSurfFile()
 
 void V3dR_MainWindow::doMenuOfSurfFile()
 {
-	try //080927
+	try // 080927
 	{
 		menuSurfFile.exec(QCursor::pos());
 	}
@@ -1581,7 +1608,7 @@ QAbstractSlider *V3dR_MainWindow::createCutPlaneSlider(int maxval, Qt::Orientati
 	slider->setSingleStep(1);
 	slider->setPageStep(10);
 
-	//slider->setValue(0);
+	// slider->setValue(0);
 	return slider;
 }
 
@@ -1593,14 +1620,14 @@ QAbstractSlider *V3dR_MainWindow::createRotateSlider(Qt::Orientation hv)
 	//    slider->setPageStep(10 * ANGLE_TICK);
 	//    slider->setTickInterval(10 * ANGLE_TICK);
 	//    slider->setTickPosition(QSlider::TicksRight);
-	QDial *slider = new HighlightDial(); //081028 QDial, 081117 HighlightDail
+	QDial *slider = new HighlightDial(); // 081028 QDial, 081117 HighlightDail
 	slider->setRange(0, 360 * ANGLE_TICK);
 	slider->setSingleStep(1 * ANGLE_TICK);
 	slider->setPageStep(10 * ANGLE_TICK);
 	slider->setWrapping(true);
 	slider->setNotchesVisible(true);
 
-	//slider->setValue(0);
+	// slider->setValue(0);
 	return slider;
 }
 QSpinBox *V3dR_MainWindow::createRotateSpinBox()
@@ -1620,14 +1647,14 @@ QAbstractSlider *V3dR_MainWindow::createShiftSlider(Qt::Orientation hv)
 	slider->setTickInterval(SHIFT_RANGE / 10);
 	slider->setTickPosition(QSlider::TicksRight);
 
-	//slider->setValue(0);
+	// slider->setValue(0);
 	return slider;
 }
 QSpinBox *V3dR_MainWindow::createShiftSpinBox()
 {
 	QSpinBox *box = new QSpinBox;
 	box->setRange(-SHIFT_RANGE, SHIFT_RANGE);
-	//box->setSuffix(" %o");
+	// box->setSuffix(" %o");
 	return box;
 }
 
@@ -1642,14 +1669,14 @@ QAbstractSlider *V3dR_MainWindow::createZoomSlider(Qt::Orientation hv) // near,f
 	slider->setTickInterval((zfar - znear) / 10);
 	slider->setTickPosition(QSlider::TicksRight);
 
-	//slider->setValue(0);
+	// slider->setValue(0);
 	return slider;
 }
 QSpinBox *V3dR_MainWindow::createZoomSpinBox()
 {
 	QSpinBox *box = new QSpinBox;
 	box->setRange(-ZOOM_RANGE, ZOOM_RANGE);
-	//box->setSuffix(" %o");
+	// box->setSuffix(" %o");
 	return box;
 }
 
@@ -1662,7 +1689,7 @@ QAbstractSlider *V3dR_MainWindow::createRangeSlider(int znear, int zfar, Qt::Ori
 	slider->setTickInterval((zfar - znear) / 10);
 	slider->setTickPosition(QSlider::TicksRight);
 
-	//slider->setValue(0);
+	// slider->setValue(0);
 	return slider;
 }
 
@@ -1673,7 +1700,7 @@ QAbstractSlider *V3dR_MainWindow::createTranparentSlider(Qt::Orientation hv)
 	slider->setSingleStep(1);
 	slider->setPageStep(10);
 
-	//slider->setValue(0);
+	// slider->setValue(0);
 	return slider;
 }
 
@@ -1683,7 +1710,7 @@ QAbstractSlider *V3dR_MainWindow::createContrastSlider(Qt::Orientation hv)
 	slider->setRange(-100, 100);
 	slider->setSingleStep(1);
 	slider->setPageStep(10);
-	//slider->setValue(0);
+	// slider->setValue(0);
 	return slider;
 }
 
@@ -1698,9 +1725,9 @@ QAbstractSlider *V3dR_MainWindow::createThicknessSlider(Qt::Orientation hv)
 	QScrollBar *slider = new QScrollBar(hv);
 	slider->setRange(1, ZTHICK_RANGE); ////////// min=1
 	slider->setSingleStep(1);
-	slider->setPageStep(1); //ZTHICK_RANGE/10);
+	slider->setPageStep(1); // ZTHICK_RANGE/10);
 
-	//slider->setValue(0);
+	// slider->setValue(0);
 	return slider;
 }
 
@@ -1718,10 +1745,10 @@ QSpinBox *V3dR_MainWindow::createMarkerSizeSpinBox()
 {
 	QSpinBox *box = new QSpinBox;
 	box->setRange(1, 100);
-	//box->setSingleStep(1.0);
+	// box->setSingleStep(1.0);
 	box->setValue(10);
 	box->setPrefix("x");
-	//box->setSuffix(" %o");
+	// box->setSuffix(" %o");
 	box->setToolTip("Marker size is related to 1/1000 of bounding box's size");
 	return box;
 }
@@ -1729,9 +1756,9 @@ QSpinBox *V3dR_MainWindow::createMarkerSizeSpinBox()
 QComboBox *V3dR_MainWindow::createChannelComboBox()
 {
 	QComboBox *box = new QComboBox;
-	//box->setRange(1, 3);
-	//box->setSingleStep(1.0);
-	//box->setValue(1);
-	//box->setSuffix(" %o");
+	// box->setRange(1, 3);
+	// box->setSingleStep(1.0);
+	// box->setValue(1);
+	// box->setSuffix(" %o");
 	return box;
 }

@@ -3,9 +3,8 @@
  * All rights reserved.
  */
 
-
 /************
-                                            ********* LICENSE NOTICE ************
+											********* LICENSE NOTICE ************
 
 This folder contains all source codes for the V3D project, which is subject to the following conditions if you want to use it.
 
@@ -25,9 +24,6 @@ Peng, H, Ruan, Z., Atasoy, D., and Sternson, S. (2010) “Automatic reconstructi
 
 *************/
 
-
-
-
 /****************************************************************************
 ** by Hanchuan Peng
 060809
@@ -40,47 +36,47 @@ Last update: 080814: move iDrawExternalParameter to v3d_core.h
 #ifndef V3DR_MAINWINDOW_H
 #define V3DR_MAINWINDOW_H
 
-
 #include "v3dr_common.h"
 
 #include "qtr_widget.h"
 
-#include<QWidget>
-#include<QTimer>
-
+#include <QWidget>
+#include <QTimer>
 
 class V3dR_GLWidget;
 
 class V3dR_MainWindow : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    V3dR_MainWindow(iDrawExternalParameter* idep);
-    ~V3dR_MainWindow();
+	V3dR_MainWindow(iDrawExternalParameter *idep);
+	~V3dR_MainWindow();
 	void setDataTitle(QString newdt);
 
-	QString getTitlePrefix() {return title_prefix;}
-	QString getDataTitle() {return data_title;}
-	V3dR_GLWidget * getGLWidget() {return glWidget;}
+	QString getTitlePrefix() { return title_prefix; }
+	QString getDataTitle() { return data_title; }
+	V3dR_GLWidget *getGLWidget() { return glWidget; }
 
-	void updateV3dR_GLWidget(iDrawExternalParameter* idep);
+	void updateV3dR_GLWidget(iDrawExternalParameter *idep);
 
 protected:
-    virtual void closeEvent(QCloseEvent* e);
-    virtual void dragEnterEvent(QDragEnterEvent *e);
-    virtual void dropEvent ( QDropEvent * e);
-    virtual void focusInEvent(QFocusEvent* e);
-    virtual void focusOutEvent(QFocusEvent* e);
-    virtual void enterEvent(QEvent *e);
-    virtual void leaveEvent(QEvent *e);
-    virtual void changeEvent(QEvent* e);
-	virtual void keyPressEvent(QKeyEvent * e);
-	virtual void keyReleaseEvent(QKeyEvent * e);
+	virtual void closeEvent(QCloseEvent *e);
+	virtual void dragEnterEvent(QDragEnterEvent *e);
+	virtual void dropEvent(QDropEvent *e);
+	virtual void focusInEvent(QFocusEvent *e);
+	virtual void focusOutEvent(QFocusEvent *e);
+	virtual void enterEvent(QEvent *e);
+	virtual void leaveEvent(QEvent *e);
+	virtual void changeEvent(QEvent *e);
+	virtual void keyPressEvent(QKeyEvent *e);
+	virtual void keyReleaseEvent(QKeyEvent *e);
 
 public slots:
 
 	void enableNextImg();
+	void enableFinish();
+	void disableFinish();
 
 	void TimeSlot();
 
@@ -92,44 +88,56 @@ public slots:
 
 	void initControlValue(); // easy to edit, by RZC 080828, easy to reset 081122
 	void initVolumeTimeRange();
-	void initVolumeCutRange();  // called by initControlValue
+	void initVolumeCutRange();	// called by initControlValue
 	void initSurfaceCutRange(); // called by initControlValue
 	void toggleCenterCutRange();
 
-	void onlySurfaceObjTab() {if(tabOptions) tabOptions->setCurrentIndex(1); if(tabCutPlane) tabCutPlane->setCurrentIndex(1);}
+	void onlySurfaceObjTab()
+	{
+		if (tabOptions)
+			tabOptions->setCurrentIndex(1);
+		if (tabCutPlane)
+			tabCutPlane->setCurrentIndex(1);
+	}
 
 	void doMenuOfSurfFile();
 	void doMenuOfAnimate();
 
-    // previewMovie() also return the rendering benchmark information
-	QString previewMovie(QString& loop_scpript, int rotation_frames, int rotation_timepoints);
-    void doSaveMovie(QString& loop_scpript, int rotation_frames, int rotation_timepoints);
-    void saveMovie();
+	// previewMovie() also return the rendering benchmark information
+	QString previewMovie(QString &loop_scpript, int rotation_frames, int rotation_timepoints);
+	void doSaveMovie(QString &loop_scpript, int rotation_frames, int rotation_timepoints);
+	void saveMovie();
 
 	void animateOn();
 	void animateOff();
-    void animateStep();
-	QString getAnimateRotType(QString qtitle, bool* ok);
+	void animateStep();
+	QString getAnimateRotType(QString qtitle, bool *ok);
 	void setAnimateRotType();
-	int getAnimateRotTimePoints(QString qtitle, bool* ok, int v);
+	int getAnimateRotTimePoints(QString qtitle, bool *ok, int v);
 	void setAnimateRotTimePoints();
 	void setAnimateRotSpeedSec();
 
-	void raise_and_activate() {if (isMinimized()) showNormal(); raise(); activateWindow();} //by PHC. 090626 to bring a 3D viewer to front and activate it
+	void raise_and_activate()
+	{
+		if (isMinimized())
+			showNormal();
+		raise();
+		activateWindow();
+	} // by PHC. 090626 to bring a 3D viewer to front and activate it
 
-    // @ADDED by Alessandro on 2015-05-07 : hide/display controls.
-    void hideDisplayControls();
+	// @ADDED by Alessandro on 2015-05-07 : hide/display controls.
+	void hideDisplayControls();
 
-//	void about();
-//    //for movie control
-//    void setXRotStep(int t);
-//    void setYRotStep(int t);
-//    void setZRotStep(int t);
-//    void setNSteps(int t);
+	//	void about();
+	//    //for movie control
+	//    void setXRotStep(int t);
+	//    void setYRotStep(int t);
+	//    void setZRotStep(int t);
+	//    void setNSteps(int t);
 
 public:
-	iDrawExternalParameter null_idep; //090918: for editing swc
-	iDrawExternalParameter* _idep;
+	iDrawExternalParameter null_idep; // 090918: for editing swc
+	iDrawExternalParameter *_idep;
 	QString title_prefix;
 	QString data_title;
 
@@ -137,41 +145,41 @@ public:
 	QTimer *msTimer;
 	void Display(QString, QString, QString);
 	void SetStrLength(QString *str, int length);
-	
 
-    void saveFrameFunc(int i);
+	void saveFrameFunc(int i);
 	QString outputDir;
 
 	// animate() return total frames to render in one loop_scpript
-	V3DLONG animate(QString& loop_scpript, int rotation_time_ms, int rotation_frames,  // FPS = rotation_frames*1000/rotation_time_ms
-					int rotation_timepoints=0, bool bSaveFrame=false);
-    int sAnimate;  // 0--stop, 1--run once, 2--run loop
-    bool bAnimating;
-    QTimer animate_timer;
-    struct {
-    	QStringList loop_list;
-    	int frame_time_ms;
-    	int rotation_frames;
-    	int rotation_timepoints;
-    	float frame_timepoints;
-    	int iframe_rotation;
-    	int irotation;
-    	bool bSaveFrame;
-    } animate_option;
-    QString scriptAnimateRot;
-    int FPS;
-    int rotationSpeedSec;
-    int rotationTimePoints;
-    void default_animate_para()
-    {
-        scriptAnimateRot = "X Y Z";
-		FPS = 15; //the best choice: 15 frame/second
-        rotationSpeedSec = 12;
+	V3DLONG animate(QString &loop_scpript, int rotation_time_ms, int rotation_frames, // FPS = rotation_frames*1000/rotation_time_ms
+					int rotation_timepoints = 0, bool bSaveFrame = false);
+	int sAnimate; // 0--stop, 1--run once, 2--run loop
+	bool bAnimating;
+	QTimer animate_timer;
+	struct
+	{
+		QStringList loop_list;
+		int frame_time_ms;
+		int rotation_frames;
+		int rotation_timepoints;
+		float frame_timepoints;
+		int iframe_rotation;
+		int irotation;
+		bool bSaveFrame;
+	} animate_option;
+	QString scriptAnimateRot;
+	int FPS;
+	int rotationSpeedSec;
+	int rotationTimePoints;
+	void default_animate_para()
+	{
+		scriptAnimateRot = "X Y Z";
+		FPS = 15; // the best choice: 15 frame/second
+		rotationSpeedSec = 12;
 		rotationTimePoints = 0;
-    }
+	}
 
-    QMenu menuAnimate;
-    QMenu menuSurfFile;
+	QMenu menuAnimate;
+	QMenu menuSurfFile;
 	void createMenuOfSurfFile();
 	void createMenuOfAnimate();
 
@@ -181,8 +189,8 @@ public:
 	QAbstractSlider *createZoomSlider(Qt::Orientation hv = Qt::Horizontal);
 	QAbstractSlider *createRangeSlider(int znear, int zfar, Qt::Orientation hv = Qt::Horizontal);
 	QAbstractSlider *createTranparentSlider(Qt::Orientation hv = Qt::Horizontal);
-    QAbstractSlider *createContrastSlider(Qt::Orientation hv = Qt::Horizontal);
-    QAbstractSlider *createThicknessSlider(Qt::Orientation hv = Qt::Horizontal);
+	QAbstractSlider *createContrastSlider(Qt::Orientation hv = Qt::Horizontal);
+	QAbstractSlider *createThicknessSlider(Qt::Orientation hv = Qt::Horizontal);
 	QDoubleSpinBox *createThicknessSpinBox();
 	QComboBox *createChannelComboBox();
 	QSpinBox *createMarkerSizeSpinBox();
@@ -190,34 +198,35 @@ public:
 	QSpinBox *createShiftSpinBox();
 	QSpinBox *createZoomSpinBox();
 
-	//void createActions();
-    //void createMenus();
-	//QSize getSize();
+	// void createActions();
+	// void createMenus();
+	// QSize getSize();
 
-    //widget controls////////////////////////////////////////////////////////////////
+	// widget controls////////////////////////////////////////////////////////////////
 
-    //QPointer<V3dR_GLWidget> glWidget; // guarded pointers to QObjects, by RZC 080924
-    V3dR_GLWidget * glWidget; // normal pointers to QObjects
-    static QWidget* lastActive; //for glWidget->updateTool()
+	// QPointer<V3dR_GLWidget> glWidget; // guarded pointers to QObjects, by RZC 080924
+	V3dR_GLWidget *glWidget;	// normal pointers to QObjects
+	static QWidget *lastActive; // for glWidget->updateTool()
 
+	// QWidget *centralWidget;
+	QScrollArea *glWidgetArea, *pixmapLabelArea;
+	QScrollBar *timeSlider;
 
-    //QWidget *centralWidget;
-    QScrollArea *glWidgetArea, *pixmapLabelArea;
-    QScrollBar* timeSlider;
-
-    // volume display control
+	// volume display control
 	QRadioButton *dispType_maxip, *dispType_minip, *dispType_alpha, *dispType_cs3d;
-	QLabel *thicknessSlider_Label, *transparentSlider_Label; //for disable, by RZC 080822
-    QLabel *contrastSlider_Label; //by ZZ 03072018
+	QLabel *thicknessSlider_Label, *transparentSlider_Label; // for disable, by RZC 080822
+	QLabel *contrastSlider_Label;							 // by ZZ 03072018
 
-	QDoubleSpinBox *zthicknessBox; //by PHC, 090215
+	QDoubleSpinBox *zthicknessBox; // by PHC, 090215
 	QComboBox *comboBox_channel;
-    QAbstractSlider *thicknessSlider, *transparentSlider;
-    QAbstractSlider *contrastSlider;
+	QAbstractSlider *thicknessSlider, *transparentSlider;
+	QAbstractSlider *contrastSlider;
 
-    QCheckBox *checkBox_channelR, *checkBox_channelG, *checkBox_channelB, *checkBox_channelA, *checkBox_volCompress;
-    QPushButton *volumeColormapButton;
+	QCheckBox *checkBox_channelR, *checkBox_channelG, *checkBox_channelB, *checkBox_channelA, *checkBox_volCompress;
+	QPushButton *volumeColormapButton;
 
+	QPushButton *undoBtn;
+	QPushButton *redoBtn;
 	QPushButton *finishBtn;
 	QPushButton *nextImgBtn;
 	QPushButton *prevImgBtn;
@@ -225,130 +234,130 @@ public:
 	QPushButton *showCenterBtn;
 	QLCDNumber *timerWindow;
 
-    // surface display control
-    QCheckBox *checkBox_displayMarkers, *checkBox_displaySurf, *checkBox_markerLabel, *checkBox_surfStretch, *checkBox_surfZLock;
-    QSpinBox * spinBox_markerSize; // 090422 RZC
-    QPushButton *updateLandmarkButton, *loadSaveObjectsButton;
-    QPushButton *surfobjManagerButton; //or Object Manager button
+	// surface display control
+	QCheckBox *checkBox_displayMarkers, *checkBox_displaySurf, *checkBox_markerLabel, *checkBox_surfStretch, *checkBox_surfZLock;
+	QSpinBox *spinBox_markerSize; // 090422 RZC
+	QPushButton *updateLandmarkButton, *loadSaveObjectsButton;
+	QPushButton *surfobjManagerButton; // or Object Manager button
 
-    // other control
+	// other control
 	QCheckBox *checkBox_displayAxes, *checkBox_displayBoundingBox, *checkBox_OrthoView;
-    QPushButton *colorButton, *brightButton, *reloadDataButton, *backgroundColorSwitchButton;
+	QPushButton *colorButton, *brightButton, *reloadDataButton, *backgroundColorSwitchButton;
 	QPushButton *movieSaveButton, *animateButton, *resOfOriginalImage, *BrainAtlas;
-    QComboBox * comboRotType;
+	QComboBox *comboRotType;
 
-    // @ADDED by Alessandro on 2015-05-07 : hide/display controls.
-    QGroupBox *controlGroup;
-    QPushButton *hideDisplayControlsButton;
-    bool displayControlsHidden;
+	// @ADDED by Alessandro on 2015-05-07 : hide/display controls.
+	QGroupBox *controlGroup;
+	QPushButton *hideDisplayControlsButton;
+	bool displayControlsHidden;
 	QWidget *toolBtnGroup;
+	QWidget *opBtnGroup;
 	QWidget *navBtnGroup;
 	QWidget *selectBtnGroup;
 	QWidget *timerGroup;
 
-    QTabWidget *tabOptions;
+	QTabWidget *tabOptions;
 
-    // rotation, zoom, shift control
-    QAbstractSlider *xRotSlider, *yRotSlider, *zRotSlider;
+	// rotation, zoom, shift control
+	QAbstractSlider *xRotSlider, *yRotSlider, *zRotSlider;
 	QAbstractSlider *zoomSlider, *xShiftSlider, *yShiftSlider;
-    QSpinBox *xRotBox, *yRotBox, *zRotBox, *zoomBox, *xShiftBox, *yShiftBox;
-    QCheckBox *checkBox_absoluteRot;
-    QPushButton *zoomReset, *rotReset, *rotAbsolute, *rotAbsolutePose; //wwbmark freeze
+	QSpinBox *xRotBox, *yRotBox, *zRotBox, *zoomBox, *xShiftBox, *yShiftBox;
+	QCheckBox *checkBox_absoluteRot;
+	QPushButton *zoomReset, *rotReset, *rotAbsolute, *rotAbsolutePose; // wwbmark freeze
 
 #ifdef __ALLOW_VR_FUNCS__
-    QPushButton *rotVRView;
+	QPushButton *rotVRView;
 	QPushButton *rotCView;
 #endif
 
-    QTabWidget *tabRotZoom;
+	QTabWidget *tabRotZoom;
 
-    // cut plane control
-    QAbstractSlider *xcminSlider, *xcmaxSlider, *ycminSlider, *ycmaxSlider, *zcminSlider, *zcmaxSlider, *fcutSlider;
-    QAbstractButton *xcLock, *ycLock, *zcLock;
-    QCheckBox *checkBox_xCS, *checkBox_yCS, *checkBox_zCS, *checkBox_fCS;
-    QAbstractSlider *xCSSlider, *yCSSlider, *zCSSlider, *fCSSlider;
-    QAbstractSlider *xSminSlider, *xSmaxSlider, *ySminSlider, *ySmaxSlider, *zSminSlider, *zSmaxSlider, *confSlider;
-    QStackedLayout *stackedCutPlane;
+	// cut plane control
+	QAbstractSlider *xcminSlider, *xcmaxSlider, *ycminSlider, *ycmaxSlider, *zcminSlider, *zcmaxSlider, *fcutSlider;
+	QAbstractButton *xcLock, *ycLock, *zcLock;
+	QCheckBox *checkBox_xCS, *checkBox_yCS, *checkBox_zCS, *checkBox_fCS;
+	QAbstractSlider *xCSSlider, *yCSSlider, *zCSSlider, *fCSSlider;
+	QAbstractSlider *xSminSlider, *xSmaxSlider, *ySminSlider, *ySmaxSlider, *zSminSlider, *zSmaxSlider, *confSlider;
+	QStackedLayout *stackedCutPlane;
 
-    QTabWidget *tabCutPlane;
+	QTabWidget *tabCutPlane;
 
-    // @ADDED by Alessandro on 2015-09-30: giving access to layout allows later changes (e.g. addition of new elements)
-    QHBoxLayout *centralLayout;
+	// @ADDED by Alessandro on 2015-09-30: giving access to layout allows later changes (e.g. addition of new elements)
+	QHBoxLayout *centralLayout;
 
 	void init_members() // more clear putting them here, by RZC 080828
 	{
 		default_animate_para();
-	    sAnimate = 0;
+		sAnimate = 0;
 		bAnimating = false;
-	    connect(&animate_timer, SIGNAL(timeout()), this, SLOT(animateStep())); //only connect once
-	    animate_timer.stop();
+		connect(&animate_timer, SIGNAL(timeout()), this, SLOT(animateStep())); // only connect once
+		animate_timer.stop();
 
+		// centralWidget=0;
+		glWidgetArea = pixmapLabelArea = 0;
+		glWidget = 0;
+		timeSlider = 0;
 
-		//centralWidget=0;
-	    glWidgetArea=pixmapLabelArea=0;
-	    glWidget=0;
-	    timeSlider=0;
+		dispType_minip = dispType_maxip = dispType_alpha = dispType_cs3d = 0;
+		thicknessSlider_Label = transparentSlider_Label = contrastSlider_Label = 0;
+		transparentSlider = contrastSlider = 0;
+		thicknessSlider = 0;
+		zthicknessBox = 0;
+		comboBox_channel = 0;
+		checkBox_channelR = checkBox_channelG = checkBox_channelB = checkBox_channelA = checkBox_volCompress = 0;
+		volumeColormapButton = 0;
 
-	    dispType_minip=dispType_maxip=dispType_alpha=dispType_cs3d=0;
-        thicknessSlider_Label=transparentSlider_Label=contrastSlider_Label=0;
-        transparentSlider=contrastSlider=0;
-	    thicknessSlider=0; zthicknessBox=0;
-	    comboBox_channel=0;
-		checkBox_channelR=checkBox_channelG=checkBox_channelB=checkBox_channelA=checkBox_volCompress=0;
-	    volumeColormapButton=0;
+		checkBox_displayMarkers = checkBox_displaySurf = checkBox_markerLabel = checkBox_surfStretch = 0;
+		spinBox_markerSize = 0;
+		updateLandmarkButton = loadSaveObjectsButton = 0;
+		surfobjManagerButton = 0;
 
-	    checkBox_displayMarkers=checkBox_displaySurf=checkBox_markerLabel=checkBox_surfStretch=0;
-	    spinBox_markerSize=0;
-	    updateLandmarkButton=loadSaveObjectsButton=0;
-	    surfobjManagerButton=0;
+		checkBox_displayAxes = checkBox_displayBoundingBox = checkBox_OrthoView = 0;
+		colorButton = brightButton = reloadDataButton = 0;
+		movieSaveButton = animateButton = 0;
+		comboRotType = 0;
 
-		checkBox_displayAxes=checkBox_displayBoundingBox=checkBox_OrthoView=0;
-		colorButton=brightButton=reloadDataButton=0;
-		movieSaveButton=animateButton=0;
-		comboRotType=0;
+		tabOptions = 0;
 
-	    tabOptions=0;
+		// @ADDED by Alessandro on 2015-05-07 : hide/display controls.
+		controlGroup = 0;
+		hideDisplayControlsButton = 0;
+		displayControlsHidden = 0;
 
-        // @ADDED by Alessandro on 2015-05-07 : hide/display controls.
-        controlGroup = 0;
-        hideDisplayControlsButton = 0;
-        displayControlsHidden = 0;
-
-		xRotSlider=yRotSlider=zRotSlider=0;
-		zoomSlider=xShiftSlider=yShiftSlider=0;
-	    xRotBox=yRotBox=zRotBox=zoomBox=xShiftBox=yShiftBox=0;
-	    checkBox_absoluteRot=0;
-        zoomReset=rotReset=rotAbsolute=rotAbsolutePose=0;
+		xRotSlider = yRotSlider = zRotSlider = 0;
+		zoomSlider = xShiftSlider = yShiftSlider = 0;
+		xRotBox = yRotBox = zRotBox = zoomBox = xShiftBox = yShiftBox = 0;
+		checkBox_absoluteRot = 0;
+		zoomReset = rotReset = rotAbsolute = rotAbsolutePose = 0;
 
 #ifdef __ALLOW_VR_FUNCS__
-        rotVRView=0;
-		rotCView=0;
+		rotVRView = 0;
+		rotCView = 0;
 #endif
 
-		tabRotZoom=0;
+		tabRotZoom = 0;
 
-		xcminSlider=xcmaxSlider=ycminSlider=ycmaxSlider=zcminSlider=zcmaxSlider=fcutSlider=0;
-		xcLock=ycLock=zcLock=0;
-		checkBox_xCS=checkBox_yCS=checkBox_zCS=checkBox_fCS=0;
-	    xCSSlider=yCSSlider=zCSSlider=fCSSlider=0;
-	    xSminSlider=xSmaxSlider=ySminSlider=ySmaxSlider=zSminSlider=zSmaxSlider=0;
-	    stackedCutPlane = 0;
+		xcminSlider = xcmaxSlider = ycminSlider = ycmaxSlider = zcminSlider = zcmaxSlider = fcutSlider = 0;
+		xcLock = ycLock = zcLock = 0;
+		checkBox_xCS = checkBox_yCS = checkBox_zCS = checkBox_fCS = 0;
+		xCSSlider = yCSSlider = zCSSlider = fCSSlider = 0;
+		xSminSlider = xSmaxSlider = ySminSlider = ySmaxSlider = zSminSlider = zSmaxSlider = 0;
+		stackedCutPlane = 0;
 
-	    tabCutPlane = 0;
+		tabCutPlane = 0;
 	}
 	void createControlWidgets();
 	void connectSignal();
-	//void disconnectSignal(); // no need to disconnect
+	// void disconnectSignal(); // no need to disconnect
 
-//    QMenu *fileMenu;
-//    QMenu *helpMenu;
-//    QAction *grabFrameBufferAct;
-//    QAction *renderIntoPixmapAct;
-//    QAction *clearPixmapAct;
-//    QAction *exitAct;
-//    QAction *aboutAct;
-//    QAction *aboutQtAct;
+	//    QMenu *fileMenu;
+	//    QMenu *helpMenu;
+	//    QAction *grabFrameBufferAct;
+	//    QAction *renderIntoPixmapAct;
+	//    QAction *clearPixmapAct;
+	//    QAction *exitAct;
+	//    QAction *aboutAct;
+	//    QAction *aboutQtAct;
 };
-
 
 #endif

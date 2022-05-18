@@ -1411,9 +1411,12 @@ bool CMainApplication::HandleInput()
 			}
 			else
 			{
-				finish_ano = true;
-				SetupMorphologyLine(2); // for showing ground truth when annotation is finished
-				_idep->glWidget->autoSaveSwcVR();
+				if (sketchedNTList.size() > 0)
+				{
+					finish_ano = true;
+					SetupMorphologyLine(2); // for showing ground truth when annotation is finished
+					_idep->glWidget->autoSaveSwcVR();
+				}
 			}
 		}
 	}
@@ -1516,7 +1519,7 @@ bool CMainApplication::HandleInput()
 										break;
 									}
 								}
-								qDebug() << "charge isAnyNodeOutBBox done  goto virtual finger";
+								qDebug() << "charge isAnyNodeOutBBox done, goto virtual finger";
 								// improve curve shape
 								NeuronTree InputNT;
 								InputNT = tempNT;
@@ -1535,6 +1538,7 @@ bool CMainApplication::HandleInput()
 								currentNT = InputNT;
 								tempNT.listNeuron.clear();
 								tempNT.hashNeuron.clear();
+								// qDebug() << "Drawing currentNT.listNeuron.size(): " << currentNT.listNeuron.size() << endl;
 								qDebug() << "virtual finger done goto next frame";
 							}
 						}
@@ -4957,26 +4961,29 @@ void CMainApplication::SetupControllerTexture()
 		point_J = mat_L * point_J;
 		point_K = mat_L * point_K;
 		point_L = mat_L * point_L;
-
-		if (!finish_ano)
+		if (sketchedNTList.size() > 0)
 		{
-			// finish
-			AddVertex(point_I.x, point_I.y, point_I.z, 0.085f, 0.5f, vcVerts);
-			AddVertex(point_J.x, point_J.y, point_J.z, 0.17f, 0.5f, vcVerts);
-			AddVertex(point_K.x, point_K.y, point_K.z, 0.085f, 0.625f, vcVerts);
-			AddVertex(point_K.x, point_K.y, point_K.z, 0.085f, 0.625f, vcVerts);
-			AddVertex(point_L.x, point_L.y, point_L.z, 0.17f, 0.625f, vcVerts);
-			AddVertex(point_J.x, point_J.y, point_J.z, 0.17f, 0.5f, vcVerts);
-		}
-		else
-		{ // x(h), y(v)
-			// next
-			AddVertex(point_I.x, point_I.y, point_I.z, 0.085f, 0, vcVerts);
-			AddVertex(point_J.x, point_J.y, point_J.z, 0.17f, 0, vcVerts);
-			AddVertex(point_K.x, point_K.y, point_K.z, 0.085f, 0.125f, vcVerts);
-			AddVertex(point_K.x, point_K.y, point_K.z, 0.085f, 0.125f, vcVerts);
-			AddVertex(point_L.x, point_L.y, point_L.z, 0.17f, 0.125f, vcVerts);
-			AddVertex(point_J.x, point_J.y, point_J.z, 0.17f, 0, vcVerts);
+			// has drawing, show "finish" or "next"
+			if (!finish_ano)
+			{
+				// finish
+				AddVertex(point_I.x, point_I.y, point_I.z, 0.085f, 0.5f, vcVerts);
+				AddVertex(point_J.x, point_J.y, point_J.z, 0.17f, 0.5f, vcVerts);
+				AddVertex(point_K.x, point_K.y, point_K.z, 0.085f, 0.625f, vcVerts);
+				AddVertex(point_K.x, point_K.y, point_K.z, 0.085f, 0.625f, vcVerts);
+				AddVertex(point_L.x, point_L.y, point_L.z, 0.17f, 0.625f, vcVerts);
+				AddVertex(point_J.x, point_J.y, point_J.z, 0.17f, 0.5f, vcVerts);
+			}
+			else
+			{ // x(h), y(v)
+				// next
+				AddVertex(point_I.x, point_I.y, point_I.z, 0.085f, 0, vcVerts);
+				AddVertex(point_J.x, point_J.y, point_J.z, 0.17f, 0, vcVerts);
+				AddVertex(point_K.x, point_K.y, point_K.z, 0.085f, 0.125f, vcVerts);
+				AddVertex(point_K.x, point_K.y, point_K.z, 0.085f, 0.125f, vcVerts);
+				AddVertex(point_L.x, point_L.y, point_L.z, 0.17f, 0.125f, vcVerts);
+				AddVertex(point_J.x, point_J.y, point_J.z, 0.17f, 0, vcVerts);
+			}
 		}
 
 		// qDebug() << "\n---- for the menu button dispaly \"NEXT\" -----------" << endl;
