@@ -1801,7 +1801,7 @@ bool CMainApplication::HandleInput()
 				// if(m_contrastMode==true)//into translate mode
 				if (m_modeTouchPad_R == tr_contrast)
 				{
-					if (m_fTouchPosY > 0.1)
+					if (m_fTouchPosY > 0.5)
 					{
 						fContrast += 0.5;
 						if (fContrast > 50)
@@ -1827,7 +1827,7 @@ bool CMainApplication::HandleInput()
 							outfile.close();
 						}
 					}
-					else if (m_fTouchPosY < -0.1)
+					else if (m_fTouchPosY < -0.5)
 					{
 						fContrast -= 0.5;
 						if (fContrast < 1)
@@ -1974,7 +1974,7 @@ bool CMainApplication::HandleInput()
 				if ((detY < 0.3f) && (detY > -0.3f))
 					detY = 0;
 
-				if (m_fTouchPosY > 0.1)
+				if (m_fTouchPosY > 0.5)
 				{
 					// m_globalScale += 0.1;
 					// m_globalMatrix = glm::scale(m_globalMatrix, glm::vec3(m_globalScale, m_globalScale, m_globalScale));
@@ -2003,7 +2003,7 @@ bool CMainApplication::HandleInput()
 						}
 					}
 				}
-				else if (m_fTouchPosY < -0.1)
+				else if (m_fTouchPosY < -0.5)
 				{
 					// m_globalScale -= 0.1;
 					// m_globalMatrix = glm::scale(m_globalMatrix, glm::vec3(m_globalScale, m_globalScale, m_globalScale));
@@ -4817,12 +4817,12 @@ void CMainApplication::SetupControllerTexture()
 		point_C = mat_L * point_C;
 		point_D = mat_L * point_D;
 		// Update PadFunc
-		//  AddVertex(point_A.x,point_A.y,point_A.z,0,0.25f,vcVerts);
-		//  AddVertex(point_B.x,point_B.y,point_B.z,0.34f,0.25f,vcVerts);
-		//  AddVertex(point_C.x,point_C.y,point_C.z,0,0.375f,vcVerts);
-		//  AddVertex(point_C.x,point_C.y,point_C.z,0,0.375f,vcVerts);
-		//  AddVertex(point_D.x,point_D.y,point_D.z,0.34f,0.375f,vcVerts);
-		//  AddVertex(point_B.x,point_B.y,point_B.z,0.34f,0.25f,vcVerts);
+		// AddVertex(point_A.x, point_A.y, point_A.z, 0, 0.25f, vcVerts);
+		// AddVertex(point_B.x, point_B.y, point_B.z, 0.34f, 0.25f, vcVerts);
+		// AddVertex(point_C.x, point_C.y, point_C.z, 0, 0.375f, vcVerts);
+		// AddVertex(point_C.x, point_C.y, point_C.z, 0, 0.375f, vcVerts);
+		// AddVertex(point_D.x, point_D.y, point_D.z, 0.34f, 0.375f, vcVerts);
+		// AddVertex(point_B.x, point_B.y, point_B.z, 0.34f, 0.25f, vcVerts);
 
 		Vector4 point_A2(0.023f, -0.009f, 0.065f, 1); // grip no.2 dispaly "Mode Switch"
 		Vector4 point_B2(0.023f, -0.009f, 0.105f, 1);
@@ -4832,14 +4832,14 @@ void CMainApplication::SetupControllerTexture()
 		point_B2 = mat_L * point_B2;
 		point_C2 = mat_L * point_C2;
 		point_D2 = mat_L * point_D2;
-		// AddVertex(point_A2.x,point_A2.y,point_A2.z,0.34f,0.25f,vcVerts);
-		// AddVertex(point_B2.x,point_B2.y,point_B2.z,0,0.25f,vcVerts);
-		// AddVertex(point_C2.x,point_C2.y,point_C2.z,0.34f,0.375f,vcVerts);
-		// AddVertex(point_C2.x,point_C2.y,point_C2.z,0.34f,0.375f,vcVerts);
-		// AddVertex(point_D2.x,point_D2.y,point_D2.z,0,0.375f,vcVerts);
-		// AddVertex(point_B2.x,point_B2.y,point_B2.z,0,0.25f,vcVerts);//*/
+		AddVertex(point_A2.x, point_A2.y, point_A2.z, 0.34f, 0.25f, vcVerts);
+		AddVertex(point_B2.x, point_B2.y, point_B2.z, 0, 0.25f, vcVerts);
+		AddVertex(point_C2.x, point_C2.y, point_C2.z, 0.34f, 0.375f, vcVerts);
+		AddVertex(point_C2.x, point_C2.y, point_C2.z, 0.34f, 0.375f, vcVerts);
+		AddVertex(point_D2.x, point_D2.y, point_D2.z, 0, 0.375f, vcVerts);
+		AddVertex(point_B2.x, point_B2.y, point_B2.z, 0, 0.25f, vcVerts); //*/
 
-		Vector4 point_E(-0.02f, 0.01f, 0.03f, 1); // for the touchpad dispaly "ON/OFF"
+		Vector4 point_E(-0.02f, 0.01f, 0.03f, 1); // for the touchpad dispaly "ON/OFF" / Zoom
 		Vector4 point_F(0.02f, 0.01f, 0.03f, 1);
 		Vector4 point_G(-0.02f, 0.01f, 0.07f, 1);
 		Vector4 point_H(0.02f, 0.01f, 0.07f, 1);
@@ -4847,6 +4847,9 @@ void CMainApplication::SetupControllerTexture()
 		point_F = mat_L * point_F;
 		point_G = mat_L * point_G;
 		point_H = mat_L * point_H;
+
+		// replaced by zoom
+		/*
 		switch (m_modeGrip_L)
 		{
 		case _donothing:
@@ -4986,6 +4989,7 @@ void CMainApplication::SetupControllerTexture()
 		default:
 			break;
 		}
+		*/
 
 		// if (!finish_ano)
 		// {
@@ -5044,6 +5048,8 @@ void CMainApplication::SetupControllerTexture()
 		point_O = mat_L * point_O;
 		point_P = mat_L * point_P;
 
+		// replaced by toggle virtual finger
+		/*
 		switch (m_modeGrip_L)
 		{
 		case _donothing:
@@ -5187,7 +5193,9 @@ void CMainApplication::SetupControllerTexture()
 		default:
 			break;
 		}
+		*/
 	}
+
 	// right controller
 	{
 		Vector4 point_A(-0.023f, -0.009f, 0.065f, 1); // grip dispaly "Mode Switch: draw /delete /marker /pull"
@@ -5199,12 +5207,12 @@ void CMainApplication::SetupControllerTexture()
 		point_C = mat_R * point_C;
 		point_D = mat_R * point_D; //*/
 
-		// AddVertex(point_A.x,point_A.y,point_A.z,0,0.25f,vcVerts);
-		// AddVertex(point_B.x,point_B.y,point_B.z,0.34f,0.25f,vcVerts);
-		// AddVertex(point_C.x,point_C.y,point_C.z,0,0.375f,vcVerts);
-		// AddVertex(point_C.x,point_C.y,point_C.z,0,0.375f,vcVerts);
-		// AddVertex(point_D.x,point_D.y,point_D.z,0.34f,0.375f,vcVerts);
-		// AddVertex(point_B.x,point_B.y,point_B.z,0.34f,0.25f,vcVerts);
+		AddVertex(point_A.x, point_A.y, point_A.z, 0, 0.25f, vcVerts);
+		AddVertex(point_B.x, point_B.y, point_B.z, 0.34f, 0.25f, vcVerts);
+		AddVertex(point_C.x, point_C.y, point_C.z, 0, 0.375f, vcVerts);
+		AddVertex(point_C.x, point_C.y, point_C.z, 0, 0.375f, vcVerts);
+		AddVertex(point_D.x, point_D.y, point_D.z, 0.34f, 0.375f, vcVerts);
+		AddVertex(point_B.x, point_B.y, point_B.z, 0.34f, 0.25f, vcVerts);
 
 		Vector4 point_A2(0.023f, -0.009f, 0.065f, 1); // grip no.2 display "Mode Switch: draw /delete /marker /pull"
 		Vector4 point_B2(0.023f, -0.009f, 0.105f, 1);
@@ -5376,7 +5384,7 @@ void CMainApplication::SetupControllerTexture()
 		point_O = mat_R * point_O;
 		point_P = mat_R * point_P;
 
-		if (!finish_ano && false)
+		if (false && !finish_ano)
 		{
 			switch (m_modeGrip_R)
 			{
