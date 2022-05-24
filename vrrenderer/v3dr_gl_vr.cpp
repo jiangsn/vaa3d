@@ -4998,6 +4998,7 @@ void CMainApplication::SetupControllerTexture()
 		AddVertex(point_H.x, point_H.y, point_H.z, 0.085f, 0.5f, vcVerts);
 		AddVertex(point_F.x, point_F.y, point_F.z, 0.085f, 0.375f, vcVerts);
 		// }
+		//
 
 		Vector4 point_I(-0.01f, 0.01f, 0.01f, 1); // for the menu button dispaly "NEXT"
 		Vector4 point_J(0.01f, 0.01f, 0.01f, 1);
