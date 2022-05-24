@@ -4824,21 +4824,23 @@ void CMainApplication::SetupControllerTexture()
 		// AddVertex(point_D.x, point_D.y, point_D.z, 0.34f, 0.375f, vcVerts);
 		// AddVertex(point_B.x, point_B.y, point_B.z, 0.34f, 0.25f, vcVerts);
 
-		Vector4 point_A2(0.023f, -0.009f, 0.065f, 1); // grip no.2 dispaly "Mode Switch"
-		Vector4 point_B2(0.023f, -0.009f, 0.105f, 1);
-		Vector4 point_C2(0.02f, -0.025f, 0.065f, 1);
-		Vector4 point_D2(0.02f, -0.025f, 0.105f, 1);
+		Vector4 point_A2(0.023f, -0.007f, 0.060f, 1); // grip no.2 dispaly "Mode Switch"
+		Vector4 point_B2(0.023f, -0.007f, 0.110f, 1);
+		Vector4 point_C2(0.02f, -0.027f, 0.060f, 1);
+		Vector4 point_D2(0.02f, -0.027f, 0.110f, 1);
 		point_A2 = mat_L * point_A2;
 		point_B2 = mat_L * point_B2;
 		point_C2 = mat_L * point_C2;
 		point_D2 = mat_L * point_D2;
-		AddVertex(point_A2.x, point_A2.y, point_A2.z, 0.34f, 0.25f, vcVerts);
-		AddVertex(point_B2.x, point_B2.y, point_B2.z, 0, 0.25f, vcVerts);
-		AddVertex(point_C2.x, point_C2.y, point_C2.z, 0.34f, 0.375f, vcVerts);
-		AddVertex(point_C2.x, point_C2.y, point_C2.z, 0.34f, 0.375f, vcVerts);
-		AddVertex(point_D2.x, point_D2.y, point_D2.z, 0, 0.375f, vcVerts);
-		AddVertex(point_B2.x, point_B2.y, point_B2.z, 0, 0.25f, vcVerts); //*/
-
+		if (!finish_ano)
+		{ // toggle vf
+			AddVertex(point_A2.x, point_A2.y, point_A2.z, 0.17f, 0.25f, vcVerts);
+			AddVertex(point_B2.x, point_B2.y, point_B2.z, 0, 0.25f, vcVerts);
+			AddVertex(point_C2.x, point_C2.y, point_C2.z, 0.17f, 0.375f, vcVerts);
+			AddVertex(point_C2.x, point_C2.y, point_C2.z, 0.17f, 0.375f, vcVerts);
+			AddVertex(point_D2.x, point_D2.y, point_D2.z, 0, 0.375f, vcVerts);
+			AddVertex(point_B2.x, point_B2.y, point_B2.z, 0, 0.25f, vcVerts); //*/
+		}
 		Vector4 point_E(-0.02f, 0.01f, 0.03f, 1); // for the touchpad dispaly "ON/OFF" / Zoom
 		Vector4 point_F(0.02f, 0.01f, 0.03f, 1);
 		Vector4 point_G(-0.02f, 0.01f, 0.07f, 1);
@@ -5198,21 +5200,24 @@ void CMainApplication::SetupControllerTexture()
 
 	// right controller
 	{
-		Vector4 point_A(-0.023f, -0.009f, 0.065f, 1); // grip dispaly "Mode Switch: draw /delete /marker /pull"
-		Vector4 point_B(-0.023f, -0.009f, 0.105f, 1);
-		Vector4 point_C(-0.02f, -0.025f, 0.065f, 1);
-		Vector4 point_D(-0.02f, -0.025f, 0.105f, 1);
+		Vector4 point_A(-0.023f, -0.007f, 0.060f, 1); // grip dispaly "Mode Switch: draw /delete /marker /pull"
+		Vector4 point_B(-0.023f, -0.007f, 0.110f, 1);
+		Vector4 point_C(-0.02f, -0.027f, 0.060f, 1);
+		Vector4 point_D(-0.02f, -0.027f, 0.110f, 1);
 		point_A = mat_R * point_A;
 		point_B = mat_R * point_B;
 		point_C = mat_R * point_C;
 		point_D = mat_R * point_D; //*/
 
-		AddVertex(point_A.x, point_A.y, point_A.z, 0, 0.25f, vcVerts);
-		AddVertex(point_B.x, point_B.y, point_B.z, 0.34f, 0.25f, vcVerts);
-		AddVertex(point_C.x, point_C.y, point_C.z, 0, 0.375f, vcVerts);
-		AddVertex(point_C.x, point_C.y, point_C.z, 0, 0.375f, vcVerts);
-		AddVertex(point_D.x, point_D.y, point_D.z, 0.34f, 0.375f, vcVerts);
-		AddVertex(point_B.x, point_B.y, point_B.z, 0.34f, 0.25f, vcVerts);
+		if (!finish_ano)
+		{ // redo
+			AddVertex(point_A.x, point_A.y, point_A.z, 0.17, 0.25f, vcVerts);
+			AddVertex(point_B.x, point_B.y, point_B.z, 0.34f, 0.25f, vcVerts);
+			AddVertex(point_C.x, point_C.y, point_C.z, 0.17, 0.375f, vcVerts);
+			AddVertex(point_C.x, point_C.y, point_C.z, 0.17, 0.375f, vcVerts);
+			AddVertex(point_D.x, point_D.y, point_D.z, 0.34f, 0.375f, vcVerts);
+			AddVertex(point_B.x, point_B.y, point_B.z, 0.34f, 0.25f, vcVerts);
+		}
 
 		Vector4 point_A2(0.023f, -0.009f, 0.065f, 1); // grip no.2 display "Mode Switch: draw /delete /marker /pull"
 		Vector4 point_B2(0.023f, -0.009f, 0.105f, 1);
