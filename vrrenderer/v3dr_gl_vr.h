@@ -244,6 +244,7 @@ public:
 
 public:
 	bool finish_ano;
+	bool showConfirmFinish;
 	bool loadNextQuit;
 	QTime pressTime;
 	int pressElapsed;

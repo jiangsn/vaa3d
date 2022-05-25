@@ -1413,16 +1413,29 @@ bool CMainApplication::HandleInput()
 			{
 				if (sketchedNTList.size() > 0)
 				{
-					int currentElapsed = pressTime.elapsed();
-					if (currentElapsed - pressElapsed <= 500)
+					// double click
+					// int currentElapsed = pressTime.elapsed();
+					// if (currentElapsed - pressElapsed <= 500)
+					// {
+					// 	finish_ano = true;
+					// 	SetupMorphologyLine(2); // for showing ground truth when annotation is finished
+					// 	_idep->glWidget->autoSaveSwcVR();
+					// }
+					// else
+					// {
+					// 	pressElapsed = currentElapsed;
+					// }
+
+					if (showConfirmFinish)
 					{
 						finish_ano = true;
+						showConfirmFinish = false;
 						SetupMorphologyLine(2); // for showing ground truth when annotation is finished
 						_idep->glWidget->autoSaveSwcVR();
 					}
 					else
 					{
-						pressElapsed = currentElapsed;
+						showConfirmFinish = true;
 					}
 				}
 			}
@@ -1438,6 +1451,7 @@ bool CMainApplication::HandleInput()
 		{
 			if (state.ulButtonPressed & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Trigger) && (!showshootingray) && (!finish_ano))
 			{
+				showConfirmFinish = false;
 				if (m_modeGrip_R == m_drawMode)
 				{
 
@@ -1818,13 +1832,16 @@ bool CMainApplication::HandleInput()
 						mat_out += "contrast: ";
 						mat_out += to_string(fContrast) + "\n";
 						mat_out += "---------------contrast change-------------------\n";
-
-						if (_idep->glWidget->notFinishedFlag)
+						if (!finish_ano)
 						{
-							std::ofstream outfile;
-							outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
-							outfile << mat_out;
-							outfile.close();
+							showConfirmFinish = false;
+							if (_idep->glWidget->notFinishedFlag)
+							{
+								std::ofstream outfile;
+								outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
+								outfile << mat_out;
+								outfile.close();
+							}
 						}
 					}
 					else if (m_fTouchPosY < -0.5)
@@ -1845,12 +1862,16 @@ bool CMainApplication::HandleInput()
 						mat_out += to_string(fContrast) + "\n";
 						mat_out += "---------------contrast change-------------------\n";
 
-						if (_idep->glWidget->notFinishedFlag)
+						if (!finish_ano)
 						{
-							std::ofstream outfile;
-							outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
-							outfile << mat_out;
-							outfile.close();
+							showConfirmFinish = false;
+							if (_idep->glWidget->notFinishedFlag)
+							{
+								std::ofstream outfile;
+								outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
+								outfile << mat_out;
+								outfile.close();
+							}
 						}
 					}
 				}
@@ -1932,6 +1953,7 @@ bool CMainApplication::HandleInput()
 
 				if (!finish_ano)
 				{
+					showConfirmFinish = false;
 					// shuning track rotation
 					string s = "--------m_globalMatrix--------\n";
 					float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
@@ -1982,6 +2004,7 @@ bool CMainApplication::HandleInput()
 
 					if (!finish_ano)
 					{
+						showConfirmFinish = false;
 						string s = "------------------------------------\n";
 						float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
 						s += "Time: " + std::to_string(elapsed_time) + "\n";
@@ -2010,6 +2033,7 @@ bool CMainApplication::HandleInput()
 					m_globalMatrix = glm::scale(m_globalMatrix, glm::vec3(0.99, 0.99, 0.99));
 					if (!finish_ano)
 					{
+						showConfirmFinish = false;
 						string s = "------------------------------------\n";
 						float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
 						s += "Time: " + std::to_string(elapsed_time) + "\n";
@@ -2194,6 +2218,7 @@ void CMainApplication::RunMainLoop()
 	bool bQuit = false;
 	loadNextQuit = false;
 	finish_ano = false;
+	showConfirmFinish = false;
 
 	pressTime.start();
 	pressElapsed = 0;
@@ -2442,6 +2467,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 	////////////////////////////////LEFT
 	if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonPress) && (event.data.controller.button == vr::k_EButton_Grip) && (!finish_ano))
 	{
+		showConfirmFinish = false;
 		// m_modeControlGrip_L++;
 		// m_modeControlGrip_L%=11;
 		// switch(m_modeControlGrip_L)
@@ -2498,6 +2524,13 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 			ctrSphereColor[0] = neuron_type_color[m_curMarkerColorType][0] / 255.0;
 			ctrSphereColor[1] = neuron_type_color[m_curMarkerColorType][1] / 255.0;
 			ctrSphereColor[2] = neuron_type_color[m_curMarkerColorType][2] / 255.0;
+
+			string mat_out = "------------------------------------\n";
+			float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
+			mat_out += "Time: " + std::to_string(elapsed_time) + "\n";
+			mat_out += "-----------------VF change---------------------\n";
+			mat_out += "VF: off";
+			mat_out += "---------------VF change-------------------\n";
 		}
 		else
 		{
@@ -2506,6 +2539,13 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 			ctrSphereColor[0] = neuron_type_color[m_curMarkerColorType][0] / 255.0;
 			ctrSphereColor[1] = neuron_type_color[m_curMarkerColorType][1] / 255.0;
 			ctrSphereColor[2] = neuron_type_color[m_curMarkerColorType][2] / 255.0;
+
+			string mat_out = "------------------------------------\n";
+			float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
+			mat_out += "Time: " + std::to_string(elapsed_time) + "\n";
+			mat_out += "-----------------VF change---------------------\n";
+			mat_out += "VF: on";
+			mat_out += "---------------VF change-------------------\n";
 		}
 	}
 
@@ -2875,9 +2915,9 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 			}
 		}
 		*/
-	if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonPress) && (event.data.controller.button == vr::k_EButton_SteamVR_Trigger))
+	if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonPress) && (event.data.controller.button == vr::k_EButton_SteamVR_Trigger) && (!finish_ano))
 	{
-
+		showConfirmFinish = false;
 		const Matrix4 &mat_M = m_rmat4DevicePose[m_iControllerIDLeft]; // mat means current controller pos
 		glm::mat4 mat = glm::mat4();
 		for (size_t i = 0; i < 4; i++)
@@ -4195,6 +4235,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 	// shuning right controller side btn
 	if ((event.trackedDeviceIndex == m_iControllerIDRight) && (event.data.controller.button == vr::k_EButton_Grip) && (event.eventType == vr::VREvent_ButtonUnpress) && (!finish_ano))
 	{
+		showConfirmFinish = false;
 		// shuning: this is replaced by redo
 		string mat_out = "------------------------------------\n";
 
@@ -4253,6 +4294,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 	}
 	if ((event.trackedDeviceIndex == m_iControllerIDRight) && (event.data.controller.button == vr::k_EButton_ApplicationMenu) && (event.eventType == vr::VREvent_ButtonPress) && (!finish_ano))
 	{
+		showConfirmFinish = false;
 		// shuning: this function is replaced by undo
 		string mat_out = "------------------------------------\n";
 
@@ -5026,6 +5068,24 @@ void CMainApplication::SetupControllerTexture()
 				AddVertex(point_K.x, point_K.y, point_K.z, 0.085f, 0.625f, vcVerts);
 				AddVertex(point_L.x, point_L.y, point_L.z, 0.17f, 0.625f, vcVerts);
 				AddVertex(point_J.x, point_J.y, point_J.z, 0.17f, 0.5f, vcVerts);
+
+				if (showConfirmFinish)
+				{
+					Vector4 point_I2(-0.05f, 0.01f, -0.03f, 1); // confirm message
+					Vector4 point_J2(0.05f, 0.01f, -0.03f, 1);
+					Vector4 point_K2(-0.05f, 0.01f, -0.01f, 1);
+					Vector4 point_L2(0.05f, 0.01f, -0.01f, 1); //*/
+					point_I2 = mat_L * point_I2;
+					point_J2 = mat_L * point_J2;
+					point_K2 = mat_L * point_K2;
+					point_L2 = mat_L * point_L2;
+					AddVertex(point_I2.x, point_I2.y, point_I2.z, 0.542f, 0.688f, vcVerts);
+					AddVertex(point_J2.x, point_J2.y, point_J2.z, 0.880f, 0.688f, vcVerts);
+					AddVertex(point_K2.x, point_K2.y, point_K2.z, 0.542f, 0.806f, vcVerts);
+					AddVertex(point_K2.x, point_K2.y, point_K2.z, 0.542f, 0.806f, vcVerts);
+					AddVertex(point_L2.x, point_L2.y, point_L2.z, 0.880f, 0.806f, vcVerts);
+					AddVertex(point_J2.x, point_J2.y, point_J2.z, 0.880f, 0.688f, vcVerts);
+				}
 			}
 			else
 			{ // x(h), y(v)
