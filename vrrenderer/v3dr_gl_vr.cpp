@@ -909,7 +909,12 @@ bool CMainApplication::BInit()
 
 	tempNT.listNeuron.clear();
 	tempNT.hashNeuron.clear();
+
 	return true;
+}
+
+void CMainApplication::Training()
+{
 }
 
 //*/
@@ -1696,31 +1701,32 @@ bool CMainApplication::HandleInput()
 							SL0.pn = currentNT.listNeuron.at(SL0.n - 1 - 1).n; // for the others, their parent should be the last one
 						}
 						currentNT.listNeuron.append(SL0);
-						currentNT.hashNeuron.insert(SL0.n, currentNT.listNeuron.size() - 1); // store NeuronSWC SL0 into currentNT
-																							 //  if(img4d&&m_bVirtualFingerON) //if an image exist, call virtual finger functions for curve drawing
-																							 //  {
-																							 //  	// for each 10 nodes/points, call virtual finger once aiming to see the line's mid-result
-																							 //  	if((currentNT.listNeuron.size()>0)&&(currentNT.listNeuron.size()%10==0))
-																							 //  	{
-																							 //  		qDebug()<<"size%10==0 goto charge isAnyNodeOutBBox";
-																							 //  		tempNT.listNeuron.clear();
-																							 //  		tempNT.hashNeuron.clear();
-																							 //  		for(int i=0;i<currentNT.listNeuron.size();i++)
-																							 //  		{
-																							 //  			NeuronSWC S_node = currentNT.listNeuron.at(i);//swcBB
-																							 //  			if(!isAnyNodeOutBBox(S_node))
-																							 //  			{
-																							 //  				S_node.n=tempNT.listNeuron.size();
-																							 //  				if(S_node.pn!=-1)
-																							 //  					S_node.pn = tempNT.listNeuron.last().n;
-																							 //  				tempNT.listNeuron.append(S_node);
-																							 //  				tempNT.hashNeuron.insert(S_node.n, tempNT.listNeuron.size()-1);
-																							 //  			}
-																							 //  			else if(i==0)
-																							 //  			{
-																							 //  				vertexcount=swccount=0;
-																							 //  				break;
-																							 //  			}
+						currentNT.hashNeuron.insert(SL0.n, currentNT.listNeuron.size() - 1);
+						// store NeuronSWC SL0 into currentNT
+						//  if(img4d&&m_bVirtualFingerON) //if an image exist, call virtual finger functions for curve drawing
+						//  {
+						//  	// for each 10 nodes/points, call virtual finger once aiming to see the line's mid-result
+						//  	if((currentNT.listNeuron.size()>0)&&(currentNT.listNeuron.size()%10==0))
+						//  	{
+						//  		qDebug()<<"size%10==0 goto charge isAnyNodeOutBBox";
+						//  		tempNT.listNeuron.clear();
+						//  		tempNT.hashNeuron.clear();
+						//  		for(int i=0;i<currentNT.listNeuron.size();i++)
+						//  		{
+						//  			NeuronSWC S_node = currentNT.listNeuron.at(i);//swcBB
+						//  			if(!isAnyNodeOutBBox(S_node))
+						//  			{
+						//  				S_node.n=tempNT.listNeuron.size();
+						//  				if(S_node.pn!=-1)
+						//  					S_node.pn = tempNT.listNeuron.last().n;
+						//  				tempNT.listNeuron.append(S_node);
+						//  				tempNT.hashNeuron.insert(S_node.n, tempNT.listNeuron.size()-1);
+						//  			}
+						//  			else if(i==0)
+						//  			{
+						//  				vertexcount=swccount=0;
+						//  				break;
+						//  			}
 
 						// 		}
 						// 		qDebug()<<"charge isAnyNodeOutBBox done  goto virtual finger";
@@ -1787,7 +1793,7 @@ bool CMainApplication::HandleInput()
 			} //
 			// whenever touchpad is pressed, get detX&detY,return to one function according to the mode
 			if ((state.ulButtonTouched & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad)) &&
-				!(state.ulButtonPressed & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad))) //&&!(showshootingPad))
+				(state.ulButtonPressed & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad))) //&&!(showshootingPad))
 			{
 				float m_fTouchPosY;
 				float m_fTouchPosX;
@@ -1975,7 +1981,7 @@ bool CMainApplication::HandleInput()
 
 			// zoom
 			if ((state.ulButtonTouched & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad)) &&
-				!(state.ulButtonPressed & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad))) //&&!(showshootingPad))
+				(state.ulButtonPressed & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad))) //&&!(showshootingPad))
 			{
 				float m_fTouchPosY;
 				float m_fTouchPosX;
@@ -2223,6 +2229,15 @@ void CMainApplication::RunMainLoop()
 	pressTime.start();
 	pressElapsed = 0;
 
+	if (_idep->V3Dmainwindow->currentImgIdx == 0)
+	{
+		train_stage = 0;
+	}
+	else
+	{
+		train_stage = -1;
+	}
+
 	while (!bQuit && !loadNextQuit)
 	// while (!loadNextQuit)
 	{
@@ -2464,7 +2479,8 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 	}//*/
 	// if(event.data.controller.button==vr::k_ebutton_steamvr_trigger)
 
-	////////////////////////////////LEFT
+	////////////////////////////////LEFT/////////////////////////////
+	// toggle VF
 	if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonPress) && (event.data.controller.button == vr::k_EButton_Grip) && (!finish_ano))
 	{
 		showConfirmFinish = false;
@@ -2915,6 +2931,8 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 			}
 		}
 		*/
+
+	// rotate
 	if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonPress) && (event.data.controller.button == vr::k_EButton_SteamVR_Trigger) && (!finish_ano))
 	{
 		showConfirmFinish = false;
@@ -2929,6 +2947,17 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 		}
 		m_oldCtrlMatrix = mat;
 		m_oldGlobalMatrix = m_globalMatrix;
+	}
+
+	// train: rotate
+	if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonUnpress) && (event.data.controller.button == vr::k_EButton_SteamVR_Trigger) && (train_stage == 0))
+	{
+		train_stage += 1;
+	}
+	// train: zoom
+	if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonUnpress) && (event.data.controller.button == vr::k_EButton_SteamVR_Touchpad) && (train_stage == 1))
+	{
+		train_stage += 1;
 	}
 
 	// // toggle VF
@@ -2951,7 +2980,6 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 	// 		ctrSphereColor[2] = neuron_type_color[m_curMarkerColorType][2] / 255.0;
 	// 	}
 	// }
-
 	//    if((event.trackedDeviceIndex==m_iControllerIDLeft)&&(event.eventType==vr::VREvent_ButtonPress)&&(event.data.controller.button==vr::k_EButton_SteamVR_Trigger))
 	//    {
 	//
@@ -3009,7 +3037,6 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 	//            }
 	//
 	//    }
-
 	//////////////////////////////////////////RIGHT
 	// if((event.trackedDeviceIndex==m_iControllerIDRight)&&(event.data.controller.button==vr::k_EButton_SteamVR_Touchpad)&&(event.eventType==vr::VREvent_ButtonUnpress))
 	//{
@@ -3017,22 +3044,18 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 	//	m_pHMD->GetControllerState( m_iControllerIDRight, &state, sizeof(state));
 	//	float temp_x  = state.rAxis[0].x;
 	//	float temp_y  = state.rAxis[0].y;
-
 	//	if(fabs(temp_x) > fabs(temp_y))
 	//	{
 	//		if((loadedNT.listNeuron.size()>0)&&(sketchNT.listNeuron.size()>0)) //both original_vr_neuron and areaofinterest must be non-empty.
 	//		{
 	//			//call feature search function, and update display
-
 	//			//save current neurons
 	//			QString outfilename1 = QCoreApplication::applicationDirPath()+"/original_vr_neuron.swc";
 	//			writeSWC_file(outfilename1, loadedNT);
 	//			qDebug("Successfully write original_vr_neuron");
-
 	//			QString outfilename2 = QCoreApplication::applicationDirPath()+"/areaofinterest.swc";
 	//			writeSWC_file(outfilename2, sketchNT);
 	//			qDebug("Successfully write areaofinterest");
-
 	//			//calculate
 	//			if(temp_x<0)
 	//			{
@@ -3052,15 +3075,12 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 	//					return;
 	//				}
 	//			}
-
 	//			//load again
 	//			QString filename = QCoreApplication::applicationDirPath()+"/updated_vr_neuron.swc";
 	//			NeuronTree nt_tmp = readSWC_file(filename);
 	//			qDebug("Successfully read tagged SWC file");
-
 	//			for (int i=0; i<loadedNT.listNeuron.size(); i++)
 	//				loadedNT.listNeuron[i].type = nt_tmp.listNeuron[i].type;
-
 	//			SetupMorphologyLine(0);
 	//		}
 	//		else
@@ -3082,11 +3102,12 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 	//	}
 	//}
 
+	////////////////////////RIGHT////////////////////
 	if ((event.trackedDeviceIndex == m_iControllerIDRight) && (event.eventType == vr::VREvent_ButtonPress) && (event.data.controller.button == vr::k_EButton_SteamVR_Touchpad) /*&&(!showshootingray)*/)
-	{ // use touchpad press to change the processing mode for touchpad, only contrast now
+	{
+		// use touchpad press to change the processing mode for touchpad, only contrast now
 		// m_modeControlTouchPad_R++;
 		// m_modeControlTouchPad_R%=4;
-
 		// switch(m_modeControlTouchPad_R)
 		// {
 		// case 0:
@@ -4850,6 +4871,35 @@ void CMainApplication::SetupControllerTexture()
 
 	// left controller
 	{
+		Vector4 point_1(-0.1f, 0.01f, -0.07f, 1);
+		Vector4 point_2(0.1f, 0.01f, -0.07f, 1);
+		Vector4 point_3(-0.1f, 0.01f, -0.03f, 1);
+		Vector4 point_4(0.1f, 0.01f, -0.03f, 1);
+
+		point_1 = mat_L * point_1;
+		point_2 = mat_L * point_2;
+		point_3 = mat_L * point_3;
+		point_4 = mat_L * point_4;
+
+		switch (train_stage)
+		{
+		case 0: // LT rotate
+		{
+			AddVertex(point_1.x, point_1.y, point_1.z, 0.542f, 0.688f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.880f, 0.688f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.542f, 0.806f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.542f, 0.806f, vcVerts);
+			AddVertex(point_4.x, point_4.y, point_4.z, 0.880f, 0.806f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.880f, 0.688f, vcVerts);
+		}
+		break;
+		case 1: // touch pad zoom
+		{
+		}
+		default:
+			break;
+		}
+
 		Vector4 point_A(-0.023f, -0.009f, 0.065f, 1); // grip no.1 dispaly "Mode Switch"
 		Vector4 point_B(-0.023f, -0.009f, 0.105f, 1);
 		Vector4 point_C(-0.02f, -0.025f, 0.065f, 1);

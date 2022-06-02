@@ -242,7 +242,10 @@ public:
 
 	float GetGlobalScale();
 
+	void Training();
+
 public:
+	int train_stage;
 	bool finish_ano;
 	bool showConfirmFinish;
 	bool loadNextQuit;
