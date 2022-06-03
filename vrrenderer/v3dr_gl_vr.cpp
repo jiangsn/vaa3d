@@ -2950,15 +2950,15 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 	}
 
 	// train: rotate
-	if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonUnpress) && (event.data.controller.button == vr::k_EButton_SteamVR_Trigger) && (train_stage == 0))
-	{
-		train_stage += 1;
-	}
+	// if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonUnpress) && (event.data.controller.button == vr::k_EButton_SteamVR_Trigger) && (train_stage == 0))
+	// {
+	// 	train_stage += 1;
+	// }
 	// train: zoom
-	if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonUnpress) && (event.data.controller.button == vr::k_EButton_SteamVR_Touchpad) && (train_stage == 1))
-	{
-		train_stage += 1;
-	}
+	// if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonUnpress) && (event.data.controller.button == vr::k_EButton_SteamVR_Touchpad) && (train_stage == 1))
+	// {
+	// 	train_stage += 1;
+	// }
 
 	// // toggle VF
 	// if ((event.trackedDeviceIndex == m_iControllerIDLeft) && (event.eventType == vr::VREvent_ButtonPress) && (event.data.controller.button == vr::k_EButton_SteamVR_Touchpad))
@@ -4494,6 +4494,7 @@ void CMainApplication::RenderFrame()
 		SDL_SetWindowTitle(m_pCompanionWindow, strWindowTitle.c_str());
 		RenderControllerAxes();
 		SetupControllerTexture();
+		SetupTrainingTexture();
 		SetupControllerRay();
 		SetupMorphologyLine(1); // for currently drawn stroke(currentNT)
 		// FlashStuff(m_flashtype,FlashCoords);
@@ -4856,6 +4857,30 @@ void CMainApplication::AddVertex(float fl0, float fl1, float fl2, float fl3, flo
 	vertdata.push_back(fl3);
 	vertdata.push_back(fl4);
 }
+
+void CMainApplication::SetupTrainingTexture()
+{
+	const Matrix4 &mat = m_rmat4DevicePose[vr::k_unTrackedDeviceIndex_Hmd];
+	std::vector<float> vcVerts;
+
+	Vector4 point_1(-0.1f, 0.01f, -0.07f, 1);
+	Vector4 point_2(0.1f, 0.01f, -0.07f, 1);
+	Vector4 point_3(-0.1f, 0.01f, -0.03f, 1);
+	Vector4 point_4(0.1f, 0.01f, -0.03f, 1);
+
+	point_1 = mat * point_1;
+	point_2 = mat * point_2;
+	point_3 = mat * point_3;
+	point_4 = mat * point_4;
+
+	AddVertex(point_1.x, point_1.y, point_1.z, 0.542f, 0.688f, vcVerts);
+	AddVertex(point_2.x, point_2.y, point_2.z, 0.880f, 0.688f, vcVerts);
+	AddVertex(point_3.x, point_3.y, point_3.z, 0.542f, 0.806f, vcVerts);
+	AddVertex(point_3.x, point_3.y, point_3.z, 0.542f, 0.806f, vcVerts);
+	AddVertex(point_4.x, point_4.y, point_4.z, 0.880f, 0.806f, vcVerts);
+	AddVertex(point_2.x, point_2.y, point_2.z, 0.880f, 0.688f, vcVerts);
+}
+
 void CMainApplication::SetupControllerTexture()
 {
 	if (!m_pHMD)
@@ -4865,9 +4890,30 @@ void CMainApplication::SetupControllerTexture()
 
 	const Matrix4 &mat_L = m_rmat4DevicePose[m_iControllerIDLeft];
 	const Matrix4 &mat_R = m_rmat4DevicePose[m_iControllerIDRight];
+	const Matrix4 &mat = m_rmat4DevicePose[vr::k_unTrackedDeviceIndex_Hmd];
 	// save the right controller position to ctrSpherePos
 	Vector4 ctrPOS = mat_R * Vector4(0, 0, 0, 1);
 	ctrSpherePos = glm::vec3(ctrPOS.x, ctrPOS.y, ctrPOS.z);
+
+	// head mounted device
+	{
+		Vector4 point_1(-0.1f, 0.01f, -0.07f, 1);
+		Vector4 point_2(0.1f, 0.01f, -0.07f, 1);
+		Vector4 point_3(-0.1f, 0.01f, -0.03f, 1);
+		Vector4 point_4(0.1f, 0.01f, -0.03f, 1);
+
+		point_1 = mat * point_1;
+		point_2 = mat * point_2;
+		point_3 = mat * point_3;
+		point_4 = mat * point_4;
+
+		AddVertex(point_1.x, point_1.y, point_1.z, 0.542f, 0.688f, vcVerts);
+		AddVertex(point_2.x, point_2.y, point_2.z, 0.880f, 0.688f, vcVerts);
+		AddVertex(point_3.x, point_3.y, point_3.z, 0.542f, 0.806f, vcVerts);
+		AddVertex(point_3.x, point_3.y, point_3.z, 0.542f, 0.806f, vcVerts);
+		AddVertex(point_4.x, point_4.y, point_4.z, 0.880f, 0.806f, vcVerts);
+		AddVertex(point_2.x, point_2.y, point_2.z, 0.880f, 0.688f, vcVerts);
+	}
 
 	// left controller
 	{
@@ -4876,29 +4922,29 @@ void CMainApplication::SetupControllerTexture()
 		Vector4 point_3(-0.1f, 0.01f, -0.03f, 1);
 		Vector4 point_4(0.1f, 0.01f, -0.03f, 1);
 
-		point_1 = mat_L * point_1;
-		point_2 = mat_L * point_2;
-		point_3 = mat_L * point_3;
-		point_4 = mat_L * point_4;
+		// point_1 = mat_L * point_1;
+		// point_2 = mat_L * point_2;
+		// point_3 = mat_L * point_3;
+		// point_4 = mat_L * point_4;
 
-		switch (train_stage)
-		{
-		case 0: // LT rotate
-		{
-			AddVertex(point_1.x, point_1.y, point_1.z, 0.542f, 0.688f, vcVerts);
-			AddVertex(point_2.x, point_2.y, point_2.z, 0.880f, 0.688f, vcVerts);
-			AddVertex(point_3.x, point_3.y, point_3.z, 0.542f, 0.806f, vcVerts);
-			AddVertex(point_3.x, point_3.y, point_3.z, 0.542f, 0.806f, vcVerts);
-			AddVertex(point_4.x, point_4.y, point_4.z, 0.880f, 0.806f, vcVerts);
-			AddVertex(point_2.x, point_2.y, point_2.z, 0.880f, 0.688f, vcVerts);
-		}
-		break;
-		case 1: // touch pad zoom
-		{
-		}
-		default:
-			break;
-		}
+		// switch (train_stage)
+		// {
+		// case 0: // LT rotate
+		// {
+		// 	AddVertex(point_1.x, point_1.y, point_1.z, 0.542f, 0.688f, vcVerts);
+		// 	AddVertex(point_2.x, point_2.y, point_2.z, 0.880f, 0.688f, vcVerts);
+		// 	AddVertex(point_3.x, point_3.y, point_3.z, 0.542f, 0.806f, vcVerts);
+		// 	AddVertex(point_3.x, point_3.y, point_3.z, 0.542f, 0.806f, vcVerts);
+		// 	AddVertex(point_4.x, point_4.y, point_4.z, 0.880f, 0.806f, vcVerts);
+		// 	AddVertex(point_2.x, point_2.y, point_2.z, 0.880f, 0.688f, vcVerts);
+		// }
+		// break;
+		// case 1: // touch pad zoom
+		// {
+		// }
+		// default:
+		// 	break;
+		// }
 
 		Vector4 point_A(-0.023f, -0.009f, 0.065f, 1); // grip no.1 dispaly "Mode Switch"
 		Vector4 point_B(-0.023f, -0.009f, 0.105f, 1);
