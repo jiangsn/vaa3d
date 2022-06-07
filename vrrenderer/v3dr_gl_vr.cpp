@@ -1457,6 +1457,7 @@ bool CMainApplication::HandleInput()
 		{
 			if (state.ulButtonPressed & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Trigger) && (!showshootingray) && (!finish_ano))
 			{
+				qDebug() << "RT pressed" << endl;
 				showConfirmFinish = false;
 				if (m_modeGrip_R == m_drawMode)
 				{
@@ -3217,7 +3218,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 
 	if ((event.trackedDeviceIndex == m_iControllerIDRight) && (event.data.controller.button == vr::k_EButton_SteamVR_Trigger) && (event.eventType == vr::VREvent_ButtonUnpress) && (!showshootingray)) // detect trigger when menu don't show
 	{
-
+		qDebug() << "RT unpressed" << endl;
 		qDebug() << "current mode is " << m_modeGrip_R;
 		switch (m_modeGrip_R)
 		{
@@ -7191,6 +7192,7 @@ void CMainApplication::ClearCurrentNT()
 	}
 	vertexcount = swccount = 0;
 }
+
 QString CMainApplication::FindNearestSegment(glm::vec3 dPOS)
 {
 	QString ntnametofind = "";
@@ -7226,6 +7228,7 @@ QString CMainApplication::FindNearestSegment(glm::vec3 dPOS)
 	// if cannot find any matches, return ""
 	return ntnametofind;
 }
+
 NeuronSWC CMainApplication::FindNearestNode(NeuronTree NT, glm::vec3 dPOS) // lq
 {
 	NeuronSWC SS0;
@@ -7241,20 +7244,6 @@ NeuronSWC CMainApplication::FindNearestNode(NeuronTree NT, glm::vec3 dPOS) // lq
 			return SS0;
 		}
 	}
-}
-void CMainApplication::UpdateDragNodeinNTList(int ntnum, int swcnum, float nodex, float nodey, float nodez)
-{
-	if ((ntnum < 0) || (ntnum >= sketchedNTList.size()))
-		return;
-	if ((swcnum < 0) || (swcnum >= sketchedNTList.at(ntnum).listNeuron.size()))
-		return;
-	NeuronSWC ss = sketchedNTList.at(ntnum).listNeuron.at(swcnum);
-	ss.x = nodex;
-	ss.y = nodey;
-	ss.z = nodez;
-	sketchedNTList[ntnum].listNeuron[swcnum] = ss;
-	qDebug() << "Successfully update node location.";
-	SetupSingleMorphologyLine(ntnum, 1);
 }
 
 bool CMainApplication::DeleteSegment(QString segName)
@@ -7278,6 +7267,53 @@ bool CMainApplication::DeleteSegment(QString segName)
 	}
 	// if cannot find any matches,return false
 	return false;
+}
+
+bool CMainApplication::Erase(glm::vec3 dPOS)
+{
+	QString ntnametofind = "";
+	// qDebug()<<sketchedNTList.size();
+	if (sketchedNTList.size() < 1)
+		return false;
+
+	for (int i = 0; i < sketchedNTList.size(); i++)
+	{
+		NeuronTree nt = sketchedNTList.at(i); // segment
+		NeuronTree newNT;
+		newNT.deepCopy(nt);
+		for (int j = 0; j < nt.listNeuron.size(); j++)
+		{
+			NeuronSWC SS0; // node
+			SS0 = nt.listNeuron.at(j);
+			float dist;
+			dist = glm::sqrt((dPOS.x - SS0.x) * (dPOS.x - SS0.x) + (dPOS.y - SS0.y) * (dPOS.y - SS0.y) + (dPOS.z - SS0.z) * (dPOS.z - SS0.z));
+
+			// cal the dist between pos & current node'position, then compare with the threshold
+			if (dist < (dist_thres / m_globalScale * 5))
+			{
+				// once dist between pos & node < threshold, return the segment/neurontree' name that current node belong to
+				ntnametofind = nt.name;
+				return true;
+			}
+		}
+	}
+	// if cannot find any matches, return ""
+	return false;
+}
+
+void CMainApplication::UpdateDragNodeinNTList(int ntnum, int swcnum, float nodex, float nodey, float nodez)
+{
+	if ((ntnum < 0) || (ntnum >= sketchedNTList.size()))
+		return;
+	if ((swcnum < 0) || (swcnum >= sketchedNTList.at(ntnum).listNeuron.size()))
+		return;
+	NeuronSWC ss = sketchedNTList.at(ntnum).listNeuron.at(swcnum);
+	ss.x = nodex;
+	ss.y = nodey;
+	ss.z = nodez;
+	sketchedNTList[ntnum].listNeuron[swcnum] = ss;
+	qDebug() << "Successfully update node location.";
+	SetupSingleMorphologyLine(ntnum, 1);
 }
 
 void CMainApplication::UndoLastSketchedNT()
