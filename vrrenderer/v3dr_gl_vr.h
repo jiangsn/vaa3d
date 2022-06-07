@@ -193,7 +193,6 @@ public:
 	bool SetupTexturemaps(); // load controller textures and setup properties
 	void AddVertex(float fl0, float fl1, float fl2, float fl3, float fl4, std::vector<float> &vertdata);
 	void SetupControllerTexture(); // update texture coordinates according to controller's new location
-	void SetupTrainingTexture();   // shuning
 	void SetupControllerRay();
 	void AddrayVertex(float fl0, float fl1, float fl2, float fl3, float fl4, float fl5, std::vector<float> &vertdata);
 	void SetupMorphologyLine(int drawMode);
@@ -246,7 +245,8 @@ public:
 	void Training();
 
 public:
-	int train_stage;
+	int trainStage;
+	bool showTips;
 	bool finish_ano;
 	bool showConfirmFinish;
 	bool loadNextQuit;
