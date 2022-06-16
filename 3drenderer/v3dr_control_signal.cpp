@@ -88,8 +88,8 @@ void V3dR_MainWindow::createControlWidgets()
 
 	opBtnGroup = new QWidget;
 	QHBoxLayout *layout_opBtnGroup = new QHBoxLayout(opBtnGroup);
-	undoBtn = new QPushButton("Undo");
-	redoBtn = new QPushButton("Redo");
+	undoBtn = new QPushButton("Undo (Ctrl+Z)");
+	redoBtn = new QPushButton("Redo (Ctrl+Shift+Z)");
 	layout_opBtnGroup->addWidget(undoBtn);
 	layout_opBtnGroup->addWidget(redoBtn);
 
@@ -283,7 +283,7 @@ void V3dR_MainWindow::createControlWidgets()
 	i = tabOptions->addTab(volDisplayOptGroup, "Volume");
 	// i= tabOptions->addTab(surfDisplayOptGroup, "Surf/Object");
 	// i= tabOptions->addTab(miscDisplayOptGroup, "Others");
-	tabOptions->setTabToolTip(0, "Volume Image");
+	tabOptions->setTabToolTip(0, "");
 	// tabOptions->setTabToolTip(1, "Surface/Object");
 	// tabOptions->setTabToolTip(2, "Other Options");
 
@@ -585,14 +585,26 @@ void V3dR_MainWindow::createControlWidgets()
 	controlGroup->setFocusPolicy(Qt::StrongFocus);
 
 	QVBoxLayout *controlLayout = new QVBoxLayout(controlGroup);
-	controlLayout->addWidget(tabOptions);  // mainDisplayOptGroup);
-										   // controlLayout->addWidget(toolBtnGroup); //090712 RZC
+	controlLayout->addWidget(tabOptions); // mainDisplayOptGroup);
+										  // controlLayout->addWidget(toolBtnGroup); //090712 RZC
+	// controlLayout->addWidget(volDisplayOptGroup);
 	controlLayout->addWidget(opBtnGroup);  // 090712 RZC
 	controlLayout->addWidget(navBtnGroup); // 090712 RZC
 										   // controlLayout->addWidget(selectBtnGroup);
 										   // controlLayout->addWidget(timerGroup);
 										   // controlLayout->addWidget(tabCutPlane); //cutPlaneGroup);
 										   // controlLayout->addWidget(tabRotZoom); // rotateBarGroup);
+
+	QLabel *label = new QLabel(this);
+	QFont f("Arial", 12);
+	label->setFont(f);
+	label->setText(
+		"-----------------------------------------------------------------------------------------\n"
+		"Rotate volume: hold left mouse button\n\n"
+		"Translate volume: Shift + left mouse button\n\n"
+		"Zoom in/out: wheel down/up\n\n"
+		"Draw: hold right mouse button");
+	controlLayout->addWidget(label);
 
 #ifdef __ALLOW_VR_FUNCS__
 	//=============================================================================

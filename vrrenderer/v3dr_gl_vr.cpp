@@ -42,7 +42,7 @@
 
 typedef vector<Point *> Segment;
 typedef vector<Point *> Tree;
-#define MAX_UNDO_COUNT 5
+#define MAX_UNDO_COUNT 50
 
 #ifndef MAX
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
@@ -1437,6 +1437,13 @@ bool CMainApplication::HandleInput()
 						finish_ano = true;
 						showConfirmFinish = false;
 						SetupMorphologyLine(2); // for showing ground truth when annotation is finished
+
+						if (_idep->V3Dmainwindow->currentImgIdx == _idep->V3Dmainwindow->trainNum)
+						{
+							showTips = true;
+							trainStage = -1;
+						}
+
 						_idep->glWidget->autoSaveSwcVR();
 					}
 					else
@@ -1533,20 +1540,26 @@ bool CMainApplication::HandleInput()
 								tempNT.hashNeuron.clear();
 								for (int i = 0; i < currentNT.listNeuron.size(); i++)
 								{
-									NeuronSWC S_node = currentNT.listNeuron.at(i); // swcBB
-									if (!isAnyNodeOutBBox(S_node))
-									{
-										S_node.n = tempNT.listNeuron.size();
-										if (S_node.pn != -1)
-											S_node.pn = tempNT.listNeuron.last().n;
-										tempNT.listNeuron.append(S_node);
-										tempNT.hashNeuron.insert(S_node.n, tempNT.listNeuron.size() - 1);
-									}
-									else if (i == 0)
-									{
-										vertexcount = swccount = 0;
-										break;
-									}
+									NeuronSWC S_node = currentNT.listNeuron.at(i);
+									// swcBB (SHUNING: Don't check it)
+									// if (!isAnyNodeOutBBox(S_node))
+									// {
+									// 	S_node.n = tempNT.listNeuron.size();
+									// 	if (S_node.pn != -1)
+									// 		S_node.pn = tempNT.listNeuron.last().n;
+									// 	tempNT.listNeuron.append(S_node);
+									// 	tempNT.hashNeuron.insert(S_node.n, tempNT.listNeuron.size() - 1);
+									// }
+									// else if (i == 0)
+									// {
+									// 	vertexcount = swccount = 0;
+									// 	break;
+									// }
+									S_node.n = tempNT.listNeuron.size();
+									if (S_node.pn != -1)
+										S_node.pn = tempNT.listNeuron.last().n;
+									tempNT.listNeuron.append(S_node);
+									tempNT.hashNeuron.insert(S_node.n, tempNT.listNeuron.size() - 1);
 								}
 								qDebug() << "charge isAnyNodeOutBBox done, goto virtual finger";
 								// improve curve shape
@@ -1934,6 +1947,26 @@ bool CMainApplication::HandleInput()
 				// 	m_globalMatrix = glm::translate(m_globalMatrix,-loadedNTCenter);
 				// }
 			}
+
+			// TODOS: put erase() here
+			if (state.ulButtonPressed & vr::ButtonMaskFromId(vr::k_EButton_ApplicationMenu) && (!finish_ano))
+			{
+				showConfirmFinish = false;
+
+				const Matrix4 &mat_M = m_rmat4DevicePose[m_iControllerIDRight]; // mat means current controller pos
+				glm::mat4 mat = glm::mat4();
+				for (size_t i = 0; i < 4; i++)
+				{
+					for (size_t j = 0; j < 4; j++)
+					{
+						mat[i][j] = *(mat_M.get() + i * 4 + j);
+					}
+				}
+				mat = glm::inverse(m_globalMatrix) * mat;
+				glm::vec4 m_v4DevicePose = mat * glm::vec4(0, 0, 0, 1); // change the world space(with the globalMatrix) to the initial world space
+				Erase(glm::vec3(m_v4DevicePose.x, m_v4DevicePose.y, m_v4DevicePose.z));
+				SetupAllMorphologyLine();
+			}
 		}
 	}
 
@@ -2227,6 +2260,7 @@ void CMainApplication::RunMainLoop()
 	bool bQuit = false;
 	loadNextQuit = false;
 	finish_ano = false;
+	erase_not_start = true;
 	showConfirmFinish = false;
 
 	pressTime.start();
@@ -2498,11 +2532,11 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 		float m_fTouchPosX = state.rAxis[0].x;
 
 		// handle training instruction navigation
-		if (m_fTouchPosX > 0.5 && trainStage < 5)
+		if (m_fTouchPosX > 0.5 && trainStage < 5 && trainStage != -1)
 		{
 			trainStage += 1;
 		}
-		if (m_fTouchPosX < -0.5 && trainStage > 1)
+		if (m_fTouchPosX < -0.5 && trainStage > 1 && trainStage != -1)
 		{
 			trainStage -= 1;
 		}
@@ -4381,8 +4415,9 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 		// }
 	}
 
-	if ((event.trackedDeviceIndex == m_iControllerIDRight) && (event.data.controller.button == vr::k_EButton_ApplicationMenu) && (event.eventType == vr::VREvent_ButtonPress) && (!finish_ano))
+	if (false && (event.trackedDeviceIndex == m_iControllerIDRight) && (event.data.controller.button == vr::k_EButton_ApplicationMenu) && (event.eventType == vr::VREvent_ButtonPress) && (!finish_ano))
 	{
+		// replace delete with erase
 		// TODOS: move delete here
 		showConfirmFinish = false;
 
@@ -4397,9 +4432,12 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 		}
 		mat = glm::inverse(m_globalMatrix) * mat;
 		glm::vec4 m_v4DevicePose = mat * glm::vec4(0, 0, 0, 1); // change the world space(with the globalMatrix) to the initial world space
+
+		//// ------------------------
 		delName = "";
 		delcurvePOS = "";
 		delcurvePOS = QString("%1 %2 %3").arg(m_v4DevicePose.x).arg(m_v4DevicePose.y).arg(m_v4DevicePose.z);
+
 		delName = FindNearestSegment(glm::vec3(m_v4DevicePose.x, m_v4DevicePose.y, m_v4DevicePose.z));
 
 		NTL temp_NTL = sketchedNTList;
@@ -4420,6 +4458,11 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 		}
 		else
 			qDebug() << "Cannot Find the Segment ";
+	}
+
+	if ((event.trackedDeviceIndex == m_iControllerIDRight) && (event.data.controller.button == vr::k_EButton_ApplicationMenu) && (event.eventType == vr::VREvent_ButtonPress) && (!finish_ano))
+	{
+		erase_not_start = true;
 	}
 
 	// save swc
@@ -4948,10 +4991,10 @@ void CMainApplication::SetupControllerTexture()
 	// head mounted device
 	if (showTips)
 	{
-		Vector4 point_1(-1.5f, 0.8f, -4.0f, 1);
-		Vector4 point_2(1.5f, 0.8f, -4.0f, 1);
-		Vector4 point_3(-1.5f, -1.2f, -4.0f, 1);
-		Vector4 point_4(1.5f, -1.2f, -4.0f, 1);
+		Vector4 point_1(-1.5f, 0.6f, -4.0f, 1);
+		Vector4 point_2(1.5f, 0.6f, -4.0f, 1);
+		Vector4 point_3(-1.5f, -1.4f, -4.0f, 1);
+		Vector4 point_4(1.5f, -1.4f, -4.0f, 1);
 
 		point_1 = mat_H * point_1;
 		point_2 = mat_H * point_2;
@@ -5010,6 +5053,16 @@ void CMainApplication::SetupControllerTexture()
 			AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.4f, vcVerts);
 			break;
 		}
+		case -1: // finish train
+		{
+			AddVertex(point_1.x, point_1.y, point_1.z, 0.2f, 0.5f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.5f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.6f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.6f, vcVerts);
+			AddVertex(point_4.x, point_4.y, point_4.z, 0.35f, 0.6f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.5f, vcVerts);
+			break;
+		}
 		default:
 			break;
 		}
@@ -5017,6 +5070,25 @@ void CMainApplication::SetupControllerTexture()
 
 	// left controller
 	{
+		{ // hand indicator
+			Vector4 point_hand1(-0.015f, 0.01f, 0.1f, 1);
+			Vector4 point_hand2(0.015f, 0.01f, 0.1f, 1);
+			Vector4 point_hand3(-0.015f, 0.01f, 0.13f, 1);
+			Vector4 point_hand4(0.015f, 0.01f, 0.13f, 1);
+
+			point_hand1 = mat_L * point_hand1;
+			point_hand2 = mat_L * point_hand2;
+			point_hand3 = mat_L * point_hand3;
+			point_hand4 = mat_L * point_hand4;
+
+			AddVertex(point_hand1.x, point_hand1.y, point_hand1.z, 0.100f, 0.000f, vcVerts);
+			AddVertex(point_hand2.x, point_hand2.y, point_hand2.z, 0.105f, 0.000f, vcVerts);
+			AddVertex(point_hand3.x, point_hand3.y, point_hand3.z, 0.100f, 0.005f, vcVerts);
+			AddVertex(point_hand3.x, point_hand3.y, point_hand3.z, 0.100f, 0.005f, vcVerts);
+			AddVertex(point_hand4.x, point_hand4.y, point_hand4.z, 0.105f, 0.005f, vcVerts);
+			AddVertex(point_hand2.x, point_hand2.y, point_hand2.z, 0.105f, 0.000f, vcVerts);
+		}
+
 		// Vector4 point_A(-0.023f, -0.009f, 0.065f, 1); // grip no.1 dispaly "Mode Switch"
 		// Vector4 point_B(-0.023f, -0.009f, 0.105f, 1);
 		// Vector4 point_C(-0.02f, -0.025f, 0.065f, 1);
@@ -5034,7 +5106,7 @@ void CMainApplication::SetupControllerTexture()
 		// AddVertex(point_B.x, point_B.y, point_B.z, 0.34f, 0.25f, vcVerts);
 
 		// left controller side button
-		Vector4 point_A2(0.023f, -0.007f, 0.110f, 1); // grip no.2 dispaly "Mode Switch"
+		Vector4 point_A2(0.023f, -0.007f, 0.110f, 1);
 		Vector4 point_B2(0.023f, -0.007f, 0.060f, 1);
 		Vector4 point_C2(0.02f, -0.027f, 0.110f, 1);
 		Vector4 point_D2(0.02f, -0.027f, 0.060f, 1);
@@ -5289,103 +5361,125 @@ void CMainApplication::SetupControllerTexture()
 
 	// right controller
 	{
-		// right controller side button (toggle)
-		Vector4 point_A(-0.023f, -0.007f, 0.060f, 1); // grip dispaly "Mode Switch: draw /delete /marker /pull"
-		Vector4 point_B(-0.023f, -0.007f, 0.110f, 1);
-		Vector4 point_C(-0.02f, -0.027f, 0.060f, 1);
-		Vector4 point_D(-0.02f, -0.027f, 0.110f, 1);
-		point_A = mat_R * point_A;
-		point_B = mat_R * point_B;
-		point_C = mat_R * point_C;
-		point_D = mat_R * point_D; //*/
+		{ // hand indicator
+			Vector4 point_hand1(-0.015f, 0.01f, 0.1f, 1);
+			Vector4 point_hand2(0.015f, 0.01f, 0.1f, 1);
+			Vector4 point_hand3(-0.015f, 0.01f, 0.13f, 1);
+			Vector4 point_hand4(0.015f, 0.01f, 0.13f, 1);
 
-		if (!finish_ano)
-		{ // toggle vf
-			if (m_bVirtualFingerON)
+			point_hand1 = mat_R * point_hand1;
+			point_hand2 = mat_R * point_hand2;
+			point_hand3 = mat_R * point_hand3;
+			point_hand4 = mat_R * point_hand4;
+
+			AddVertex(point_hand1.x, point_hand1.y, point_hand1.z, 0.105f, 0.000f, vcVerts);
+			AddVertex(point_hand2.x, point_hand2.y, point_hand2.z, 0.110f, 0.000f, vcVerts);
+			AddVertex(point_hand3.x, point_hand3.y, point_hand3.z, 0.105f, 0.005f, vcVerts);
+			AddVertex(point_hand3.x, point_hand3.y, point_hand3.z, 0.105f, 0.005f, vcVerts);
+			AddVertex(point_hand4.x, point_hand4.y, point_hand4.z, 0.110f, 0.005f, vcVerts);
+			AddVertex(point_hand2.x, point_hand2.y, point_hand2.z, 0.110f, 0.000f, vcVerts);
+		}
+
+		{ // right controller side button (toggle)
+			Vector4 point_A(-0.023f, -0.007f, 0.060f, 1);
+			Vector4 point_B(-0.023f, -0.007f, 0.110f, 1);
+			Vector4 point_C(-0.02f, -0.027f, 0.060f, 1);
+			Vector4 point_D(-0.02f, -0.027f, 0.110f, 1);
+			point_A = mat_R * point_A;
+			point_B = mat_R * point_B;
+			point_C = mat_R * point_C;
+			point_D = mat_R * point_D; //*/
+
+			if (!finish_ano)
+			{ // toggle vf
+				if (m_bVirtualFingerON)
+				{
+					AddVertex(point_A.x, point_A.y, point_A.z, 0.0f, 0.126f, vcVerts);
+					AddVertex(point_B.x, point_B.y, point_B.z, 0.051, 0.126f, vcVerts);
+					AddVertex(point_C.x, point_C.y, point_C.z, 0.0f, 0.151f, vcVerts);
+					AddVertex(point_C.x, point_C.y, point_C.z, 0.0f, 0.151f, vcVerts);
+					AddVertex(point_D.x, point_D.y, point_D.z, 0.051f, 0.151f, vcVerts);
+					AddVertex(point_B.x, point_B.y, point_B.z, 0.051, 0.126f, vcVerts);
+				}
+				else
+				{
+					AddVertex(point_A.x, point_A.y, point_A.z, 0.0f, 0.152f, vcVerts);
+					AddVertex(point_B.x, point_B.y, point_B.z, 0.051, 0.152f, vcVerts);
+					AddVertex(point_C.x, point_C.y, point_C.z, 0.0f, 0.177f, vcVerts);
+					AddVertex(point_C.x, point_C.y, point_C.z, 0.0f, 0.177f, vcVerts);
+					AddVertex(point_D.x, point_D.y, point_D.z, 0.051f, 0.177f, vcVerts);
+					AddVertex(point_B.x, point_B.y, point_B.z, 0.051, 0.152f, vcVerts);
+				}
+			}
+
+			// Vector4 point_A2(0.023f, -0.009f, 0.065f, 1); // grip no.2 display "Mode Switch: draw /delete /marker /pull"
+			// Vector4 point_B2(0.023f, -0.009f, 0.105f, 1);
+			// Vector4 point_C2(0.02f, -0.025f, 0.065f, 1);
+			// Vector4 point_D2(0.02f, -0.025f, 0.105f, 1);
+			// point_A2 = mat_R * point_A2;
+			// point_B2 = mat_R * point_B2;
+			// point_C2 = mat_R * point_C2;
+			// point_D2 = mat_R * point_D2; //*/
+
+			// AddVertex(point_A2.x,point_A2.y,point_A2.z,0.34f,0.25f,vcVerts);
+			// AddVertex(point_B2.x,point_B2.y,point_B2.z,0,0.25f,vcVerts);
+			// AddVertex(point_C2.x,point_C2.y,point_C2.z,0.34f,0.375f,vcVerts);
+			// AddVertex(point_C2.x,point_C2.y,point_C2.z,0.34f,0.375f,vcVerts);
+			// AddVertex(point_D2.x,point_D2.y,point_D2.z,0,0.375f,vcVerts);
+			// AddVertex(point_B2.x,point_B2.y,point_B2.z,0,0.25f,vcVerts);//*/
+		}
+
+		{ // right controller touchpad
+
+			Vector4 point_E(-0.02f, 0.01f, 0.03f, 1); // for the touchpad switch & display "translate /rotate /scale /nothing
+			Vector4 point_F(0.02f, 0.01f, 0.03f, 1);
+			Vector4 point_G(-0.02f, 0.01f, 0.07f, 1);
+			Vector4 point_H(0.02f, 0.01f, 0.07f, 1);
+			point_E = mat_R * point_E;
+			point_F = mat_R * point_F;
+			point_G = mat_R * point_G;
+			point_H = mat_R * point_H;
+
+			// right controller touchpad
+			if (!finish_ano)
 			{
-				AddVertex(point_A.x, point_A.y, point_A.z, 0.0f, 0.126f, vcVerts);
-				AddVertex(point_B.x, point_B.y, point_B.z, 0.051, 0.126f, vcVerts);
-				AddVertex(point_C.x, point_C.y, point_C.z, 0.0f, 0.151f, vcVerts);
-				AddVertex(point_C.x, point_C.y, point_C.z, 0.0f, 0.151f, vcVerts);
-				AddVertex(point_D.x, point_D.y, point_D.z, 0.051f, 0.151f, vcVerts);
-				AddVertex(point_B.x, point_B.y, point_B.z, 0.051, 0.126f, vcVerts);
+				AddVertex(point_E.x, point_E.y, point_E.z, 0.03f, 0.03f, vcVerts);
+				AddVertex(point_F.x, point_F.y, point_F.z, 0.059f, 0.03f, vcVerts);
+				AddVertex(point_G.x, point_G.y, point_G.z, 0.03f, 0.059f, vcVerts);
+				AddVertex(point_G.x, point_G.y, point_G.z, 0.03f, 0.059f, vcVerts);
+				AddVertex(point_H.x, point_H.y, point_H.z, 0.059f, 0.059f, vcVerts);
+				AddVertex(point_F.x, point_F.y, point_F.z, 0.059f, 0.03f, vcVerts);
 			}
 			else
 			{
-				AddVertex(point_A.x, point_A.y, point_A.z, 0.0f, 0.152f, vcVerts);
-				AddVertex(point_B.x, point_B.y, point_B.z, 0.051, 0.152f, vcVerts);
-				AddVertex(point_C.x, point_C.y, point_C.z, 0.0f, 0.177f, vcVerts);
-				AddVertex(point_C.x, point_C.y, point_C.z, 0.0f, 0.177f, vcVerts);
-				AddVertex(point_D.x, point_D.y, point_D.z, 0.051f, 0.177f, vcVerts);
-				AddVertex(point_B.x, point_B.y, point_B.z, 0.051, 0.152f, vcVerts);
+				AddVertex(point_E.x, point_E.y, point_E.z, 0.06f, 0.03f, vcVerts);
+				AddVertex(point_F.x, point_F.y, point_F.z, 0.089f, 0.03f, vcVerts);
+				AddVertex(point_G.x, point_G.y, point_G.z, 0.06f, 0.059f, vcVerts);
+				AddVertex(point_G.x, point_G.y, point_G.z, 0.06f, 0.059f, vcVerts);
+				AddVertex(point_H.x, point_H.y, point_H.z, 0.089f, 0.059f, vcVerts);
+				AddVertex(point_F.x, point_F.y, point_F.z, 0.089f, 0.03f, vcVerts);
 			}
 		}
 
-		// Vector4 point_A2(0.023f, -0.009f, 0.065f, 1); // grip no.2 display "Mode Switch: draw /delete /marker /pull"
-		// Vector4 point_B2(0.023f, -0.009f, 0.105f, 1);
-		// Vector4 point_C2(0.02f, -0.025f, 0.065f, 1);
-		// Vector4 point_D2(0.02f, -0.025f, 0.105f, 1);
-		// point_A2 = mat_R * point_A2;
-		// point_B2 = mat_R * point_B2;
-		// point_C2 = mat_R * point_C2;
-		// point_D2 = mat_R * point_D2; //*/
+		{ // right controller menu (delete)
+			Vector4 point_I(-0.018f, 0.01f, 0.01f, 1);
+			Vector4 point_J(0.018f, 0.01f, 0.01f, 1);
+			Vector4 point_K(-0.018f, 0.01f, 0.03f, 1);
+			Vector4 point_L(0.018f, 0.01f, 0.03f, 1); //*/
 
-		// AddVertex(point_A2.x,point_A2.y,point_A2.z,0.34f,0.25f,vcVerts);
-		// AddVertex(point_B2.x,point_B2.y,point_B2.z,0,0.25f,vcVerts);
-		// AddVertex(point_C2.x,point_C2.y,point_C2.z,0.34f,0.375f,vcVerts);
-		// AddVertex(point_C2.x,point_C2.y,point_C2.z,0.34f,0.375f,vcVerts);
-		// AddVertex(point_D2.x,point_D2.y,point_D2.z,0,0.375f,vcVerts);
-		// AddVertex(point_B2.x,point_B2.y,point_B2.z,0,0.25f,vcVerts);//*/
-
-		// right controller touchpad
-
-		Vector4 point_E(-0.02f, 0.01f, 0.03f, 1); // for the touchpad switch & display "translate /rotate /scale /nothing
-		Vector4 point_F(0.02f, 0.01f, 0.03f, 1);
-		Vector4 point_G(-0.02f, 0.01f, 0.07f, 1);
-		Vector4 point_H(0.02f, 0.01f, 0.07f, 1);
-		point_E = mat_R * point_E;
-		point_F = mat_R * point_F;
-		point_G = mat_R * point_G;
-		point_H = mat_R * point_H;
-
-		// right controller touchpad
-		if (!finish_ano)
-		{
-			AddVertex(point_E.x, point_E.y, point_E.z, 0.03f, 0.03f, vcVerts);
-			AddVertex(point_F.x, point_F.y, point_F.z, 0.059f, 0.03f, vcVerts);
-			AddVertex(point_G.x, point_G.y, point_G.z, 0.03f, 0.059f, vcVerts);
-			AddVertex(point_G.x, point_G.y, point_G.z, 0.03f, 0.059f, vcVerts);
-			AddVertex(point_H.x, point_H.y, point_H.z, 0.059f, 0.059f, vcVerts);
-			AddVertex(point_F.x, point_F.y, point_F.z, 0.059f, 0.03f, vcVerts);
-		}
-		else
-		{
-			AddVertex(point_E.x, point_E.y, point_E.z, 0.06f, 0.03f, vcVerts);
-			AddVertex(point_F.x, point_F.y, point_F.z, 0.089f, 0.03f, vcVerts);
-			AddVertex(point_G.x, point_G.y, point_G.z, 0.06f, 0.059f, vcVerts);
-			AddVertex(point_G.x, point_G.y, point_G.z, 0.06f, 0.059f, vcVerts);
-			AddVertex(point_H.x, point_H.y, point_H.z, 0.089f, 0.059f, vcVerts);
-			AddVertex(point_F.x, point_F.y, point_F.z, 0.089f, 0.03f, vcVerts);
-		}
-
-		// right controller menu (delete)
-		Vector4 point_I(-0.018f, 0.01f, 0.01f, 1);
-		Vector4 point_J(0.018f, 0.01f, 0.01f, 1);
-		Vector4 point_K(-0.018f, 0.01f, 0.03f, 1);
-		Vector4 point_L(0.018f, 0.01f, 0.03f, 1); //*/
-
-		point_I = mat_R * point_I;
-		point_J = mat_R * point_J;
-		point_K = mat_R * point_K;
-		point_L = mat_R * point_L;
-		if (!finish_ano)
-		{
-			AddVertex(point_I.x, point_I.y, point_I.z, 0.0f, 0.08f, vcVerts);
-			AddVertex(point_J.x, point_J.y, point_J.z, 0.029f, 0.08f, vcVerts);
-			AddVertex(point_K.x, point_K.y, point_K.z, 0.0f, 0.097f, vcVerts);
-			AddVertex(point_K.x, point_K.y, point_K.z, 0.0f, 0.097f, vcVerts);
-			AddVertex(point_L.x, point_L.y, point_L.z, 0.029f, 0.097f, vcVerts);
-			AddVertex(point_J.x, point_J.y, point_J.z, 0.029f, 0.08f, vcVerts);
+			point_I = mat_R * point_I;
+			point_J = mat_R * point_J;
+			point_K = mat_R * point_K;
+			point_L = mat_R * point_L;
+			if (!finish_ano)
+			{
+				AddVertex(point_I.x, point_I.y, point_I.z, 0.0f, 0.08f, vcVerts);
+				AddVertex(point_J.x, point_J.y, point_J.z, 0.029f, 0.08f, vcVerts);
+				AddVertex(point_K.x, point_K.y, point_K.z, 0.0f, 0.097f, vcVerts);
+				AddVertex(point_K.x, point_K.y, point_K.z, 0.0f, 0.097f, vcVerts);
+				AddVertex(point_L.x, point_L.y, point_L.z, 0.029f, 0.097f, vcVerts);
+				AddVertex(point_J.x, point_J.y, point_J.z, 0.029f, 0.08f, vcVerts);
+			}
 		}
 
 		// For NewPadtest
@@ -7269,36 +7363,105 @@ bool CMainApplication::DeleteSegment(QString segName)
 	return false;
 }
 
-bool CMainApplication::Erase(glm::vec3 dPOS)
+void CMainApplication::Erase(glm::vec3 dPOS)
 {
-	QString ntnametofind = "";
-	// qDebug()<<sketchedNTList.size();
 	if (sketchedNTList.size() < 1)
-		return false;
+		return;
 
+	bool bIsNewNTAdded = false;
+
+	qDebug() << "----------------------------------------------------" << endl;
+	qDebug() << "Threshold: " << (dist_thres / m_globalScale * 5) << endl;
+	qDebug() << "sketchedNTList.size() before Erase(): " << sketchedNTList.size() << endl;
+
+	NTL newNTL;
+	int nt_idx = 0;
 	for (int i = 0; i < sketchedNTList.size(); i++)
 	{
 		NeuronTree nt = sketchedNTList.at(i); // segment
+		qDebug() << "nt.listNeuron.size(): " << nt.listNeuron.size() << endl;
+
 		NeuronTree newNT;
-		newNT.deepCopy(nt);
+		int node_idx = 0;
+		// newNT.deepCopy(nt);
 		for (int j = 0; j < nt.listNeuron.size(); j++)
 		{
 			NeuronSWC SS0; // node
 			SS0 = nt.listNeuron.at(j);
 			float dist;
 			dist = glm::sqrt((dPOS.x - SS0.x) * (dPOS.x - SS0.x) + (dPOS.y - SS0.y) * (dPOS.y - SS0.y) + (dPOS.z - SS0.z) * (dPOS.z - SS0.z));
-
+			// qDebug() << "dist: " << dist << endl;
 			// cal the dist between pos & current node'position, then compare with the threshold
-			if (dist < (dist_thres / m_globalScale * 5))
+			if (dist < (dist_thres / m_globalScale * 1.5))
 			{
-				// once dist between pos & node < threshold, return the segment/neurontree' name that current node belong to
-				ntnametofind = nt.name;
-				return true;
+				// qDebug() << "Discard node " << j << endl;
+				if (newNT.listNeuron.size() > 1)
+				{
+					// qDebug() << "Create new NT " << endl;
+					bIsNewNTAdded = true;
+					newNT.name = "sketch_" + QString("%1").arg(nt_idx);
+					newNT.n = nt_idx;
+					NeuronTree tmp;
+					tmp.deepCopy(newNT);
+					newNTL.push_back(tmp);
+					newNT.listNeuron.clear();
+					newNT.hashNeuron.clear();
+					nt_idx += 1;
+				}
+				node_idx = 0;
+			}
+			else
+			{
+				// qDebug() << "Append node" << j << endl;
+				SS0.pn = node_idx - 1;
+				SS0.n = node_idx;
+				newNT.listNeuron.append(SS0);
+				newNT.hashNeuron.insert(SS0.n, newNT.listNeuron.size() - 1);
+				node_idx += 1;
 			}
 		}
+		if (newNT.listNeuron.size() > 1)
+		{
+			// qDebug() << "Create new NT " << endl;
+			bIsNewNTAdded = true;
+			newNT.name = "sketch_" + QString("%1").arg(nt_idx);
+			newNT.n = nt_idx;
+			NeuronTree tmp;
+			tmp.deepCopy(newNT);
+			newNTL.push_back(tmp);
+			newNT.listNeuron.clear();
+			newNT.hashNeuron.clear();
+			node_idx += 1;
+		}
 	}
-	// if cannot find any matches, return ""
-	return false;
+
+	if (bIsNewNTAdded)
+	{
+		if (erase_not_start)
+		{
+			bIsUndoEnable = true;
+			erase_not_start = false;
+			if (vUndoList.size() == MAX_UNDO_COUNT)
+			{
+				vUndoList.erase(vUndoList.begin());
+			}
+			vUndoList.push_back(sketchedNTList);
+			if (vRedoList.size() > 0)
+				vRedoList.clear();
+			bIsRedoEnable = false;
+			vRedoList.clear();
+		}
+
+		sketchedNTList.clear();
+		sketchedNTList = newNTL;
+	}
+	// qDebug() << "sketchedNTList.size() after Erase(): " << sketchedNTList.size() << endl;
+
+	// for (int i = 0; i < sketchedNTList.size(); i++)
+	// {
+	// 	sketchedNTList[i].print();
+	// }
+	return;
 }
 
 void CMainApplication::UpdateDragNodeinNTList(int ntnum, int swcnum, float nodex, float nodey, float nodez)

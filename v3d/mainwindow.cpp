@@ -2197,7 +2197,7 @@ void MainWindow::startExp()
 {
 	if (!isTrained)
 	{
-		trainNum = 5;
+		trainNum = 2;
 
 		bool ok;
 		pID = QInputDialog::getText(this, "", tr("Please input your ID:"), QLineEdit::Normal, "", &ok);
@@ -2287,7 +2287,7 @@ void MainWindow::loadNextImage()
 	if (currentImgIdx == trainNum)
 	{
 		isTrained = true;
-		return;
+		// return;
 	}
 	if (currentImgIdx >= expImages.size())
 	{

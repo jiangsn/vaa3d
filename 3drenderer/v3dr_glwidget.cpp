@@ -394,6 +394,14 @@ void V3dR_GLWidget::autoSaveSwc()
 		qDebug() << "Loading swc: " << swcName << endl;
 		loadObjectFromFile(swcName);
 	}
+
+	if (_idep->V3Dmainwindow->currentImgIdx == _idep->V3Dmainwindow->trainNum)
+	{
+		string msg = "You have finished the training!\n"
+					 "You can take a break now. If you have any questions about the task please let us know.\n"
+					 "Click \"Next Image\" button to start the formal study.";
+		QMessageBox::information(this, "", QString::fromStdString(msg));
+	}
 }
 
 void V3dR_GLWidget::autoSaveSwcVR()
