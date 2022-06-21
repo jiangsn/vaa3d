@@ -1376,11 +1376,42 @@ bool CMainApplication::HandleInput()
 				bRet = true;
 			}
 			if (sdlEvent.key.keysym.sym == SDLK_c)
-
 			{
 				m_bShowMorphologyLine = !m_bShowMorphologyLine;
 				m_bShowMorphologySurface = !m_bShowMorphologySurface;
 				m_bShowMorphologyMarker = !m_bShowMorphologyMarker;
+			}
+			if (sdlEvent.key.keysym.sym == SDLK_KP_1)
+			{
+				trainStage = 1;
+			}
+			if (sdlEvent.key.keysym.sym == SDLK_KP_2)
+			{
+				trainStage = 2;
+			}
+			if (sdlEvent.key.keysym.sym == SDLK_KP_3)
+			{
+				trainStage = 3;
+			}
+			if (sdlEvent.key.keysym.sym == SDLK_KP_4)
+			{
+				trainStage = 4;
+			}
+			if (sdlEvent.key.keysym.sym == SDLK_KP_5)
+			{
+				trainStage = 5;
+			}
+			if (sdlEvent.key.keysym.sym == SDLK_KP_6)
+			{
+				trainStage = 6;
+			}
+			if (sdlEvent.key.keysym.sym == SDLK_KP_0)
+			{
+				trainStage = 0;
+			}
+			if (sdlEvent.key.keysym.sym == SDLK_KP_MINUS)
+			{
+				trainStage = 9;
 			}
 		}
 	} //*/
@@ -1438,7 +1469,7 @@ bool CMainApplication::HandleInput()
 						showConfirmFinish = false;
 						SetupMorphologyLine(2); // for showing ground truth when annotation is finished
 
-						if (_idep->V3Dmainwindow->currentImgIdx == _idep->V3Dmainwindow->trainNum)
+						if (_idep->V3Dmainwindow->currentImgIdx == _idep->V3Dmainwindow->trainNum - 1)
 						{
 							showTips = true;
 							trainStage = -1;
@@ -2266,17 +2297,22 @@ void CMainApplication::RunMainLoop()
 	pressTime.start();
 	pressElapsed = 0;
 
-	trainStage = 1;
+	trainStage = 9; // display nothing
 
 	if (_idep->V3Dmainwindow->currentImgIdx == 0)
 	{
 		showTips = true;
-		trainStage = 1;
+		trainStage = 9;
+	}
+	else if (_idep->V3Dmainwindow->currentImgIdx < _idep->V3Dmainwindow->trainNum)
+	{
+		showTips = false;
+		trainStage = 0;
 	}
 	else
 	{
 		showTips = false;
-		trainStage = 5;
+		trainStage = 9;
 	}
 
 	while (!bQuit && !loadNextQuit)
@@ -2534,11 +2570,11 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 		// handle training instruction navigation
 		if (m_fTouchPosX > 0.5 && trainStage < 5 && trainStage != -1)
 		{
-			trainStage += 1;
+			// trainStage += 1;
 		}
 		if (m_fTouchPosX < -0.5 && trainStage > 1 && trainStage != -1)
 		{
-			trainStage -= 1;
+			// trainStage -= 1;
 		}
 	}
 
@@ -2596,7 +2632,10 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 		// }
 
 		// TODOS: move showtips here
-		showTips = !showTips;
+		if (trainStage <= 0)
+		{
+			showTips = !showTips;
+		}
 	}
 
 	/*  // shuning: works together with menu (see switch{} part), now is replaced by toggle VF
@@ -4988,13 +5027,95 @@ void CMainApplication::SetupControllerTexture()
 	Vector4 ctrPOS = mat_R * Vector4(0, 0, 0, 1);
 	ctrSpherePos = glm::vec3(ctrPOS.x, ctrPOS.y, ctrPOS.z);
 
+	/*  // old show tips
+		// head mounted device
+		if (showTips)
+		{
+			Vector4 point_1(-1.5f, 0.6f, -4.0f, 1);
+			Vector4 point_2(1.5f, 0.6f, -4.0f, 1);
+			Vector4 point_3(-1.5f, -1.4f, -4.0f, 1);
+			Vector4 point_4(1.5f, -1.4f, -4.0f, 1);
+
+			point_1 = mat_H * point_1;
+			point_2 = mat_H * point_2;
+			point_3 = mat_H * point_3;
+			point_4 = mat_H * point_4;
+
+			switch (trainStage) // x(h), y(v)
+			{
+			case 1: // intro
+			{
+				AddVertex(point_1.x, point_1.y, point_1.z, 0.2f, 0.0f, vcVerts);
+				AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.0f, vcVerts);
+				AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.1f, vcVerts);
+				AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.1f, vcVerts);
+				AddVertex(point_4.x, point_4.y, point_4.z, 0.35f, 0.1f, vcVerts);
+				AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.0f, vcVerts);
+				break;
+			}
+			case 2: // image manipulation
+			{
+				AddVertex(point_1.x, point_1.y, point_1.z, 0.2f, 0.1f, vcVerts);
+				AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.1f, vcVerts);
+				AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.2f, vcVerts);
+				AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.2f, vcVerts);
+				AddVertex(point_4.x, point_4.y, point_4.z, 0.35f, 0.2f, vcVerts);
+				AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.1f, vcVerts);
+				break;
+			}
+			case 3: // image annotation
+			{
+				AddVertex(point_1.x, point_1.y, point_1.z, 0.2f, 0.2f, vcVerts);
+				AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.2f, vcVerts);
+				AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.3f, vcVerts);
+				AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.3f, vcVerts);
+				AddVertex(point_4.x, point_4.y, point_4.z, 0.35f, 0.3f, vcVerts);
+				AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.2f, vcVerts);
+				break;
+			}
+			case 4: // submission
+			{
+				AddVertex(point_1.x, point_1.y, point_1.z, 0.2f, 0.3f, vcVerts);
+				AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.3f, vcVerts);
+				AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.4f, vcVerts);
+				AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.4f, vcVerts);
+				AddVertex(point_4.x, point_4.y, point_4.z, 0.35f, 0.4f, vcVerts);
+				AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.3f, vcVerts);
+				break;
+			}
+			case 5: // cheatsheet
+			{
+				AddVertex(point_1.x, point_1.y, point_1.z, 0.2f, 0.4f, vcVerts);
+				AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.4f, vcVerts);
+				AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.5f, vcVerts);
+				AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.5f, vcVerts);
+				AddVertex(point_4.x, point_4.y, point_4.z, 0.35f, 0.5f, vcVerts);
+				AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.4f, vcVerts);
+				break;
+			}
+			case -1: // finish train
+			{
+				AddVertex(point_1.x, point_1.y, point_1.z, 0.2f, 0.5f, vcVerts);
+				AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.5f, vcVerts);
+				AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.6f, vcVerts);
+				AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.6f, vcVerts);
+				AddVertex(point_4.x, point_4.y, point_4.z, 0.35f, 0.6f, vcVerts);
+				AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.5f, vcVerts);
+				break;
+			}
+			default:
+				break;
+			}
+		}
+	*/
+
 	// head mounted device
 	if (showTips)
 	{
-		Vector4 point_1(-1.5f, 0.6f, -4.0f, 1);
-		Vector4 point_2(1.5f, 0.6f, -4.0f, 1);
-		Vector4 point_3(-1.5f, -1.4f, -4.0f, 1);
-		Vector4 point_4(1.5f, -1.4f, -4.0f, 1);
+		Vector4 point_1(-0.5f, -1.5f, -4.0f, 1);
+		Vector4 point_2(0.5f, -1.5f, -4.0f, 1);
+		Vector4 point_3(-0.5f, -2.5f, -4.0f, 1);
+		Vector4 point_4(0.5f, -2.5f, -4.0f, 1);
 
 		point_1 = mat_H * point_1;
 		point_2 = mat_H * point_2;
@@ -5003,58 +5124,99 @@ void CMainApplication::SetupControllerTexture()
 
 		switch (trainStage) // x(h), y(v)
 		{
-		case 1: // intro
+		case 1: // move
 		{
-			AddVertex(point_1.x, point_1.y, point_1.z, 0.2f, 0.0f, vcVerts);
-			AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.0f, vcVerts);
-			AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.1f, vcVerts);
-			AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.1f, vcVerts);
-			AddVertex(point_4.x, point_4.y, point_4.z, 0.35f, 0.1f, vcVerts);
-			AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.0f, vcVerts);
+			AddVertex(point_1.x, point_1.y, point_1.z, 0.35f, 0.000f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.42f, 0.000f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.35f, 0.065f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.35f, 0.065f, vcVerts);
+			AddVertex(point_4.x, point_4.y, point_4.z, 0.42f, 0.065f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.42f, 0.000f, vcVerts);
 			break;
 		}
-		case 2: // image manipulation
+		case 2: // zoom & contrast
 		{
-			AddVertex(point_1.x, point_1.y, point_1.z, 0.2f, 0.1f, vcVerts);
-			AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.1f, vcVerts);
-			AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.2f, vcVerts);
-			AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.2f, vcVerts);
-			AddVertex(point_4.x, point_4.y, point_4.z, 0.35f, 0.2f, vcVerts);
-			AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.1f, vcVerts);
+			AddVertex(point_1.x, point_1.y, point_1.z, 0.35f, 0.065f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.42f, 0.065f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.35f, 0.130f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.35f, 0.130f, vcVerts);
+			AddVertex(point_4.x, point_4.y, point_4.z, 0.42f, 0.130f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.42f, 0.065f, vcVerts);
 			break;
 		}
-		case 3: // image annotation
+		case 3: // annotation
 		{
-			AddVertex(point_1.x, point_1.y, point_1.z, 0.2f, 0.2f, vcVerts);
-			AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.2f, vcVerts);
-			AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.3f, vcVerts);
-			AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.3f, vcVerts);
-			AddVertex(point_4.x, point_4.y, point_4.z, 0.35f, 0.3f, vcVerts);
-			AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.2f, vcVerts);
+			AddVertex(point_1.x, point_1.y, point_1.z, 0.35f, 0.130f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.42f, 0.130f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.35f, 0.195f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.35f, 0.195f, vcVerts);
+			AddVertex(point_4.x, point_4.y, point_4.z, 0.42f, 0.195f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.42f, 0.130f, vcVerts);
 			break;
 		}
-		case 4: // submission
+		case 4: // edit
 		{
-			AddVertex(point_1.x, point_1.y, point_1.z, 0.2f, 0.3f, vcVerts);
-			AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.3f, vcVerts);
-			AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.4f, vcVerts);
-			AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.4f, vcVerts);
-			AddVertex(point_4.x, point_4.y, point_4.z, 0.35f, 0.4f, vcVerts);
-			AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.3f, vcVerts);
+			AddVertex(point_1.x, point_1.y, point_1.z, 0.35f, 0.195f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.42f, 0.195f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.35f, 0.260f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.35f, 0.260f, vcVerts);
+			AddVertex(point_4.x, point_4.y, point_4.z, 0.42f, 0.260f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.42f, 0.195f, vcVerts);
 			break;
 		}
-		case 5: // cheatsheet
+		case 5: // submit
 		{
-			AddVertex(point_1.x, point_1.y, point_1.z, 0.2f, 0.4f, vcVerts);
-			AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.4f, vcVerts);
-			AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.5f, vcVerts);
-			AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.5f, vcVerts);
-			AddVertex(point_4.x, point_4.y, point_4.z, 0.35f, 0.5f, vcVerts);
-			AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.4f, vcVerts);
+			AddVertex(point_1.x, point_1.y, point_1.z, 0.35f, 0.260f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.42f, 0.260f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.35f, 0.325f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.35f, 0.325f, vcVerts);
+			AddVertex(point_4.x, point_4.y, point_4.z, 0.42f, 0.325f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.42f, 0.260f, vcVerts);
+			break;
+		}
+		case 6: // tips
+		{
+			AddVertex(point_1.x, point_1.y, point_1.z, 0.35f, 0.325f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.42f, 0.325f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.35f, 0.390f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.35f, 0.390f, vcVerts);
+			AddVertex(point_4.x, point_4.y, point_4.z, 0.42f, 0.390f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.42f, 0.325f, vcVerts);
+			break;
+		}
+		case 0: // cheatsheet
+		{
+			Vector4 point_1(-1.5f, -1.5f, -4.0f, 1);
+			Vector4 point_2(1.5f, -1.5f, -4.0f, 1);
+			Vector4 point_3(-1.5f, -4.0f, -4.0f, 1);
+			Vector4 point_4(1.5f, -4.0f, -4.0f, 1);
+
+			point_1 = mat_H * point_1;
+			point_2 = mat_H * point_2;
+			point_3 = mat_H * point_3;
+			point_4 = mat_H * point_4;
+
+			AddVertex(point_1.x, point_1.y, point_1.z, 0.35f, 0.390f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.55f, 0.390f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.35f, 0.550f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.35f, 0.550f, vcVerts);
+			AddVertex(point_4.x, point_4.y, point_4.z, 0.55f, 0.550f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.55f, 0.390f, vcVerts);
 			break;
 		}
 		case -1: // finish train
 		{
+
+			Vector4 point_1(-1.5f, 0.6f, -4.0f, 1);
+			Vector4 point_2(1.5f, 0.6f, -4.0f, 1);
+			Vector4 point_3(-1.5f, -1.4f, -4.0f, 1);
+			Vector4 point_4(1.5f, -1.4f, -4.0f, 1);
+
+			point_1 = mat_H * point_1;
+			point_2 = mat_H * point_2;
+			point_3 = mat_H * point_3;
+			point_4 = mat_H * point_4;
+
 			AddVertex(point_1.x, point_1.y, point_1.z, 0.2f, 0.5f, vcVerts);
 			AddVertex(point_2.x, point_2.y, point_2.z, 0.35f, 0.5f, vcVerts);
 			AddVertex(point_3.x, point_3.y, point_3.z, 0.2f, 0.6f, vcVerts);
@@ -5133,12 +5295,20 @@ void CMainApplication::SetupControllerTexture()
 		point_H = mat_L * point_H;
 		if (showTips)
 		{
-			AddVertex(point_E.x, point_E.y, point_E.z, 0.0f, 0.03f, vcVerts);
-			AddVertex(point_F.x, point_F.y, point_F.z, 0.029f, 0.03f, vcVerts);
-			AddVertex(point_G.x, point_G.y, point_G.z, 0.0f, 0.059f, vcVerts);
-			AddVertex(point_G.x, point_G.y, point_G.z, 0.0f, 0.059f, vcVerts);
-			AddVertex(point_H.x, point_H.y, point_H.z, 0.029f, 0.059f, vcVerts);
-			AddVertex(point_F.x, point_F.y, point_F.z, 0.029f, 0.03f, vcVerts);
+			// no T+ and T- now
+			// AddVertex(point_E.x, point_E.y, point_E.z, 0.0f, 0.03f, vcVerts);
+			// AddVertex(point_F.x, point_F.y, point_F.z, 0.029f, 0.03f, vcVerts);
+			// AddVertex(point_G.x, point_G.y, point_G.z, 0.0f, 0.059f, vcVerts);
+			// AddVertex(point_G.x, point_G.y, point_G.z, 0.0f, 0.059f, vcVerts);
+			// AddVertex(point_H.x, point_H.y, point_H.z, 0.029f, 0.059f, vcVerts);
+			// AddVertex(point_F.x, point_F.y, point_F.z, 0.029f, 0.03f, vcVerts);
+
+			AddVertex(point_E.x, point_E.y, point_E.z, 0.06f, 0.06f, vcVerts);
+			AddVertex(point_F.x, point_F.y, point_F.z, 0.089f, 0.06f, vcVerts);
+			AddVertex(point_G.x, point_G.y, point_G.z, 0.06f, 0.089f, vcVerts);
+			AddVertex(point_G.x, point_G.y, point_G.z, 0.06f, 0.089f, vcVerts);
+			AddVertex(point_H.x, point_H.y, point_H.z, 0.089f, 0.089f, vcVerts);
+			AddVertex(point_F.x, point_F.y, point_F.z, 0.089f, 0.06f, vcVerts);
 		}
 		else
 		{
@@ -7392,22 +7562,22 @@ void CMainApplication::Erase(glm::vec3 dPOS)
 			dist = glm::sqrt((dPOS.x - SS0.x) * (dPOS.x - SS0.x) + (dPOS.y - SS0.y) * (dPOS.y - SS0.y) + (dPOS.z - SS0.z) * (dPOS.z - SS0.z));
 			// qDebug() << "dist: " << dist << endl;
 			// cal the dist between pos & current node'position, then compare with the threshold
-			if (dist < (dist_thres / m_globalScale * 1.5))
+			if (dist < (dist_thres / m_globalScale * 3))
 			{
 				// qDebug() << "Discard node " << j << endl;
-				if (newNT.listNeuron.size() > 1)
+				if (newNT.listNeuron.size() > 0)
 				{
 					// qDebug() << "Create new NT " << endl;
-					bIsNewNTAdded = true;
 					newNT.name = "sketch_" + QString("%1").arg(nt_idx);
 					newNT.n = nt_idx;
 					NeuronTree tmp;
 					tmp.deepCopy(newNT);
 					newNTL.push_back(tmp);
-					newNT.listNeuron.clear();
-					newNT.hashNeuron.clear();
 					nt_idx += 1;
 				}
+				bIsNewNTAdded = true;
+				newNT.listNeuron.clear();
+				newNT.hashNeuron.clear();
 				node_idx = 0;
 			}
 			else
@@ -7420,17 +7590,15 @@ void CMainApplication::Erase(glm::vec3 dPOS)
 				node_idx += 1;
 			}
 		}
-		if (newNT.listNeuron.size() > 1)
+		if (newNT.listNeuron.size() > 0)
 		{
 			// qDebug() << "Create new NT " << endl;
-			bIsNewNTAdded = true;
+			// bIsNewNTAdded = true;
 			newNT.name = "sketch_" + QString("%1").arg(nt_idx);
 			newNT.n = nt_idx;
 			NeuronTree tmp;
 			tmp.deepCopy(newNT);
 			newNTL.push_back(tmp);
-			newNT.listNeuron.clear();
-			newNT.hashNeuron.clear();
 			node_idx += 1;
 		}
 	}
@@ -7456,11 +7624,11 @@ void CMainApplication::Erase(glm::vec3 dPOS)
 		sketchedNTList = newNTL;
 	}
 	// qDebug() << "sketchedNTList.size() after Erase(): " << sketchedNTList.size() << endl;
-
 	// for (int i = 0; i < sketchedNTList.size(); i++)
 	// {
 	// 	sketchedNTList[i].print();
 	// }
+
 	return;
 }
 

@@ -2197,7 +2197,7 @@ void MainWindow::startExp()
 {
 	if (!isTrained)
 	{
-		trainNum = 2;
+		trainNum = 3;
 
 		bool ok;
 		pID = QInputDialog::getText(this, "", tr("Please input your ID:"), QLineEdit::Normal, "", &ok);
