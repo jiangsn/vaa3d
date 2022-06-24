@@ -247,6 +247,7 @@ public:
 
 public:
 	int trainStage;
+	int adjustVolHeight;
 	bool showTips;
 	bool finish_ano;
 	bool erase_not_start;

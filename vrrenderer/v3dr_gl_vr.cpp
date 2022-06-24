@@ -2293,6 +2293,7 @@ void CMainApplication::RunMainLoop()
 	finish_ano = false;
 	erase_not_start = true;
 	showConfirmFinish = false;
+	adjustVolHeight = 0;
 
 	pressTime.start();
 	pressElapsed = 0;
@@ -4641,6 +4642,41 @@ void CMainApplication::MergeNeuronTrees(NeuronTree &ntree, const QList<NeuronTre
 //-----------------------------------------------------------------------------
 void CMainApplication::RenderFrame()
 {
+	switch (adjustVolHeight)
+	{
+	case 0:
+	{
+		adjustVolHeight++;
+		break;
+	}
+	case 1:
+	{
+		// update volume position first
+		// shuning: -----------------------adjust volume height based on HMD position--------------
+		const Matrix4 &mat_H = m_rmat4DevicePose[vr::k_unTrackedDeviceIndex_Hmd];
+		glm::mat4 mat = glm::mat4();
+		for (size_t i = 0; i < 4; i++)
+		{
+			for (size_t j = 0; j < 4; j++)
+			{
+				mat[i][j] = *(mat_H.get() + i * 4 + j);
+			}
+		}
+		mat = glm::inverse(m_globalMatrix) * mat;
+		glm::vec4 hmdPos = mat * glm::vec4(0, 0, 0, 1);
+		// cout << "hmdPose: " << hmdPos[0] << ", " << hmdPos[1] << ", " << hmdPos[2] << ", " << hmdPos[3] << endl;
+
+		glm::vec4 gblPos = inverse(m_globalMatrix) * glm::vec4(0, 0, 0, 1);
+		// cout << "gblPos: " << gblPos[0] << ", " << gblPos[1] << ", " << gblPos[2] << ", " << gblPos[3] << endl;
+		cout << gblPos[1] << ", " << hmdPos[1] << endl;
+		float deltaY = hmdPos[1] - gblPos[1];
+		cout << "deltaY: " << deltaY << endl;
+		m_globalMatrix = glm::translate(m_globalMatrix, glm::vec3(0, deltaY, 0));
+		// shuning: -----------------------adjust volume height based on HMD position done --------------
+		adjustVolHeight++;
+	}
+	}
+
 	// for now as fast as possible
 	if (m_pHMD)
 	{
@@ -6488,7 +6524,7 @@ void CMainApplication::SetupGlobalMatrix()
 
 	// original center location
 	loadedNTCenter.x = (swcBB.x0 + swcBB.x1) / 2;
-	loadedNTCenter.y = (swcBB.y0 + swcBB.y1) / 2 + 20;
+	loadedNTCenter.y = 0.0; //(swcBB.y0 + swcBB.y1) / 2 + 20;
 	loadedNTCenter.z = (swcBB.z0 + swcBB.z1) / 2 + 50;
 	qDebug("old: center.x = %f,center.y = %f,center.z = %f\n", loadedNTCenter.x, loadedNTCenter.y, loadedNTCenter.z);
 
@@ -6516,17 +6552,21 @@ void CMainApplication::SetupGlobalMatrix()
 		HmdQuadmax.v[1] = HmdQuadmax.v[1] > currentHmdQuadPos.v[1] ? HmdQuadmax.v[1] : currentHmdQuadPos.v[1];
 		HmdQuadmax.v[2] = HmdQuadmax.v[2] > currentHmdQuadPos.v[2] ? HmdQuadmax.v[2] : currentHmdQuadPos.v[2];
 	}
-	HmdQuadImageOffset.v[0] = 0;
-	HmdQuadImageOffset.v[1] = 1.5f;
+
+	// assume facing the wall
+	HmdQuadImageOffset.v[0] = 0.0f; // -- direction
+	HmdQuadImageOffset.v[1] = 0.0f; // user height, handled by HMD position
 	HmdQuadImageOffset.v[2] = (HmdQuadmax.v[1] - HmdQuadmin.v[1]) / 4;
-	// cout<<"HmdQuadmin x == "<<HmdQuadmin.v[0]<<"HmdQuadmin y == "<<HmdQuadmin.v[1]<<"HmdQuadmin z == "<<HmdQuadmin.v[2]<<endl;
-	// cout<<"HmdQuadmax x == "<<HmdQuadmax.v[0]<<"HmdQuadmax y == "<<HmdQuadmax.v[1]<<"HmdQuadmax z == "<<HmdQuadmax.v[2]<<endl;
+	cout << "HmdQuadmin x == " << HmdQuadmin.v[0] << "HmdQuadmin y == " << HmdQuadmin.v[1] << "HmdQuadmin z == " << HmdQuadmin.v[2] << endl;
+	cout << "HmdQuadmax x == " << HmdQuadmax.v[0] << "HmdQuadmax y == " << HmdQuadmax.v[1] << "HmdQuadmax z == " << HmdQuadmax.v[2] << endl;
 
 	m_globalMatrix = glm::translate(m_globalMatrix, glm::vec3(HmdQuadImageOffset.v[0], HmdQuadImageOffset.v[1], HmdQuadImageOffset.v[2]));
+
 	// m_globalMatrix = glm::translate(m_globalMatrix,glm::vec3(trans_x,trans_y,trans_z) ); //fine tune
 	// glm::vec4 cntr = m_globalMatrix * glm::vec4(loadedNTCenter.x,loadedNTCenter.y,loadedNTCenter.z,1);
 	// qDebug("after scaling: center.x = %f,center.y = %f,center.z = %f\n",cntr.x,cntr.y,cntr.z);
 	m_globalMatrix = glm::scale(m_globalMatrix, glm::vec3(m_globalScale, m_globalScale, m_globalScale));
+
 	m_globalMatrix = glm::translate(m_globalMatrix, glm::vec3(-loadedNTCenter.x, -loadedNTCenter.y, -loadedNTCenter.z));
 
 	// cntr = m_globalMatrix * glm::vec4(loadedNTCenter.x,loadedNTCenter.y,loadedNTCenter.z,1);
@@ -6543,7 +6583,7 @@ void CMainApplication::SetupGlobalMatrix()
 		s += '\n';
 	}
 	s += "------------------------------------\n";
-	// qDebug() << QString::fromStdString(s);
+	qDebug() << QString::fromStdString(s);
 	if (_idep->glWidget->notFinishedFlag)
 	{
 		std::ofstream outfile;
