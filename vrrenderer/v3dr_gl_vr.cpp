@@ -985,7 +985,7 @@ bool CMainApplication::BInitGL()
 	// set up each NT in sketchedNTList morphology line VAO&VBO
 	SetupAllMorphologyLine();
 
-	SetupGlobalMatrix();
+	// SetupGlobalMatrix();
 
 	// SetupMorphologyLine(0);
 	// SetupMorphologyLine(2);
@@ -1053,6 +1053,7 @@ void CMainApplication::Shutdown()
 	m_globalMatrix = glm::scale(m_globalMatrix, glm::vec3(1.0f / m_globalScale, 1.0f / m_globalScale, 1.0f / m_globalScale));
 	// m_globalMatrix = glm::translate(m_globalMatrix,glm::vec3(-trans_x,-trans_y,-trans_z) ); //fine tune
 	m_globalMatrix = glm::translate(m_globalMatrix, glm::vec3(-HmdQuadImageOffset.v[0], -HmdQuadImageOffset.v[1], -HmdQuadImageOffset.v[2]));
+	m_globalMatrix = glm::translate(m_globalMatrix, glm::vec3(0, -_idep->V3Dmainwindow->userHeight, 0));
 	// replace "vaa3d_traced_neuron" with VR_drawn_curves
 	////////update glwidget->listneurontree
 	if (m_bHasImage4D && (sketchedNTList.size() > 0))
@@ -4651,29 +4652,8 @@ void CMainApplication::RenderFrame()
 	}
 	case 1:
 	{
-		// update volume position first
-		// shuning: -----------------------adjust volume height based on HMD position--------------
-		const Matrix4 &mat_H = m_rmat4DevicePose[vr::k_unTrackedDeviceIndex_Hmd];
-		glm::mat4 mat = glm::mat4();
-		for (size_t i = 0; i < 4; i++)
-		{
-			for (size_t j = 0; j < 4; j++)
-			{
-				mat[i][j] = *(mat_H.get() + i * 4 + j);
-			}
-		}
-		mat = glm::inverse(m_globalMatrix) * mat;
-		glm::vec4 hmdPos = mat * glm::vec4(0, 0, 0, 1);
-		// cout << "hmdPose: " << hmdPos[0] << ", " << hmdPos[1] << ", " << hmdPos[2] << ", " << hmdPos[3] << endl;
-
-		glm::vec4 gblPos = inverse(m_globalMatrix) * glm::vec4(0, 0, 0, 1);
-		// cout << "gblPos: " << gblPos[0] << ", " << gblPos[1] << ", " << gblPos[2] << ", " << gblPos[3] << endl;
-		cout << gblPos[1] << ", " << hmdPos[1] << endl;
-		float deltaY = hmdPos[1] - gblPos[1];
-		cout << "deltaY: " << deltaY << endl;
-		m_globalMatrix = glm::translate(m_globalMatrix, glm::vec3(0, deltaY, 0));
-		// shuning: -----------------------adjust volume height based on HMD position done --------------
 		adjustVolHeight++;
+		SetupGlobalMatrix();
 	}
 	}
 
@@ -6524,7 +6504,7 @@ void CMainApplication::SetupGlobalMatrix()
 
 	// original center location
 	loadedNTCenter.x = (swcBB.x0 + swcBB.x1) / 2;
-	loadedNTCenter.y = 0.0; //(swcBB.y0 + swcBB.y1) / 2 + 20;
+	loadedNTCenter.y = (swcBB.y0 + swcBB.y1) / 2 + 20;
 	loadedNTCenter.z = (swcBB.z0 + swcBB.z1) / 2 + 50;
 	qDebug("old: center.x = %f,center.y = %f,center.z = %f\n", loadedNTCenter.x, loadedNTCenter.y, loadedNTCenter.z);
 
@@ -6555,10 +6535,36 @@ void CMainApplication::SetupGlobalMatrix()
 
 	// assume facing the wall
 	HmdQuadImageOffset.v[0] = 0.0f; // -- direction
-	HmdQuadImageOffset.v[1] = 0.0f; // user height, handled by HMD position
+	HmdQuadImageOffset.v[1] = 0.0f; // 1.5f; // user height, handled by HMD position (_idep->V3Dmainwindow->userHeight)
 	HmdQuadImageOffset.v[2] = (HmdQuadmax.v[1] - HmdQuadmin.v[1]) / 4;
 	cout << "HmdQuadmin x == " << HmdQuadmin.v[0] << "HmdQuadmin y == " << HmdQuadmin.v[1] << "HmdQuadmin z == " << HmdQuadmin.v[2] << endl;
 	cout << "HmdQuadmax x == " << HmdQuadmax.v[0] << "HmdQuadmax y == " << HmdQuadmax.v[1] << "HmdQuadmax z == " << HmdQuadmax.v[2] << endl;
+
+	// update volume position first
+	// shuning: -----------------------adjust volume height based on HMD position--------------
+	if (_idep->V3Dmainwindow->currentImgIdx == 0) // setup user height for the first time
+	{
+		const Matrix4 &mat_H = m_rmat4DevicePose[vr::k_unTrackedDeviceIndex_Hmd];
+		glm::mat4 mat = glm::mat4();
+		for (size_t i = 0; i < 4; i++)
+		{
+			for (size_t j = 0; j < 4; j++)
+			{
+				mat[i][j] = *(mat_H.get() + i * 4 + j);
+			}
+		}
+		mat = glm::inverse(m_globalMatrix) * mat;
+		glm::vec4 hmdPos = mat * glm::vec4(0, 0, 0, 1);
+		// cout << "hmdPose: " << hmdPos[0] << ", " << hmdPos[1] << ", " << hmdPos[2] << ", " << hmdPos[3] << endl;
+
+		glm::vec4 gblPos = inverse(m_globalMatrix) * glm::vec4(0, 0, 0, 1);
+		// cout << "gblPos: " << gblPos[0] << ", " << gblPos[1] << ", " << gblPos[2] << ", " << gblPos[3] << endl;
+		cout << gblPos[1] << ", " << hmdPos[1] << endl;
+		_idep->V3Dmainwindow->userHeight = hmdPos[1] - gblPos[1];
+		cout << "User Height: " << _idep->V3Dmainwindow->userHeight << endl;
+	}
+	m_globalMatrix = glm::translate(m_globalMatrix, glm::vec3(0, _idep->V3Dmainwindow->userHeight, 0));
+	// shuning: -----------------------adjust volume height based on HMD position done --------------
 
 	m_globalMatrix = glm::translate(m_globalMatrix, glm::vec3(HmdQuadImageOffset.v[0], HmdQuadImageOffset.v[1], HmdQuadImageOffset.v[2]));
 

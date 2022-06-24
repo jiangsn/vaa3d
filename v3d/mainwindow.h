@@ -507,6 +507,7 @@ public: // for image processing, some of the parameters should be globally set
 	QString currentImgAttributes;
 	QString pID;
 	int trainNum;
+	float userHeight;
 	bool isTrained;
 	QString img_path_prefix;
 	QString swc_path_prefix;
