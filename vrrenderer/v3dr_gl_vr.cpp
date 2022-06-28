@@ -1406,13 +1406,21 @@ bool CMainApplication::HandleInput()
 			{
 				trainStage = 6;
 			}
-			if (sdlEvent.key.keysym.sym == SDLK_KP_0)
+			if (sdlEvent.key.keysym.sym == SDLK_KP_7)
 			{
-				trainStage = 0;
+				trainStage = 7;
+			}
+			if (sdlEvent.key.keysym.sym == SDLK_KP_8)
+			{
+				trainStage = 8;
+			}
+			if (sdlEvent.key.keysym.sym == SDLK_KP_9)
+			{
+				trainStage = 9;
 			}
 			if (sdlEvent.key.keysym.sym == SDLK_KP_MINUS)
 			{
-				trainStage = 9;
+				trainStage = 999;
 			}
 		}
 	} //*/
@@ -2299,23 +2307,23 @@ void CMainApplication::RunMainLoop()
 	pressTime.start();
 	pressElapsed = 0;
 
-	trainStage = 9; // display nothing
+	trainStage = 999; // display nothing
 
 	if (_idep->V3Dmainwindow->currentImgIdx == 0)
 	{
 		showTips = true;
-		trainStage = 9;
+		trainStage = 7;
 	}
-	else if (_idep->V3Dmainwindow->currentImgIdx < _idep->V3Dmainwindow->trainNum)
-	{
-		showTips = false;
-		trainStage = 0;
-	}
-	else
-	{
-		showTips = false;
-		trainStage = 9;
-	}
+	// else if (_idep->V3Dmainwindow->currentImgIdx < _idep->V3Dmainwindow->trainNum)
+	// {
+	// 	showTips = false;
+	// 	trainStage = 0;
+	// }
+	// else
+	// {
+	// 	showTips = false;
+	// 	trainStage = 9;
+	// }
 
 	while (!bQuit && !loadNextQuit)
 	// while (!loadNextQuit)
@@ -4647,11 +4655,13 @@ void CMainApplication::RenderFrame()
 	{
 	case 0:
 	{
+		// can't get hmd position in the first frame
 		adjustVolHeight++;
 		break;
 	}
 	case 1:
 	{
+		// get hmd position in the second frame and setup user height.
 		adjustVolHeight++;
 		SetupGlobalMatrix();
 	}
@@ -4982,19 +4992,26 @@ bool CMainApplication::SetupTexturemaps()
 
 	if (nError != 0)
 		return false;
+
+	// cout << "imageRGBA: " << endl;
 	for (int i = 0; i < nImageWidth; i++)
 	{
 		for (int j = 0; j < nImageHeight; j++)
 		{
-			if (imageRGBA[(j * nImageWidth + i) * 4 + 1] > 225 && imageRGBA[(j * nImageWidth + i) * 4 + 2] > 225)
+			// cout << imageRGBA[(j * nImageWidth + i)];
+			// if (imageRGBA[(j * nImageWidth + i) * 4 + 0] > 225 && imageRGBA[(j * nImageWidth + i) * 4 + 1] > 225 && imageRGBA[(j * nImageWidth + i) * 4 + 2] > 225)
+			if (imageRGBA[(j * nImageWidth + i) * 4 + 0] < 10 && imageRGBA[(j * nImageWidth + i) * 4 + 1] > 250 && imageRGBA[(j * nImageWidth + i) * 4 + 2] < 10)
 			{
-				imageRGBA[(j * nImageWidth + i) * 4 + 3] = 1;
+				// if RGB > 225 (almost white), set alpha to transparent;
+				imageRGBA[(j * nImageWidth + i) * 4 + 3] = 0;
 			}
-			else
+			else if (i > 2000 || j > 2000) // exclude controller texture
 			{
-				imageRGBA[(j * nImageWidth + i) * 4 + 3] = 255;
+				// set alpha to opaque / semi transparent
+				imageRGBA[(j * nImageWidth + i) * 4 + 3] = 128;
 			}
 		}
+		// cout << endl;
 	}
 	glGenTextures(1, &m_iTexture);
 	glBindTexture(GL_TEXTURE_2D, m_iTexture);
@@ -5218,6 +5235,66 @@ void CMainApplication::SetupControllerTexture()
 			AddVertex(point_3.x, point_3.y, point_3.z, 0.35f, 0.550f, vcVerts);
 			AddVertex(point_4.x, point_4.y, point_4.z, 0.55f, 0.550f, vcVerts);
 			AddVertex(point_2.x, point_2.y, point_2.z, 0.55f, 0.390f, vcVerts);
+			break;
+		}
+		case 7: // intro
+		{
+			Vector4 point_1(-1.5f, 0.6f, -4.0f, 1);
+			Vector4 point_2(1.5f, 0.6f, -4.0f, 1);
+			Vector4 point_3(-1.5f, -1.4f, -4.0f, 1);
+			Vector4 point_4(1.5f, -1.4f, -4.0f, 1);
+
+			point_1 = mat_H * point_1;
+			point_2 = mat_H * point_2;
+			point_3 = mat_H * point_3;
+			point_4 = mat_H * point_4;
+
+			AddVertex(point_1.x, point_1.y, point_1.z, 0.45f, 0.000f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.60f, 0.000f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.45f, 0.100f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.45f, 0.100f, vcVerts);
+			AddVertex(point_4.x, point_4.y, point_4.z, 0.60f, 0.100f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.60f, 0.000f, vcVerts);
+			break;
+		}
+		case 8: // background
+		{
+			Vector4 point_1(-1.5f, 0.6f, -4.0f, 1);
+			Vector4 point_2(1.5f, 0.6f, -4.0f, 1);
+			Vector4 point_3(-1.5f, -1.4f, -4.0f, 1);
+			Vector4 point_4(1.5f, -1.4f, -4.0f, 1);
+
+			point_1 = mat_H * point_1;
+			point_2 = mat_H * point_2;
+			point_3 = mat_H * point_3;
+			point_4 = mat_H * point_4;
+
+			AddVertex(point_1.x, point_1.y, point_1.z, 0.45f, 0.100f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.60f, 0.100f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.45f, 0.200f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.45f, 0.200f, vcVerts);
+			AddVertex(point_4.x, point_4.y, point_4.z, 0.60f, 0.200f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.60f, 0.100f, vcVerts);
+			break;
+		}
+		case 9: // task
+		{
+			Vector4 point_1(-1.5f, 0.6f, -4.0f, 1);
+			Vector4 point_2(1.5f, 0.6f, -4.0f, 1);
+			Vector4 point_3(-1.5f, -1.4f, -4.0f, 1);
+			Vector4 point_4(1.5f, -1.4f, -4.0f, 1);
+
+			point_1 = mat_H * point_1;
+			point_2 = mat_H * point_2;
+			point_3 = mat_H * point_3;
+			point_4 = mat_H * point_4;
+
+			AddVertex(point_1.x, point_1.y, point_1.z, 0.45f, 0.200f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.60f, 0.200f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.45f, 0.300f, vcVerts);
+			AddVertex(point_3.x, point_3.y, point_3.z, 0.45f, 0.300f, vcVerts);
+			AddVertex(point_4.x, point_4.y, point_4.z, 0.60f, 0.300f, vcVerts);
+			AddVertex(point_2.x, point_2.y, point_2.z, 0.60f, 0.200f, vcVerts);
 			break;
 		}
 		case -1: // finish train
@@ -6342,8 +6419,9 @@ void CMainApplication::SetupMorphologyLine(NeuronTree neuron_Tree,
 void CMainApplication::RenderControllerAxes() // note: note render, actually setup VAO and VBO for axes
 {
 	// don't draw controllers if somebody else has input focus
-	if (m_pHMD->IsInputFocusCapturedByAnotherProcess())
-		return;
+	// Shuning: we use offline mode only so this is commented.
+	// if (m_pHMD->IsInputFocusCapturedByAnotherProcess())
+	// 	return;
 
 	std::vector<float> vertdataarray;
 
@@ -6505,10 +6583,10 @@ void CMainApplication::SetupGlobalMatrix()
 	// original center location
 	loadedNTCenter.x = (swcBB.x0 + swcBB.x1) / 2;
 	loadedNTCenter.y = (swcBB.y0 + swcBB.y1) / 2 + 20;
-	loadedNTCenter.z = (swcBB.z0 + swcBB.z1) / 2 + 50;
+	loadedNTCenter.z = (swcBB.z0 + swcBB.z1) / 2 - 50;
 	qDebug("old: center.x = %f,center.y = %f,center.z = %f\n", loadedNTCenter.x, loadedNTCenter.y, loadedNTCenter.z);
 
-	m_globalScale = 1 / maxD / 2; // these numbers are related to room size
+	m_globalScale = 1 / maxD / 1; // these numbers are related to room size
 
 	float trans_x = 0.6;
 	float trans_y = 1.5;
@@ -6536,7 +6614,7 @@ void CMainApplication::SetupGlobalMatrix()
 	// assume facing the wall
 	HmdQuadImageOffset.v[0] = 0.0f; // -- direction
 	HmdQuadImageOffset.v[1] = 0.0f; // 1.5f; // user height, handled by HMD position (_idep->V3Dmainwindow->userHeight)
-	HmdQuadImageOffset.v[2] = (HmdQuadmax.v[1] - HmdQuadmin.v[1]) / 4;
+	HmdQuadImageOffset.v[2] = -(HmdQuadmax.v[1] - HmdQuadmin.v[1]) / 4;
 	cout << "HmdQuadmin x == " << HmdQuadmin.v[0] << "HmdQuadmin y == " << HmdQuadmin.v[1] << "HmdQuadmin z == " << HmdQuadmin.v[2] << endl;
 	cout << "HmdQuadmax x == " << HmdQuadmax.v[0] << "HmdQuadmax y == " << HmdQuadmax.v[1] << "HmdQuadmax z == " << HmdQuadmax.v[2] << endl;
 
@@ -7162,7 +7240,7 @@ void CMainApplication::RenderScene(vr::Hmd_Eye nEye)
 	//=================== Render Model rendering ======================
 	if (m_bControllerModelON)
 	{
-
+		// Shuning: the controller should always be rendered, is the code here?
 		glUseProgram(m_unRenderModelProgramID);
 
 		for (uint32_t unTrackedDevice = 0; unTrackedDevice < vr::k_unMaxTrackedDeviceCount; unTrackedDevice++)
