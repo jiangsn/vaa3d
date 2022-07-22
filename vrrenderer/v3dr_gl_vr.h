@@ -231,7 +231,7 @@ public:
 	Matrix4 GetCurrentViewProjectionMatrix(vr::Hmd_Eye nEye);
 	void UpdateHMDMatrixPose();
 
-	void AppendMovetoFile();
+	string Mat2String(glm::mat4 mat);
 
 	Matrix4 ConvertSteamVRMatrixToMatrix4(const vr::HmdMatrix34_t &matPose);
 

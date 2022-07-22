@@ -1484,6 +1484,15 @@ bool CMainApplication::HandleInput()
 							trainStage = -1;
 						}
 
+						string s = "# Submit [" + to_string(_idep->glWidget->exptime.elapsed() * 0.001) + "]\n";
+						s += "# -----\n";
+						qDebug() << QString::fromStdString(s);
+
+						std::ofstream outfile;
+						outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
+						outfile << s;
+						outfile.close();
+
 						_idep->glWidget->autoSaveSwcVR();
 					}
 					else
@@ -1528,24 +1537,17 @@ bool CMainApplication::HandleInput()
 
 						// shuning track right controller drawing
 						qDebug(" DrawCtrlRightPos = %.2f,%.2f,%.2f\n", ctrlRightPos.x, ctrlRightPos.y, ctrlRightPos.z);
-						string mat_out = "------right controller drawing------\n";
-						float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
-						mat_out += "Time: " + std::to_string(elapsed_time) + "\n";
-						for (size_t i = 0; i < 4; i++)
+
+						if (!finish_ano)
 						{
-							for (size_t j = 0; j < 4; j++)
-							{
-								mat_out += to_string(mat[i][j]) + ", ";
-							}
-							mat_out += "\n";
-						}
-						mat_out += "------------------------------------\n";
-						// qDebug() << QString::fromStdString(mat_out);
-						if (_idep->glWidget->notFinishedFlag)
-						{
+							string s = "# Draw [" + to_string(_idep->glWidget->exptime.elapsed() * 0.001) + "]\n";
+							s += Mat2String(mat);
+							s += "# -----\n";
+							qDebug() << QString::fromStdString(s);
+
 							std::ofstream outfile;
 							outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
-							outfile << mat_out;
+							outfile << s;
 							outfile.close();
 						}
 
@@ -1570,7 +1572,8 @@ bool CMainApplication::HandleInput()
 						}
 						currentNT.listNeuron.append(SL0);
 						currentNT.hashNeuron.insert(SL0.n, currentNT.listNeuron.size() - 1); // store NeuronSWC SL0 into currentNT
-						if (img4d && m_bVirtualFingerON)									 // if an image exist, call virtual finger functions for curve drawing
+
+						if (img4d && m_bVirtualFingerON) // if an image exist, call virtual finger functions for curve drawing
 						{
 							// for each 10 nodes/points, call virtual finger once aiming to see the line's mid-result
 							if ((currentNT.listNeuron.size() > 0) && (currentNT.listNeuron.size() % 10 == 0))
@@ -1581,25 +1584,21 @@ bool CMainApplication::HandleInput()
 								for (int i = 0; i < currentNT.listNeuron.size(); i++)
 								{
 									NeuronSWC S_node = currentNT.listNeuron.at(i);
-									// swcBB (SHUNING: Don't check it)
-									// if (!isAnyNodeOutBBox(S_node))
-									// {
-									// 	S_node.n = tempNT.listNeuron.size();
-									// 	if (S_node.pn != -1)
-									// 		S_node.pn = tempNT.listNeuron.last().n;
-									// 	tempNT.listNeuron.append(S_node);
-									// 	tempNT.hashNeuron.insert(S_node.n, tempNT.listNeuron.size() - 1);
-									// }
-									// else if (i == 0)
-									// {
-									// 	vertexcount = swccount = 0;
-									// 	break;
-									// }
-									S_node.n = tempNT.listNeuron.size();
-									if (S_node.pn != -1)
-										S_node.pn = tempNT.listNeuron.last().n;
-									tempNT.listNeuron.append(S_node);
-									tempNT.hashNeuron.insert(S_node.n, tempNT.listNeuron.size() - 1);
+									// swcBB (SHUNING: Don't check it) //05202022
+									// SHUNING: still check it or it may cause freeze // 07182022
+									if (!isAnyNodeOutBBox(S_node))
+									{
+										S_node.n = tempNT.listNeuron.size();
+										if (S_node.pn != -1)
+											S_node.pn = tempNT.listNeuron.last().n;
+										tempNT.listNeuron.append(S_node);
+										tempNT.hashNeuron.insert(S_node.n, tempNT.listNeuron.size() - 1);
+									}
+									else if (i == 0)
+									{
+										vertexcount = swccount = 0;
+										break;
+									}
 								}
 								qDebug() << "charge isAnyNodeOutBBox done, goto virtual finger";
 								// improve curve shape
@@ -1665,6 +1664,7 @@ bool CMainApplication::HandleInput()
 								vUndoList.erase(vUndoList.begin());
 							}
 							vUndoList.push_back(sketchedNTList);
+							qDebug() << "vUndoList.size(): " << vUndoList.size();
 							if (vRedoList.size() > 0)
 								vRedoList.clear();
 							bIsRedoEnable = false;
@@ -1886,24 +1886,17 @@ bool CMainApplication::HandleInput()
 						// if(fBrightness>0.8f)
 						//	fBrightness = 0.8f;
 
-						string mat_out = "------------------------------------\n";
-
-						float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
-						mat_out += "Time: " + std::to_string(elapsed_time) + "\n";
-						mat_out += "-----------------contrast change---------------------\n";
-						mat_out += "contrast: ";
-						mat_out += to_string(fContrast) + "\n";
-						mat_out += "---------------contrast change-------------------\n";
 						if (!finish_ano)
 						{
-							showConfirmFinish = false;
-							if (_idep->glWidget->notFinishedFlag)
-							{
-								std::ofstream outfile;
-								outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
-								outfile << mat_out;
-								outfile.close();
-							}
+							string s = "# Contrast [" + to_string(_idep->glWidget->exptime.elapsed() * 0.001) + "]\n";
+							s += std::to_string(fContrast);
+							s += "\n# -----\n";
+							qDebug() << QString::fromStdString(s);
+
+							std::ofstream outfile;
+							outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
+							outfile << s;
+							outfile.close();
 						}
 					}
 					else if (m_fTouchPosY < -0.5)
@@ -1915,25 +1908,17 @@ bool CMainApplication::HandleInput()
 						// if(fBrightness<0)
 						//	fBrightness = 0;
 
-						string mat_out = "------------------------------------\n";
-
-						float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
-						mat_out += "Time: " + std::to_string(elapsed_time) + "\n";
-						mat_out += "-----------------contrast change---------------------\n";
-						mat_out += "contrast: ";
-						mat_out += to_string(fContrast) + "\n";
-						mat_out += "---------------contrast change-------------------\n";
-
 						if (!finish_ano)
 						{
-							showConfirmFinish = false;
-							if (_idep->glWidget->notFinishedFlag)
-							{
-								std::ofstream outfile;
-								outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
-								outfile << mat_out;
-								outfile.close();
-							}
+							string s = "# Contrast [" + to_string(_idep->glWidget->exptime.elapsed() * 0.001) + "]\n";
+							s += std::to_string(fContrast);
+							s += "\n# -----\n";
+							qDebug() << QString::fromStdString(s);
+
+							std::ofstream outfile;
+							outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
+							outfile << s;
+							outfile.close();
 						}
 					}
 				}
@@ -2004,7 +1989,22 @@ bool CMainApplication::HandleInput()
 				}
 				mat = glm::inverse(m_globalMatrix) * mat;
 				glm::vec4 m_v4DevicePose = mat * glm::vec4(0, 0, 0, 1); // change the world space(with the globalMatrix) to the initial world space
+
+				if (!finish_ano)
+				{
+					string s = "# Erase [" + to_string(_idep->glWidget->exptime.elapsed() * 0.001) + "]\n";
+					s += Mat2String(mat);
+					s += "# -----\n";
+					qDebug() << QString::fromStdString(s);
+
+					std::ofstream outfile;
+					outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
+					outfile << s;
+					outfile.close();
+				}
+
 				Erase(glm::vec3(m_v4DevicePose.x, m_v4DevicePose.y, m_v4DevicePose.z));
+
 				SetupAllMorphologyLine();
 			}
 		}
@@ -2035,19 +2035,11 @@ bool CMainApplication::HandleInput()
 
 				if (!finish_ano)
 				{
-					showConfirmFinish = false;
-					// shuning track rotation
-					string s = "--------m_globalMatrix--------\n";
-					float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
-					s += "Time: " + std::to_string(elapsed_time) + "\n";
-					for (int i = 0; i < 4; i++)
-					{
-						for (int j = 0; j < 4; j++)
-							s += to_string(m_globalMatrix[i][j]) + ", ";
-						s += '\n';
-					}
-					s += "------------------------------------\n";
-					// qDebug() << QString::fromStdString(s);
+					string s = "# Move [" + to_string(_idep->glWidget->exptime.elapsed() * 0.001) + "]\n";
+					s += Mat2String(m_globalMatrix);
+					s += "# -----\n";
+					qDebug() << QString::fromStdString(s);
+
 					std::ofstream outfile;
 					outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
 					outfile << s;
@@ -2059,6 +2051,7 @@ bool CMainApplication::HandleInput()
 			if ((state.ulButtonTouched & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad)) &&
 				(state.ulButtonPressed & vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad))) //&&!(showshootingPad))
 			{
+				showConfirmFinish = false;
 				float m_fTouchPosY;
 				float m_fTouchPosX;
 				if (m_TouchFirst == true)
@@ -2086,26 +2079,15 @@ bool CMainApplication::HandleInput()
 
 					if (!finish_ano)
 					{
-						showConfirmFinish = false;
-						string s = "------------------------------------\n";
-						float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
-						s += "Time: " + std::to_string(elapsed_time) + "\n";
-						s += "--------m_globalMatrix--------\n";
-						for (int i = 0; i < 4; i++)
-						{
-							for (int j = 0; j < 4; j++)
-								s += to_string(m_globalMatrix[i][j]) + ", ";
-							s += '\n';
-						}
-						s += "------------------------------------\n";
-						// qDebug() << QString::fromStdString(s);
-						if (_idep->glWidget->notFinishedFlag)
-						{
-							std::ofstream outfile;
-							outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
-							outfile << s;
-							outfile.close();
-						}
+						string s = "# Zoom [" + to_string(_idep->glWidget->exptime.elapsed() * 0.001) + "]\n";
+						s += Mat2String(m_globalMatrix);
+						s += "# -----\n";
+						qDebug() << QString::fromStdString(s);
+
+						std::ofstream outfile;
+						outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
+						outfile << s;
+						outfile.close();
 					}
 				}
 				else if (m_fTouchPosY < -0.5)
@@ -2115,26 +2097,15 @@ bool CMainApplication::HandleInput()
 					m_globalMatrix = glm::scale(m_globalMatrix, glm::vec3(0.99, 0.99, 0.99));
 					if (!finish_ano)
 					{
-						showConfirmFinish = false;
-						string s = "------------------------------------\n";
-						float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
-						s += "Time: " + std::to_string(elapsed_time) + "\n";
-						s += "--------m_globalMatrix--------\n";
-						for (int i = 0; i < 4; i++)
-						{
-							for (int j = 0; j < 4; j++)
-								s += to_string(m_globalMatrix[i][j]) + ", ";
-							s += '\n';
-						}
-						s += "------------------------------------\n";
-						// qDebug() << QString::fromStdString(s);
-						if (_idep->glWidget->notFinishedFlag)
-						{
-							std::ofstream outfile;
-							outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
-							outfile << s;
-							outfile.close();
-						}
+						string s = "# Zoom [" + to_string(_idep->glWidget->exptime.elapsed() * 0.001) + "]\n";
+						s += Mat2String(m_globalMatrix);
+						s += "# -----\n";
+						qDebug() << QString::fromStdString(s);
+
+						std::ofstream outfile;
+						outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
+						outfile << s;
+						outfile.close();
 					}
 				}
 			}
@@ -2308,8 +2279,9 @@ void CMainApplication::RunMainLoop()
 	pressElapsed = 0;
 
 	trainStage = 999; // display nothing
+	showTips = false;
 
-	if (_idep->V3Dmainwindow->currentImgIdx == 0)
+	if (_idep->V3Dmainwindow->currentImgIdx == 0 && _idep->V3Dmainwindow->currentImgIdx<_idep->V3Dmainwindow->trainNum> 0)
 	{
 		showTips = true;
 		trainStage = 7;
@@ -3055,18 +3027,15 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 		if (m_fTouchPosX > 0.5)
 		{
 			// shuning: this is replaced by redo
-			string mat_out = "------------------------------------\n";
-
-			float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
-			mat_out += "Time: " + std::to_string(elapsed_time) + "\n";
-			mat_out += "Redo\n";
-			mat_out += "------------------------------------\n";
-
-			if (_idep->glWidget->notFinishedFlag)
+			if (!finish_ano)
 			{
+				string s = "# Redo [" + to_string(_idep->glWidget->exptime.elapsed() * 0.001) + "]\n";
+				s += "# -----\n";
+				qDebug() << QString::fromStdString(s);
+
 				std::ofstream outfile;
 				outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
-				outfile << mat_out;
+				outfile << s;
 				outfile.close();
 			}
 
@@ -3076,18 +3045,15 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 		if (m_fTouchPosX < -0.5)
 		{
 			// shuning: this function is replaced by undo
-			string mat_out = "------------------------------------\n";
-
-			float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
-			mat_out += "Time: " + std::to_string(elapsed_time) + "\n";
-			mat_out += "Undo\n";
-			mat_out += "------------------------------------\n";
-
-			if (_idep->glWidget->notFinishedFlag)
+			if (!finish_ano)
 			{
+				string s = "# Undo [" + to_string(_idep->glWidget->exptime.elapsed() * 0.001) + "]\n";
+				s += "# -----\n";
+				qDebug() << QString::fromStdString(s);
+
 				std::ofstream outfile;
 				outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
-				outfile << mat_out;
+				outfile << s;
 				outfile.close();
 			}
 
@@ -3335,8 +3301,8 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 						NeuronTree InputNT;
 						InputNT = tempNT;
 						int iter_number = 1;
-						bool convergent = false; // todo:future may add this convergent func
-						for (int i = 0; (convergent == false) && (i < iter_number); i++)
+						bool convergent = false;										 // todo:future may add this convergent func
+						for (int i = 0; (convergent == false) && (i < iter_number); i++) // shuning: one iteration?
 						{
 							NeuronTree OutputNT;
 							RefineSketchCurve(i % 3, InputNT, OutputNT); // ver. 2b
@@ -3422,6 +3388,8 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 							beginNode->y = min_node.y;
 							beginNode->z = min_node.z;
 							autoConnected = min_node.type;
+
+							qDebug() << "Adjust start node to (" << beginNode->x << ", " << beginNode->y << ", " << beginNode->z << ")" << endl;
 							break;
 						}
 					}
@@ -3457,6 +3425,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 								endNode->y = min_node.y;
 								endNode->z = min_node.z;
 								autoConnected = min_node.type;
+								qDebug() << "Adjust end node to (" << endNode->x << ", " << endNode->y << ", " << endNode->z << ")" << endl;
 								break;
 							}
 						}
@@ -3480,6 +3449,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 							vUndoList.erase(vUndoList.begin());
 						}
 						vUndoList.push_back(sketchedNTList);
+						qDebug() << "vUndoList.size(): " << vUndoList.size();
 						if (vRedoList.size() > 0)
 							vRedoList.clear();
 						bIsRedoEnable = false;
@@ -3528,6 +3498,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 							vUndoList.erase(vUndoList.begin());
 						}
 						vUndoList.push_back(temp_NTL);
+						qDebug() << "vUndoList.size(): " << vUndoList.size();
 						if (vRedoList.size() > 0)
 							vRedoList.clear();
 						bIsRedoEnable = false;
@@ -3754,6 +3725,7 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 								vUndoList.erase(vUndoList.begin());
 							}
 							vUndoList.push_back(sketchedNTList);
+							qDebug() << "vUndoList.size(): " << vUndoList.size();
 							if (vRedoList.size() > 0)
 								vRedoList.clear();
 							bIsRedoEnable = false;
@@ -4403,12 +4375,18 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 			ctrSphereColor[1] = neuron_type_color[m_curMarkerColorType][1] / 255.0;
 			ctrSphereColor[2] = neuron_type_color[m_curMarkerColorType][2] / 255.0;
 
-			string mat_out = "------------------------------------\n";
-			float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
-			mat_out += "Time: " + std::to_string(elapsed_time) + "\n";
-			mat_out += "-----------------VF change---------------------\n";
-			mat_out += "VF: off";
-			mat_out += "---------------VF change-------------------\n";
+			if (!finish_ano)
+			{
+				string s = "# VF [" + to_string(_idep->glWidget->exptime.elapsed() * 0.001) + "]\n";
+				s += "Off\n";
+				s += "# -----\n";
+				qDebug() << QString::fromStdString(s);
+
+				std::ofstream outfile;
+				outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
+				outfile << s;
+				outfile.close();
+			}
 		}
 		else
 		{
@@ -4418,12 +4396,18 @@ void CMainApplication::ProcessVREvent(const vr::VREvent_t &event)
 			ctrSphereColor[1] = neuron_type_color[m_curMarkerColorType][1] / 255.0;
 			ctrSphereColor[2] = neuron_type_color[m_curMarkerColorType][2] / 255.0;
 
-			string mat_out = "------------------------------------\n";
-			float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
-			mat_out += "Time: " + std::to_string(elapsed_time) + "\n";
-			mat_out += "-----------------VF change---------------------\n";
-			mat_out += "VF: on";
-			mat_out += "---------------VF change-------------------\n";
+			if (!finish_ano)
+			{
+				string s = "# VF [" + to_string(_idep->glWidget->exptime.elapsed() * 0.001) + "]\n";
+				s += "On\n";
+				s += "# -----\n";
+				qDebug() << QString::fromStdString(s);
+
+				std::ofstream outfile;
+				outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
+				outfile << s;
+				outfile.close();
+			}
 		}
 
 		// use grip button(right) to change mode draw/delelte/drag/drawmarker/deletemarker
@@ -4737,24 +4721,26 @@ void CMainApplication::RenderFrame()
 	}
 	UpdateHMDMatrixPose();
 
-	AppendMovetoFile();
+	// AppendMovetoFile();
 }
 
-void CMainApplication::AppendMovetoFile()
+string CMainApplication::Mat2String(glm::mat4 mat)
 {
-	string s = "";
+	string s = "[\n";
 	for (int i = 0; i < 4; i++)
 	{
+		s += "  [";
 		for (int j = 0; j < 4; j++)
-			// s += to_string(m_HMDTrans[i][j]) + ", ";
-			s += to_string(m_globalMatrix[i][j]) + ", ";
-		s += '\n';
+			s += to_string(mat[i][j]) + ", ";
+		s += "],\n";
 	}
+	s += "]\n";
 	// qDebug() << QString::fromStdString(s);
 	// std::ofstream outfile;
 	// outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
 	// outfile << m_rmat4DevicePose;
 	// outfile.close();
+	return s;
 }
 
 //-----------------------------------------------------------------------------
@@ -6656,23 +6642,27 @@ void CMainApplication::SetupGlobalMatrix()
 	// cntr = m_globalMatrix * glm::vec4(loadedNTCenter.x,loadedNTCenter.y,loadedNTCenter.z,1);
 	// qDebug("after translation: center.x = %f,center.y = %f,center.z = %f\n",cntr.x,cntr.y,cntr.z);
 
-	string s = "------------------------------------\n";
-	float elapsed_time = _idep->glWidget->exptime.elapsed() * 0.001;
-	s += "Time: " + std::to_string(elapsed_time) + "\n";
-	s += "--------m_globalMatrix--------\n";
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-			s += to_string(m_globalMatrix[i][j]) + ", ";
-		s += '\n';
-	}
-	s += "------------------------------------\n";
-	qDebug() << QString::fromStdString(s);
-	if (_idep->glWidget->notFinishedFlag)
+	_idep->glWidget->exptime.start();
+	if (!finish_ano)
 	{
 		std::ofstream outfile;
 		outfile.open(_idep->V3Dmainwindow->currentEventPath.toStdString(), std::ios_base::app); // append instead of overwrite
+
+		string s = "# Init [" + to_string(_idep->glWidget->exptime.elapsed() * 0.001) + "]\n";
+		s += Mat2String(m_globalMatrix);
+		s += "# -----\n";
 		outfile << s;
+
+		s = "# VF [" + to_string(_idep->glWidget->exptime.elapsed() * 0.001) + "]\n";
+		s += m_bVirtualFingerON ? "On\n" : "Off\n";
+		s += "# -----\n";
+		outfile << s;
+
+		s = "# Contrast [" + to_string(_idep->glWidget->exptime.elapsed() * 0.001) + "]\n";
+		s += std::to_string(fContrast);
+		s += "\n# -----\n";
+		outfile << s;
+
 		outfile.close();
 	}
 }
@@ -8029,13 +8019,18 @@ void CMainApplication::RefineSketchCurve(int direction, NeuronTree &oldNTree, Ne
 				nearpos_vec.push_back(MyMarker(loc0.x, loc0.y, loc0.z));
 				farpos_vec.push_back(MyMarker(loc1.x, loc1.y, loc1.z));
 			}
-
-			// fastmarching_drawing_dynamic(nearpos_vec, farpos_vec, (unsigned char*)data1d, outswc, N,M,P, 1, 5);
-			fastmarching_drawing_serialbboxes(nearpos_vec, farpos_vec, (unsigned char *)data1d, outswc, N, M, P, 1, 5);
-			qDebug() << "done fm function start smooth";
-			smooth_sketch_curve(outswc, 5);
-			qDebug() << "done smooth";
-
+			try
+			{
+				// fastmarching_drawing_dynamic(nearpos_vec, farpos_vec, (unsigned char*)data1d, outswc, N,M,P, 1, 5);
+				fastmarching_drawing_serialbboxes(nearpos_vec, farpos_vec, (unsigned char *)data1d, outswc, N, M, P, 1, 5);
+				qDebug() << "done fm function start smooth";
+				smooth_sketch_curve(outswc, 5);
+				qDebug() << "done smooth";
+			}
+			catch (...)
+			{
+				qDebug() << "error in fastmarching_drawing_serialbboxes / smooth_sketch_curve";
+			}
 			for (V3DLONG d = 0; d < outswc.size(); d++)
 			{
 				outswc[d]->radius = 2;
@@ -8114,8 +8109,15 @@ void CMainApplication::RefineSketchCurve(int direction, NeuronTree &oldNTree, Ne
 				farpos_vec.push_back(MyMarker(loc1.x, loc1.y, loc1.z));
 			}
 
-			fastmarching_drawing_dynamic(nearpos_vec, farpos_vec, (unsigned char *)data1d, outswc, N, M, P, 1, 5);
-			smooth_sketch_curve(outswc, 5);
+			try
+			{
+				fastmarching_drawing_dynamic(nearpos_vec, farpos_vec, (unsigned char *)data1d, outswc, N, M, P, 1, 5);
+				smooth_sketch_curve(outswc, 5);
+			}
+			catch (...)
+			{
+				qDebug() << "error in fastmarching_drawing_dynamic / smooth_sketch_curve";
+			}
 
 			for (V3DLONG d = 0; d < outswc.size(); d++)
 			{

@@ -198,8 +198,10 @@ V3dR_GLWidget::V3dR_GLWidget(iDrawExternalParameter *idep, QWidget *mainWindow, 
 
 	// qDebug("V3dR_GLWidget::V3dR_GLWidget ----- end");
 	currentPluginState = -1; // May 29, 2012 by Hang
-
-	exptime.start();
+	if (!_idep->V3Dmainwindow->vrMode)
+	{
+		exptime.start();
+	}
 
 	notFinishedFlag = true;
 }

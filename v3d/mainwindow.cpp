@@ -2197,7 +2197,7 @@ void MainWindow::startExp()
 {
 	if (!isTrained)
 	{
-		trainNum = 3;
+		trainNum = -1;
 
 		bool ok;
 		pID = QInputDialog::getText(this, "", tr("Please input your ID:"), QLineEdit::Normal, "", &ok);
@@ -2212,12 +2212,12 @@ void MainWindow::startExp()
 		else
 			vrMode = false;
 
-		img_path_prefix = "/data128/image/selected_center_200/";
-		swc_path_prefix = "/data128/swc/selected_center_200/";
-		event_path_prefix = "/data/events/";
+		img_path_prefix = "/data/image/selected_center_200/";
+		swc_path_prefix = "/data/swc/selected_center_200/";
+		event_path_prefix = "/data/events/selected_center_200/";
 		expDir = QDir(QDir::currentPath());
 		qDebug() << expDir.currentPath();
-		QString csv_path = expDir.currentPath() + "/data128/df_select_200.csv";
+		QString csv_path = expDir.currentPath() + "/data/df_select_200.csv";
 		selectedImages = QStringList();
 		expImages = QStringList();
 		int rowidx;
@@ -2343,7 +2343,7 @@ void MainWindow::selectImage()
 		return;
 	QString name = currentImgPath.split('/').last();
 	ifstream fin;
-	fin.open("./data128/df_select_200.csv");
+	fin.open("./data/df_select_200.csv");
 	string str;
 	string out;
 	while (getline(fin, str))
